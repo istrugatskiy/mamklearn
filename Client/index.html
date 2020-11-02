@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>mamkLearn</title>
+	<meta content="mamkLearn" name="description">
+	<meta content="mamkLearn" name="author">
+	<meta content="width=device-width, initial-scale=1" name="viewport">
+	<meta content="917106980205-im519fknf8sfb1jc1gs1tr6eafmto4vs.apps.googleusercontent.com"
+		name="google-signin-client_id">
+	<link href="data:;base64,iVBORw0KGgo=" rel="icon">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+</head>
+
+<body>
+	<div id="particles-js"></div>
+	<link href="css/style.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Chelsea+Market&display=swap" rel="stylesheet">
+	<script async defer src="https://apis.google.com/js/platform.js">
+	</script>
+	<script defer src="js/particles.js">
+	</script>
+	<script defer src="js/app.js">
+	</script>
+	<script async defer src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.0/dragula.min.js'>
+	</script>
+	<noscript>
+		<style>
+			.aboutContainer {
+				display: none;
+			}
+
+			#particles-js {
+				display: none;
+			}
+
+			.backdrop-filter {
+				display: none;
+			}
+
+			.title {
+				display: none;
+			}
+
+			.Container {
+				display: none;
+			}
+
+			.loader {
+				display: none;
+			}
+		</style>
+		<p style="color: black;">An error has occurred: JavaScript is disabled or not supported by your browser</p>
+	</noscript>
+	<script>
+		function signOut() {
+			var auth2 = gapi.auth2.getAuthInstance();
+			auth2.signOut().then(function () {
+				console.log('User signed out.');
+				window.location.reload(false);
+			});
+		}
+	</script>
+	<script>
+		function isIE() {
+			ua = navigator.userAgent;
+			/* MSIE used to detect old browsers and Trident used to newer ones*/
+			var is_ie = ua.indexOf("MSIE ") > -1 || ua.indexOf("Trident/") > -1;
+			return is_ie;
+		}
+
+		if (isIE()) {
+			document.location.href = "https://support.microsoft.com/en-us/office/the-website-you-were-trying-to-reach-doesn-t-work-with-internet-explorer-8f5fc675-cd47-414c-9535-12821ddfc554?ui=en-us&rs=en-us&ad=us";
+		}
+	</script>
+	<div id="gameStartScreenStudent">
+		<span style="--i:1;">G</span> <span style="--i:2;">a</span> <span style="--i:3;">m</span> <span
+			style="--i:4;">e</span> <span style="--i:5;">&nbsp;</span> <span style="--i:6;">w</span> <span
+			style="--i:7;">i</span> <span style="--i:8;">l</span> <span style="--i:9;">l</span> <span
+			style="--i:10;">&nbsp;</span> <span style="--i:11;">s</span> <span style="--i:12;">t</span> <span
+			style="--i:13;">a</span> <span style="--i:14;">r</span> <span style="--i:15;">t</span> <span
+			style="--i:16;">&nbsp;</span> <span style="--i:17;">s</span> <span style="--i:18;">h</span> <span
+			style="--i:19;">o</span> <span style="--i:20;">r</span> <span style="--i:21;">t</span> <span
+			style="--i:22;">l</span> <span style="--i:23;">y</span> <span style="--i:24;">.</span> <span
+			style="--i:25;">.</span> <span style="--i:26;">.</span>
+	</div>
+	<div class="loader loader--active">
+		<div class="loader__icon">
+			<svg enable-background="new 0 0 40 40" height="40px" id="loader-1" version="1.1" viewbox="0 0 40 40"
+				width="40px" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg/"
+				xmlns:xlink="http://www.w3.org/2000/svg/1999/xlink" y="0px">
+				<path
+					d="M20.201,5.169c-8.254,0-14.946,6.692-14.946,14.946c0,8.255,6.692,14.946,14.946,14.946s14.946-6.691,14.946-14.946C35.146,11.861,28.455,5.169,20.201,5.169z M20.201,31.749c-6.425,0-11.634-5.208-11.634-11.634c0-6.425,5.209-11.634,11.634-11.634c6.425,0,11.633,5.209,11.633,11.634C31.834,26.541,26.626,31.749,20.201,31.749z"
+					fill="#ffffff" opacity="1"></path>
+				<path
+					d="M26.013,10.047l1.654-2.866c-2.198-1.272-4.743-2.012-7.466-2.012h0v3.312h0C22.32,8.481,24.301,9.057,26.013,10.047z"
+					fill="#000"></path>
+			</svg>
+		</div>
+		<div class="loader__tile"></div>
+		<div class="loader__tile"></div>
+		<div class="loader__tile"></div>
+		<div class="loader__tile"></div>
+		<div class="loader__tile"></div>
+	</div>
+	<div class="title" id="title" style="top: 30%;">
+		<h1>MamkLearn</h1>
+		<button class="button btn" id="loginBtn">Login</button>
+		<div class="container containerLoginMenu">
+			<div class="centerA">
+				<div class="bottom-bar">
+					<div class="first">
+						<ul style="all: unset;">
+							<li class="float">
+								<a href="privacy.html">Privacy Policy</a>
+							</li>
+						</ul>
+					</div>
+					<div class="center">
+						<ul style="all: unset;">
+							<li class="float">
+								<a href="tos.html">Terms of Service</a>
+							</li>
+						</ul>
+					</div>
+					<div class="last">
+						<ul style="all: unset;">
+							<li class="float" id="float">
+								<a class="btn" href="javascript:void(0)" id="AboutLink"
+									onclick="userClick('about.html')">About</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-popup" id='modal-popupA'>
+		<div id="modal-bg" onclick="exitModalPopupA();"
+			style="position: fixed; display: block; min-width: 100%; min-height: 100%; text-align: center;"></div>
+		<div id="createQuizMenu">
+			<h1 style="font-family: 'Chelsea Market', cursive; color: white;">Quiz Name:</h1>
+			<form id="quizCreateForm" name="quizCreateForm">
+				<input autocomplete="off" autofocus="" class='titleTransitionBack formInput button' id="QuizName"
+					maxlength="15" name="QuizName" placeholder="Quiz Name" required="" title="Quiz Name"
+					type="text"><br>
+				<br>
+				<button class="button titleTransitionBack" id="submitQuizID" type="submit">Create</button>
+			</form>
+			<div class="link-background">
+				<ul class="textOverrideA titleTransitionBack">
+					<li>
+						<a class="middle" href="javascript:void(0);" onclick="exitModalPopupA()"
+							style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;">Back</a>
+					</li>
+				</ul>
+				<div id='underline'></div>
+			</div>
+		</div>
+		<div id="manageQuizMenu">
+			<h1 id="quizNameTitleA"
+				style="font-family: 'Chelsea Market', cursive; color: white; word-break: break-all;"></h1>
+			<button class="button titleTransitionBack" id="playQuiz" style="min-width: 400px;">Play</button>
+			<br>
+			<br>
+			<button class="button titleTransitionBack" id="editQuiz" style="min-width: 400px;">Edit</button><br>
+			<br>
+			<button class="button titleTransitionBack" id="shareQuiz" style="min-width: 400px; ">Share</button><br>
+			<br>
+			<button class="button titleTransitionBack" id="deleteQuiz"
+				style="min-width: 400px; background-color: orange;">Delete</button><br>
+			<br>
+			<div class="link-background">
+				<ul class="textOverrideA titleTransitionBack">
+					<li>
+						<a class="middle" href="javascript:void(0);" onclick="exitModalPopupB()"
+							style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;">Back</a>
+					</li>
+				</ul>
+				<div id='underline'></div>
+			</div>
+		</div>
+		<div id="quizDeleteConfirm" style="display: none;">
+			<h1 id="quizNameTitleB" style="font-family: 'Chelsea Market', cursive; color: white;">Delete Quiz?</h1>
+			<p style="font-size: x-large; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: white;">
+				The following action cannot be undone!</p><button class="button titleTransitionBack"
+				id="deleteQuizConfirm" style="min-width: 400px; background-color: orange;">Delete</button><br>
+			<br>
+			<button class="button titleTransitionBack" id="backButtonDeleteConfirm"
+				onclick="exitModalPopupC()">Back</button>
+		</div>
+		<div id="editQuizMenu" style="display: none;">
+			<h1 style="font-family: 'Chelsea Market', cursive; color: white;">Quiz Name:</h1>
+			<form id="editQuizForm" name="editQuizForm">
+				<input autocomplete="off" autofocus="" class='titleTransitionBack formInput button' id="quizNameUpdate"
+					maxlength="15" name="QuizNameUpdate" placeholder="Quiz Name" required="" title="Quiz Name"
+					type="text">
+				<div id="draggableDiv" style="margin-top: 110px;">
+				</div><button class="button textAreaConfig" id="addQuestionButton" type="button">add
+					question...</button><br>
+				<br>
+				<button class="button" id="backButtonEditQuiz" type="button">Back</button> <button class="button"
+					id="saveQuizButton" type="submit">Save</button>
+			</form>
+		</div>
+		<div id="shareQuizMenu" style="display: none;">
+			<h1 style="font-family: 'Chelsea Market', cursive; color: white;">Shareable Link:</h1>
+			<p style="font-size: x-large; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: white;">
+				This link will create a copy of this quiz.<br> Note: the link cannot be revoked!</p>
+			<textarea disabled id="coolTextArea" class="textAreaConfig button titleTransitionBack formInput textarea2">mamklearn.com/?shareQuiz=1803b027-eaee-4784-a9a1-792ae3029450</textarea><br>
+			<div class="link-background">
+				<ul class="textOverrideA titleTransitionBack" style="width: 180px;">
+					<li>
+						<a class="middle" href="javascript:void(0);" onclick="copyShareLink()"
+							style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px; width: 140px;">Copy Link</a>
+					</li>
+				</ul>
+				<div id='underline'></div>
+			</div>
+			<br>
+			<button class="button titleTransitionBack" id="backButtonShareQuiz"
+				onclick="exitModalPopupG()">Back</button>
+		</div>
+	</div>
+	<div class="modal-popup" id="modal-popupB">
+		<div class="modal-bg"
+			style="position: fixed; display: block; min-width: 100%; min-height: 100%; text-align: center; background-color: rgba(0, 0, 0, 0); z-index: 11;">
+		</div>
+		<div class="errorDivMakeOuter">
+			<div class="errorDivMake">
+				<p style="font-size: 30px; margin-bottom: 5px; margin-top: 5px; text-align: left;">&nbsp;The quiz could
+					not be saved for the following reason(s):</p>
+				<ul class="innerError innerError2" id="innerError3">
+
+				</ul>
+			</div>
+			<button id="doneButtonA" class="button errorDivMake2">Done</button>
+		</div>
+	</div>
+	<div id="blackSquare"></div>
+	<div id="loginPage">
+		<div class="innerdiv">
+			<p>Please login with your mamaroneck schools Google Account.</p>
+			<p id="loginError1" style="font-size: large; color: red; margin: 0px; display: none; padding: 0px;">Please
+				use an account that ends in 'mamkschools.org' or 'student.mamkschools.org'</p>
+			<div style="text-align: center; display: flex; align-items: center; justify-content: center;">
+				<div class="g-signin2" data-height="50" data-longtitle="true" data-onsuccess="onSignIn"
+					data-theme="dark" data-width="240" style="padding: 20px;"></div>
+			</div>
+			<p style="font-size: large; text-align: center;">By signing in you agree to our terms of service and privacy
+				policy.</p>
+		</div>
+	</div>
+	<div class="error" id="CommError" style="display: none; z-index: 20;">
+		<div class="innerdiv"
+			style="background-color: rgba(25, 25, 25, 0.65); border-radius: 0px; border-color: rgb(25, 25, 25); border-width: 5px; border-style: solid;">
+			<p>A communication error has occurred. Please try again later.</p>
+			<p style="font-size: large;">Error Code: <span id="comError3">UKNOWN</span></p>
+		</div>
+	</div>
+	<div class="title titleTransitionBack" id="teacherPlayScreen" style="display: none;">
+		<h1>Game Code: ****</h1>
+		<button disabled class="button" style="cursor: not-allowed; display: none;">Play!</button>
+		<div id="characterPeopleDiv">
+
+		</div>
+	</div>
+	<div id="commError2"
+		style=" display: none;position: fixed; min-width: 100%; min-height: 100%; background-color: hsla(0, 0%, 10%, 0.65);">
+	</div>
+	<div id="errorMessageA">
+		<h2 id="errorActual">Invalid ID</h2>
+	</div>
+</body>
+
+</html>
