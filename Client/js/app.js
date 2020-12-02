@@ -1319,11 +1319,24 @@ function studentGameProcessor(input) {
 		if(inputInternal.gameStart == true) {
 			gameStateStudent = {
 				competitors: inputInternal.competitors,
-				competitorAvatars: inputInternal.competitorAvatars,
+				competitorAvatars: inputInternal.competitorConfigs,
 				currentQuestion: inputInternal.questionID,
 				totalQuestions: inputInternal.totalQuestions,
-			}
+				gameErrorState: false
+			};
+			document.getElementById('gameStartScreenStudent').style.display = "none";
+			var $loader = document.querySelector(".loader");
+			$loader.classList.remove('loader--active');
+			document.getElementById('title').style.display = "none";
+			goBack();
+			setTimeout(() => {
+				document.getElementById('loader-1').style.display = "none";
+			}, 1000);
 		}
+	}
+	else if (inputInternal.hasOwnProperty('error')) {
+		throwExcept(inputInternal.error);
+		gameStateStudent.gameErrorState = inputInternal.gameErrorState;
 	}
 	console.log(gameStateStudent);
 }
