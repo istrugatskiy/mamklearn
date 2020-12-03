@@ -1408,3 +1408,12 @@ img {
 #teacherPlayScreen {
 	top: 10%;
 }
+#studentPlayScreen {
+	max-width: 800px;
+	display: none;
+}
+.buttonLikeTitle {
+	font-size: x-large;
+	max-width: 800px;
+	cursor: default;
+}

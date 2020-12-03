@@ -1035,7 +1035,7 @@ function wrapper(toWrap, wrapper) {
 //verify that we have any questions at all; done
 //verify that no field goes over it's character limit; done
 //verify that time limit is at least 5 or more; done
-//verify that at least one possible choice is correct;
+//verify that at least one possible choice is correct; done
 //verify that at least two answer fields are filled out; done
 function verifyQuiz() {
 	quizParseError = [];
@@ -1322,21 +1322,37 @@ function studentGameProcessor(input) {
 				competitorAvatars: inputInternal.competitorConfigs,
 				currentQuestion: inputInternal.questionID,
 				totalQuestions: inputInternal.totalQuestions,
-				gameErrorState: false
+				gameErrorState: false,
+				timeLeft: false
 			};
 			document.getElementById('gameStartScreenStudent').style.display = "none";
 			var $loader = document.querySelector(".loader");
 			$loader.classList.remove('loader--active');
 			document.getElementById('title').style.display = "none";
-			goBack();
+			document.getElementById('studentPlayScreen').style.display = "block";
 			setTimeout(() => {
 				document.getElementById('loader-1').style.display = "none";
+				document.getElementById("errorMessageA").style.display = "none";
 			}, 1000);
 		}
 	}
 	else if (inputInternal.hasOwnProperty('error')) {
 		throwExcept(inputInternal.error);
 		gameStateStudent.gameErrorState = inputInternal.gameErrorState;
+	}
+	else if(inputInternal.hasOwnProperty('kickPlayer')) {
+		document.getElementById("errorActual").innerText = 'Kicked From Game';
+		document.getElementById("errorMessageA").style.display = "block";
+		document.getElementById('gameStartScreenStudent').style.display = "none";
+		document.getElementById('studentPlayScreen').style.display = "none";
+		var $loader = document.querySelector(".loader");
+		$loader.classList.remove('loader--active');
+		document.getElementById('title').style.display = "block";
+		goBack();
+		setTimeout(() => {
+			document.getElementById('loader-1').style.display = "none";
+			document.getElementById("errorMessageA").style.display = "none";
+		}, 1000);
 	}
 	console.log(gameStateStudent);
 }
