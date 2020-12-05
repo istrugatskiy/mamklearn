@@ -361,6 +361,7 @@ window.onload = function () {
 				}, 500);
 				setTimeout(() => {
 					document.getElementById('title').style.display = 'none';
+					document.getElementById('mainTheme').play();
 					document.getElementById('teacherPlayScreen').style.display = 'block';
 				}, 1000);
 				document.getElementById('manageQuizMenu').style.animation = 'modalPopout 0.3s';
@@ -956,7 +957,11 @@ function setCaretPosition(element, offset) {
 }
 
 window.addEventListener("error", function (e) {
-	if (e.message.includes('Script error') || e.message.includes('TypeError')) {
+	console.log(e.name);
+	if(e.hasOwnProperty('details')) {
+		throwExcept('GAPI_ERROR');
+	}
+	else if (e.message.includes('Script error') || e.message.includes('TypeError')) {
 		throwExcept('SCRIPT_ERROR');
 	}
 	else {
@@ -965,16 +970,9 @@ window.addEventListener("error", function (e) {
 });
 
 window.addEventListener('offline', (e) => { 
-	if (!editState) {
-	 throwExcept('CONNECTION_DROPPED') 
-	} 
+	throwExcept('CONNECTION_DROPPED');
 });
 
-window.addEventListener('online', (e) => { 
-	if (!editState) {
-	 throwExcept('CONNECTION_DROPPED') 
-	} 
-});
 
 
 function throwExcept(msg) {
