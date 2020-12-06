@@ -178,6 +178,7 @@ li {
 	pointer-events: all;
 }
 .button {
+	-webkit-appearance: none;
 	background-color: white;
 	border: 2px solid white;
 	text-decoration: none;
