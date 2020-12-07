@@ -1411,10 +1411,10 @@ img {
 }
 #studentPlayScreen {
 	display: none;
-	top: 10%;
+	top: 5%;
 }
 .buttonLikeTitle {
-	font-size: x-large;
+	font-size: 100%;
 	cursor: default;
 	max-width: 800px;
 	margin: 25px auto;
@@ -1436,4 +1436,32 @@ img {
 }
 .playerContainer {
 	min-height: 180px;
+}
+.playButtonStudent {
+	font-size: 4vw;
+	width: 45%;
+	height: 45%;
+	margin-bottom: 25px;
+	margin-right: 25px;
+}
+.studentAnswersFlex {
+	display: flex;
+	flex-flow: row wrap;
+	flex-wrap: wrap;
+	flex-shrink: 1;
+	flex-grow: 1;
+	justify-content: center;
+	align-items: stretch;
+}
+@media screen and (max-width:800px) {
+	.studentAnswersFlex {
+		flex-flow: column wrap;
+		align-items: stretch;
+	}
+	.playButtonStudent {
+		flex: 1;
+		margin: 10px auto;
+		width: 90%;
+		height: 20%;
+	}
 }
