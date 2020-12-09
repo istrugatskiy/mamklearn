@@ -478,6 +478,12 @@ ul {
 		background-color: rgb(255, 255, 255);
 		color: black;
 	}
+	.button:hover, .button:active, .button:focus, .button:disabled {
+		background-color: rgb(28, 37, 102) !important;
+	}
+	#charCustomize:focus {
+		background-color: white !important;
+	}
 }
 .btnTransitionA {
 	transition: all 0.3s ease-out;
