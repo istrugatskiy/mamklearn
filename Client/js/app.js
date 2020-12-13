@@ -122,8 +122,8 @@ if (!window.location.href.includes("#performance-mode")) {
 }
 //const bottomBarHTML = '<div id="containerBottomA" style="display: none;" class="container"> <div class="centerA"> <div class="bottom-bar"> <div class="first"><ul style="all:unset;"> <li class="float" ><a href="privacy.html" >Privacy Policy</a></li></ul> </div> <div class="center"> <ul style="all:unset;"><li class="float"><a href="tos.html">Terms of Service</a></li></ul> </div> <div class="last"> <ul style="all:unset;"><li class="float" id="float"><a class="btn" href="javascript:void(0)" onclick="userClick(\'about.html\')" id="AboutLink">About</a></li></ul> </div> </div> </div> </div>';
 const bottomBarHTML = '<div style="display: none;" id="containerBottomA" class=\"container\">\r\n\t\t\t<div class=\"centerA\">\r\n\t\t\t\t<div class=\"bottom-bar\">\r\n\t\t\t\t\t<div class=\"first\">\r\n\t\t\t\t\t\t<ul style=\"all: unset;\">\r\n\t\t\t\t\t\t\t<li class=\"float\">\r\n\t\t\t\t\t\t\t\t<a href=\"privacy.html\">Privacy Policy<\/a>\r\n\t\t\t\t\t\t\t<\/li>\r\n\t\t\t\t\t\t<\/ul>\r\n\t\t\t\t\t<\/div>\r\n\t\t\t\t\t<div class=\"center\">\r\n\t\t\t\t\t\t<ul style=\"all: unset;\">\r\n\t\t\t\t\t\t\t<li class=\"float\">\r\n\t\t\t\t\t\t\t\t<a href=\"tos.html\">Terms of Service<\/a>\r\n\t\t\t\t\t\t\t<\/li>\r\n\t\t\t\t\t\t<\/ul>\r\n\t\t\t\t\t<\/div>\r\n\t\t\t\t\t<div class=\"last\">\r\n\t\t\t\t\t\t<ul style=\"all: unset;\">\r\n\t\t\t\t\t\t\t<li class=\"float\" id=\"float\">\r\n\t\t\t\t\t\t\t\t<a class=\"btn\" href=\"javascript:void(0)\" id=\"AboutLink\" onclick=\"userClick(\'about.html\')\">About<\/a>\r\n\t\t\t\t\t\t\t<\/li>\r\n\t\t\t\t\t\t<\/ul>\r\n\t\t\t\t\t<\/div>\r\n\t\t\t\t<\/div>\r\n\t\t\t<\/div>\r\n\t\t<\/div>';
-const newTitle = '<h1 id=\'homeText\' class=\"titleTransitionBack\">Home<\/h1><div id="charCustomize" class="button titleTransitionBack" tabindex="0"><p class="notifyTextChar" id="tapToCustom">Tap to customize...</p><div id="stableBody"><img src="../img/arms-0.png" id="currentUserArms" style="position: absolute;" alt="your arms" width="250"><img src="../img/eyes-0.png" style="position: absolute;" alt="your eyes" id="currentUserEyes" width="250"><img src="../img/nose-0.png" style="position: absolute;" id="currentUserNose" alt="your nose" width="250"><img src="../img/mouth-0.png" style="position: absolute;" id="currentUserMouth" alt="your mouth" width="250"><img src="../img/shirt-0.png" style="position: absolute;" id="currentUserShirt" alt="your shirt" width="250"><img src="../img/base.png" alt="your profile picture" width="250"></div><p class="notifyTextChar" id="customType"><a class="arrow left" onclick="arrowButtonPress(true)" href="javascript:void(0)"></a><a id="customButtonChange" onclick="updateImageState();" href="javascript:void(0)">Eyes</a><a class="arrow right" onclick="arrowButtonPress(false)" href="javascript:void(0)"></a></p><img height="90" onclick="updateImageState();" style="cursor: pointer;" alt="Tap to change button..." src="img/tapToChange.png"></div> </br><button class=\"button  titleTransitionBack\" id=\"makebtn\">Make<\/button><button class=\"button  titleTransitionBack\" id=\"btn2\">Play<\/button><div class=\"link-background titleTransitionBack\"><ul><li><a href=\"javascript:void(0);\" class=\"middle\" id=\"signOutbtn\" style=\"font-family: \'Segoe UI\', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;\" onclick=\"signOut();\">Sign out<\/a> <\/li><\/ul><div id=\'underline\'></div><\/div>' + bottomBarHTML;
-const playData = '<h1 class=\'titleTransitionBack\' id=\'codeText\'>Game Code:<\/h1><form id="joinQuizForm"><input autofocus type="text" class=\'titleTransitionBack formInput button\' required autocomplete="off" pattern=\'^[0-9]*$\'  maxlength="9" title="valid game ID" id="gameID" placeholder="Game Code" name="gameID"> <br> <br> <button class="button titleTransitionBack" id="submitID" type="submit">Join</button> <\/form> <div class=\"link-background\"><ul class="textOverrideA titleTransitionBack"><li><a href=\"javascript:void(0);\" class=\"middle\" id=\"signOutbtn\" style=\"font-family: \'Segoe UI\', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;\" onclick=\"goBack();\">Back<\/a> <\/li><\/ul> <div id=\'underline\'></div><\/div>' + bottomBarHTML;
+const newTitle = '<h1 id=\'homeText\' class=\"titleTransitionBack\">Home<\/h1><div id="charCustomize" class="button titleTransitionBack" tabindex="0"><p class="notifyTextChar" id="tapToCustom">Tap to customize...</p><div id="stableBody"><img src="../img/arms-0.png" id="currentUserArms" style="position: absolute;" alt="your arms" width="250"><img src="../img/eyes-0.png" style="position: absolute;" alt="your eyes" id="currentUserEyes" width="250"><img src="../img/nose-0.png" style="position: absolute;" id="currentUserNose" alt="your nose" width="250"><img src="../img/mouth-0.png" style="position: absolute;" id="currentUserMouth" alt="your mouth" width="250"><img src="../img/shirt-0.png" style="position: absolute;" id="currentUserShirt" alt="your shirt" width="250"><img src="../img/base.png" alt="your profile picture" width="250"></div><p class="notifyTextChar" id="customType"><a class="arrow left" id="leftCustomizeArrow" href="javascript:void(0)"></a><a id="customButtonChange" href="javascript:void(0)">Eyes</a><a class="arrow right" id="arrowCustomizeRight" href="javascript:void(0)"></a></p><img height="90" id="customButtonChange2" style="cursor: pointer;" alt="Tap to change button..." src="img/tapToChange.png"></div> </br><button class=\"button  titleTransitionBack\" id=\"makebtn\">Make<\/button><button class=\"button  titleTransitionBack\" id=\"btn2\">Play<\/button><div class=\"link-background titleTransitionBack\"><ul><li><a href=\"javascript:void(0);\" class=\"middle\" id=\"signOutbtn\" style=\"font-family: \'Segoe UI\', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;\">Sign out<\/a> <\/li><\/ul><div id=\'underline\'></div><\/div>' + bottomBarHTML;
+const playData = '<h1 class=\'titleTransitionBack\' id=\'codeText\'>Game Code:<\/h1><form id="joinQuizForm"><input autofocus type="text" class=\'titleTransitionBack formInput button\' required autocomplete="off" pattern=\'^[0-9]*$\'  maxlength="9" title="valid game ID" id="gameID" placeholder="Game Code" name="gameID"> <br> <br> <button class="button titleTransitionBack" id="submitID" type="submit">Join</button> <\/form> <div class=\"link-background\"><ul class="textOverrideA titleTransitionBack"><li><a href=\"javascript:void(0);\" class=\"middle\" id=\"playMenuBack\" style=\"font-family: \'Segoe UI\', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;\" onclick=\"goBack();\">Back<\/a> <\/li><\/ul> <div id=\'underline\'></div><\/div>' + bottomBarHTML;
 const makeData = '<h1 id=\'homeText\' class=\"titleTransitionBack\">Your Quizzes:<\/h1><div id="makeDiv"><div id="removeButton"><button class="button  titleTransitionBack" id="createButtonA"><p class="notifyTextChar">Tap to create a quiz...</p><img width="400" id="plusButtonImage" src="../img/createQuiz.png"></button><br><br></div><button class="button titleTransitionBack" id="backButtonC" onclick="goBackMakeA()">Back</button></div>';
 const svgData = '<svg version="1.1" id="loader-1" xmlns="www.w3.org/2000/svg" xmlns:xlink="www.w3.org/1999/xlink" x="0px" y="0px" width="40px" height="40px" viewBox="0 0 40 40" enable-background="new 0 0 40 40" xml:space="preserve"><path opacity="1" fill="#ffffff" d="M20.201,5.169c-8.254,0-14.946,6.692-14.946,14.946c0,8.255,6.692,14.946,14.946,14.946s14.946-6.691,14.946-14.946C35.146,11.861,28.455,5.169,20.201,5.169z M20.201,31.749c-6.425,0-11.634-5.208-11.634-11.634c0-6.425,5.209-11.634,11.634-11.634c6.425,0,11.633,5.209,11.633,11.634C31.834,26.541,26.626,31.749,20.201,31.749z"></path><path fill="#000" d="M26.013,10.047l1.654-2.866c-2.198-1.272-4.743-2.012-7.466-2.012h0v3.312h0C22.32,8.481,24.301,9.057,26.013,10.047z"></path><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0" to="360" dur="0.5s" repeatCount="indefinite"></animateTransform></svg>';
 var customOptions = ["Eyes", "Nose", "Mouth", "Shirt", "Arms"];
@@ -189,99 +189,12 @@ window.onload = function () {
 					}, 1000);
 				}, 500);
 			}
-			document.getElementById('deleteQuizConfirm').addEventListener('click', function () {
-				delete quizList2[currentQuizEdit];
-				document.getElementById('deleteQuizConfirm').disabled = true;
-				document.getElementById('backButtonDeleteConfirm').disabled = true;
-				document.getElementById('deleteQuizConfirm').style.backgroundColor = null;
-				document.getElementById('deleteQuizConfirm').innerHTML = svgData;
-				setTimeout(function () {
-					exitModalPopupC();
-				}, 1000);
-			});
 			window.addEventListener("beforeunload", function (event) {
 				if(editState) {
 					event.preventDefault();
 					event.returnValue = ' ';
 				}
 			});
-			document.getElementById('deleteQuiz').addEventListener('click', function () {
-				checkOnce = false;
-				document.getElementById('manageQuizMenu').style.animation = 'modalPopout 0.3s';
-				document.getElementById('deleteQuizConfirm').disabled = false;
-				document.getElementById('backButtonDeleteConfirm').disabled = false;
-				document.getElementById('deleteQuizConfirm').innerHTML = 'Delete';
-				document.getElementById('deleteQuizConfirm').style.backgroundColor = 'orange';
-				setTimeout(function () {
-					document.getElementById('manageQuizMenu').style.display = 'none';
-					document.getElementById('quizDeleteConfirm').style.display = 'block';
-					document.getElementById('manageQuizMenu').style.animation = 'modalPopin 0.3s';
-					document.getElementById('quizDeleteConfirm').style.animation = 'modalPopin 0.3s';
-				}, 300);
-			});
-			document.getElementById('editQuiz').addEventListener('click', function () {
-				checkOnce = false;
-				editState = true;
-				document.getElementById('manageQuizMenu').style.animation = 'modalPopout 0.3s';
-				if (quizObject2[currentQuizEdit] === undefined) {
-					quizObject2[currentQuizEdit] = JSON.parse(JSON.stringify(quizObject));
-					quizObject2[currentQuizEdit].quizName = quizList2[currentQuizEdit];
-					quizObject2[currentQuizEdit].quizID = currentQuizEdit;
-				}
-				else {
-					quizObject2[currentQuizEdit].questionObjects.forEach(function(questionObject) {
-						addquestionToDOM();
-						var actualData = document.getElementById(`draggableQuestion${highestQuestion}`).children[1].children;
-						actualData[0].textContent = questionObject.questionName;
-						characterCount(actualData[0], 90);
-						actualData[3].children[0].children[0].checked = questionObject.shortAnswer;
-						if(questionObject.shortAnswer) {
-							shortAnswerToggle(highestQuestion);
-						}
-						actualData[4].children[0].children[0].checked = questionObject.timeLimit;
-						if(typeof questionObject.timeLimit != "boolean") {
-							toggleTime(highestQuestion);
-							actualData[4].children[2].textContent = questionObject.timeLimit;
-							characterCount(actualData[4].children[2], 3);
-						}
-						actualData[5].children[0].children[0].textContent = questionObject.Answers[0].answer;
-						characterCount(actualData[5].children[0].children[0], 50);
-						actualData[5].children[1].children[0].textContent = questionObject.Answers[1].answer;
-						characterCount(actualData[5].children[1].children[0], 50);
-						actualData[5].children[2].children[0].textContent = questionObject.Answers[2].answer;
-						characterCount(actualData[5].children[2].children[0], 50);
-						actualData[5].children[3].children[0].textContent = questionObject.Answers[3].answer;
-						characterCount(actualData[5].children[3].children[0], 50);
-						actualData[5].children[0].children[2].children[0].checked = questionObject.Answers[0].correct;
-						actualData[5].children[1].children[2].children[0].checked = questionObject.Answers[1].correct;
-						actualData[5].children[2].children[2].children[0].checked = questionObject.Answers[2].correct;
-						actualData[5].children[3].children[2].children[0].checked = questionObject.Answers[3].correct;
-					});
-					reorderProper();
-				}
-				document.getElementById('quizNameUpdate').value = decodeHTML(quizList2[currentQuizEdit]);
-				drake = dragula([document.getElementById('draggableDiv')], {
-					moves: function (el, container, handle) {
-						return handle.classList.contains('draggableActual');
-					}
-				}).on('drag', function (el) {
-					el.classList.add('dragging');
-					collapseAllArea();
-				}).on('dragend', function (el) {
-					el.classList.remove('dragging');
-					document.body.style.cursor = "inherit";
-					setTimeout(function () {
-						reorderProper();
-					}, 100);
-				});
-				setTimeout(function () {
-					document.getElementById('manageQuizMenu').style.display = 'none';
-					document.getElementById('editQuizMenu').style.display = 'block';
-					document.getElementById('manageQuizMenu').style.animation = 'modalPopin 0.3s';
-					document.getElementById('editQuizMenu').style.animation = 'modalPopin 0.3s';
-					contentEditableUpdate();
-				}, 300);
-			})
 			document.getElementById('editQuizForm').addEventListener('submit', function (event) {
 				event.preventDefault();
 				document.getElementById("modal-popupA").style.pointerEvents = "none";
@@ -318,71 +231,213 @@ window.onload = function () {
 					},1200);
 				} 
 			});
-			document.getElementById('addQuestionButton').addEventListener('click', function () {
-				addquestionToDOM();
-				contentEditableUpdate();
-				reorderProper();
-				setTimeout(() => {
-					document.getElementById('addQuestionButton').blur();
-				}, 300);
-			});
-			document.getElementById('doneButtonA').addEventListener('click', function () {
-				if (allowState2) {
-					document.getElementById("modal-popupB").style.animation = 'modalPopout2 0.5s';
-					document.getElementById("editQuizMenu").style.animation = 'fadein 0.5s';
-					document.getElementById("editQuizMenu").style.visibility = 'visible';
-					document.getElementById("saveQuizButton").disabled = false;
-					document.getElementById("backButtonEditQuiz").disabled = false;
-					document.getElementById("quizNameUpdate").disabled = false;
-					document.getElementById("addQuestionButton").disabled = false;
-					allowState = true;
-					reorderProper();
-					setTimeout(function () {
-						document.getElementById("modal-popupB").style = '';
-						document.getElementById("modal-popupB").style.visibility = 'none';
-						document.getElementById("modal-popupA").style.pointerEvents = "all";
-					}, 500);
-				}
-			});
-			document.getElementById('shareQuiz').addEventListener('click', function () {
-				checkOnce = false;
-				document.getElementById('manageQuizMenu').style.animation = 'modalPopout 0.3s';
-				setTimeout(function () {
-					document.getElementById('manageQuizMenu').style.display = 'none';
-					document.getElementById('shareQuizMenu').style.display = 'block';
-					document.getElementById('manageQuizMenu').style.animation = 'modalPopin 0.3s';
-					document.getElementById('shareQuizMenu').style.animation = 'modalPopin 0.3s';
-				}, 300);
-			});
-			document.getElementById('playQuiz').addEventListener('click', function () {
-				document.getElementById('modal-bg').style.animation = 'fadeOut 0.5s';
-				setTimeout(function () {
-					document.getElementById('modal-bg').style.display = 'none';
-				}, 500);
-				setTimeout(() => {
-					document.getElementById('title').style.display = 'none';
-					document.getElementById('mainTheme').play();
-					document.getElementById('teacherPlayScreen').style.display = 'block';
-				}, 1000);
-				document.getElementById('manageQuizMenu').style.animation = 'modalPopout 0.3s';
-				setTimeout(function () {
-					document.getElementById('modal-popupA').style.display = 'none';
-				}, 300);
-			});
-			document.getElementById('backButtonEditQuiz').addEventListener('click', function () {
-				exitModalPopupF(true);
-			});
-			var elements = document.getElementsByClassName("btn");
-			if (document.querySelector('#loginBtn')) {
-				document.querySelector('#loginBtn').addEventListener('click', function () {
-					a = true;
-					auth2 = gapi.auth2.getAuthInstance();
-					document.getElementById('loginPage').style.display = "block";
-					document.getElementById('loginBtn').classList.add('buttonPressed');
-				});
-			}
 		});
 	});
+}
+
+window.addEventListener('click', function (event) {
+	switch(event.target.id) {
+		case "btn2":
+			playCode();
+			break;
+		case "makebtn":
+			makeCode();
+			break;
+		case "signOutbtn":
+			signOut();
+			break;
+		case "deleteQuiuzConfirm":
+			deleteQuizConfirm();
+			break;
+		case "deleteQuiz":
+			deleteQuiz();
+			break;
+		case "editQuiz":
+			editQuiz();
+			break;
+		case "addQuestionButton":
+			addQuestion();
+			break;
+		case "playQuiz":
+			playQuiz();
+			break;
+		case "doneButtonA":
+			doneButtonA();
+			break;
+		case "shareQuiz":
+			shareQuiz();
+			break;
+		case "backButtonEditQuiz":
+			exitModalPopupF(true);
+			break;
+		case "loginBtn":
+			login();
+			break;
+		case "customButtonChange":
+			updateImageState();
+			break;
+		case "customButtonChange2":
+			updateImageState();
+			break;
+		case "leftCustomizeArrow":
+			arrowButtonPress(true);
+			break;
+		case "arrowCustomizeRight":
+			arrowButtonPress(false);
+			break;
+	}
+});
+
+function shareQuiz() {
+	checkOnce = false;
+	document.getElementById('manageQuizMenu').style.animation = 'modalPopout 0.3s';
+	setTimeout(function () {
+		document.getElementById('manageQuizMenu').style.display = 'none';
+		document.getElementById('shareQuizMenu').style.display = 'block';
+		document.getElementById('manageQuizMenu').style.animation = 'modalPopin 0.3s';
+		document.getElementById('shareQuizMenu').style.animation = 'modalPopin 0.3s';
+	}, 300);
+}
+
+function login() {
+	a = true;
+	auth2 = gapi.auth2.getAuthInstance();
+	document.getElementById('loginPage').style.display = "block";
+	document.getElementById('loginBtn').classList.add('buttonPressed');
+}
+
+function addQuestion() {
+	addquestionToDOM();
+	contentEditableUpdate();
+	reorderProper();
+	setTimeout(() => {
+		document.getElementById('addQuestionButton').blur();
+	}, 300);
+}
+
+function doneButtonA() {
+	if (allowState2) {
+		document.getElementById("modal-popupB").style.animation = 'modalPopout2 0.5s';
+		document.getElementById("editQuizMenu").style.animation = 'fadein 0.5s';
+		document.getElementById("editQuizMenu").style.visibility = 'visible';
+		document.getElementById("saveQuizButton").disabled = false;
+		document.getElementById("backButtonEditQuiz").disabled = false;
+		document.getElementById("quizNameUpdate").disabled = false;
+		document.getElementById("addQuestionButton").disabled = false;
+		allowState = true;
+		reorderProper();
+		setTimeout(function () {
+			document.getElementById("modal-popupB").style = '';
+			document.getElementById("modal-popupB").style.visibility = 'none';
+			document.getElementById("modal-popupA").style.pointerEvents = "all";
+		}, 500);
+	}
+}
+
+function playQuiz() {
+	document.getElementById('modal-bg').style.animation = 'fadeOut 0.5s';
+	setTimeout(function () {
+		document.getElementById('modal-bg').style.display = 'none';
+	}, 500);
+	setTimeout(() => {
+		document.getElementById('title').style.display = 'none';
+		document.getElementById('mainTheme').play();
+		document.getElementById('teacherPlayScreen').style.display = 'block';
+	}, 1000);
+	document.getElementById('manageQuizMenu').style.animation = 'modalPopout 0.3s';
+	setTimeout(function () {
+		document.getElementById('modal-popupA').style.display = 'none';
+	}, 300);
+}
+
+function deleteQuiz() {
+	checkOnce = false;
+	document.getElementById('manageQuizMenu').style.animation = 'modalPopout 0.3s';
+	document.getElementById('deleteQuizConfirm').disabled = false;
+	document.getElementById('backButtonDeleteConfirm').disabled = false;
+	document.getElementById('deleteQuizConfirm').innerHTML = 'Delete';
+	document.getElementById('deleteQuizConfirm').style.backgroundColor = 'orange';
+	setTimeout(function () {
+		document.getElementById('manageQuizMenu').style.display = 'none';
+		document.getElementById('quizDeleteConfirm').style.display = 'block';
+		document.getElementById('manageQuizMenu').style.animation = 'modalPopin 0.3s';
+		document.getElementById('quizDeleteConfirm').style.animation = 'modalPopin 0.3s';
+	}, 300);
+}
+
+function deleteQuizConfirm() {
+	delete quizList2[currentQuizEdit];
+	document.getElementById('deleteQuizConfirm').disabled = true;
+	document.getElementById('backButtonDeleteConfirm').disabled = true;
+	document.getElementById('deleteQuizConfirm').style.backgroundColor = null;
+	document.getElementById('deleteQuizConfirm').innerHTML = svgData;
+	setTimeout(function () {
+		exitModalPopupC();
+	}, 1000);
+}
+
+function editQuiz() {
+	checkOnce = false;
+	editState = true;
+	document.getElementById('manageQuizMenu').style.animation = 'modalPopout 0.3s';
+	if (quizObject2[currentQuizEdit] === undefined) {
+		quizObject2[currentQuizEdit] = JSON.parse(JSON.stringify(quizObject));
+		quizObject2[currentQuizEdit].quizName = quizList2[currentQuizEdit];
+		quizObject2[currentQuizEdit].quizID = currentQuizEdit;
+	}
+	else {
+		quizObject2[currentQuizEdit].questionObjects.forEach(function (questionObject) {
+			addquestionToDOM();
+			var actualData = document.getElementById(`draggableQuestion${highestQuestion}`).children[1].children;
+			actualData[0].textContent = questionObject.questionName;
+			characterCount(actualData[0], 90);
+			actualData[3].children[0].children[0].checked = questionObject.shortAnswer;
+			if (questionObject.shortAnswer) {
+				shortAnswerToggle(highestQuestion);
+			}
+			actualData[4].children[0].children[0].checked = questionObject.timeLimit;
+			if (typeof questionObject.timeLimit != "boolean") {
+				toggleTime(highestQuestion);
+				actualData[4].children[2].textContent = questionObject.timeLimit;
+				characterCount(actualData[4].children[2], 3);
+			}
+			actualData[5].children[0].children[0].textContent = questionObject.Answers[0].answer;
+			characterCount(actualData[5].children[0].children[0], 50);
+			actualData[5].children[1].children[0].textContent = questionObject.Answers[1].answer;
+			characterCount(actualData[5].children[1].children[0], 50);
+			actualData[5].children[2].children[0].textContent = questionObject.Answers[2].answer;
+			characterCount(actualData[5].children[2].children[0], 50);
+			actualData[5].children[3].children[0].textContent = questionObject.Answers[3].answer;
+			characterCount(actualData[5].children[3].children[0], 50);
+			actualData[5].children[0].children[2].children[0].checked = questionObject.Answers[0].correct;
+			actualData[5].children[1].children[2].children[0].checked = questionObject.Answers[1].correct;
+			actualData[5].children[2].children[2].children[0].checked = questionObject.Answers[2].correct;
+			actualData[5].children[3].children[2].children[0].checked = questionObject.Answers[3].correct;
+		});
+		reorderProper();
+	}
+	document.getElementById('quizNameUpdate').value = decodeHTML(quizList2[currentQuizEdit]);
+	drake = dragula([document.getElementById('draggableDiv')], {
+		moves: function (el, container, handle) {
+			return handle.classList.contains('draggableActual');
+		}
+	}).on('drag', function (el) {
+		el.classList.add('dragging');
+		collapseAllArea();
+	}).on('dragend', function (el) {
+		el.classList.remove('dragging');
+		document.body.style.cursor = "inherit";
+		setTimeout(function () {
+			reorderProper();
+		}, 100);
+	});
+	setTimeout(function () {
+		document.getElementById('manageQuizMenu').style.display = 'none';
+		document.getElementById('editQuizMenu').style.display = 'block';
+		document.getElementById('manageQuizMenu').style.animation = 'modalPopin 0.3s';
+		document.getElementById('editQuizMenu').style.animation = 'modalPopin 0.3s';
+		contentEditableUpdate();
+	}, 300);
 }
 
 function userClick(e, g = false, nabeelIsGreat = false) {
@@ -437,18 +492,6 @@ function onSignIn(googleUser) {
 		setTimeout(function () {
 			document.getElementById('loginPage').style.display = "none";
 		}, 500);
-		var makeButton = document.querySelector('#makebtn');
-		var playButton = document.querySelector('#btn2');
-		var signOutButton = document.querySelector('#signOutbtn');
-		var title = document.querySelector('#homeText');
-		playButton.addEventListener('click', function () {
-			// add the play code here
-			playCode();
-		});
-		makeButton.addEventListener('click', function () {
-			// add the make code here
-			makeCode();
-		});
 	} else {
 		auth2.signOut().then(function () {
 			console.log('User signed out.');
@@ -577,26 +620,14 @@ function goBack() {
 	document.querySelector('#codeText').classList.add('titleTransition');
 	document.querySelector('#gameID').classList.add('btnTransitionA');
 	document.querySelector('#submitID').classList.add('btnTransitionA');
-	document.querySelector('#signOutbtn').classList.add('linkTransitionF');
+	document.querySelector('#playMenuBack').classList.add('linkTransitionF');
 	setTimeout(function () {
 		document.getElementById('title').innerHTML = decodeURI(newTitle);
 		document.getElementById('title').style.height = "800px";
 		document.getElementById('containerBottomA').classList.remove("containerLoginMenu");
 		document.getElementById('containerBottomA').classList.add("containerMainMenu");
 		document.getElementById('title').style.top = "15%";
-		var makeButton = document.querySelector('#makebtn');
 		setCharImage('currentUser', currentUserConfig);
-		var playButton = document.querySelector('#btn2');
-		var signOutButton = document.querySelector('#signOutbtn');
-		var title = document.querySelector('#homeText');
-		playButton.addEventListener('click', function () {
-			// add the play code here
-			playCode();
-		});
-		makeButton.addEventListener('click', function () {
-			// add the make code here
-			makeCode();
-		});
 	}, 300);
 }
 var customOptionsIncrement = 0;
@@ -720,19 +751,7 @@ function goBackMakeA() {
 		document.getElementById('containerBottomA').classList.remove("containerLoginMenu");
 		document.getElementById('containerBottomA').classList.add("containerMainMenu");
 		document.getElementById('title').style.top = "15%";
-		var makeButton = document.querySelector('#makebtn');
 		setCharImage('currentUser', currentUserConfig);
-		var playButton = document.querySelector('#btn2');
-		var signOutButton = document.querySelector('#signOutbtn');
-		var title = document.querySelector('#homeText');
-		playButton.addEventListener('click', function () {
-			// add the play code here
-			playCode();
-		});
-		makeButton.addEventListener('click', function () {
-			// add the make code here
-			makeCode();
-		});
 	}, 300);
 }
 
