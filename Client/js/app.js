@@ -551,6 +551,9 @@ function JoinGame(event) {
 				document.getElementById("gameStartScreenStudent").style.display = 'block';
 			}, 1000);
 		}, 750);
+		setTimeout(() => {
+			studentGameProcessor(quizStartTestCase);
+		}, 5000);
 	} else {
 		setTimeout(function () {
 			document.getElementById("errorActual").innerText = 'Invalid ID';
