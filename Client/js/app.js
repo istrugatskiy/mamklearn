@@ -170,6 +170,7 @@ var allowState = true;
 var minHeight = null;
 var allowState2 = true;
 var editState = false;
+var currentDisconnectInstance = 0;
 window.onload = function () {
 	gapi.load('auth2', function () {
 		gapi.auth2.init({
@@ -992,10 +993,16 @@ window.addEventListener("error", function (e) {
 });
 
 window.addEventListener('offline', (e) => { 
-	throwExcept('CONNECTION_DROPPED');
+	var internalInstance = currentDisconnectInstance;
+	console.log(currentDisconnectInstance);
+	setTimeout(() => {
+		if(currentDisconnectInstance == internalInstance) throwExcept("CONNECTION_DROPPED");
+	}, 5000);
 });
 
-
+window.addEventListener('online', (e) => {
+	currentDisconnectInstance++;
+});
 
 function throwExcept(msg) {
 	document.getElementById('commError2').style.display = 'block';

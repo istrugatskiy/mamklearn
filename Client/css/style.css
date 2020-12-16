@@ -1451,6 +1451,11 @@ img {
 	z-index: -1;
 	position: absolute;
 	height: 150px;
+	bottom: 50px;
+}
+#studentRaceBox {
+	overflow: hidden;
+	justify-content: left;
 }
 .playerContainer {
 	min-height: 180px;
