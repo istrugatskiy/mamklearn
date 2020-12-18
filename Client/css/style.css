@@ -1473,12 +1473,12 @@ img {
 	display: flex;
 	flex-wrap: wrap;
 	margin-left: 10px;
-	height: 50%;
+	height: calc(50% - 75px);
 }
 .playButtonStudent::after {
 	content: '';
 	display: block;
-	padding-bottom: 100%;
+	padding-bottom: calc(100% - 75px);
 }
 .internalText {
 	display: flex;
@@ -1504,16 +1504,14 @@ img {
 		padding: 30px;
 	}
 	.buttonLikeTitle {
-		font-size: 32px;
+		font-size: 24px;
 		height: auto;
 	}
 	.playButtonStudent {
-		font-size: 32px;
-	}
-}
-@media screen and (max-width: 40em) {
-	.playButtonStudent {
 		font-size: 24px;
+	}
+	.internalText {
+		min-height: 30px;
 	}
 }
 @keyframes scaleBoi {
