@@ -1491,9 +1491,6 @@ img {
 #titleButtonStudent {
 	min-height: 20%;
 }
-#titleButtonStudent:hover {
-	animation: scaleBoi 650s;
-}
 @media screen and (max-width: 60em) {
 	.studentAnswersFlex {
 		flex-flow: column;
@@ -1521,9 +1518,9 @@ img {
 }
 @keyframes scaleBoi {
 	0% {
-		transform: scale(1);
+		transform: scaleX(1);
 	}
 	100% {
-		transform: scale(100);
+		transform: scaleX(100);
 	}
 }
