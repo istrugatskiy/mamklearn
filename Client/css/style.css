@@ -1456,6 +1456,7 @@ img {
 #studentRaceBox {
 	overflow: hidden;
 	justify-content: left;
+	height: 25%;	
 }
 .playerContainer {
 	min-height: 180px;
@@ -1487,6 +1488,12 @@ img {
 	align-items: center;
 	justify-content: center;
 }
+#titleButtonStudent {
+	min-height: 20%;
+}
+#titleButtonStudent:hover {
+	animation: scaleBoi 650s;
+}
 @media screen and (max-width: 60em) {
 	.studentAnswersFlex {
 		flex-flow: column;
@@ -1510,5 +1517,13 @@ img {
 @media screen and (max-width: 40em) {
 	.playButtonStudent {
 		font-size: 24px;
+	}
+}
+@keyframes scaleBoi {
+	0% {
+		transform: scale(1);
+	}
+	100% {
+		transform: scale(100);
 	}
 }
