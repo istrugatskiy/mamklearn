@@ -1475,11 +1475,6 @@ img {
 	margin-left: 10px;
 	height: calc(50% - 75px);
 }
-.playButtonStudent::after {
-	content: '';
-	display: block;
-	padding-bottom: calc(100% - 75px);
-}
 .internalText {
 	display: flex;
 	width: 100%;
