@@ -1490,9 +1490,6 @@ img {
 	.studentAnswersFlex {
 		flex-flow: column;
 	}
-	.playButtonStudent::after {
-		display: none;
-	}
 	.playButtonStudent {
 		margin-top: 10px;
 		min-height: 50px;
@@ -1516,4 +1513,11 @@ img {
 	100% {
 		transform: scaleX(100);
 	}
+}
+#studentShortAnswer {
+	display: none;
+	text-align: center;
+}
+#studentShortAnswerText {
+	margin: 0 auto;
 }
