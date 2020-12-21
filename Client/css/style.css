@@ -1521,3 +1521,12 @@ img {
 #studentShortAnswerText {
 	margin: 0 auto;
 }
+.contentEditableDisabled {
+	background-color: rgba(4, 57, 217, 0);
+	border-radius: 12px;
+	color: white;
+	box-shadow: none;
+	display: block;
+	height: auto;
+	word-break: break-all;
+}
