@@ -1513,6 +1513,7 @@ img {
 #studentShortAnswerText {
 	margin: 0 auto;
 }
+<<<<<<< HEAD
 @keyframes fadeOutInner {
 	0% {
 		color: black;
@@ -1531,4 +1532,14 @@ img {
 #titleButtonStudent {
 	animation: fadeOutInner 1s;
 	animation-timing-function: cubic-bezier(0.29, 0.09, 0.07, 1.4);
+=======
+.contentEditableDisabled {
+	background-color: rgba(4, 57, 217, 0);
+	border-radius: 12px;
+	color: white;
+	box-shadow: none;
+	display: block;
+	height: auto;
+	word-break: break-all;
+>>>>>>> ec638fff9d684aed5f80c1a3a7a58bbd59b2542f
 }
