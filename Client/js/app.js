@@ -234,6 +234,7 @@ window.onload = function () {
 				} 
 			});
 			document.getElementById('studentShortAnswerText').addEventListener('keydown', event => {
+				console.log(event.key);
 				if(event.key == "Enter") {
 					document.getElementById('studentShortAnswerText').disabled = true;
 					document.getElementById('shortAnswerSubmitButton').contentEditable = false;

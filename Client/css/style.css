@@ -1506,18 +1506,29 @@ img {
 		min-height: 30px;
 	}
 }
-@keyframes scaleBoi {
-	0% {
-		transform: scaleX(1);
-	}
-	100% {
-		transform: scaleX(100);
-	}
-}
 #studentShortAnswer {
 	display: none;
 	text-align: center;
 }
 #studentShortAnswerText {
 	margin: 0 auto;
+}
+@keyframes fadeOutInner {
+	0% {
+		color: black;
+		transform: scale(1);
+	}
+	50% {
+		transform: translateX(0) scale(0.8);
+		opacity: 1;
+	}
+	100% {
+		color: white;
+		transform: translateX(-50%) scale(0.7);
+		opacity: 0;
+	}
+}
+#titleButtonStudent {
+	animation: fadeOutInner 1s;
+	animation-timing-function: cubic-bezier(0.29, 0.09, 0.07, 1.4);
 }
