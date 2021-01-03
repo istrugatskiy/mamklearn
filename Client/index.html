@@ -23,7 +23,7 @@
 	</script>
 	<script defer src="js/app.js">
 	</script>
-	<script async defer src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.0/dragula.min.js'>
+	<script defer src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.0/dragula.min.js'>
 	</script>
 	<noscript>
 		<style>
@@ -71,7 +71,7 @@
 		}
 
 		if (isIE()) {
-			document.location.href = "https://support.microsoft.com/en-us/office/the-website-you-were-trying-to-reach-doesn-t-work-with-internet-explorer-8f5fc675-cd47-414c-9535-12821ddfc554?ui=en-us&rs=en-us&ad=us";
+			//document.location.href = "https://support.microsoft.com/en-us/office/the-website-you-were-trying-to-reach-doesn-t-work-with-internet-explorer-8f5fc675-cd47-414c-9535-12821ddfc554?ui=en-us&rs=en-us&ad=us";
 		}
 	</script>
 	<audio loop id="mainTheme">
@@ -259,7 +259,7 @@
 	<div class="error" id="CommError" style="display: none; z-index: 20;">
 		<div class="innerdiv"
 			style="background-color: rgba(25, 25, 25, 0.65); border-radius: 0px; border-color: rgb(25, 25, 25); border-width: 5px; border-style: solid;">
-			<p>A communication error has occurred. Please try again later.</p>
+			<p>A communication error occurred. Please try again later.</p>
 			<p style="font-size: large;">Error Code: <span id="comError3">UKNOWN</span></p>
 		</div>
 	</div>
@@ -280,7 +280,7 @@
 				<img src="../img/shirt-0.png" style="position: absolute;" id="playerShirt" alt="your shirt" width="150">
 				<img src="../img/base.png" alt="your profile picture" width="150"></div>
 		</div>
-		<h1 class="button buttonLikeTitle" id="titleButtonStudent">Test text for app, test text works effectively for test text that is 90 characters long...</h1>
+		<h1 class="button buttonLikeTitle" id="titleButtonStudent">Test text for app, test text works effectively for test text that is 90 characters long...<br></h1>
 		<div class="studentAnswersFlex" id="studentAnswersFlex">
 			<button id="studentQuizButton1" class="button titleTransitionBack playButtonStudent"><span class="internalText">Default text, if you're seeing this I messed it up</span></button>
 			<button id="studentQuizButton2" class="button titleTransitionBack playButtonStudent"><span class="internalText">This is a template not something you should see...</span></button>
@@ -292,10 +292,12 @@
 			<div class="charLimited" style="position: relative; right: 0;">0/180</div>
 			<br>
 			<button id="shortAnswerSubmitButton" class="titleTransitionBack button">Submit</button>
+			<br>
+			<div class="charLimited" style="position: relative; right: 0;">(Enter)</div>
 		</div>
 	</div>
 	<div id="commError2"
-		style=" display: none;position: fixed; min-width: 100%; min-height: 100%; background-color: hsla(0, 0%, 10%, 0.65);">
+		style=" display: none; position: fixed; min-width: 100%; min-height: 100%; background-color: hsla(0, 0%, 10%, 0.65);">
 	</div>
 	<div id="errorMessageA">
 		<h2 id="errorActual">Invalid ID</h2>

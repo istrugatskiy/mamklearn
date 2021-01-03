@@ -1502,9 +1502,6 @@ img {
 	.playButtonStudent {
 		font-size: 24px;
 	}
-	.internalText {
-		min-height: 30px;
-	}
 }
 #studentShortAnswer {
 	display: none;
@@ -1513,26 +1510,34 @@ img {
 #studentShortAnswerText {
 	margin: 0 auto;
 }
-<<<<<<< HEAD
 @keyframes fadeOutInner {
 	0% {
 		color: black;
 		transform: scale(1);
 	}
-	50% {
+	25% {
 		transform: translateX(0) scale(0.8);
 		opacity: 1;
 	}
-	100% {
+	50% {
 		color: white;
 		transform: translateX(-50%) scale(0.7);
 		opacity: 0;
 	}
+	70% {
+		color: black;
+		opacity: 0;
+		transform: translateX(50%);
+	}
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
 }
 #titleButtonStudent {
-	animation: fadeOutInner 1s;
-	animation-timing-function: cubic-bezier(0.29, 0.09, 0.07, 1.4);
-=======
+	animation: fadeOutInner 2s;
+	animation-timing-function: cubic-bezier(0.29, 0.09, 0.07, 1.2);
+}
 .contentEditableDisabled {
 	background-color: rgba(4, 57, 217, 0);
 	border-radius: 12px;
@@ -1541,5 +1546,4 @@ img {
 	display: block;
 	height: auto;
 	word-break: break-all;
->>>>>>> ec638fff9d684aed5f80c1a3a7a58bbd59b2542f
 }
