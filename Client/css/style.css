@@ -536,6 +536,7 @@ input[type=number] {
 	border-radius: 12px;
 	color: white;
 	box-shadow: none;
+	cursor: default;
 }
 .textOverrideA {
 	width: 110px;
@@ -1482,6 +1483,7 @@ img {
 	text-align: center;
 	align-items: center;
 	justify-content: center;
+	pointer-events: none;
 }
 #titleButtonStudent {
 	min-height: 20%;
@@ -1530,12 +1532,12 @@ img {
 		transform: translateX(50%);
 	}
 	100% {
-		transform: scale(1);
+		transform: scale(1) translateX(0);
 		opacity: 1;
 	}
 }
-#titleButtonStudent {
-	animation: fadeOutInner 2s;
+.transitionQuestionA {
+	animation: fadeOutInner 0.8s;
 	animation-timing-function: cubic-bezier(0.29, 0.09, 0.07, 1.2);
 }
 .contentEditableDisabled {
