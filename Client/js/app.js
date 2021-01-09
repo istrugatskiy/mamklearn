@@ -1427,12 +1427,14 @@ function studentGameProcessor(input) {
 		gameStateStudent.currentQuestionData.answers = inputInternal.choices;
 		if(inputInternal.isQuestionCorrect) {
 			Array.from(document.getElementById('studentAnswersFlex').children).forEach((object, index) => {
-				object.classList.add('transitionQuestionA');
+				object.classList.add('transitionQuestionB');
 				setTimeout(() => {
 					object.firstElementChild.innerHTML = null;
 					object.disabled = false;
+					object.classList.remove('transitionQuestionB');
+					object.classList.add('transitionQuestionC');
 					setTimeout(() => {
-						object.classList.remove('transitionQuestionA');
+						object.classList.remove('transitionQuestionC');
 					}, 400);
 				}, 400);
 			});
@@ -1465,8 +1467,13 @@ function setQuestion() {
 		}
 	}
 	if (gameStateStudent.currentQuestionData.answers.join("").length == 0) {
+		document.getElementById('resettableCharLimited').innerText = '0/180';
 		document.getElementById('studentAnswersFlex').style.display = 'none';
 		document.getElementById('studentShortAnswer').style.display = 'block';
+		document.getElementById('studentShortAnswerText').textContent = null;
+		document.getElementById('studentShortAnswerText').classList.remove('contentEditableDisabled');
+		document.getElementById('studentShortAnswerText').contentEditable = true;
+		document.getElementById('shortAnswerSubmitButton').disabled = false;
 	}
 	else {
 		document.getElementById('studentShortAnswer').style.display = 'none';

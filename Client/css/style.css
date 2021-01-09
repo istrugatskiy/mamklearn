@@ -1562,6 +1562,11 @@ img {
 	}
 }
 @keyframes fadeOutInner2 {
+	0% {
+		color: white;
+		transform: translateX(-50%) scale(0.7);
+		opacity: 0;
+	}
 	40% {
 		color: black;
 		opacity: 0;
@@ -1592,11 +1597,12 @@ img {
 	animation-timing-function: cubic-bezier(0.29, 0.09, 0.07, 1.2);
 }
 .transitionQuestionB {
-	animation: fadeOutInner2 0.4s;
+	animation: fadeOutInner3 0.4s;
 	animation-timing-function: cubic-bezier(0.29, 0.09, 0.07, 1.2);
 }
 .transitionQuestionC {
-	animation: fadeOutInner3 0.4s;
+	animation: fadeOutInner2 0.4s;
+	animation-timing-function: cubic-bezier(0.29, 0.09, 0.07, 1.2);
 }
 .contentEditableDisabled {
 	background-color: rgba(4, 57, 217, 0);
