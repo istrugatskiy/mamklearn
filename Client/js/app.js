@@ -940,7 +940,7 @@ function contentEditableUpdate() {
 			contentBoxes[i].addEventListener('input', function () {
 				var a69 = getCaretCharacterOffsetWithin(this);
 				setTimeout(() => {
-					var a70 = String(this.textContent.replace(/\r?\n|\r/g , ""));
+					var a70 = String(this.textContent.replace(/(\r\n|\r|\n)/ , ""));
 					this.innerText = a70.substring(0, this.getAttribute("maxlength"));
 					try {
 						setCaretPosition(this, a69);
@@ -1439,15 +1439,22 @@ function studentGameProcessor(input) {
 				}, 400);
 			});
 			document.getElementById('titleButtonStudent').classList.add('transitionQuestionA');
+			document.getElementById('studentShortAnswer').classList.add('transitionQuestionB');
 			setTimeout(() => {
 				setQuestion();
 			}, 400);
+			// Separate timeout to get on a separate thread and fix random flickering
+			setTimeout(() => {
+				document.getElementById('studentShortAnswer').classList.add('transitionQuestionC');
+				document.getElementById('studentShortAnswer').classList.remove('transitionQuestionB');
+			}, 400);
 			setTimeout(() => {
 				document.getElementById('titleButtonStudent').classList.remove('transitionQuestionA');
+				document.getElementById('studentShortAnswer').classList.remove('transitionQuestionC');
 			}, 800);
 		}
 		else {
-			console.log("Incorrect");
+			
 		}
 	}
 	console.log(gameStateStudent);
@@ -1455,7 +1462,7 @@ function studentGameProcessor(input) {
 
 function setQuestion() {
 	document.getElementById('studentAnswersFlex').style.display = 'flex';
-	document.getElementById('titleButtonStudent').innerText = decodeURI(gameStateStudent.currentQuestionData.question);
+	document.getElementById('titleButtonStudent').firstElementChild.innerText = decodeURI(gameStateStudent.currentQuestionData.question);
 	var options = document.getElementById('studentAnswersFlex').children;
 	for (i = 0; i < options.length; i++) {
 		if (!gameStateStudent.currentQuestionData.answers[i]) {
