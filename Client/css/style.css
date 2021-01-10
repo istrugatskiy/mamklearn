@@ -1614,3 +1614,16 @@ img {
 	height: auto;
 	word-break: break-all;
 }
+#titleButtonStudent {
+	display: block;
+	font-size: 48px;
+	padding-top: 30px;
+}
+.timeLeft {
+	font-size: 24px;
+	position: absolute;
+	bottom: 30px;
+	left: 50%;
+	transform: translate(-50%, 0);
+	min-width: 400px;
+}
