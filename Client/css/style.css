@@ -1450,7 +1450,7 @@ img {
 	height: 100%;
 }
 .buttonLikeTitle {
-	font-size: 3vw;
+	font-size: 48px;
 	cursor: default;
 	width: 95%;
 	margin: 25px auto;
@@ -1489,7 +1489,7 @@ img {
 	min-height: 180px;
 }
 .playButtonStudent {
-	font-size: 2.5vw;
+	font-size: 42px;
 	flex: 1 0 calc(25% - 10px);
 	word-break: break-word;
 	display: inline-flex;
@@ -1626,4 +1626,5 @@ img {
 	left: 50%;
 	transform: translate(-50%, 0);
 	min-width: 400px;
+	display: none;
 }
