@@ -112,7 +112,7 @@ var jsonUri = "data:text/plain;base64," + window.btoa(JSON.stringify(ParticleDat
 var a = false;
 var currentQuizEdit;
 var drake = null;
-var quizStartTestCase = ' {"gameStart": true, "competitors": ["Nabeel", "Nabeel2", "Nabeel3", "Nabeel4", "Nabeel5"], "competitorConfigs": [[0,0,8,4,2], [0,0,8,4,2], [0,0,8,4,2], [0,0,8,4,2], [0,0,8,4,2]], "totalQuestions": 15, "currentQuestion": "If%20fish%20are%20fish", "choices": [ "heck", "null", "really%20I%20could%20not%20be%20bothered", "heckv2" ], "currentQuestionTime": 69, "questionID": 0 }';
+var quizStartTestCase = ' {"gameStart": true, "totalQuestions": 15, "currentQuestion": "If%20fish%20are%20fish", "choices": [ "heck", "null", "really%20I%20could%20not%20be%20bothered", "heckv2" ], "currentQuestionTime": 69, "questionID": 0 }';
 var anotherTestCase = '{ "isQuestionCorrect": true, "nextQuestion": "heckDifferentQuestionTooLazyTooPutPercent", "choices": [ null ], "currentQuestionTime": 69 }';
 var anotherTestCase2 = '{ "isQuestionCorrect": true, "nextQuestion": "heckDifferentQuestionTooLazyTooPutPercent", "choices": [ "Nabeel", "Nabeel2", "Nabeel3", "Nabeel4" ], "currentQuestionTime": 69 }';
 var gameStateStudent = {};
@@ -622,7 +622,7 @@ function JoinGame(event) {
 	for (var i = 0, il = selects.length; i < il; i++) {
 		selects[i].className += " disabled";
 	}
-	document.getElementById('submitID').innerHTML = `&nbsp;	${svgData} &nbsp;	`;
+	document.getElementById('submitID').innerHTML = `${svgData}`;
 	if (document.getElementById("gameID").value == "2794") {
 		setTimeout(function () {
 			document.getElementById('loader-1').style.display = "none";
@@ -1425,6 +1425,7 @@ function studentGameProcessor(input) {
 	else if(inputInternal.hasOwnProperty('isQuestionCorrect')) {
 		gameStateStudent.currentQuestionData.question = inputInternal.nextQuestion;
 		gameStateStudent.currentQuestionData.answers = inputInternal.choices;
+		gameStateStudent.currentQuestionData.timeLimit = inputInternal.currentQuestionTime;
 		if(inputInternal.isQuestionCorrect) {
 			Array.from(document.getElementById('studentAnswersFlex').children).forEach((object, index) => {
 				object.classList.add('transitionQuestionB');
@@ -1460,7 +1461,10 @@ function studentGameProcessor(input) {
 	console.log(gameStateStudent);
 }
 
+var timerInterval;
+
 function setQuestion() {
+	clearInterval(timerInterval);
 	document.getElementById('studentAnswersFlex').style.display = 'flex';
 	document.getElementById('titleButtonStudent').firstElementChild.innerText = decodeURI(gameStateStudent.currentQuestionData.question);
 	var options = document.getElementById('studentAnswersFlex').children;
@@ -1484,6 +1488,17 @@ function setQuestion() {
 	}
 	else {
 		document.getElementById('studentShortAnswer').style.display = 'none';
+	}
+	if (gameStateStudent.currentQuestionData.timeLimit === false) {
+		document.getElementById('timeLeftCounter').style.display = 'none';
+	}
+	else {
+		document.getElementById('timeLeftCounter').style.display = 'block';
+		document.getElementById('timeLeftCounter').innerText = `(Time Left: ${gameStateStudent.currentQuestionData.timeLimit}s)`;
+		timerInterval = setInterval(() => {
+			document.getElementById('timeLeftCounter').innerText = `(Time Left: ${gameStateStudent.currentQuestionData.timeLimit}s)`;
+			gameStateStudent.currentQuestionData.timeLimit--;
+		}, 1000);
 	}
 }
 

@@ -1628,3 +1628,6 @@ img {
 	min-width: 400px;
 	display: none;
 }
+#submitID {
+	min-width: 170px;
+}
