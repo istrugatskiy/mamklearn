@@ -1512,9 +1512,11 @@ function setQuestion() {
 		timerInterval = setInterval(() => {
 			var delta = (Date.now() - start) / 1000;
 			gameStateStudent.currentQuestionData.timeLimit = init - delta;
-			document.getElementById('timeLeftCounter').innerText = `(Time Left: ${Math.floor(gameStateStudent.currentQuestionData.timeLimit)}s)`;
-			if(gameStateStudent.currentQuestionData.timeLimit) {
-
+			if(gameStateStudent.currentQuestionData.timeLimit < 0) {
+				document.getElementById('timeLeftCounter').innerText = `(Time Penalty: ${Math.abs(Math.floor(gameStateStudent.currentQuestionData.timeLimit))}s)`;
+			}
+			else {
+				document.getElementById('timeLeftCounter').innerText = `(Time Left: ${Math.floor(gameStateStudent.currentQuestionData.timeLimit)}s)`;
 			}
 		}, 100); 
 	}
