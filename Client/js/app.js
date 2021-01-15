@@ -323,6 +323,7 @@ function answerQuestion(answer) {
 function submitMultipleChoice(event) {
 	var response = event.target.id.charAt(event.target.id.length - 1);
 	answerQuestion(response);
+	clearInterval(timerInterval);
 	Array.from(document.getElementById('studentAnswersFlex').children).forEach( (object, index) => {
 		object.disabled = true;
 		if(index + 1 == response) {
@@ -1512,13 +1513,16 @@ function setQuestion() {
 		timerInterval = setInterval(() => {
 			var delta = (Date.now() - start) / 1000;
 			gameStateStudent.currentQuestionData.timeLimit = init - delta;
-			if(gameStateStudent.currentQuestionData.timeLimit < 0) {
+			if(gameStateStudent.currentQuestionData.timeLimit < 0 && gameStateStudent.currentQuestionData.timeLimit > -999) {
 				document.getElementById('timeLeftCounter').innerText = `(Time Penalty: ${Math.abs(Math.floor(gameStateStudent.currentQuestionData.timeLimit))}s)`;
+			}
+			else if(gameStateStudent.currentQuestionData.timeLimit < -999) {
+				document.getElementById('timeLeftCounter').innerText = `(You're very slow)`;
 			}
 			else {
 				document.getElementById('timeLeftCounter').innerText = `(Time Left: ${Math.floor(gameStateStudent.currentQuestionData.timeLimit)}s)`;
 			}
-		}, 100); 
+		}, 10); 
 	}
 }
 
