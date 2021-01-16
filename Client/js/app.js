@@ -113,7 +113,7 @@ var a = false;
 var currentQuizEdit;
 var drake = null;
 var quizStartTestCase = ' {"gameStart": true, "totalQuestions": 15, "currentQuestion": "If%20fish%20are%20fish", "choices": [ "heck", "null", "really%20I%20could%20not%20be%20bothered", "heckv2" ], "currentQuestionTime": 69, "questionID": 0 }';
-var anotherTestCase = '{ "isQuestionCorrect": true, "nextQuestion": "heckDifferentQuestionTooLazyTooPutPercent", "choices": [ null ], "currentQuestionTime": 69 }';
+var anotherTestCase = '{ "isQuestionCorrect": true, "nextQuestion": null, "choices": [ null ], "currentQuestionTime": null }';
 var anotherTestCase2 = '{ "isQuestionCorrect": true, "nextQuestion": "heckDifferentQuestionTooLazyTooPutPercent", "choices": [ "Nabeel", "Nabeel2", "Nabeel3", "Nabeel4" ], "currentQuestionTime": 69 }';
 var gameStateStudent = {};
 console.log("%cUse link to get quiz answers:https://bit.ly/31Apj2U", "font-size: 32px;");
@@ -505,8 +505,9 @@ function userClick(e, g = false, nabeelIsGreat = false) {
 	}, 1000);
 };
 
+var profile;
 function onSignIn(googleUser) {
-	var profile = googleUser.getBasicProfile();
+	profile = googleUser.getBasicProfile();
 	var $error = document.querySelector("#loginError1");
 	var id_token = googleUser.getAuthResponse().id_token;
 	var auth2 = gapi.auth2.getAuthInstance();
@@ -1437,10 +1438,10 @@ function studentGameProcessor(input) {
 	}
 	else if(inputInternal.hasOwnProperty('isQuestionCorrect')) {
 		clearInterval(timerInterval);
-		gameStateStudent.currentQuestionData.question = inputInternal.nextQuestion;
-		gameStateStudent.currentQuestionData.answers = inputInternal.choices;
-		gameStateStudent.currentQuestionData.timeLimit = inputInternal.currentQuestionTime;
 		if(inputInternal.isQuestionCorrect) {
+			gameStateStudent.currentQuestionData.question = inputInternal.nextQuestion;
+			gameStateStudent.currentQuestionData.answers = inputInternal.choices;
+			gameStateStudent.currentQuestionData.timeLimit = inputInternal.currentQuestionTime;
 			Array.from(document.getElementById('studentAnswersFlex').children).forEach((object, index) => {
 				object.classList.add('transitionQuestionB');
 				setTimeout(() => {

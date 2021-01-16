@@ -23,6 +23,12 @@ button {
     border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
     border-image: initial;
 }
+[contentEditable] {
+	-webkit-user-modify: read-write;
+    overflow-wrap: break-word;
+	-webkit-line-break: after-white-space;
+	line-break: after-white-space;
+}
 #particles-js {
 	position: fixed;
 	width: 100%;
