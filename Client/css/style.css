@@ -1596,15 +1596,15 @@ img {
 	}
 }
 .transitionQuestionA {
-	animation: fadeOutInner 0.8s;
+	animation: fadeOutInner 0.82s;
 	animation-timing-function: cubic-bezier(0.29, 0.09, 0.07, 1.2);
 }
 .transitionQuestionB {
-	animation: fadeOutInner3 0.4s;
+	animation: fadeOutInner3 0.42s;
 	animation-timing-function: cubic-bezier(0.29, 0.09, 0.07, 1.2);
 }
 .transitionQuestionC {
-	animation: fadeOutInner2 0.4s;
+	animation: fadeOutInner2 0.42s;
 	animation-timing-function: cubic-bezier(0.29, 0.09, 0.07, 1.2);
 }
 .contentEditableDisabled {

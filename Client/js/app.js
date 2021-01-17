@@ -1388,6 +1388,8 @@ function exitModalPopupG() {
 	});
 }
 
+var otherInterval;
+
 function studentGameProcessor(input) {
 	var inputInternal = JSON.parse(input);
 	if(inputInternal.hasOwnProperty('gameStart')) {
@@ -1470,23 +1472,50 @@ function studentGameProcessor(input) {
 			}, 800);
 		}
 		else {
+			var start = Date.now();
+			var init = 5;
+			otherInterval = setInterval(() => {
+				var delta = (Date.now() - start) / 1000;
+				var internal = init - delta;
+				if(internal < 0) {internal = 0};
+				document.getElementById('mistakeQuestion').innerText = `You can try again in ${Math.floor(internal)} seconds`;
+			}, 100);
 			Array.from(document.getElementById('studentAnswersFlex').children).forEach((object, index) => {
 				object.classList.add('transitionQuestionB');
 				setTimeout(() => {
+					object.style.display = 'none';
 					object.firstElementChild.innerHTML = null;
 					object.disabled = false;
-					object.style.display = 'none';
 					object.classList.remove('transitionQuestionB');
+					setTimeout(() => {
+						object.style.display = 'block';
+						object.classList.add('transitionQuestionC');
+						setTimeout(() => {
+							object.classList.remove('transitionQuestionC');
+						}, 400);
+					}, 5000);
 				}, 400);
 			});
 			document.getElementById('titleButtonStudent').classList.add('transitionQuestionB');
+			document.getElementById('studentShortAnswer').classList.add('transitionQuestionB');
 			setTimeout(() => {
 				document.getElementById('titleButtonStudent').classList.remove('transitionQuestionB');
+				document.getElementById('studentShortAnswer').classList.remove('transitionQuestionB');
 				document.getElementById('titleButtonStudent').style.display = 'none';
+				document.getElementById('studentShortAnswer').style.display = 'none';
 				document.getElementById('userNotifyPlay').style.display = 'block';
 				setTimeout(() => {
 					document.getElementById('userNotifyPlay').classList.add('fadeOutThingy');
+					document.getElementById('titleButtonStudent').classList.add('transitionQuestionC');
+					document.getElementById('studentShortAnswer').classList.add('transitionQuestionC');
+					document.getElementById('titleButtonStudent').style.display = 'block';
+					setQuestion();
 					setTimeout(() => {
+						document.getElementById('studentShortAnswer').classList.remove('transitionQuestionC');
+						document.getElementById('titleButtonStudent').classList.remove('transitionQuestionC');
+					}, 400);
+					setTimeout(() => {
+						clearInterval(otherInterval);
 						document.getElementById('userNotifyPlay').style.display = 'none';
 					}, 100);
 				}, 5000);
