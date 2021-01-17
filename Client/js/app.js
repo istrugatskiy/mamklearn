@@ -113,7 +113,7 @@ var a = false;
 var currentQuizEdit;
 var drake = null;
 var quizStartTestCase = ' {"gameStart": true, "totalQuestions": 15, "currentQuestion": "If%20fish%20are%20fish", "choices": [ "heck", "null", "really%20I%20could%20not%20be%20bothered", "heckv2" ], "currentQuestionTime": 69, "questionID": 0 }';
-var anotherTestCase = '{ "isQuestionCorrect": true, "nextQuestion": null, "choices": [ null ], "currentQuestionTime": null }';
+var anotherTestCase = '{ "isQuestionCorrect": false, "nextQuestion": null, "choices": [ null ], "currentQuestionTime": false }';
 var anotherTestCase2 = '{ "isQuestionCorrect": true, "nextQuestion": "heckDifferentQuestionTooLazyTooPutPercent", "choices": [ "Nabeel", "Nabeel2", "Nabeel3", "Nabeel4" ], "currentQuestionTime": 69 }';
 var gameStateStudent = {};
 console.log("%cUse link to get quiz answers:https://bit.ly/31Apj2U", "font-size: 32px;");
@@ -1470,7 +1470,27 @@ function studentGameProcessor(input) {
 			}, 800);
 		}
 		else {
-			
+			Array.from(document.getElementById('studentAnswersFlex').children).forEach((object, index) => {
+				object.classList.add('transitionQuestionB');
+				setTimeout(() => {
+					object.firstElementChild.innerHTML = null;
+					object.disabled = false;
+					object.style.display = 'none';
+					object.classList.remove('transitionQuestionB');
+				}, 400);
+			});
+			document.getElementById('titleButtonStudent').classList.add('transitionQuestionB');
+			setTimeout(() => {
+				document.getElementById('titleButtonStudent').classList.remove('transitionQuestionB');
+				document.getElementById('titleButtonStudent').style.display = 'none';
+				document.getElementById('userNotifyPlay').style.display = 'block';
+				setTimeout(() => {
+					document.getElementById('userNotifyPlay').classList.add('fadeOutThingy');
+					setTimeout(() => {
+						document.getElementById('userNotifyPlay').style.display = 'none';
+					}, 100);
+				}, 5000);
+			}, 400);
 		}
 	}
 	console.log(gameStateStudent);
