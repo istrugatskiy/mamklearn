@@ -1394,7 +1394,7 @@ function studentGameProcessor(input) {
 	var inputInternal = JSON.parse(input);
 	if(inputInternal.hasOwnProperty('gameStart')) {
 		if(inputInternal.gameStart == true) {
-
+			clearInterval(timerInterval);
 			gameStateStudent = {
 				competitors: inputInternal.competitors,
 				competitorAvatars: inputInternal.competitorConfigs,
