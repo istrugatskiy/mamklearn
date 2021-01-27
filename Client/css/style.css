@@ -1481,6 +1481,8 @@ img {
 	position: absolute;
 	height: 150px;
 	bottom: 50px;
+	transform: translateX(415px);
+	transition: transform 0.3s;
 }
 #studentRaceBox {
 	overflow: hidden;
@@ -1644,4 +1646,17 @@ img {
 }
 .fadeOutThingy {
 	animation: fadeOut .1s;
+}
+.stretchyBoi2 {
+	font-size: 16px;
+	width: calc(100% - 30px);
+	position: absolute;
+	bottom: 0px;
+	left: 15px;	
+}
+.stretchyBoi2 > tbody > tr > th {
+	border: #000000;
+	border-style: solid;
+	border-radius: 5px;
+	min-width: calc(75px);
 }
