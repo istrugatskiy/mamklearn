@@ -30,6 +30,11 @@ button {
 	line-break: after-white-space;
 	-webkit-user-select: text;
 }
+table {
+	border-collapse: separate;
+    text-indent: initial;
+    border-spacing: 2px;
+}
 #particles-js {
 	position: fixed;
 	width: 100%;
@@ -1481,7 +1486,7 @@ img {
 	position: absolute;
 	height: 150px;
 	bottom: 50px;
-	transform: translateX(415px);
+	transform: translateX(calc(110px));
 	transition: transform 0.3s;
 }
 #studentRaceBox {
@@ -1658,5 +1663,6 @@ img {
 	border: #000000;
 	border-style: solid;
 	border-radius: 5px;
-	min-width: calc(75px);
+	border-width: 5px;
+	min-width: 100px;
 }
