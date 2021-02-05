@@ -173,6 +173,9 @@ var minHeight = null;
 var allowState2 = true;
 var editState = false;
 var currentDisconnectInstance = 0;
+const $ = (a) => {
+	return document.getElementById(a);
+}
 window.onload = function () {
 	gapi.load('auth2', function () {
 		gapi.auth2.init({
@@ -181,14 +184,14 @@ window.onload = function () {
 			contentEditableUpdate();
 			var $loader = document.querySelector(".loader");
 			$loader.classList.remove('loader--active');
-			document.getElementById('quizCreateForm').addEventListener('submit', createNewQuiz);
+			$('quizCreateForm').addEventListener('submit', createNewQuiz);
 			var auth2 = gapi.auth2.getAuthInstance();
 			if(new URLSearchParams(window.location.search).get('shareQuiz')) {
 				setTimeout(() => {
-					document.getElementById("errorActual").innerText = 'Quiz Copied';
-					document.getElementById("errorMessageA").style.display = "block";
+					$("errorActual").innerText = 'Quiz Copied';
+					$("errorMessageA").style.display = "block";
 					setTimeout(function () {
-						document.getElementById("errorMessageA").style.display = "none";
+						$("errorMessageA").style.display = "none";
 						window.history.pushState({"html": 1,"pageTitle": 5},"mamkLearn", "index.html");
 					}, 1000);
 				}, 500);
@@ -199,43 +202,43 @@ window.onload = function () {
 					event.returnValue = ' ';
 				}
 			});
-			document.getElementById('editQuizForm').addEventListener('submit', function (event) {
+			$('editQuizForm').addEventListener('submit', function (event) {
 				event.preventDefault();
-				document.getElementById("modal-popupA").style.pointerEvents = "none";
-				document.getElementById("saveQuizButton").disabled = true;
-				document.getElementById("backButtonEditQuiz").disabled = true;
-				document.getElementById("quizNameUpdate").disabled = true;
-				document.getElementById("addQuestionButton").disabled = true;
+				$("modal-popupA").style.pointerEvents = "none";
+				$("saveQuizButton").disabled = true;
+				$("backButtonEditQuiz").disabled = true;
+				$("quizNameUpdate").disabled = true;
+				$("addQuestionButton").disabled = true;
 				collapseAllArea();
 				parseActiveQuiz();
 				if(!verifyQuiz()) {
-					document.getElementById("modal-popupB").style.display = 'block';
-					document.getElementById("editQuizMenu").style.animation = 'fadeOut 0.5s';
+					$("modal-popupB").style.display = 'block';
+					$("editQuizMenu").style.animation = 'fadeOut 0.5s';
 					window.scrollTo(0, 0);
 					allowState = false;
 					allowState2 = false;
 					setTimeout(function () {
-						document.getElementById("editQuizMenu").style.visibility = 'hidden';
+						$("editQuizMenu").style.visibility = 'hidden';
 						allowState2 = true;
 					}, 500);
 				}
 				else {
 					quizObject2[currentQuizEdit] = tempQuiz;
-					quizList2[currentQuizEdit] = encodeHTML(document.getElementById("quizNameUpdate").value);
-					document.getElementById("saveQuizButton").innerHTML = svgData;
+					quizList2[currentQuizEdit] = encodeHTML($("quizNameUpdate").value);
+					$("saveQuizButton").innerHTML = svgData;
 					setTimeout(function () {
 						exitModalPopupF(false);
 					}, 1000);
 					setTimeout(function () {
-						document.getElementById("errorActual").innerText = 'Quiz Saved';
-						document.getElementById("errorMessageA").style.display = "block";
+						$("errorActual").innerText = 'Quiz Saved';
+						$("errorMessageA").style.display = "block";
 						setTimeout(function () {
-							document.getElementById("errorMessageA").style.display = "none";
+							$("errorMessageA").style.display = "none";
 						}, 1000);
 					},1200);
 				} 
 			});
-			document.getElementById('studentShortAnswerText').addEventListener('keydown', event => {
+			$('studentShortAnswerText').addEventListener('keydown', event => {
 				if(event.key == "Enter") {
 					submitShortAnswer();
 				}
@@ -244,76 +247,78 @@ window.onload = function () {
 	});
 }
 
-window.addEventListener('click', function (event) {
-	switch(event.target.id) {
-		case "btn2":
-			playCode();
-			break;
-		case "makebtn":
-			makeCode();
-			break;
-		case "signOutbtn":
-			signOut();
-			break;
-		case "deleteQuiuzConfirm":
-			deleteQuizConfirm();
-			break;
-		case "deleteQuiz":
-			deleteQuiz();
-			break;
-		case "editQuiz":
-			editQuiz();
-			break;
-		case "addQuestionButton":
-			addQuestion();
-			break;
-		case "playQuiz":
-			playQuiz();
-			break;
-		case "doneButtonA":
-			doneButtonA();
-			break;
-		case "shareQuiz":
-			shareQuiz();
-			break;
-		case "backButtonEditQuiz":
-			exitModalPopupF(true);
-			break;
-		case "loginBtn":
-			login();
-			break;
-		case "customButtonChange":
-			updateImageState();
-			break;
-		case "customButtonChange2":
-			updateImageState();
-			break;
-		case "leftCustomizeArrow":
-			arrowButtonPress(true);
-			break;
-		case "arrowCustomizeRight":
-			arrowButtonPress(false);
-			break;
-		case "shortAnswerSubmitButton":
-			submitShortAnswer();
-			break;
-		case "backButtonC":
-			goBackMakeA();
-			break;
-		case "copyShareLink":
-			copyShareLink();
-			break;
-		case "playMenuBack":
-			goBack();
-			break;
-		case "AboutLink":
-			userClick('About.html');
-			break;
-	}
-	if(event.target.id.includes("studentQuizButton")) {
-		submitMultipleChoice(event);
-	}
-
+window.addEventListener("load", () => {
+	window.addEventListener('click', function (event) {
+		switch(event.target.id) {
+			case "btn2":
+				playCode();
+				break;
+			case "makebtn":
+				makeCode();
+				break;
+			case "signOutbtn":
+				signOut();
+				break;
+			case "deleteQuiuzConfirm":
+				deleteQuizConfirm();
+				break;
+			case "deleteQuiz":
+				deleteQuiz();
+				break;
+			case "editQuiz":
+				editQuiz();
+				break;
+			case "addQuestionButton":
+				addQuestion();
+				break;
+			case "playQuiz":
+				playQuiz();
+				break;
+			case "doneButtonA":
+				doneButtonA();
+				break;
+			case "shareQuiz":
+				shareQuiz();
+				break;
+			case "backButtonEditQuiz":
+				exitModalPopupF(true);
+				break;
+			case "loginBtn":
+				login();
+				break;
+			case "customButtonChange":
+				updateImageState();
+				break;
+			case "customButtonChange2":
+				updateImageState();
+				break;
+			case "leftCustomizeArrow":
+				arrowButtonPress(true);
+				break;
+			case "arrowCustomizeRight":
+				arrowButtonPress(false);
+				break;
+			case "shortAnswerSubmitButton":
+				submitShortAnswer();
+				break;
+			case "backButtonC":
+				goBackMakeA();
+				break;
+			case "copyShareLink":
+				copyShareLink();
+				break;
+			case "playMenuBack":
+				goBack();
+				break;
+			case "AboutLink":
+				userClick('About.html');
+				break;
+		}
+		if(event.target.id.includes("studentQuizButton")) {
+			submitMultipleChoice(event);
+		}
+	
+	});
 });
 
 function answerQuestion(answer) {
@@ -324,7 +329,7 @@ function submitMultipleChoice(event) {
 	var response = event.target.id.charAt(event.target.id.length - 1);
 	answerQuestion(response);
 	clearInterval(timerInterval);
-	Array.from(document.getElementById('studentAnswersFlex').children).forEach( (object, index) => {
+	Array.from($('studentAnswersFlex').children).forEach( (object, index) => {
 		object.disabled = true;
 		if(index + 1 == response) {
 			object.firstElementChild.innerHTML = svgData;
@@ -333,28 +338,28 @@ function submitMultipleChoice(event) {
 }
 
 function submitShortAnswer() {
-	document.getElementById('studentShortAnswerText').contentEditable = false;
-	document.getElementById('shortAnswerSubmitButton').disabled = true;
-	document.getElementById('studentShortAnswerText').classList.add('contentEditableDisabled');
+	$('studentShortAnswerText').contentEditable = false;
+	$('shortAnswerSubmitButton').disabled = true;
+	$('studentShortAnswerText').classList.add('contentEditableDisabled');
 	answerQuestion("testing!");
 }
 
 function shareQuiz() {
 	checkOnce = false;
-	document.getElementById('manageQuizMenu').style.animation = 'modalPopout 0.3s';
+	$('manageQuizMenu').style.animation = 'modalPopout 0.3s';
 	setTimeout(function () {
-		document.getElementById('manageQuizMenu').style.display = 'none';
-		document.getElementById('shareQuizMenu').style.display = 'block';
-		document.getElementById('manageQuizMenu').style.animation = 'modalPopin 0.3s';
-		document.getElementById('shareQuizMenu').style.animation = 'modalPopin 0.3s';
+		$('manageQuizMenu').style.display = 'none';
+		$('shareQuizMenu').style.display = 'block';
+		$('manageQuizMenu').style.animation = 'modalPopin 0.3s';
+		$('shareQuizMenu').style.animation = 'modalPopin 0.3s';
 	}, 300);
 }
 
 function login() {
 	a = true;
 	auth2 = gapi.auth2.getAuthInstance();
-	document.getElementById('loginPage').style.display = "block";
-	document.getElementById('loginBtn').classList.add('buttonPressed');
+	$('loginPage').style.display = "block";
+	$('loginBtn').classList.add('buttonPressed');
 }
 
 function addQuestion() {
@@ -362,66 +367,66 @@ function addQuestion() {
 	contentEditableUpdate();
 	reorderProper();
 	setTimeout(() => {
-		document.getElementById('addQuestionButton').blur();
+		$('addQuestionButton').blur();
 	}, 300);
 }
 
 function doneButtonA() {
 	if (allowState2) {
-		document.getElementById("modal-popupB").style.animation = 'modalPopout2 0.5s';
-		document.getElementById("editQuizMenu").style.animation = 'fadein 0.5s';
-		document.getElementById("editQuizMenu").style.visibility = 'visible';
-		document.getElementById("saveQuizButton").disabled = false;
-		document.getElementById("backButtonEditQuiz").disabled = false;
-		document.getElementById("quizNameUpdate").disabled = false;
-		document.getElementById("addQuestionButton").disabled = false;
+		$("modal-popupB").style.animation = 'modalPopout2 0.5s';
+		$("editQuizMenu").style.animation = 'fadein 0.5s';
+		$("editQuizMenu").style.visibility = 'visible';
+		$("saveQuizButton").disabled = false;
+		$("backButtonEditQuiz").disabled = false;
+		$("quizNameUpdate").disabled = false;
+		$("addQuestionButton").disabled = false;
 		allowState = true;
 		reorderProper();
 		setTimeout(function () {
-			document.getElementById("modal-popupB").style = '';
-			document.getElementById("modal-popupB").style.visibility = 'none';
-			document.getElementById("modal-popupA").style.pointerEvents = "all";
+			$("modal-popupB").style = '';
+			$("modal-popupB").style.visibility = 'none';
+			$("modal-popupA").style.pointerEvents = "all";
 		}, 500);
 	}
 }
 
 function playQuiz() {
-	document.getElementById('modal-bg').style.animation = 'fadeOut 0.5s';
+	$('modal-bg').style.animation = 'fadeOut 0.5s';
 	setTimeout(function () {
-		document.getElementById('modal-bg').style.display = 'none';
+		$('modal-bg').style.display = 'none';
 	}, 500);
 	setTimeout(() => {
-		document.getElementById('title').style.display = 'none';
-		document.getElementById('mainTheme').play();
-		document.getElementById('teacherPlayScreen').style.display = 'block';
+		$('title').style.display = 'none';
+		$('mainTheme').play();
+		$('teacherPlayScreen').style.display = 'block';
 	}, 1000);
-	document.getElementById('manageQuizMenu').style.animation = 'modalPopout 0.3s';
+	$('manageQuizMenu').style.animation = 'modalPopout 0.3s';
 	setTimeout(function () {
-		document.getElementById('modal-popupA').style.display = 'none';
+		$('modal-popupA').style.display = 'none';
 	}, 300);
 }
 
 function deleteQuiz() {
 	checkOnce = false;
-	document.getElementById('manageQuizMenu').style.animation = 'modalPopout 0.3s';
-	document.getElementById('deleteQuizConfirm').disabled = false;
-	document.getElementById('backButtonDeleteConfirm').disabled = false;
-	document.getElementById('deleteQuizConfirm').innerHTML = 'Delete';
-	document.getElementById('deleteQuizConfirm').style.backgroundColor = 'orange';
+	$('manageQuizMenu').style.animation = 'modalPopout 0.3s';
+	$('deleteQuizConfirm').disabled = false;
+	$('backButtonDeleteConfirm').disabled = false;
+	$('deleteQuizConfirm').innerHTML = 'Delete';
+	$('deleteQuizConfirm').style.backgroundColor = 'orange';
 	setTimeout(function () {
-		document.getElementById('manageQuizMenu').style.display = 'none';
-		document.getElementById('quizDeleteConfirm').style.display = 'block';
-		document.getElementById('manageQuizMenu').style.animation = 'modalPopin 0.3s';
-		document.getElementById('quizDeleteConfirm').style.animation = 'modalPopin 0.3s';
+		$('manageQuizMenu').style.display = 'none';
+		$('quizDeleteConfirm').style.display = 'block';
+		$('manageQuizMenu').style.animation = 'modalPopin 0.3s';
+		$('quizDeleteConfirm').style.animation = 'modalPopin 0.3s';
 	}, 300);
 }
 
 function deleteQuizConfirm() {
 	delete quizList2[currentQuizEdit];
-	document.getElementById('deleteQuizConfirm').disabled = true;
-	document.getElementById('backButtonDeleteConfirm').disabled = true;
-	document.getElementById('deleteQuizConfirm').style.backgroundColor = null;
-	document.getElementById('deleteQuizConfirm').innerHTML = svgData;
+	$('deleteQuizConfirm').disabled = true;
+	$('backButtonDeleteConfirm').disabled = true;
+	$('deleteQuizConfirm').style.backgroundColor = null;
+	$('deleteQuizConfirm').innerHTML = svgData;
 	setTimeout(function () {
 		exitModalPopupC();
 	}, 1000);
@@ -430,7 +435,7 @@ function deleteQuizConfirm() {
 function editQuiz() {
 	checkOnce = false;
 	editState = true;
-	document.getElementById('manageQuizMenu').style.animation = 'modalPopout 0.3s';
+	$('manageQuizMenu').style.animation = 'modalPopout 0.3s';
 	if (quizObject2[currentQuizEdit] === undefined) {
 		quizObject2[currentQuizEdit] = JSON.parse(JSON.stringify(quizObject));
 		quizObject2[currentQuizEdit].quizName = quizList2[currentQuizEdit];
@@ -439,7 +444,7 @@ function editQuiz() {
 	else {
 		quizObject2[currentQuizEdit].questionObjects.forEach(function (questionObject) {
 			addquestionToDOM();
-			var actualData = document.getElementById(`draggableQuestion${highestQuestion}`).children[1].children;
+			var actualData = $(`draggableQuestion${highestQuestion}`).children[1].children;
 			actualData[0].textContent = questionObject.questionName;
 			characterCount(actualData[0], 90);
 			actualData[3].children[0].children[0].checked = questionObject.shortAnswer;
@@ -467,8 +472,8 @@ function editQuiz() {
 		});
 		reorderProper();
 	}
-	document.getElementById('quizNameUpdate').value = decodeHTML(quizList2[currentQuizEdit]);
-	drake = dragula([document.getElementById('draggableDiv')], {
+	$('quizNameUpdate').value = decodeHTML(quizList2[currentQuizEdit]);
+	drake = dragula([$('draggableDiv')], {
 		moves: function (el, container, handle) {
 			return handle.classList.contains('draggableActual');
 		}
@@ -483,10 +488,10 @@ function editQuiz() {
 		}, 100);
 	});
 	setTimeout(function () {
-		document.getElementById('manageQuizMenu').style.display = 'none';
-		document.getElementById('editQuizMenu').style.display = 'block';
-		document.getElementById('manageQuizMenu').style.animation = 'modalPopin 0.3s';
-		document.getElementById('editQuizMenu').style.animation = 'modalPopin 0.3s';
+		$('manageQuizMenu').style.display = 'none';
+		$('editQuizMenu').style.display = 'block';
+		$('manageQuizMenu').style.animation = 'modalPopin 0.3s';
+		$('editQuizMenu').style.animation = 'modalPopin 0.3s';
 		contentEditableUpdate();
 	}, 300);
 }
@@ -495,10 +500,10 @@ function userClick(e, g = false, nabeelIsGreat = false) {
 	var $loader = document.querySelector(".loader");
 	$loader.classList.add('loader--active');
 	if (g) {
-		document.getElementById('btn').classList.add('buttonPressed');
+		$('btn').classList.add('buttonPressed');
 	}
 	if (nabeelIsGreat) {
-		document.getElementById('btn2').classList.add('buttonPressed');
+		$('btn2').classList.add('buttonPressed');
 	}
 	setTimeout(function () {
 		window.location.href = e;
@@ -522,9 +527,9 @@ function onSignIn(googleUser) {
 			//  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 			//  xhr.onload = function() {
 			//  console.log('Signed in as: ' + xhr.responseText);
-			//  document.getElementById('title').innerHTML = decodeURI(newTitle);
-			//  document.getElementById('loginPage').style.animation = 'animatezoomout 0.6s'; 
-			//  setTimeout(function() {document.getElementById('loginPage').style.display = "none";},500);
+			//  $('title').innerHTML = decodeURI(newTitle);
+			//  $('loginPage').style.animation = 'animatezoomout 0.6s'; 
+			//  setTimeout(function() {$('loginPage').style.display = "none";},500);
 			//  };
 			//  xhr.send('token=' + id_token);
 		} catch (error) {
@@ -535,14 +540,14 @@ function onSignIn(googleUser) {
 			//  });
 		}
 		//console.log('Signed in as: ' + xhr.responseText);
-		document.getElementById('title').innerHTML = decodeURI(newTitle);
-		document.getElementById('loginPage').style.animation = 'animatezoomout 0.6s';
-		document.getElementById('title').style.top = "15%";
-		document.getElementById('title').style.height = "800px";
-		document.getElementById('containerBottomA').classList.remove("containerLoginMenu");
-		document.getElementById('containerBottomA').classList.add("containerMainMenu");
+		$('title').innerHTML = decodeURI(newTitle);
+		$('loginPage').style.animation = 'animatezoomout 0.6s';
+		$('title').style.top = "15%";
+		$('title').style.height = "800px";
+		$('containerBottomA').classList.remove("containerLoginMenu");
+		$('containerBottomA').classList.add("containerMainMenu");
 		setTimeout(function () {
-			document.getElementById('loginPage').style.display = "none";
+			$('loginPage').style.display = "none";
 		}, 500);
 	} else {
 		auth2.signOut().then(function () {
@@ -569,12 +574,12 @@ function makeCode() {
 		makeButton.disabled = true;
 		playButton.disabled = true;
 		signOutButton.classList.add('linkTransitionF');
-		document.getElementById('charCustomize').classList.add('btnTransitionA');
+		$('charCustomize').classList.add('btnTransitionA');
 		setTimeout(function () {
-			document.getElementById('title').innerHTML = decodeURI(makeData);
-			document.getElementById('title').style.top = '100px';
+			$('title').innerHTML = decodeURI(makeData);
+			$('title').style.top = '100px';
 			addQuiz();
-			document.getElementById('createButtonA').addEventListener('click', function () {
+			$('createButtonA').addEventListener('click', function () {
 				createQuiz();
 			});
 		}, 300);
@@ -583,26 +588,26 @@ function makeCode() {
 
 function createQuiz() {
 	if (checkOnce) {
-		document.getElementById('createButtonA').disabled = true;
-		document.getElementById('QuizName').disabled = false;
-		document.getElementById('modal-bg').onclick = exitModalPopupA;
-		document.getElementById('submitQuizID').disabled = false;
-		document.getElementById('QuizName').value = '';
-		document.getElementById('createButtonA').classList.add('btnTransitionA');
-		document.getElementById('backButtonC').disabled = true;
-		document.getElementById('backButtonC').classList.add('btnTransitionA');
-		document.getElementById('submitQuizID').innerHTML = 'Create';
-		document.getElementById('modal-bg').style.animation = 'fadeIn 0.5s';
-		document.getElementById('modal-bg').style.display = 'block';
-		document.getElementById('homeText').classList.add('btnTransitionA');
-		document.getElementById('createQuizMenu').style.animation = 'modalPopin 0.3s';
-		document.getElementById('manageQuizMenu').style.display = 'none';
-		document.getElementById('createQuizMenu').style.display = 'block';
-		document.getElementById('modal-popupA').style.display = 'block';
-		document.getElementById('modal-popupA').classList.add('modal-popupActive');
+		$('createButtonA').disabled = true;
+		$('QuizName').disabled = false;
+		$('modal-bg').onclick = exitModalPopupA;
+		$('submitQuizID').disabled = false;
+		$('QuizName').value = '';
+		$('createButtonA').classList.add('btnTransitionA');
+		$('backButtonC').disabled = true;
+		$('backButtonC').classList.add('btnTransitionA');
+		$('submitQuizID').innerHTML = 'Create';
+		$('modal-bg').style.animation = 'fadeIn 0.5s';
+		$('modal-bg').style.display = 'block';
+		$('homeText').classList.add('btnTransitionA');
+		$('createQuizMenu').style.animation = 'modalPopin 0.3s';
+		$('manageQuizMenu').style.display = 'none';
+		$('createQuizMenu').style.display = 'block';
+		$('modal-popupA').style.display = 'block';
+		$('modal-popupA').classList.add('modal-popupActive');
 		if (Object.keys(quizList2).length > 0) {
 			for (var key in quizList2) {
-				document.getElementById(key).classList.add('btnTransitionA');
+				$(key).classList.add('btnTransitionA');
 			};
 		}
 	}
@@ -619,31 +624,31 @@ function playCode() {
 	makeButton.disabled = true;
 	playButton.disabled = true;
 	signOutButton.classList.add('linkTransitionF');
-	document.getElementById('charCustomize').classList.add('btnTransitionA');
+	$('charCustomize').classList.add('btnTransitionA');
 	setTimeout(function () {
-		document.getElementById('title').innerHTML = decodeURI(playData);
-		document.getElementById('containerBottomA').classList.add("containerPlayMenu");
-		document.getElementById('title').style.height = '250px';
-		document.getElementById('title').style.top = "30%";
-		document.getElementById('joinQuizForm').addEventListener('submit', JoinGame);
+		$('title').innerHTML = decodeURI(playData);
+		$('containerBottomA').classList.add("containerPlayMenu");
+		$('title').style.height = '250px';
+		$('title').style.top = "30%";
+		$('joinQuizForm').addEventListener('submit', JoinGame);
 	}, 300);
 }
 
 function JoinGame(event) {
-	document.getElementById("gameID").disabled = true;
-	document.getElementById("submitID").disabled = true;
+	$("gameID").disabled = true;
+	$("submitID").disabled = true;
 	var selects = document.getElementsByTagName("a");
 	for (var i = 0, il = selects.length; i < il; i++) {
 		selects[i].className += " disabled";
 	}
-	document.getElementById('submitID').innerHTML = `${svgData}`;
-	if (document.getElementById("gameID").value == "2794") {
+	$('submitID').innerHTML = `${svgData}`;
+	if ($("gameID").value == "2794") {
 		setTimeout(function () {
-			document.getElementById('loader-1').style.display = "none";
+			$('loader-1').style.display = "none";
 			var $loader = document.querySelector(".loader");
 			$loader.classList.add('loader--active');
 			setTimeout(function () {
-				document.getElementById("gameStartScreenStudent").style.display = 'block';
+				$("gameStartScreenStudent").style.display = 'block';
 			}, 1000);
 		}, 750);
 		setTimeout(() => {
@@ -651,18 +656,18 @@ function JoinGame(event) {
 		}, 5000);
 	} else {
 		setTimeout(function () {
-			document.getElementById("errorActual").innerText = 'Invalid ID';
-			document.getElementById("gameID").disabled = false;
-			document.getElementById("submitID").disabled = false;
-			document.getElementById("errorMessageA").style.display = "block";
+			$("errorActual").innerText = 'Invalid ID';
+			$("gameID").disabled = false;
+			$("submitID").disabled = false;
+			$("errorMessageA").style.display = "block";
 			setTimeout(function () {
-				document.getElementById("errorMessageA").style.display = "none";
+				$("errorMessageA").style.display = "none";
 			}, 1000);
 			var selects = document.getElementsByTagName("a");
 			for (var i = 0, il = selects.length; i < il; i++) {
 				selects[i].classList.remove("disabled");
 			}
-			document.getElementById('submitID').innerHTML = 'Join';
+			$('submitID').innerHTML = 'Join';
 		}, 1000);
 	}
 	event.preventDefault();
@@ -674,11 +679,11 @@ function goBack() {
 	document.querySelector('#submitID').classList.add('btnTransitionA');
 	document.querySelector('#playMenuBack').classList.add('linkTransitionF');
 	setTimeout(function () {
-		document.getElementById('title').innerHTML = decodeURI(newTitle);
-		document.getElementById('title').style.height = "800px";
-		document.getElementById('containerBottomA').classList.remove("containerLoginMenu");
-		document.getElementById('containerBottomA').classList.add("containerMainMenu");
-		document.getElementById('title').style.top = "15%";
+		$('title').innerHTML = decodeURI(newTitle);
+		$('title').style.height = "800px";
+		$('containerBottomA').classList.remove("containerLoginMenu");
+		$('containerBottomA').classList.add("containerMainMenu");
+		$('title').style.top = "15%";
 		setCharImage('currentUser', currentUserConfig);
 	}, 300);
 }
@@ -696,8 +701,8 @@ function arrowButtonPress(isLeft) {
 			customOptionsIncrement = 0;
 		}
 	}
-	document.getElementById("customButtonChange").innerHTML = customOptions[customOptionsIncrement];
-	document.getElementById("charCustomize").focus();
+	$("customButtonChange").innerHTML = customOptions[customOptionsIncrement];
+	$("charCustomize").focus();
 }
 var currentUserConfig = [0, 0, 0, 0, 0];
 var tempData01;
@@ -711,29 +716,29 @@ function updateImageState() {
 }
 
 function setCharImage(charID, currentUserConfig) {
-	document.getElementById(charID + 'Eyes').src = `img/eyes-${currentUserConfig[0]}.png`;
-	document.getElementById(charID + 'Nose').src = `img/nose-${currentUserConfig[1]}.png`;
-	document.getElementById(charID + 'Mouth').src = `img/mouth-${currentUserConfig[2]}.png`;
-	document.getElementById(charID + 'Shirt').src = `img/shirt-${currentUserConfig[3]}.png`;
-	document.getElementById(charID + 'Arms').src = `img/arms-${currentUserConfig[4]}.png`;
+	$(charID + 'Eyes').src = `img/eyes-${currentUserConfig[0]}.png`;
+	$(charID + 'Nose').src = `img/nose-${currentUserConfig[1]}.png`;
+	$(charID + 'Mouth').src = `img/mouth-${currentUserConfig[2]}.png`;
+	$(charID + 'Shirt').src = `img/shirt-${currentUserConfig[3]}.png`;
+	$(charID + 'Arms').src = `img/arms-${currentUserConfig[4]}.png`;
 }
 var checkOnce = true;
 
 function exitModalPopupA(a = false) {
 	if (checkOnce) {
 		checkOnce = false;
-		document.getElementById('modal-bg').style.animation = 'fadeOut 0.5s';
+		$('modal-bg').style.animation = 'fadeOut 0.5s';
 		setTimeout(function () {
-			document.getElementById('modal-bg').style.display = 'none';
+			$('modal-bg').style.display = 'none';
 			checkOnce = true;
 		}, 500);
-		document.getElementById('createQuizMenu').style.animation = 'modalPopout 0.3s';
+		$('createQuizMenu').style.animation = 'modalPopout 0.3s';
 		setTimeout(function () {
-			document.getElementById('modal-popupA').style.display = 'none';
+			$('modal-popupA').style.display = 'none';
 		}, 300);
-		document.getElementById('title').innerHTML = decodeURI(makeData);
+		$('title').innerHTML = decodeURI(makeData);
 		addQuiz();
-		document.getElementById('createButtonA').addEventListener('click', function () {
+		$('createButtonA').addEventListener('click', function () {
 			createQuiz();
 		});
 	}
@@ -743,66 +748,66 @@ var iconIterate = 0;
 function addQuiz() {
 	if (Object.keys(quizList2).length > 0) {
 		for (var key in quizList2) {
-			document.getElementById('makeDiv').innerHTML += `<button style="min-width: 300px; min-height: 300px;  margin-top: 30px; text-align: center; font-size: xx-large; margin-left: 30px;" class="button titleTransitionBack quizActionButton" id="${key}"><img src="../img/qIcon-${iconIterate % 4}.png" width="250"><br>${quizList2[key]}</button>`
+			$('makeDiv').innerHTML += `<button style="min-width: 300px; min-height: 300px;  margin-top: 30px; text-align: center; font-size: xx-large; margin-left: 30px;" class="button titleTransitionBack quizActionButton" id="${key}"><img src="../img/qIcon-${iconIterate % 4}.png" width="250"><br>${quizList2[key]}</button>`
 			iconIterate++;
 		};
 		iconIterate = 0;
-		document.getElementById('backButtonC').remove();
-		document.getElementById('removeButton').remove();
-		document.getElementById('makeDiv').innerHTML += '<button style="min-width: 300px; min-height: 300px;  margin-top: 30px; text-align: center; font-size: xx-large;  max-width:300px; margin-left: 30px;" class="button titleTransitionBack" id="createButtonA"><img src="../img/createQuiz-2.png" width="250"><br>(Create quiz)</button>'
-		document.getElementById('makeDiv').innerHTML += '<br><br><div style="text-align:center; width: 100%25;"><button class="button titleTransitionBack" id="backButtonC">Back</button></div>';
-		document.getElementById('makeDiv').style.textAlign = 'center';
+		$('backButtonC').remove();
+		$('removeButton').remove();
+		$('makeDiv').innerHTML += '<button style="min-width: 300px; min-height: 300px;  margin-top: 30px; text-align: center; font-size: xx-large;  max-width:300px; margin-left: 30px;" class="button titleTransitionBack" id="createButtonA"><img src="../img/createQuiz-2.png" width="250"><br>(Create quiz)</button>'
+		$('makeDiv').innerHTML += '<br><br><div style="text-align:center; width: 100%25;"><button class="button titleTransitionBack" id="backButtonC">Back</button></div>';
+		$('makeDiv').style.textAlign = 'center';
 		document.querySelectorAll('.quizActionButton').forEach(item => {
 			item.addEventListener('click', event => {
 				if (checkOnce) {
-					document.getElementById('createButtonA').disabled = true;
-					document.getElementById('modal-bg').onclick = exitModalPopupB;
-					document.getElementById('QuizName').disabled = false;
-					document.getElementById('submitQuizID').disabled = false;
-					document.getElementById('QuizName').value = '';
-					document.getElementById('createButtonA').classList.add('btnTransitionA');
-					document.getElementById('backButtonC').disabled = true;
-					document.getElementById('backButtonC').classList.add('btnTransitionA');
-					document.getElementById('submitQuizID').innerHTML = 'Create';
-					document.getElementById('modal-bg').style.animation = 'fadeIn 0.5s';
-					document.getElementById('modal-bg').style.display = 'block';
-					document.getElementById('quizNameTitleA').innerHTML = quizList2[event.currentTarget.id] + ":";
-					document.getElementById('homeText').classList.add('btnTransitionA');
-					document.getElementById('manageQuizMenu').style.animation = 'modalPopin 0.3s';
-					document.getElementById('manageQuizMenu').style.display = 'block';
-					document.getElementById('createQuizMenu').style.display = 'none';
-					document.getElementById('modal-popupA').style.display = 'block';
-					document.getElementById('modal-popupA').classList.add('modal-popupActive');
+					$('createButtonA').disabled = true;
+					$('modal-bg').onclick = exitModalPopupB;
+					$('QuizName').disabled = false;
+					$('submitQuizID').disabled = false;
+					$('QuizName').value = '';
+					$('createButtonA').classList.add('btnTransitionA');
+					$('backButtonC').disabled = true;
+					$('backButtonC').classList.add('btnTransitionA');
+					$('submitQuizID').innerHTML = 'Create';
+					$('modal-bg').style.animation = 'fadeIn 0.5s';
+					$('modal-bg').style.display = 'block';
+					$('quizNameTitleA').innerHTML = quizList2[event.currentTarget.id] + ":";
+					$('homeText').classList.add('btnTransitionA');
+					$('manageQuizMenu').style.animation = 'modalPopin 0.3s';
+					$('manageQuizMenu').style.display = 'block';
+					$('createQuizMenu').style.display = 'none';
+					$('modal-popupA').style.display = 'block';
+					$('modal-popupA').classList.add('modal-popupActive');
 					currentQuizEdit = event.currentTarget.id;
 					if (Object.keys(quizList2).length > 0) {
 						for (var key in quizList2) {
-							document.getElementById(key).classList.add('btnTransitionA');
+							$(key).classList.add('btnTransitionA');
 						};
 					}
 				}
 			})
 		})
-		document.getElementById('makeDiv').style.paddingLeft = "30px";
+		$('makeDiv').style.paddingLeft = "30px";
 	}
 }
 
 function goBackMakeA() {
 	customOptionsIncrement = 0;
-	document.getElementById('backButtonC').disabled = true;
-	document.getElementById('homeText').classList.add('titleTransition');
+	$('backButtonC').disabled = true;
+	$('homeText').classList.add('titleTransition');
 	if (Object.keys(quizList2).length > 0) {
 		for (var key in quizList2) {
-			document.getElementById(key).classList.add('btnTransitionA');
+			$(key).classList.add('btnTransitionA');
 		};
 	}
-	document.getElementById('createButtonA').classList.add('btnTransitionA');
-	document.getElementById('backButtonC').classList.add('btnTransitionA');
+	$('createButtonA').classList.add('btnTransitionA');
+	$('backButtonC').classList.add('btnTransitionA');
 	setTimeout(function () {
-		document.getElementById('title').innerHTML = decodeURI(newTitle);
-		document.getElementById('title').style.height = "800px";
-		document.getElementById('containerBottomA').classList.remove("containerLoginMenu");
-		document.getElementById('containerBottomA').classList.add("containerMainMenu");
-		document.getElementById('title').style.top = "15%";
+		$('title').innerHTML = decodeURI(newTitle);
+		$('title').style.height = "800px";
+		$('containerBottomA').classList.remove("containerLoginMenu");
+		$('containerBottomA').classList.add("containerMainMenu");
+		$('title').style.top = "15%";
 		setCharImage('currentUser', currentUserConfig);
 	}, 300);
 }
@@ -825,9 +830,9 @@ function decodeHTML(str) {
 
 function createNewQuiz(event) {
 	checkOnce = false;
-	var button = document.getElementById('submitQuizID');
-	document.getElementById('QuizName').disabled = true;
-	var g = document.getElementById('QuizName').value;
+	var button = $('submitQuizID');
+	$('QuizName').disabled = true;
+	var g = $('QuizName').value;
 	button.disabled = true;
 	button.innerHTML = svgData;
 	setTimeout(function () {
@@ -841,18 +846,18 @@ function createNewQuiz(event) {
 function exitModalPopupB() {
 	if (checkOnce) {
 		checkOnce = false;
-		document.getElementById('modal-bg').style.animation = 'fadeOut 0.5s';
+		$('modal-bg').style.animation = 'fadeOut 0.5s';
 		setTimeout(function () {
-			document.getElementById('modal-bg').style.display = 'none';
+			$('modal-bg').style.display = 'none';
 			checkOnce = true;
 		}, 500);
-		document.getElementById('manageQuizMenu').style.animation = 'modalPopout 0.3s';
+		$('manageQuizMenu').style.animation = 'modalPopout 0.3s';
 		setTimeout(function () {
-			document.getElementById('modal-popupA').style.display = 'none';
+			$('modal-popupA').style.display = 'none';
 		}, 300);
-		document.getElementById('title').innerHTML = decodeURI(makeData);
+		$('title').innerHTML = decodeURI(makeData);
 		addQuiz();
-		document.getElementById('createButtonA').addEventListener('click', function () {
+		$('createButtonA').addEventListener('click', function () {
 			createQuiz();
 		});
 	}
@@ -860,33 +865,33 @@ function exitModalPopupB() {
 
 function exitModalPopupC() {
 	checkOnce = false;
-	document.getElementById('modal-bg').style.animation = 'fadeOut 0.5s';
+	$('modal-bg').style.animation = 'fadeOut 0.5s';
 	setTimeout(function () {
-		document.getElementById('modal-bg').style.display = 'none';
+		$('modal-bg').style.display = 'none';
 		checkOnce = true;
 	}, 500);
-	document.getElementById('quizDeleteConfirm').style.animation = 'modalPopout 0.3s';
+	$('quizDeleteConfirm').style.animation = 'modalPopout 0.3s';
 	setTimeout(function () {
-		document.getElementById('modal-popupA').style.display = 'none';
-		document.getElementById('quizDeleteConfirm').style.display = 'none';
+		$('modal-popupA').style.display = 'none';
+		$('quizDeleteConfirm').style.display = 'none';
 	}, 300);
-	document.getElementById('title').innerHTML = decodeURI(makeData);
+	$('title').innerHTML = decodeURI(makeData);
 	addQuiz();
-	document.getElementById('createButtonA').addEventListener('click', function () {
+	$('createButtonA').addEventListener('click', function () {
 		createQuiz();
 	});
 }
 
 function collapseSubArea(a) {
-	var area = document.getElementById(`collapseSubArea${a}`);
-	var objm = document.getElementById(`collapsableContent${a}`);
+	var area = $(`collapseSubArea${a}`);
+	var objm = $(`collapsableContent${a}`);
 	area.classList.toggle('arrowBRight');
 	area.classList.toggle('arrowBDown');
 	objm.classList.toggle('contentA1');
 	objm.classList.toggle('contentA2');
 	if (activeArea !== null && activeArea !== a) {
-		var area = document.getElementById(`collapseSubArea${activeArea}`);
-		var objm = document.getElementById(`collapsableContent${activeArea}`);
+		var area = $(`collapseSubArea${activeArea}`);
+		var objm = $(`collapsableContent${activeArea}`);
 		area.classList.add('arrowBRight');
 		area.classList.remove('arrowBDown');
 		objm.classList.add("contentA2");
@@ -896,9 +901,9 @@ function collapseSubArea(a) {
 }
 
 function collapseAllArea() {
-	if (activeArea !== null && document.getElementById(`collapseSubArea${activeArea}`) != null) {
-		var area = document.getElementById(`collapseSubArea${activeArea}`);
-		var objm = document.getElementById(`collapsableContent${activeArea}`);
+	if (activeArea !== null && $(`collapseSubArea${activeArea}`) != null) {
+		var area = $(`collapseSubArea${activeArea}`);
+		var objm = $(`collapsableContent${activeArea}`);
 		area.classList.add('arrowBRight');
 		area.classList.remove('arrowBDown');
 		objm.classList.add("contentA2");
@@ -909,11 +914,11 @@ function collapseAllArea() {
 
 function deleteQuestion(a) {
 	collapseAllArea();
-	document.getElementById(`draggableQuestion${a}`).style.pointerEvents = 'none';
-	document.getElementById(`draggableQuestion${a}`).classList.add('btnTransitionA');
+	$(`draggableQuestion${a}`).style.pointerEvents = 'none';
+	$(`draggableQuestion${a}`).classList.add('btnTransitionA');
 	setTimeout(function () {
-		drake.remove(document.getElementById(`draggableQuestion${a}`));
-		document.getElementById(`draggableQuestion${a}`).remove();
+		drake.remove($(`draggableQuestion${a}`));
+		$(`draggableQuestion${a}`).remove();
 		reorderProper();
 	}, 300);
 }
@@ -927,19 +932,19 @@ function characterCount(thisVar, total) {
 
 function reorderProper() {
 	var test = 0;
-	for (i = 0; i <= document.getElementById('draggableDiv').children.length - 1; i++) {
-		document.getElementById('draggableDiv').children[i].firstElementChild.childNodes[3].innerHTML = `Question ${i + 1}:`;
+	for (i = 0; i <= $('draggableDiv').children.length - 1; i++) {
+		$('draggableDiv').children[i].firstElementChild.childNodes[3].innerHTML = `Question ${i + 1}:`;
 		test = i;
 	}
 	if(test >= 24) {
-		document.getElementById('addQuestionButton').disabled = true;
-		document.getElementById('addQuestionButton').innerText = '25/25 questions';
-		document.getElementById('addQuestionButton').style.cursor = "no-drop";
+		$('addQuestionButton').disabled = true;
+		$('addQuestionButton').innerText = '25/25 questions';
+		$('addQuestionButton').style.cursor = "no-drop";
 	}
 	else {
-		document.getElementById('addQuestionButton').disabled = false;
-		document.getElementById('addQuestionButton').innerText = 'add question...';
-		document.getElementById('addQuestionButton').style.cursor = "pointer";
+		$('addQuestionButton').disabled = false;
+		$('addQuestionButton').innerText = 'add question...';
+		$('addQuestionButton').style.cursor = "pointer";
 	}
 }
 
@@ -1054,26 +1059,26 @@ window.addEventListener('online', (e) => {
 });
 
 function throwExcept(msg) {
-	document.getElementById('commError2').style.display = 'block';
-	document.getElementById('CommError').style.display = 'block';
-	document.getElementById('comError3').innerHTML = msg;
+	$('commError2').style.display = 'block';
+	$('CommError').style.display = 'block';
+	$('comError3').innerHTML = msg;
 }
 
 function shortAnswerToggle(endMe) {
-	document.getElementById(`answerContainerObject${endMe}`).classList.toggle('shortAnswerEditorStyles');
-	document.getElementById(`collapsableContent${endMe}`).classList.toggle('noSpaceEditor');
+	$(`answerContainerObject${endMe}`).classList.toggle('shortAnswerEditorStyles');
+	$(`collapsableContent${endMe}`).classList.toggle('noSpaceEditor');
 }
 
 function toggleTime(order) {
-	document.getElementById(`Question${order}Time`).classList.toggle("displayTimeLimit");
+	$(`Question${order}Time`).classList.toggle("displayTimeLimit");
 }
 
 function parseActiveQuiz() {
 	tempQuiz = JSON.parse(JSON.stringify(quizObject));
-	tempQuiz.quizName = encodeHTML(document.getElementById("quizNameUpdate").value);
+	tempQuiz.quizName = encodeHTML($("quizNameUpdate").value);
 	tempQuiz.quizID = currentQuizEdit;
-	if (document.getElementById("draggableDiv").firstElementChild) {
-		quizDoc = Array.from(document.getElementById("draggableDiv").children);
+	if ($("draggableDiv").firstElementChild) {
+		quizDoc = Array.from($("draggableDiv").children);
 		quizDoc.forEach(function (object) {
 			var timeLimit = false;
 			if (object.children[1].children[4].children[0].children[0].checked) {
@@ -1284,7 +1289,7 @@ function verifyQuiz() {
 		quizParseError.forEach(function (error) {
 			finalResult += `<li class="innerError">${encodeHTML(error)}</li>`;
 		});
-		document.getElementById('innerError3').innerHTML = finalResult;
+		$('innerError3').innerHTML = finalResult;
 		return false;
 	}
 	else {
@@ -1331,30 +1336,30 @@ function exitModalPopupF(promptUser) {
 	}
 	else {
 		checkOnce = false;
-		document.getElementById('modal-bg').style.animation = 'fadeOut 0.5s';
-		document.getElementById('editQuizMenu').style.animation = 'modalPopout 0.3s';
+		$('modal-bg').style.animation = 'fadeOut 0.5s';
+		$('editQuizMenu').style.animation = 'modalPopout 0.3s';
 		setTimeout(function () {
 			editState = false;
-			document.getElementById('editQuizMenu').style = "";
-			document.getElementById('modal-bg').style.display = 'none';
-			document.getElementById('editQuizMenu').style.display = 'none';
-			document.getElementById("saveQuizButton").disabled = false;
-			document.getElementById("backButtonEditQuiz").disabled = false;
-			document.getElementById("quizNameUpdate").disabled = false;
-			document.getElementById("addQuestionButton").disabled = false;
-			document.getElementById("modal-popupA").style.pointerEvents = "all";
-			document.getElementById("saveQuizButton").innerHTML = "Save";
-			document.getElementById("draggableDiv").innerHTML = "";
+			$('editQuizMenu').style = "";
+			$('modal-bg').style.display = 'none';
+			$('editQuizMenu').style.display = 'none';
+			$("saveQuizButton").disabled = false;
+			$("backButtonEditQuiz").disabled = false;
+			$("quizNameUpdate").disabled = false;
+			$("addQuestionButton").disabled = false;
+			$("modal-popupA").style.pointerEvents = "all";
+			$("saveQuizButton").innerHTML = "Save";
+			$("draggableDiv").innerHTML = "";
 			drake.destroy();
 			highestQuestion = 0;
 			checkOnce = true;
 		}, 500);
 		setTimeout(function () {
-			document.getElementById('modal-popupA').style.display = 'none';
+			$('modal-popupA').style.display = 'none';
 		}, 300);
-		document.getElementById('title').innerHTML = decodeURI(makeData);
+		$('title').innerHTML = decodeURI(makeData);
 		addQuiz();
-		document.getElementById('createButtonA').addEventListener('click', function () {
+		$('createButtonA').addEventListener('click', function () {
 			createQuiz();
 		});
 	}
@@ -1366,24 +1371,24 @@ function addquestionToDOM() {
         	<div autofocus class=\'titleTransitionBack textAreaConfig formInput button\' required  autocomplete=\"off\" maxlength=\"90\" title=\"Question 2\" id=\"Question2InputText\" onkeypress=\"return (this.innerText.length < 90)\" contenteditable=\"true\" placeholder=\"Question\" name=\"Question2InputText\"><\/div><div class=\"charLimited\">0\/90<\/div><br><div class=\"checkboxCustomConfig\" style=\"margin-top: 0px;\"> <label class=\"toggleButton toggleButtonPosition\">   <input type=\"checkbox\" onclick="shortAnswerToggle(${highestQuestion})">     <div>       <svg viewBox=\"0 0 44 44\">         <path d=\"M14,24 L21,31 L39.7428882,11.5937758 C35.2809627,6.53125861 30.0333333,4 24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,19.3 42.5809627,15.1645919 39.7428882,11.5937758\" transform=\"translate(-2.000000, -2.000000)\"><\/path>       <\/svg>     <\/div> <\/label> <p class=\"labelForCheck labelForCheckPosition\">Short Answer<\/p><\/div><div class=\"checkboxCustomConfig\" style=\"margin-top: 10px;\"> <label class=\"toggleButton toggleButtonPosition\">   <input type=\"checkbox\" onclick="toggleTime(${highestQuestion})">     <div>       <svg viewBox=\"0 0 44 44\">         <path d=\"M14,24 L21,31 L39.7428882,11.5937758 C35.2809627,6.53125861 30.0333333,4 24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,19.3 42.5809627,15.1645919 39.7428882,11.5937758\" transform=\"translate(-2.000000, -2.000000)\"><\/path>
         	<\/svg>     <\/div> <\/label> <p class=\"labelForCheck labelForCheckPosition\">Time Limit<\/p><div autofocus class=\'titleTransitionBack textAreaConfig formInput button questionInput timeLimitMagic\' maxlength="3" onkeypress=\"return (this.innerText.length < 3)\" autocomplete=\"off\" id=\"Question${highestQuestion}Time\" contenteditable=\"true\"><\/div><div class=\"charLimited charLimited2\">0\/3<\/div><\/div> <div class=\"answerContainer\" id="answerContainerObject${highestQuestion}"><div class=\"checkboxCustomConfig\" style=\"margin-top: 50px;\"> <div autofocus class=\'titleTransitionBack textAreaConfig formInput button questionInput\' required maxlength="50" onkeypress=\"return (this.innerText.length < 50)\" autocomplete=\"off\" title=\"Question 1\" id=\"Question${highestQuestion}InputText\" contenteditable=\"true\" placeholder=\"Answer 1\" name=\"Question${highestQuestion}InputText\"><\/div> <div class=\"charLimited charLimited2\">0\/50<\/div> <label class=\"toggleButton weirdButton2\">   <input checked type=\"checkbox\">     <div>       <svg viewBox=\"0 0 44 44\">         <path d=\"M14,24 L21,31 L39.7428882,11.5937758 C35.2809627,6.53125861 30.0333333,4 24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,19.3 42.5809627,15.1645919 39.7428882,11.5937758\" transform=\"translate(-2.000000, -2.000000)\"><\/path>       <\/svg>     <\/div> <\/label><\/div><div class=\"checkboxCustomConfig\"> <div autofocus class=\'titleTransitionBack textAreaConfig formInput button questionInput\' required maxlength="50" onkeypress=\"return (this.innerText.length < 50)\" autocomplete=\"off\" title=\"Question 1\" id=\"Question${highestQuestion}InputText\" contenteditable=\"true\" placeholder=\"Answer 2\" name=\"Question${highestQuestion}InputText\"><\/div> <div class=\"charLimited charLimited2\">0\/50<\/div> <label class=\"toggleButton\ weirdButton2">   <input type=\"checkbox\">     <div>       <svg viewBox=\"0 0 44 44\">         <path d=\"M14,24 L21,31 L39.7428882,11.5937758 C35.2809627,6.53125861 30.0333333,4 24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,19.3 42.5809627,15.1645919 39.7428882,11.5937758\" transform=\"translate(-2.000000, -2.000000)\"><\/path><\/svg><\/div><\/label><\/div><div class=\"checkboxCustomConfig\"> <div autofocus class=\'titleTransitionBack textAreaConfig formInput button questionInput\' required maxlength="50" onkeypress=\"return (this.innerText.length < 50)\" autocomplete=\"off\" title=\"Question 1\" 
         	id=\"Question${highestQuestion}InputText\" contenteditable=\"true\" placeholder=\"Answer 3\" name=\"Question${highestQuestion}InputText\"><\/div><div class=\"charLimited charLimited2\">0\/50<\/div> <label class=\"toggleButton weirdButton2\"><input type=\"checkbox\"><div><svg viewBox=\"0 0 44 44\"><path d=\"M14,24 L21,31 L39.7428882,11.5937758 C35.2809627,6.53125861 30.0333333,4 24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,19.3 42.5809627,15.1645919 39.7428882,11.5937758\" transform=\"translate(-2.000000, -2.000000)\"><\/path><\/svg><\/div> <\/label><\/div><div class=\"checkboxCustomConfig\"><div autofocus class=\'titleTransitionBack textAreaConfig formInput button questionInput\' required maxlength="50" onkeypress=\"return (this.innerText.length < 50)\" autocomplete=\"off\" title=\"Question 1\" id=\"Question${highestQuestion}InputText\" contenteditable=\"true\" placeholder=\"Answer 4\" name=\"Question${highestQuestion}InputText\"><\/div><div class=\"charLimited charLimited2\">0\/50<\/div><label class=\"toggleButton weirdButton2\"><input type=\"checkbox\"><div><svg viewBox=\"0 0 44 44\"><path d=\"M14,24 L21,31 L39.7428882,11.5937758 C35.2809627,6.53125861 30.0333333,4 24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,19.3 42.5809627,15.1645919 39.7428882,11.5937758\" transform=\"translate(-2.000000, -2.000000)\"><\/path><\/svg><\/div><\/label><\/div><\/div><\/div><\/div>`;
-	document.getElementById('draggableDiv').insertAdjacentHTML('beforeEnd', temp41);
+	$('draggableDiv').insertAdjacentHTML('beforeEnd', temp41);
 }
 
 function exitModalPopupG() {
 	checkOnce = false;
-	document.getElementById('modal-bg').style.animation = 'fadeOut 0.5s';
+	$('modal-bg').style.animation = 'fadeOut 0.5s';
 	setTimeout(function () {
-		document.getElementById('modal-bg').style.display = 'none';
+		$('modal-bg').style.display = 'none';
 		checkOnce = true;
 	}, 500);
-	document.getElementById('shareQuizMenu').style.animation = 'modalPopout 0.3s';
+	$('shareQuizMenu').style.animation = 'modalPopout 0.3s';
 	setTimeout(function () {
-		document.getElementById('modal-popupA').style.display = 'none';
-		document.getElementById('shareQuizMenu').style.display = 'none';
+		$('modal-popupA').style.display = 'none';
+		$('shareQuizMenu').style.display = 'none';
 	}, 300);
-	document.getElementById('title').innerHTML = decodeURI(makeData);
+	$('title').innerHTML = decodeURI(makeData);
 	addQuiz();
-	document.getElementById('createButtonA').addEventListener('click', function () {
+	$('createButtonA').addEventListener('click', function () {
 		createQuiz();
 	});
 }
@@ -1408,15 +1413,15 @@ function studentGameProcessor(input) {
 					timeLimit: inputInternal.currentQuestionTime
 				}
 			};
-			document.getElementById('gameStartScreenStudent').style.display = "none";
+			$('gameStartScreenStudent').style.display = "none";
 			var $loader = document.querySelector(".loader");
 			$loader.classList.remove('loader--active');
-			document.getElementById('title').style.display = "none";
-			document.getElementById('studentPlayScreen').style.display = "block";
+			$('title').style.display = "none";
+			$('studentPlayScreen').style.display = "block";
 			setQuestion();
 			setTimeout(() => {
-				document.getElementById('loader-1').style.display = "none";
-				document.getElementById("errorMessageA").style.display = "none";
+				$('loader-1').style.display = "none";
+				$("errorMessageA").style.display = "none";
 			}, 1000);
 		}
 	}
@@ -1425,17 +1430,17 @@ function studentGameProcessor(input) {
 		gameStateStudent.gameErrorState = inputInternal.gameErrorState;
 	}
 	else if(inputInternal.hasOwnProperty('kickPlayer')) {
-		document.getElementById("errorActual").innerText = 'Kicked From Game';
-		document.getElementById("errorMessageA").style.display = "block";
-		document.getElementById('gameStartScreenStudent').style.display = "none";
-		document.getElementById('studentPlayScreen').style.display = "none";
+		$("errorActual").innerText = 'Kicked From Game';
+		$("errorMessageA").style.display = "block";
+		$('gameStartScreenStudent').style.display = "none";
+		$('studentPlayScreen').style.display = "none";
 		var $loader = document.querySelector(".loader");
 		$loader.classList.remove('loader--active');
-		document.getElementById('title').style.display = "block";
+		$('title').style.display = "block";
 		goBack();
 		setTimeout(() => {
-			document.getElementById('loader-1').style.display = "none";
-			document.getElementById("errorMessageA").style.display = "none";
+			$('loader-1').style.display = "none";
+			$("errorMessageA").style.display = "none";
 		}, 1000);
 	}
 	else if(inputInternal.hasOwnProperty('isQuestionCorrect')) {
@@ -1444,7 +1449,7 @@ function studentGameProcessor(input) {
 			gameStateStudent.currentQuestionData.question = inputInternal.nextQuestion;
 			gameStateStudent.currentQuestionData.answers = inputInternal.choices;
 			gameStateStudent.currentQuestionData.timeLimit = inputInternal.currentQuestionTime;
-			Array.from(document.getElementById('studentAnswersFlex').children).forEach((object, index) => {
+			Array.from($('studentAnswersFlex').children).forEach((object, index) => {
 				object.classList.add('transitionQuestionB');
 				setTimeout(() => {
 					object.firstElementChild.innerHTML = null;
@@ -1456,19 +1461,19 @@ function studentGameProcessor(input) {
 					}, 400);
 				}, 400);
 			});
-			document.getElementById('titleButtonStudent').classList.add('transitionQuestionA');
-			document.getElementById('studentShortAnswer').classList.add('transitionQuestionB');
+			$('titleButtonStudent').classList.add('transitionQuestionA');
+			$('studentShortAnswer').classList.add('transitionQuestionB');
 			setTimeout(() => {
 				setQuestion();
 			}, 400);
 			// Separate timeout to get on a separate thread and fix random flickering
 			setTimeout(() => {
-				document.getElementById('studentShortAnswer').classList.add('transitionQuestionC');
-				document.getElementById('studentShortAnswer').classList.remove('transitionQuestionB');
+				$('studentShortAnswer').classList.add('transitionQuestionC');
+				$('studentShortAnswer').classList.remove('transitionQuestionB');
 			}, 400);
 			setTimeout(() => {
-				document.getElementById('titleButtonStudent').classList.remove('transitionQuestionA');
-				document.getElementById('studentShortAnswer').classList.remove('transitionQuestionC');
+				$('titleButtonStudent').classList.remove('transitionQuestionA');
+				$('studentShortAnswer').classList.remove('transitionQuestionC');
 			}, 800);
 		}
 		else {
@@ -1478,9 +1483,9 @@ function studentGameProcessor(input) {
 				var delta = (Date.now() - start) / 1000;
 				var internal = init - delta;
 				if(internal < 0) {internal = 0};
-				document.getElementById('mistakeQuestion').innerText = `You can try again in ${Math.floor(internal)} seconds`;
+				$('mistakeQuestion').innerText = `You can try again in ${Math.floor(internal)} seconds`;
 			}, 100);
-			Array.from(document.getElementById('studentAnswersFlex').children).forEach((object, index) => {
+			Array.from($('studentAnswersFlex').children).forEach((object, index) => {
 				object.classList.add('transitionQuestionB');
 				setTimeout(() => {
 					object.style.display = 'none';
@@ -1496,27 +1501,27 @@ function studentGameProcessor(input) {
 					}, 5000);
 				}, 400);
 			});
-			document.getElementById('titleButtonStudent').classList.add('transitionQuestionB');
-			document.getElementById('studentShortAnswer').classList.add('transitionQuestionB');
+			$('titleButtonStudent').classList.add('transitionQuestionB');
+			$('studentShortAnswer').classList.add('transitionQuestionB');
 			setTimeout(() => {
-				document.getElementById('titleButtonStudent').classList.remove('transitionQuestionB');
-				document.getElementById('studentShortAnswer').classList.remove('transitionQuestionB');
-				document.getElementById('titleButtonStudent').style.display = 'none';
-				document.getElementById('studentShortAnswer').style.display = 'none';
-				document.getElementById('userNotifyPlay').style.display = 'block';
+				$('titleButtonStudent').classList.remove('transitionQuestionB');
+				$('studentShortAnswer').classList.remove('transitionQuestionB');
+				$('titleButtonStudent').style.display = 'none';
+				$('studentShortAnswer').style.display = 'none';
+				$('userNotifyPlay').style.display = 'block';
 				setTimeout(() => {
-					document.getElementById('userNotifyPlay').classList.add('fadeOutThingy');
-					document.getElementById('titleButtonStudent').classList.add('transitionQuestionC');
-					document.getElementById('studentShortAnswer').classList.add('transitionQuestionC');
-					document.getElementById('titleButtonStudent').style.display = 'block';
+					$('userNotifyPlay').classList.add('fadeOutThingy');
+					$('titleButtonStudent').classList.add('transitionQuestionC');
+					$('studentShortAnswer').classList.add('transitionQuestionC');
+					$('titleButtonStudent').style.display = 'block';
 					setQuestion();
 					setTimeout(() => {
-						document.getElementById('studentShortAnswer').classList.remove('transitionQuestionC');
-						document.getElementById('titleButtonStudent').classList.remove('transitionQuestionC');
+						$('studentShortAnswer').classList.remove('transitionQuestionC');
+						$('titleButtonStudent').classList.remove('transitionQuestionC');
 					}, 400);
 					setTimeout(() => {
 						clearInterval(otherInterval);
-						document.getElementById('userNotifyPlay').style.display = 'none';
+						$('userNotifyPlay').style.display = 'none';
 					}, 100);
 				}, 5000);
 			}, 400);
@@ -1528,9 +1533,9 @@ function studentGameProcessor(input) {
 var timerInterval;
 
 function setQuestion() {
-	document.getElementById('studentAnswersFlex').style.display = 'flex';
-	document.getElementById('titleButtonStudent').firstElementChild.innerText = decodeURI(gameStateStudent.currentQuestionData.question);
-	var options = document.getElementById('studentAnswersFlex').children;
+	$('studentAnswersFlex').style.display = 'flex';
+	$('titleButtonStudent').firstElementChild.innerText = decodeURI(gameStateStudent.currentQuestionData.question);
+	var options = $('studentAnswersFlex').children;
 	for (i = 0; i < options.length; i++) {
 		if (!gameStateStudent.currentQuestionData.answers[i]) {
 			options[i].style.display = 'none';
@@ -1541,46 +1546,46 @@ function setQuestion() {
 		}
 	}
 	if (gameStateStudent.currentQuestionData.answers.join("").length == 0) {
-		document.getElementById('resettableCharLimited').innerText = '0/180';
-		document.getElementById('studentAnswersFlex').style.display = 'none';
-		document.getElementById('studentShortAnswer').style.display = 'block';
-		document.getElementById('studentShortAnswerText').textContent = null;
-		document.getElementById('studentShortAnswerText').classList.remove('contentEditableDisabled');
-		document.getElementById('studentShortAnswerText').contentEditable = true;
-		document.getElementById('shortAnswerSubmitButton').disabled = false;
+		$('resettableCharLimited').innerText = '0/180';
+		$('studentAnswersFlex').style.display = 'none';
+		$('studentShortAnswer').style.display = 'block';
+		$('studentShortAnswerText').textContent = null;
+		$('studentShortAnswerText').classList.remove('contentEditableDisabled');
+		$('studentShortAnswerText').contentEditable = true;
+		$('shortAnswerSubmitButton').disabled = false;
 	}
 	else {
-		document.getElementById('studentShortAnswer').style.display = 'none';
+		$('studentShortAnswer').style.display = 'none';
 	}
 	if (gameStateStudent.currentQuestionData.timeLimit == false) {
-		document.getElementById('timeLeftCounter').style.display = 'none';
+		$('timeLeftCounter').style.display = 'none';
 	}
 	else {
-		document.getElementById('timeLeftCounter').style.display = 'block';
-		document.getElementById('timeLeftCounter').innerText = `(Time Left: ${gameStateStudent.currentQuestionData.timeLimit}s)`;
+		$('timeLeftCounter').style.display = 'block';
+		$('timeLeftCounter').innerText = `(Time Left: ${gameStateStudent.currentQuestionData.timeLimit}s)`;
 		var start = Date.now();
 		var init = gameStateStudent.currentQuestionData.timeLimit;
 		timerInterval = setInterval(() => {
 			var delta = (Date.now() - start) / 1000;
 			gameStateStudent.currentQuestionData.timeLimit = init - delta;
 			if(gameStateStudent.currentQuestionData.timeLimit < 0 && gameStateStudent.currentQuestionData.timeLimit > -999) {
-				document.getElementById('timeLeftCounter').innerText = `(Time Penalty: ${Math.abs(Math.floor(gameStateStudent.currentQuestionData.timeLimit))}s)`;
+				$('timeLeftCounter').innerText = `(Time Penalty: ${Math.abs(Math.floor(gameStateStudent.currentQuestionData.timeLimit))}s)`;
 			}
 			else if(gameStateStudent.currentQuestionData.timeLimit < -999) {
-				document.getElementById('timeLeftCounter').innerText = `(You're very slow)`;
+				$('timeLeftCounter').innerText = `(You're very slow)`;
 			}
 			else {
-				document.getElementById('timeLeftCounter').innerText = `(Time Left: ${Math.floor(gameStateStudent.currentQuestionData.timeLimit)}s)`;
+				$('timeLeftCounter').innerText = `(Time Left: ${Math.floor(gameStateStudent.currentQuestionData.timeLimit)}s)`;
 			}
 		}, 10); 
 	}
 }
 
 function copyShareLink() {
-	navigator.clipboard.writeText(document.getElementById('coolTextArea').textContent);
-	document.getElementById("errorActual").innerText = 'Link Copied';
-	document.getElementById("errorMessageA").style.display = "block";
+	navigator.clipboard.writeText($('coolTextArea').textContent);
+	$("errorActual").innerText = 'Link Copied';
+	$("errorMessageA").style.display = "block";
 	setTimeout(function () {
-		document.getElementById("errorMessageA").style.display = "none";
+		$("errorMessageA").style.display = "none";
 	}, 1000);
 }
