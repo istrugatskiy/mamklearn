@@ -29,11 +29,28 @@ button {
 	-webkit-line-break: after-white-space;
 	line-break: after-white-space;
 	-webkit-user-select: text;
+	user-select: text;
+}
+tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+}
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
 }
 table {
-	border-collapse: separate;
+    border-collapse: separate;
     text-indent: initial;
     border-spacing: 2px;
+}
+th {
+    display: table-cell;
+    vertical-align: inherit;
+    font-weight: bold;
+    text-align: center;
 }
 #particles-js {
 	position: fixed;
@@ -1482,25 +1499,22 @@ img {
 	box-shadow: 0px 0px 12px #000000;
 }
 :root {
-	--questionOffset: 4;
+	--questionOffset: 0;
+	--bottomBarOffset: 15px;
 }
 .playerCharacter {
 	z-index: -1;
 	position: absolute;
 	height: 150px;
 	bottom: 50px;
-	transform: translateX(calc(((1vw * var(--questionOffset))) + (110px * var(--questionOffset))));
+	transform: translateX(calc(114px * var(--questionOffset)));
 	transition: transform 0.3s;
-}
-@media screen and (max-width: 2560px) {
-	.playerCharacter {
-		transform: translateX(calc(110px * var(--questionOffset)));
-	}
 }
 #studentRaceBox {
 	overflow: hidden;
 	justify-content: left;
-	height: 25%;	
+	height: 25%;
+	left: 0;	
 }
 .playerContainer {
 	min-height: 180px;
@@ -1662,10 +1676,11 @@ img {
 }
 .stretchyBoi2 {
 	font-size: 16px;
-	width: calc(100% - 30px);
+	width: calc(110px * var(--questionOffset));
 	position: absolute;
 	bottom: 0px;
-	left: 15px;	
+	left: var(--bottomBarOffset);
+	transition: left 0.3s;
 }
 .stretchyBoi2 > tbody > tr > th {
 	border: #000000;
