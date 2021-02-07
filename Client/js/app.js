@@ -113,7 +113,7 @@ var a = false;
 var currentQuizEdit;
 var drake = null;
 var currentWindowScale = window.innerWidth;
-var quizStartTestCase = ' {"gameStart": true, "totalQuestions": 15, "currentQuestion": "If%20fish%20are%20fish", "choices": [ "heck", "null", "really%20I%20could%20not%20be%20bothered", "heckv2" ], "currentQuestionTime": 69, "questionID": 0 }';
+var quizStartTestCase = ' {"gameStart": true, "totalQuestions": 25, "currentQuestion": "If%20fish%20are%20fish", "choices": [ "heck", "null", "really%20I%20could%20not%20be%20bothered", "heckv2" ], "currentQuestionTime": 69, "questionID": 0 }';
 var anotherTestCase = '{ "isQuestionCorrect": false, "nextQuestion": null, "choices": [ null ], "currentQuestionTime": 20 }';
 var anotherTestCase2 = '{ "isQuestionCorrect": true, "nextQuestion": "heckDifferentQuestionTooLazyTooPutPercent", "choices": [ "Nabeel", "Nabeel2", "Nabeel3", "Nabeel4" ], "currentQuestionTime": 69 }';
 var anotherTestCase3 = '{ "gameFinish": true, "timeTillEnd": 180}';
@@ -248,7 +248,6 @@ window.onload = function () {
 		});
 	});
 }
-
 window.addEventListener("load", () => {
 	window.addEventListener('click', function (event) {
 		switch(event.target.id) {
@@ -1407,8 +1406,6 @@ function studentGameProcessor(input) {
 			setCharImage('player', currentUserConfig);
 			bottomBarOffset = 15;
 			gameStateStudent = {
-				competitors: inputInternal.competitors,
-				competitorAvatars: inputInternal.competitorConfigs,
 				currentQuestion: inputInternal.questionID,
 				totalQuestions: inputInternal.totalQuestions,
 				gameErrorState: false,
@@ -1461,7 +1458,7 @@ function studentGameProcessor(input) {
 	else if(inputInternal.hasOwnProperty('isQuestionCorrect')) {
 		clearInterval(timerInterval);
 		clearInterval(otherInterval);
-		if(inputInternal.isQuestionCorrect) {
+		if(inputInternal.isQuestionCorrect && gameStateStudent.currentQuestion < gameStateStudent.totalQuestions - 1) {
 			gameStateStudent.currentQuestion++;
 			gameStateStudent.currentQuestionData.question = inputInternal.nextQuestion;
 			gameStateStudent.currentQuestionData.answers = inputInternal.choices;
@@ -1493,7 +1490,11 @@ function studentGameProcessor(input) {
 				$('studentShortAnswer').classList.remove('transitionQuestionC');
 			}, 800);
 		}
-		else {
+		else if(inputInternal.isQuestionCorrect && gameStateStudent.currentQuestion < gameStateStudent.totalQuestions) {
+			gameStateStudent.currentQuestion++;
+			updateStudentLocation(gameStateStudent.currentQuestion);
+		}
+		else if(!inputInternal.isQuestionCorrect) {
 			var start = Date.now();
 			var init = inputInternal.currentQuestionTime;
 			otherInterval = setInterval(() => {
@@ -1502,7 +1503,7 @@ function studentGameProcessor(input) {
 				if(internal < 0) {internal = 0};
 				$('mistakeQuestion').innerText = `You can try again in ${Math.floor(internal)} seconds`;
 			}, 100);
-			Array.from($('studentAnswersFlex').children).forEach((object, index) => {
+			Array.from($('studentAnswersFlex').children).forEach((object) => {
 				object.classList.add('transitionQuestionB');
 				setTimeout(() => {
 					object.style.display = 'none';
@@ -1554,7 +1555,12 @@ var timerInterval;
 
 function setQuestion() {
 	if(!gameStateStudent) return;
-	updateStudentLocation(gameStateStudent.currentQuestion);
+	if(gameStateStudent.currentQuestion > gameStateStudent.totalQuestions) {
+		//waiting for other players...
+	}
+	else {
+		updateStudentLocation(gameStateStudent.currentQuestion);
+	}
 	$('studentAnswersFlex').style.display = 'flex';
 	$('titleButtonStudent').firstElementChild.innerText = decodeURI(gameStateStudent.currentQuestionData.question);
 	var options = $('studentAnswersFlex').children;
@@ -1563,6 +1569,7 @@ function setQuestion() {
 			options[i].style.display = 'none';
 		}
 		else {
+			options[i].disabled = false;
 			options[i].style.display = 'block';
 			options[i].firstElementChild.textContent = decodeURI(gameStateStudent.currentQuestionData.answers[i]);
 		}
