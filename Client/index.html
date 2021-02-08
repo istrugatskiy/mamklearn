@@ -139,8 +139,7 @@
 		</div>
 	</div>
 	<div class="modal-popup" id='modal-popupA'>
-		<div id="modal-bg" onclick="exitModalPopupA();"
-			style="position: fixed; display: block; min-width: 100%; min-height: 100%; text-align: center;"></div>
+		<div id="modal-bg" style="position: fixed; display: block; min-width: 100%; min-height: 100%; text-align: center;"></div>
 		<div id="createQuizMenu">
 			<h1 style="font-family: 'Chelsea Market', cursive; color: white;">Quiz Name:</h1>
 			<form id="quizCreateForm" name="quizCreateForm">
@@ -153,8 +152,7 @@
 			<div class="link-background">
 				<ul class="textOverrideA titleTransitionBack">
 					<li>
-						<a class="middle" href="javascript:void(0);" onclick="exitModalPopupA()"
-							style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;">Back</a>
+						<a class="middle" href="javascript:void(0);" id="backButtonZ" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;">Back</a>
 					</li>
 				</ul>
 				<div id='underline'></div>
@@ -176,7 +174,7 @@
 			<div class="link-background">
 				<ul class="textOverrideA titleTransitionBack">
 					<li>
-						<a class="middle" href="javascript:void(0);" onclick="exitModalPopupB()"
+						<a class="middle" href="javascript:void(0);" id="backButtonY"
 							style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;">Back</a>
 					</li>
 				</ul>
@@ -189,8 +187,7 @@
 				The following action cannot be undone!</p><button class="button titleTransitionBack"
 				id="deleteQuizConfirm" style="min-width: 400px; background-color: orange;">Delete</button><br>
 			<br>
-			<button class="button titleTransitionBack" id="backButtonDeleteConfirm"
-				onclick="exitModalPopupC()">Back</button>
+			<button class="button titleTransitionBack" id="backButtonDeleteConfirm" id="backButtonX">Back</button>
 		</div>
 		<div id="editQuizMenu" style="display: none;">
 			<h1 style="font-family: 'Chelsea Market', cursive; color: white;">Quiz Name:</h1>
@@ -221,8 +218,7 @@
 				<div id='underline'></div>
 			</div>
 			<br>
-			<button class="button titleTransitionBack" id="backButtonShareQuiz"
-				onclick="exitModalPopupG()">Back</button>
+			<button class="button titleTransitionBack" id="backButtonShareQuiz">Back</button>
 		</div>
 	</div>
 	<div class="modal-popup" id="modal-popupB">

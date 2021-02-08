@@ -124,7 +124,6 @@ console.log("%cMamklearn:                                                       
 if (!window.location.href.includes("#performance-mode")) {
 	particlesJS.load('particles-js', jsonUri, function () { });
 }
-//const bottomBarHTML = '<div id="containerBottomA" style="display: none;" class="container"> <div class="centerA"> <div class="bottom-bar"> <div class="first"><ul style="all:unset;"> <li class="float" ><a href="privacy.html" >Privacy Policy</a></li></ul> </div> <div class="center"> <ul style="all:unset;"><li class="float"><a href="tos.html">Terms of Service</a></li></ul> </div> <div class="last"> <ul style="all:unset;"><li class="float" id="float"><a class="btn" href="javascript:void(0)" onclick="userClick(\'about.html\')" id="AboutLink">About</a></li></ul> </div> </div> </div> </div>';
 const bottomBarHTML = '<div style="display: none;" id="containerBottomA" class=\"container\">\r\n\t\t\t<div class=\"centerA\">\r\n\t\t\t\t<div class=\"bottom-bar\">\r\n\t\t\t\t\t<div class=\"first\">\r\n\t\t\t\t\t\t<ul style=\"all: unset;\">\r\n\t\t\t\t\t\t\t<li class=\"float\">\r\n\t\t\t\t\t\t\t\t<a href=\"privacy.html\">Privacy Policy<\/a>\r\n\t\t\t\t\t\t\t<\/li>\r\n\t\t\t\t\t\t<\/ul>\r\n\t\t\t\t\t<\/div>\r\n\t\t\t\t\t<div class=\"center\">\r\n\t\t\t\t\t\t<ul style=\"all: unset;\">\r\n\t\t\t\t\t\t\t<li class=\"float\">\r\n\t\t\t\t\t\t\t\t<a href=\"tos.html\">Terms of Service<\/a>\r\n\t\t\t\t\t\t\t<\/li>\r\n\t\t\t\t\t\t<\/ul>\r\n\t\t\t\t\t<\/div>\r\n\t\t\t\t\t<div class=\"last\">\r\n\t\t\t\t\t\t<ul style=\"all: unset;\">\r\n\t\t\t\t\t\t\t<li class=\"float\" id=\"float\">\r\n\t\t\t\t\t\t\t\t<a class=\"btn\" href=\"javascript:void(0)\" id=\"AboutLink\">About<\/a>\r\n\t\t\t\t\t\t\t<\/li>\r\n\t\t\t\t\t\t<\/ul>\r\n\t\t\t\t\t<\/div>\r\n\t\t\t\t<\/div>\r\n\t\t\t<\/div>\r\n\t\t<\/div>';
 const newTitle = '<h1 id=\'homeText\' class=\"titleTransitionBack\">Home<\/h1><div id="charCustomize" class="button titleTransitionBack" tabindex="0"><p class="notifyTextChar" id="tapToCustom">Tap to customize...</p><div id="stableBody"><img src="../img/arms-0.png" id="currentUserArms" style="position: absolute;" alt="your arms" width="250"><img src="../img/eyes-0.png" style="position: absolute;" alt="your eyes" id="currentUserEyes" width="250"><img src="../img/nose-0.png" style="position: absolute;" id="currentUserNose" alt="your nose" width="250"><img src="../img/mouth-0.png" style="position: absolute;" id="currentUserMouth" alt="your mouth" width="250"><img src="../img/shirt-0.png" style="position: absolute;" id="currentUserShirt" alt="your shirt" width="250"><img src="../img/base.png" alt="your profile picture" width="250"></div><p class="notifyTextChar" id="customType"><a class="arrow left" id="leftCustomizeArrow" href="javascript:void(0)"></a><a id="customButtonChange" href="javascript:void(0)">Eyes</a><a class="arrow right" id="arrowCustomizeRight" href="javascript:void(0)"></a></p><img height="90" id="customButtonChange2" style="cursor: pointer;" alt="Tap to change button..." src="img/tapToChange.png"></div> </br><button class=\"button  titleTransitionBack\" id=\"makebtn\">Make<\/button><button class=\"button  titleTransitionBack\" id=\"btn2\">Play<\/button><div class=\"link-background titleTransitionBack\"><ul><li><a href=\"javascript:void(0);\" class=\"middle\" id=\"signOutbtn\" style=\"font-family: \'Segoe UI\', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;\">Sign out<\/a> <\/li><\/ul><div id=\'underline\'></div><\/div>' + bottomBarHTML;
 const playData = '<h1 class=\'titleTransitionBack\' id=\'codeText\'>Game Code:<\/h1><form id="joinQuizForm"><input autofocus type="text" class=\'titleTransitionBack formInput button\' required autocomplete="off" pattern=\'^[0-9]*$\'  maxlength="9" title="valid game ID" id="gameID" placeholder="Game Code" name="gameID"> <br> <br> <button class="button titleTransitionBack" id="submitID" type="submit">Join</button> <\/form> <div class=\"link-background\"><ul class="textOverrideA titleTransitionBack"><li><a href=\"javascript:void(0);\" class=\"middle\" id=\"playMenuBack\" style=\"font-family: \'Segoe UI\', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;\">Back<\/a> <\/li><\/ul> <div id=\'underline\'></div><\/div>' + bottomBarHTML;
@@ -144,24 +143,6 @@ const quizObject = {
 	quizName: "",
 	questionObjects: []
 };
-const questionObject = {
-	questionName: "",
-	shortAnswer: false,
-	timeLimit: 0,
-	Answers: [{
-		answer: "",
-		correct: false
-	}, {
-		answer: "",
-		correct: false
-	}, {
-		answer: "",
-		correct: false
-	}, {
-		answer: "",
-		correct: false
-	}]
-};
 var quizObject2 = [];
 var quizList2 = {};
 var allowSubmit = true;
@@ -174,151 +155,198 @@ var allowState = true;
 var minHeight = null;
 var allowState2 = true;
 var editState = false;
-var currentDisconnectInstance = 0;
+
+// These are some helper functions used throughout the app!
 const $ = (a) => {
 	return document.getElementById(a);
 }
-window.onload = function () {
+
+const getCaretCharacterOffsetWithin = (element) => {
+	var caretOffset = 0;
+	var doc = element.ownerDocument || element.document;
+	var win = doc.defaultView || doc.parentWindow;
+	var sel;
+	if (typeof win.getSelection != "undefined") {
+		sel = win.getSelection();
+		if (sel.rangeCount > 0) {
+			var range = win.getSelection().getRangeAt(0);
+			var preCaretRange = range.cloneRange();
+			preCaretRange.selectNodeContents(element);
+			preCaretRange.setEnd(range.endContainer, range.endOffset);
+			caretOffset = preCaretRange.toString().length;
+		}
+	} else if ((sel = doc.selection) && sel.type != "Control") {
+		var textRange = sel.createRange();
+		var preCaretTextRange = doc.body.createTextRange();
+		preCaretTextRange.moveToElementText(element);
+		preCaretTextRange.setEndPoint("EndToEnd", textRange);
+		caretOffset = preCaretTextRange.text.length;
+	}
+	return caretOffset;
+}
+
+const characterCount = (thisVar, total) => {
+	thisVar.nextElementSibling.innerHTML = `${thisVar.textContent.length}/${total}`;
+	if (thisVar.innerText.length > total) {
+		allowSubmit = false;
+	}
+}
+
+const setCaretPosition = (element, offset) => {
+	var range = document.createRange();
+	var sel = window.getSelection();
+
+	//select appropriate node
+	var currentNode = null;
+	var previousNode = null;
+
+	for (var i = 0; i < element.childNodes.length; i++) {
+		//save previous node
+		previousNode = currentNode;
+
+		//get current node
+		currentNode = element.childNodes[i];
+		//if we get span or something else then we should get child node
+		while (currentNode.childNodes.length > 0) {
+			currentNode = currentNode.childNodes[0];
+		}
+
+		//calc offset in current node
+		if (previousNode != null) {
+			offset -= previousNode.length;
+		}
+		//check whether current node has enough length
+		if (offset <= currentNode.length) {
+			break;
+		}
+	}
+	//move caret to specified offset
+	if (currentNode != null) {
+		range.setStart(currentNode, offset);
+		range.collapse(true);
+		sel.removeAllRanges();
+		sel.addRange(range);
+	}
+}
+// Helper functions end here!
+
+const initializeApp = () => {
+	contentEditableUpdate();
+	var $loader = document.querySelector(".loader");
+	$loader.classList.remove('loader--active');
+	$('quizCreateForm').addEventListener('submit', createNewQuiz);
+	if (new URLSearchParams(window.location.search).get('shareQuiz')) {
+		setTimeout(() => {
+			$("errorActual").innerText = 'Quiz Copied';
+			$("errorMessageA").style.display = "block";
+			setTimeout(function () {
+				$("errorMessageA").style.display = "none";
+				window.history.pushState({ "html": 1, "pageTitle": 5 }, "mamkLearn", "index.html");
+			}, 1000);
+		}, 500);
+	}
+}
+
+// Defines the initial click events, if you want to pass parameters use a lambda!
+var clickEvents = {
+	"btn2": playCode,
+	"makebtn": makeCode,
+	"signOutbtn": signOut,
+	"deleteQuiuzConfirm": deleteQuizConfirm,
+	"deleteQuiz": deleteQuiz,
+	"editQuiz": editQuiz,
+	"addQuestionButton": addQuestion,
+	"playQuiz": playQuiz,
+	"doneButtonA": doneButtonA,
+	"shareQuiz": shareQuiz,
+	"backButtonEditQuiz": () => {exitModalPopupF(true)},
+	"loginBtn": login,
+	"customButtonChange": updateImageState,
+	"customButtonChange2": updateImageState,
+	"leftCustomizeArrow": () => {arrowButtonPress(true)},
+	"arrowCustomizeRight": () => {arrowButtonPress(false)},
+	"shortAnswerSubmitButton": submitShortAnswer,
+	"backButtonC": goBackMakeA,
+	"copyShareLink": copyShareLink,
+	"playMenuBack": goBack,
+	"AboutLink": () => {userClick('About.html')},
+	"modal-bg": exitModalPopupA,
+	"backButtonZ": exitModalPopupA,
+	"backButtonY": exitModalPopupB,
+	"backButtonX": exitModalPopupC,
+	"backButtonShareQuiz": exitModalPopupG
+};
+
+// Handles the majority of events.
+const eventHandle = () => {
+	window.addEventListener('click', (event) => {
+		if(event.target.id in clickEvents) {
+			clickEvents[event.target.id]();
+		}
+		if (event.target.id.includes("studentQuizButton")) {
+			submitMultipleChoice(event);
+		}
+
+	});
+	window.addEventListener("beforeunload", function (event) {
+		if (editState) {
+			event.preventDefault();
+			event.returnValue = ' ';
+		}
+	});
+	$('editQuizForm').addEventListener('submit', function (event) {
+		event.preventDefault();
+		$("modal-popupA").style.pointerEvents = "none";
+		$("saveQuizButton").disabled = true;
+		$("backButtonEditQuiz").disabled = true;
+		$("quizNameUpdate").disabled = true;
+		$("addQuestionButton").disabled = true;
+		collapseAllArea();
+		parseActiveQuiz();
+		if (!verifyQuiz()) {
+			$("modal-popupB").style.display = 'block';
+			$("editQuizMenu").style.animation = 'fadeOut 0.5s';
+			window.scrollTo(0, 0);
+			allowState = false;
+			allowState2 = false;
+			setTimeout(function () {
+				$("editQuizMenu").style.visibility = 'hidden';
+				allowState2 = true;
+			}, 500);
+		}
+		else {
+			quizObject2[currentQuizEdit] = tempQuiz;
+			quizList2[currentQuizEdit] = encodeHTML($("quizNameUpdate").value);
+			$("saveQuizButton").innerHTML = svgData;
+			setTimeout(function () {
+				exitModalPopupF(false);
+			}, 1000);
+			setTimeout(function () {
+				$("errorActual").innerText = 'Quiz Saved';
+				$("errorMessageA").style.display = "block";
+				setTimeout(function () {
+					$("errorMessageA").style.display = "none";
+				}, 1000);
+			}, 1200);
+		}
+	});
+	$('studentShortAnswerText').addEventListener('keydown', event => {
+		if (event.key == "Enter") {
+			submitShortAnswer();
+		}
+	});
+}
+
+// Initializes the app once its fully loaded.
+window.addEventListener('load', () => {
 	gapi.load('auth2', function () {
 		gapi.auth2.init({
 			client_id: '917106980205-im519fknf8sfb1jc1gs1tr6eafmto4vs.apps.googleusercontent.com',
-		}).then(function () {
-			contentEditableUpdate();
-			var $loader = document.querySelector(".loader");
-			$loader.classList.remove('loader--active');
-			$('quizCreateForm').addEventListener('submit', createNewQuiz);
-			var auth2 = gapi.auth2.getAuthInstance();
-			if(new URLSearchParams(window.location.search).get('shareQuiz')) {
-				setTimeout(() => {
-					$("errorActual").innerText = 'Quiz Copied';
-					$("errorMessageA").style.display = "block";
-					setTimeout(function () {
-						$("errorMessageA").style.display = "none";
-						window.history.pushState({"html": 1,"pageTitle": 5},"mamkLearn", "index.html");
-					}, 1000);
-				}, 500);
-			}
-			window.addEventListener("beforeunload", function (event) {
-				if(editState) {
-					event.preventDefault();
-					event.returnValue = ' ';
-				}
-			});
-			$('editQuizForm').addEventListener('submit', function (event) {
-				event.preventDefault();
-				$("modal-popupA").style.pointerEvents = "none";
-				$("saveQuizButton").disabled = true;
-				$("backButtonEditQuiz").disabled = true;
-				$("quizNameUpdate").disabled = true;
-				$("addQuestionButton").disabled = true;
-				collapseAllArea();
-				parseActiveQuiz();
-				if(!verifyQuiz()) {
-					$("modal-popupB").style.display = 'block';
-					$("editQuizMenu").style.animation = 'fadeOut 0.5s';
-					window.scrollTo(0, 0);
-					allowState = false;
-					allowState2 = false;
-					setTimeout(function () {
-						$("editQuizMenu").style.visibility = 'hidden';
-						allowState2 = true;
-					}, 500);
-				}
-				else {
-					quizObject2[currentQuizEdit] = tempQuiz;
-					quizList2[currentQuizEdit] = encodeHTML($("quizNameUpdate").value);
-					$("saveQuizButton").innerHTML = svgData;
-					setTimeout(function () {
-						exitModalPopupF(false);
-					}, 1000);
-					setTimeout(function () {
-						$("errorActual").innerText = 'Quiz Saved';
-						$("errorMessageA").style.display = "block";
-						setTimeout(function () {
-							$("errorMessageA").style.display = "none";
-						}, 1000);
-					},1200);
-				} 
-			});
-			$('studentShortAnswerText').addEventListener('keydown', event => {
-				if(event.key == "Enter") {
-					submitShortAnswer();
-				}
-			});
-		});
-	});
-}
-window.addEventListener("load", () => {
-	window.addEventListener('click', function (event) {
-		switch(event.target.id) {
-			case "btn2":
-				playCode();
-				break;
-			case "makebtn":
-				makeCode();
-				break;
-			case "signOutbtn":
-				signOut();
-				break;
-			case "deleteQuiuzConfirm":
-				deleteQuizConfirm();
-				break;
-			case "deleteQuiz":
-				deleteQuiz();
-				break;
-			case "editQuiz":
-				editQuiz();
-				break;
-			case "addQuestionButton":
-				addQuestion();
-				break;
-			case "playQuiz":
-				playQuiz();
-				break;
-			case "doneButtonA":
-				doneButtonA();
-				break;
-			case "shareQuiz":
-				shareQuiz();
-				break;
-			case "backButtonEditQuiz":
-				exitModalPopupF(true);
-				break;
-			case "loginBtn":
-				login();
-				break;
-			case "customButtonChange":
-				updateImageState();
-				break;
-			case "customButtonChange2":
-				updateImageState();
-				break;
-			case "leftCustomizeArrow":
-				arrowButtonPress(true);
-				break;
-			case "arrowCustomizeRight":
-				arrowButtonPress(false);
-				break;
-			case "shortAnswerSubmitButton":
-				submitShortAnswer();
-				break;
-			case "backButtonC":
-				goBackMakeA();
-				break;
-			case "copyShareLink":
-				copyShareLink();
-				break;
-			case "playMenuBack":
-				goBack();
-				break;
-			case "AboutLink":
-				userClick('About.html');
-				break;
+		}).then( () => {
+			initializeApp();
+			eventHandle();
 		}
-		if(event.target.id.includes("studentQuizButton")) {
-			submitMultipleChoice(event);
-		}
-	
+		);
 	});
 });
 
@@ -458,18 +486,11 @@ function editQuiz() {
 				actualData[4].children[2].textContent = questionObject.timeLimit;
 				characterCount(actualData[4].children[2], 3);
 			}
-			actualData[5].children[0].children[0].textContent = questionObject.Answers[0].answer;
-			characterCount(actualData[5].children[0].children[0], 50);
-			actualData[5].children[1].children[0].textContent = questionObject.Answers[1].answer;
-			characterCount(actualData[5].children[1].children[0], 50);
-			actualData[5].children[2].children[0].textContent = questionObject.Answers[2].answer;
-			characterCount(actualData[5].children[2].children[0], 50);
-			actualData[5].children[3].children[0].textContent = questionObject.Answers[3].answer;
-			characterCount(actualData[5].children[3].children[0], 50);
-			actualData[5].children[0].children[2].children[0].checked = questionObject.Answers[0].correct;
-			actualData[5].children[1].children[2].children[0].checked = questionObject.Answers[1].correct;
-			actualData[5].children[2].children[2].children[0].checked = questionObject.Answers[2].correct;
-			actualData[5].children[3].children[2].children[0].checked = questionObject.Answers[3].correct;
+			for(i = 0; i < 4; i++) {
+				actualData[5].children[i].children[0].textContent = questionObject.Answers[i].answer;
+				characterCount(actualData[5].children[i].children[0], 50);
+				actualData[5].children[i].children[2].children[0].checked = questionObject.Answers[0].correct;
+			}
 		});
 		reorderProper();
 	}
@@ -591,7 +612,7 @@ function createQuiz() {
 	if (checkOnce) {
 		$('createButtonA').disabled = true;
 		$('QuizName').disabled = false;
-		$('modal-bg').onclick = exitModalPopupA;
+		clickEvents['modal-bg'] = exitModalPopupA;
 		$('submitQuizID').disabled = false;
 		$('QuizName').value = '';
 		$('createButtonA').classList.add('btnTransitionA');
@@ -706,8 +727,8 @@ function arrowButtonPress(isLeft) {
 	$("customButtonChange").innerHTML = customOptions[customOptionsIncrement];
 	$("charCustomize").focus();
 }
+
 var currentUserConfig = [0, 0, 0, 0, 0];
-var tempData01;
 
 function updateImageState() {
 	currentUserConfig[customOptionsIncrement]++;
@@ -726,7 +747,7 @@ function setCharImage(charID, currentUserConfig) {
 }
 var checkOnce = true;
 
-function exitModalPopupA(a = false) {
+function exitModalPopupA() {
 	if (checkOnce) {
 		checkOnce = false;
 		$('modal-bg').style.animation = 'fadeOut 0.5s';
@@ -763,7 +784,7 @@ function addQuiz() {
 			item.addEventListener('click', event => {
 				if (checkOnce) {
 					$('createButtonA').disabled = true;
-					$('modal-bg').onclick = exitModalPopupB;
+					clickEvents['modal-bg'] = exitModalPopupB;
 					$('QuizName').disabled = false;
 					$('submitQuizID').disabled = false;
 					$('QuizName').value = '';
@@ -925,13 +946,6 @@ function deleteQuestion(a) {
 	}, 300);
 }
 
-function characterCount(thisVar, total) {
-	thisVar.nextElementSibling.innerHTML = `${thisVar.textContent.length}/${total}`;
-	if (thisVar.innerText.length > total) {
-		allowSubmit = false;
-	}
-}
-
 function reorderProper() {
 	var test = 0;
 	for (i = 0; i <= $('draggableDiv').children.length - 1; i++) {
@@ -976,67 +990,6 @@ function contentEditableUpdate() {
 	}
 }
 
-function getCaretCharacterOffsetWithin(element) {
-	var caretOffset = 0;
-	var doc = element.ownerDocument || element.document;
-	var win = doc.defaultView || doc.parentWindow;
-	var sel;
-	if (typeof win.getSelection != "undefined") {
-		sel = win.getSelection();
-		if (sel.rangeCount > 0) {
-			var range = win.getSelection().getRangeAt(0);
-			var preCaretRange = range.cloneRange();
-			preCaretRange.selectNodeContents(element);
-			preCaretRange.setEnd(range.endContainer, range.endOffset);
-			caretOffset = preCaretRange.toString().length;
-		}
-	} else if ((sel = doc.selection) && sel.type != "Control") {
-		var textRange = sel.createRange();
-		var preCaretTextRange = doc.body.createTextRange();
-		preCaretTextRange.moveToElementText(element);
-		preCaretTextRange.setEndPoint("EndToEnd", textRange);
-		caretOffset = preCaretTextRange.text.length;
-	}
-	return caretOffset;
-}
-
-function setCaretPosition(element, offset) {
-	var range = document.createRange();
-	var sel = window.getSelection();
-
-	//select appropriate node
-	var currentNode = null;
-	var previousNode = null;
-
-	for (var i = 0; i < element.childNodes.length; i++) {
-		//save previous node
-		previousNode = currentNode;
-
-		//get current node
-		currentNode = element.childNodes[i];
-		//if we get span or something else then we should get child node
-		while (currentNode.childNodes.length > 0) {
-			currentNode = currentNode.childNodes[0];
-		}
-
-		//calc offset in current node
-		if (previousNode != null) {
-			offset -= previousNode.length;
-		}
-		//check whether current node has enough length
-		if (offset <= currentNode.length) {
-			break;
-		}
-	}
-	//move caret to specified offset
-	if (currentNode != null) {
-		range.setStart(currentNode, offset);
-		range.collapse(true);
-		sel.removeAllRanges();
-		sel.addRange(range);
-	}
-}
-
 window.addEventListener("error", function (e) {
 	if(e.hasOwnProperty('details')) {
 		throwExcept('GAPI_ERROR');
@@ -1047,17 +1000,6 @@ window.addEventListener("error", function (e) {
 	else {
 		console.log(e.message);
 	}
-});
-
-window.addEventListener('offline', (e) => { 
-	var internalInstance = currentDisconnectInstance;
-	setTimeout(() => {
-		if(currentDisconnectInstance == internalInstance) throwExcept("CONNECTION_DROPPED");
-	}, 5000);
-});
-
-window.addEventListener('online', (e) => {
-	currentDisconnectInstance++;
 });
 
 function throwExcept(msg) {
