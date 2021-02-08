@@ -113,7 +113,6 @@ const jsonUri = "data:text/plain;base64," + window.btoa(JSON.stringify(ParticleD
 var a = false;
 var currentQuizEdit;
 var drake = null;
-var currentWindowScale = window.innerWidth;
 const quizStartTestCase = ' {"gameStart": true, "totalQuestions": 25, "currentQuestion": "If%20fish%20are%20fish", "choices": [ "heck", "null", "really%20I%20could%20not%20be%20bothered", "heckv2" ], "currentQuestionTime": 69, "questionID": 0 }';
 const anotherTestCase = '{ "isQuestionCorrect": false, "nextQuestion": null, "choices": [ null ], "currentQuestionTime": 20 }';
 const anotherTestCase2 = '{ "isQuestionCorrect": true, "nextQuestion": "heckDifferentQuestionTooLazyTooPutPercent", "choices": [ "Nabeel", "Nabeel2", "Nabeel3", "Nabeel4" ], "currentQuestionTime": 69 }';
@@ -127,7 +126,7 @@ const newTitle = '<h1 id=\'homeText\' class=\"titleTransitionBack\">Home<\/h1><d
 const playData = '<h1 class=\'titleTransitionBack\' id=\'codeText\'>Game Code:<\/h1><form id="joinQuizForm"><input autofocus type="text" class=\'titleTransitionBack formInput button\' required autocomplete="off" pattern=\'^[0-9]*$\'  maxlength="9" title="valid game ID" id="gameID" placeholder="Game Code" name="gameID"> <br> <br> <button class="button titleTransitionBack" id="submitID" type="submit">Join</button> <\/form> <div class=\"link-background\"><ul class="textOverrideA titleTransitionBack"><li><a href=\"javascript:void(0);\" class=\"middle\" id=\"playMenuBack\" style=\"font-family: \'Segoe UI\', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;\">Back<\/a> <\/li><\/ul> <div></div><\/div>' + bottomBarHTML;
 const makeData = '<h1 id=\'homeText\' class=\"titleTransitionBack\">Your Quizzes:<\/h1><div id="makeDiv"><div id="removeButton"><button class="button  titleTransitionBack" id="createButtonA"><p class="notifyTextChar">Tap to create a quiz...</p><img width="400" id="plusButtonImage" src="../img/createQuiz.png"></button><br><br></div><button class="button titleTransitionBack" id="backButtonC">Back</button></div>';
 const svgData = '<svg version="1.1" id="loader-1" xmlns="www.w3.org/2000/svg" xmlns:xlink="www.w3.org/1999/xlink" x="0px" y="0px" width="40px" height="40px" viewBox="0 0 40 40" enable-background="new 0 0 40 40" xml:space="preserve"><path opacity="1" fill="#ffffff" d="M20.201,5.169c-8.254,0-14.946,6.692-14.946,14.946c0,8.255,6.692,14.946,14.946,14.946s14.946-6.691,14.946-14.946C35.146,11.861,28.455,5.169,20.201,5.169z M20.201,31.749c-6.425,0-11.634-5.208-11.634-11.634c0-6.425,5.209-11.634,11.634-11.634c6.425,0,11.633,5.209,11.633,11.634C31.834,26.541,26.626,31.749,20.201,31.749z"></path><path fill="#000" d="M26.013,10.047l1.654-2.866c-2.198-1.272-4.743-2.012-7.466-2.012h0v3.312h0C22.32,8.481,24.301,9.057,26.013,10.047z"></path><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0" to="360" dur="0.5s" repeatCount="indefinite"></animateTransform></svg>';
-var customOptions = ["Eyes", "Nose", "Mouth", "Shirt", "Arms"];
+const customOptions = ["Eyes", "Nose", "Mouth", "Shirt", "Arms"];
 // for quiz object order does matter for answers!
 const quizObject = {
 	quizID: "",
@@ -139,11 +138,8 @@ var quizList2 = {};
 var allowSubmit = true;
 var activeArea = 1;
 var highestQuestion = 0;
-var temp41 = null;
-var temp42 = null;
 var tempQuiz = null;
 var allowState = true;
-var minHeight = null;
 var allowState2 = true;
 var editState = false;
 
@@ -1311,7 +1307,7 @@ function exitModalPopupF(promptUser) {
 
 function addquestionToDOM() {
 	highestQuestion++;
-	temp41 = `<div style="margin-top: -50px; position: relative;" class="draggable" id="draggableQuestion${highestQuestion}">
+	var temp41 = `<div style="margin-top: -50px; position: relative;" class="draggable" id="draggableQuestion${highestQuestion}">
 	<h3 style="font-family: 'Chelsea Market', cursive; color: white; text-align: left;"> <span class="draggableActual"><svg class="draggableActual" xmlns="http://www.w3.org/2000/svg" height="24" style="transform: scale(2);" viewBox="0 0 24 24" width="24"><path class="draggableActual" d="M0 0h24v24H0V0z" fill="none"/><path class="draggableActual" fill="white" d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></span> <span class="hackDoNotUse">Question ${highestQuestion}:</span><a href="javascript:void(0);" onclick="collapseSubArea(${highestQuestion});"  id="collapseSubArea${highestQuestion}" class="arrowBRight arrow"></a> <svg xmlns="http://www.w3.org/2000/svg" class="clickBoxGrey" onclick="deleteQuestion(${highestQuestion});" viewBox="0 0 24 24" style="transform: scale(2); margin-left: 22px;" fill="white" width="18px" height="18px"><path d="M0 0h24v24H0z" fill="none"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></h3>
 	<div id="collapsableContent${highestQuestion}" class="contentA2">
 		<div autofocus class='titleTransitionBack textAreaConfig formInput button' required autocomplete="off" maxlength="90" title="Question 2" id="Question2InputText" onkeypress="return (this.innerText.length < 90)" contenteditable="true" placeholder="Question" name="Question2InputText"></div>
