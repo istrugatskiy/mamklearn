@@ -183,6 +183,39 @@ const characterCount = (thisVar, total) => {
 	}
 }
 
+const deepEqual = (object1, object2) => {
+	const keys1 = Object.keys(object1);
+	const keys2 = Object.keys(object2);
+
+	if (keys1.length !== keys2.length) {
+		return false;
+	}
+
+	for (const key of keys1) {
+		const val1 = object1[key];
+		const val2 = object2[key];
+		const areObjects = isObject(val1) && isObject(val2);
+		if (
+			areObjects && !deepEqual(val1, val2) ||
+			!areObjects && val1 !== val2
+		) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+const isObject = (object) => {
+	return object != null && typeof object === 'object';
+}
+
+const throwExcept = (msg) => {
+	$('commError2').style.display = 'block';
+	$('CommError').style.display = 'block';
+	$('comError3').innerHTML = msg;
+}
+
 const setCaretPosition = (element, offset) => {
 	var range = document.createRange();
 	var sel = window.getSelection();
@@ -1001,12 +1034,6 @@ window.addEventListener("error", function (e) {
 	}
 });
 
-function throwExcept(msg) {
-	$('commError2').style.display = 'block';
-	$('CommError').style.display = 'block';
-	$('comError3').innerHTML = msg;
-}
-
 function shortAnswerToggle(endMe) {
 	$(`answerContainerObject${endMe}`).classList.toggle('shortAnswerEditorStyles');
 	$(`collapsableContent${endMe}`).classList.toggle('noSpaceEditor');
@@ -1049,11 +1076,6 @@ function parseActiveQuiz() {
 	}
 }
 
-function wrapper(toWrap, wrapper) {
-	wrapper = wrapper || document.createElement('div');
-	toWrap.parentNode.appendChild(wrapper);
-	return wrapper.appendChild(toWrap);
-};
 //verify that question field is filled; done
 //verify that we have any questions at all; done
 //verify that no field goes over it's character limit; done
@@ -1239,33 +1261,6 @@ function verifyQuiz() {
 		return true;
 	}
 }
-
-function deepEqual(object1, object2) {
-	const keys1 = Object.keys(object1);
-	const keys2 = Object.keys(object2);
-  
-	if (keys1.length !== keys2.length) {
-	  return false;
-	}
-  
-	for (const key of keys1) {
-	  const val1 = object1[key];
-	  const val2 = object2[key];
-	  const areObjects = isObject(val1) && isObject(val2);
-	  if (
-		areObjects && !deepEqual(val1, val2) ||
-		!areObjects && val1 !== val2
-	  ) {
-		return false;
-	  }
-	}
-  
-	return true;
-  }
-  
-  function isObject(object) {
-	return object != null && typeof object === 'object';
-  }
 
 function exitModalPopupF(promptUser) {
 	if(promptUser) {
