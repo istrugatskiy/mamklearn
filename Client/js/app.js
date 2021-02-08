@@ -1,3 +1,4 @@
+// Definese the configuration data for particles js.
 var ParticleData = {
 	"particles": {
 		"number": {
@@ -108,36 +109,26 @@ var ParticleData = {
 	},
 	"retina_detect": false
 };
-var jsonUri = "data:text/plain;base64," + window.btoa(JSON.stringify(ParticleData));
+const jsonUri = "data:text/plain;base64," + window.btoa(JSON.stringify(ParticleData));
 var a = false;
 var currentQuizEdit;
 var drake = null;
 var currentWindowScale = window.innerWidth;
-var quizStartTestCase = ' {"gameStart": true, "totalQuestions": 25, "currentQuestion": "If%20fish%20are%20fish", "choices": [ "heck", "null", "really%20I%20could%20not%20be%20bothered", "heckv2" ], "currentQuestionTime": 69, "questionID": 0 }';
-var anotherTestCase = '{ "isQuestionCorrect": false, "nextQuestion": null, "choices": [ null ], "currentQuestionTime": 20 }';
-var anotherTestCase2 = '{ "isQuestionCorrect": true, "nextQuestion": "heckDifferentQuestionTooLazyTooPutPercent", "choices": [ "Nabeel", "Nabeel2", "Nabeel3", "Nabeel4" ], "currentQuestionTime": 69 }';
-var anotherTestCase3 = '{ "gameFinish": true, "timeTillEnd": 180}';
+const quizStartTestCase = ' {"gameStart": true, "totalQuestions": 25, "currentQuestion": "If%20fish%20are%20fish", "choices": [ "heck", "null", "really%20I%20could%20not%20be%20bothered", "heckv2" ], "currentQuestionTime": 69, "questionID": 0 }';
+const anotherTestCase = '{ "isQuestionCorrect": false, "nextQuestion": null, "choices": [ null ], "currentQuestionTime": 20 }';
+const anotherTestCase2 = '{ "isQuestionCorrect": true, "nextQuestion": "heckDifferentQuestionTooLazyTooPutPercent", "choices": [ "Nabeel", "Nabeel2", "Nabeel3", "Nabeel4" ], "currentQuestionTime": 69 }';
+const anotherTestCase3 = '{ "gameFinish": true, "timeTillEnd": 180}';
 var gameStateStudent = null;
 console.log("%cUse link to get quiz answers:https://bit.ly/31Apj2U", "font-size: 32px;");
-var css69 = `text-shadow: -1px -1px hsl(0,100%,50%), 1px 1px hsl(5.4, 100%, 50%), 3px 2px hsl(10.8, 100%, 50%), 5px 3px hsl(16.2, 100%, 50%), 7px 4px hsl(21.6, 100%, 50%), 9px 5px hsl(27, 100%, 50%), 11px 6px hsl(32.4, 100%, 50%), 13px 7px hsl(37.8, 100%, 50%), 14px 8px hsl(43.2, 100%, 50%), 16px 9px hsl(48.6, 100%, 50%), 18px 10px hsl(54, 100%, 50%), 20px 11px hsl(59.4, 100%, 50%), 22px 12px hsl(64.8, 100%, 50%), 23px 13px hsl(70.2, 100%, 50%), 25px 14px hsl(75.6, 100%, 50%), 27px 15px hsl(81, 100%, 50%), 28px 16px hsl(86.4, 100%, 50%), 30px 17px hsl(91.8, 100%, 50%), 32px 18px hsl(97.2, 100%, 50%), 33px 19px hsl(102.6, 100%, 50%), 35px 20px hsl(108, 100%, 50%), 36px 21px hsl(113.4, 100%, 50%), 38px 22px hsl(118.8, 100%, 50%), 39px 23px hsl(124.2, 100%, 50%), 41px 24px hsl(129.6, 100%, 50%), 42px 25px hsl(135, 100%, 50%), 43px 26px hsl(140.4, 100%, 50%), 45px 27px hsl(145.8, 100%, 50%), 46px 28px hsl(151.2, 100%, 50%), 47px 29px hsl(156.6, 100%, 50%), 48px 30px hsl(162, 100%, 50%), 49px 31px hsl(167.4, 100%, 50%), 50px 32px hsl(172.8, 100%, 50%), 51px 33px hsl(178.2, 100%, 50%), 52px 34px hsl(183.6, 100%, 50%), 53px 35px hsl(189, 100%, 50%), 54px 36px hsl(194.4, 100%, 50%), 55px 37px hsl(199.8, 100%, 50%), 55px 38px hsl(205.2, 100%, 50%), 56px 39px hsl(210.6, 100%, 50%), 57px 40px hsl(216, 100%, 50%), 57px 41px hsl(221.4, 100%, 50%), 58px 42px hsl(226.8, 100%, 50%), 58px 43px hsl(232.2, 100%, 50%), 58px 44px hsl(237.6, 100%, 50%), 59px 45px hsl(243, 100%, 50%), 59px 46px hsl(248.4, 100%, 50%), 59px 47px hsl(253.8, 100%, 50%), 59px 48px hsl(259.2, 100%, 50%), 59px 49px hsl(264.6, 100%, 50%), 60px 50px hsl(270, 100%, 50%), 59px 51px hsl(275.4, 100%, 50%), 59px 52px hsl(280.8, 100%, 50%), 59px 53px hsl(286.2, 100%, 50%), 59px 54px hsl(291.6, 100%, 50%), 59px 55px hsl(297, 100%, 50%), 58px 56px hsl(302.4, 100%, 50%), 58px 57px hsl(307.8, 100%, 50%), 58px 58px hsl(313.2, 100%, 50%), 57px 59px hsl(318.6, 100%, 50%), 57px 60px hsl(324, 100%, 50%), 56px 61px hsl(329.4, 100%, 50%), 55px 62px hsl(334.8, 100%, 50%), 55px 63px hsl(340.2, 100%, 50%), 54px 64px hsl(345.6, 100%, 50%), 53px 65px hsl(351, 100%, 50%), 52px 66px hsl(356.4, 100%, 50%), 51px 67px hsl(361.8, 100%, 50%), 50px 68px hsl(367.2, 100%, 50%), 49px 69px hsl(372.6, 100%, 50%), 48px 70px hsl(378, 100%, 50%), 47px 71px hsl(383.4, 100%, 50%), 46px 72px hsl(388.8, 100%, 50%), 45px 73px hsl(394.2, 100%, 50%), 43px 74px hsl(399.6, 100%, 50%), 42px 75px hsl(405, 100%, 50%), 41px 76px hsl(410.4, 100%, 50%), 39px 77px hsl(415.8, 100%, 50%), 38px 78px hsl(421.2, 100%, 50%), 36px 79px hsl(426.6, 100%, 50%), 35px 80px hsl(432, 100%, 50%), 33px 81px hsl(437.4, 100%, 50%), 32px 82px hsl(442.8, 100%, 50%), 30px 83px hsl(448.2, 100%, 50%), 28px 84px hsl(453.6, 100%, 50%), 27px 85px hsl(459, 100%, 50%), 25px 86px hsl(464.4, 100%, 50%), 23px 87px hsl(469.8, 100%, 50%), 22px 88px hsl(475.2, 100%, 50%), 20px 89px hsl(480.6, 100%, 50%), 18px 90px hsl(486, 100%, 50%), 16px 91px hsl(491.4, 100%, 50%), 14px 92px hsl(496.8, 100%, 50%), 13px 93px hsl(502.2, 100%, 50%), 11px 94px hsl(507.6, 100%, 50%), 9px 95px hsl(513, 100%, 50%); font-size: 40px;`;
+const css69 = `text-shadow: -1px -1px hsl(0,100%,50%), 1px 1px hsl(5.4, 100%, 50%), 3px 2px hsl(10.8, 100%, 50%), 5px 3px hsl(16.2, 100%, 50%), 7px 4px hsl(21.6, 100%, 50%), 9px 5px hsl(27, 100%, 50%), 11px 6px hsl(32.4, 100%, 50%), 13px 7px hsl(37.8, 100%, 50%), 14px 8px hsl(43.2, 100%, 50%), 16px 9px hsl(48.6, 100%, 50%), 18px 10px hsl(54, 100%, 50%), 20px 11px hsl(59.4, 100%, 50%), 22px 12px hsl(64.8, 100%, 50%), 23px 13px hsl(70.2, 100%, 50%), 25px 14px hsl(75.6, 100%, 50%), 27px 15px hsl(81, 100%, 50%), 28px 16px hsl(86.4, 100%, 50%), 30px 17px hsl(91.8, 100%, 50%), 32px 18px hsl(97.2, 100%, 50%), 33px 19px hsl(102.6, 100%, 50%), 35px 20px hsl(108, 100%, 50%), 36px 21px hsl(113.4, 100%, 50%), 38px 22px hsl(118.8, 100%, 50%), 39px 23px hsl(124.2, 100%, 50%), 41px 24px hsl(129.6, 100%, 50%), 42px 25px hsl(135, 100%, 50%), 43px 26px hsl(140.4, 100%, 50%), 45px 27px hsl(145.8, 100%, 50%), 46px 28px hsl(151.2, 100%, 50%), 47px 29px hsl(156.6, 100%, 50%), 48px 30px hsl(162, 100%, 50%), 49px 31px hsl(167.4, 100%, 50%), 50px 32px hsl(172.8, 100%, 50%), 51px 33px hsl(178.2, 100%, 50%), 52px 34px hsl(183.6, 100%, 50%), 53px 35px hsl(189, 100%, 50%), 54px 36px hsl(194.4, 100%, 50%), 55px 37px hsl(199.8, 100%, 50%), 55px 38px hsl(205.2, 100%, 50%), 56px 39px hsl(210.6, 100%, 50%), 57px 40px hsl(216, 100%, 50%), 57px 41px hsl(221.4, 100%, 50%), 58px 42px hsl(226.8, 100%, 50%), 58px 43px hsl(232.2, 100%, 50%), 58px 44px hsl(237.6, 100%, 50%), 59px 45px hsl(243, 100%, 50%), 59px 46px hsl(248.4, 100%, 50%), 59px 47px hsl(253.8, 100%, 50%), 59px 48px hsl(259.2, 100%, 50%), 59px 49px hsl(264.6, 100%, 50%), 60px 50px hsl(270, 100%, 50%), 59px 51px hsl(275.4, 100%, 50%), 59px 52px hsl(280.8, 100%, 50%), 59px 53px hsl(286.2, 100%, 50%), 59px 54px hsl(291.6, 100%, 50%), 59px 55px hsl(297, 100%, 50%), 58px 56px hsl(302.4, 100%, 50%), 58px 57px hsl(307.8, 100%, 50%), 58px 58px hsl(313.2, 100%, 50%), 57px 59px hsl(318.6, 100%, 50%), 57px 60px hsl(324, 100%, 50%), 56px 61px hsl(329.4, 100%, 50%), 55px 62px hsl(334.8, 100%, 50%), 55px 63px hsl(340.2, 100%, 50%), 54px 64px hsl(345.6, 100%, 50%), 53px 65px hsl(351, 100%, 50%), 52px 66px hsl(356.4, 100%, 50%), 51px 67px hsl(361.8, 100%, 50%), 50px 68px hsl(367.2, 100%, 50%), 49px 69px hsl(372.6, 100%, 50%), 48px 70px hsl(378, 100%, 50%), 47px 71px hsl(383.4, 100%, 50%), 46px 72px hsl(388.8, 100%, 50%), 45px 73px hsl(394.2, 100%, 50%), 43px 74px hsl(399.6, 100%, 50%), 42px 75px hsl(405, 100%, 50%), 41px 76px hsl(410.4, 100%, 50%), 39px 77px hsl(415.8, 100%, 50%), 38px 78px hsl(421.2, 100%, 50%), 36px 79px hsl(426.6, 100%, 50%), 35px 80px hsl(432, 100%, 50%), 33px 81px hsl(437.4, 100%, 50%), 32px 82px hsl(442.8, 100%, 50%), 30px 83px hsl(448.2, 100%, 50%), 28px 84px hsl(453.6, 100%, 50%), 27px 85px hsl(459, 100%, 50%), 25px 86px hsl(464.4, 100%, 50%), 23px 87px hsl(469.8, 100%, 50%), 22px 88px hsl(475.2, 100%, 50%), 20px 89px hsl(480.6, 100%, 50%), 18px 90px hsl(486, 100%, 50%), 16px 91px hsl(491.4, 100%, 50%), 14px 92px hsl(496.8, 100%, 50%), 13px 93px hsl(502.2, 100%, 50%), 11px 94px hsl(507.6, 100%, 50%), 9px 95px hsl(513, 100%, 50%); font-size: 40px;`;
 console.log("%cMamklearn:                                                                                                      Version: 1.0.0                                                                                                             Dev. Build                                                                                                                     Particles-js V.2                                                                                                                                                                                                                       gapi OAuth 2.0 ", css69);
-if (!window.location.href.includes("#performance-mode")) {
-	particlesJS.load('particles-js', jsonUri, function () { });
-}
 const bottomBarHTML = '<div style="display: none;" id="containerBottomA" class=\"container\">\r\n\t\t\t<div class=\"centerA\">\r\n\t\t\t\t<div class=\"bottom-bar\">\r\n\t\t\t\t\t<div class=\"first\">\r\n\t\t\t\t\t\t<ul style=\"all: unset;\">\r\n\t\t\t\t\t\t\t<li class=\"float\">\r\n\t\t\t\t\t\t\t\t<a href=\"privacy.html\">Privacy Policy<\/a>\r\n\t\t\t\t\t\t\t<\/li>\r\n\t\t\t\t\t\t<\/ul>\r\n\t\t\t\t\t<\/div>\r\n\t\t\t\t\t<div class=\"center\">\r\n\t\t\t\t\t\t<ul style=\"all: unset;\">\r\n\t\t\t\t\t\t\t<li class=\"float\">\r\n\t\t\t\t\t\t\t\t<a href=\"tos.html\">Terms of Service<\/a>\r\n\t\t\t\t\t\t\t<\/li>\r\n\t\t\t\t\t\t<\/ul>\r\n\t\t\t\t\t<\/div>\r\n\t\t\t\t\t<div class=\"last\">\r\n\t\t\t\t\t\t<ul style=\"all: unset;\">\r\n\t\t\t\t\t\t\t<li class=\"float\" id=\"float\">\r\n\t\t\t\t\t\t\t\t<a class=\"btn\" href=\"javascript:void(0)\" id=\"AboutLink\">About<\/a>\r\n\t\t\t\t\t\t\t<\/li>\r\n\t\t\t\t\t\t<\/ul>\r\n\t\t\t\t\t<\/div>\r\n\t\t\t\t<\/div>\r\n\t\t\t<\/div>\r\n\t\t<\/div>';
-const newTitle = '<h1 id=\'homeText\' class=\"titleTransitionBack\">Home<\/h1><div id="charCustomize" class="button titleTransitionBack" tabindex="0"><p class="notifyTextChar" id="tapToCustom">Tap to customize...</p><div id="stableBody"><img src="../img/arms-0.png" id="currentUserArms" style="position: absolute;" alt="your arms" width="250"><img src="../img/eyes-0.png" style="position: absolute;" alt="your eyes" id="currentUserEyes" width="250"><img src="../img/nose-0.png" style="position: absolute;" id="currentUserNose" alt="your nose" width="250"><img src="../img/mouth-0.png" style="position: absolute;" id="currentUserMouth" alt="your mouth" width="250"><img src="../img/shirt-0.png" style="position: absolute;" id="currentUserShirt" alt="your shirt" width="250"><img src="../img/base.png" alt="your profile picture" width="250"></div><p class="notifyTextChar" id="customType"><a class="arrow left" id="leftCustomizeArrow" href="javascript:void(0)"></a><a id="customButtonChange" href="javascript:void(0)">Eyes</a><a class="arrow right" id="arrowCustomizeRight" href="javascript:void(0)"></a></p><img height="90" id="customButtonChange2" style="cursor: pointer;" alt="Tap to change button..." src="img/tapToChange.png"></div> </br><button class=\"button  titleTransitionBack\" id=\"makebtn\">Make<\/button><button class=\"button  titleTransitionBack\" id=\"btn2\">Play<\/button><div class=\"link-background titleTransitionBack\"><ul><li><a href=\"javascript:void(0);\" class=\"middle\" id=\"signOutbtn\" style=\"font-family: \'Segoe UI\', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;\">Sign out<\/a> <\/li><\/ul><div id=\'underline\'></div><\/div>' + bottomBarHTML;
-const playData = '<h1 class=\'titleTransitionBack\' id=\'codeText\'>Game Code:<\/h1><form id="joinQuizForm"><input autofocus type="text" class=\'titleTransitionBack formInput button\' required autocomplete="off" pattern=\'^[0-9]*$\'  maxlength="9" title="valid game ID" id="gameID" placeholder="Game Code" name="gameID"> <br> <br> <button class="button titleTransitionBack" id="submitID" type="submit">Join</button> <\/form> <div class=\"link-background\"><ul class="textOverrideA titleTransitionBack"><li><a href=\"javascript:void(0);\" class=\"middle\" id=\"playMenuBack\" style=\"font-family: \'Segoe UI\', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;\">Back<\/a> <\/li><\/ul> <div id=\'underline\'></div><\/div>' + bottomBarHTML;
+const newTitle = '<h1 id=\'homeText\' class=\"titleTransitionBack\">Home<\/h1><div id="charCustomize" class="button titleTransitionBack" tabindex="0"><p class="notifyTextChar" id="tapToCustom">Tap to customize...</p><div id="stableBody"><img src="../img/arms-0.png" id="currentUserArms" style="position: absolute;" alt="your arms" width="250"><img src="../img/eyes-0.png" style="position: absolute;" alt="your eyes" id="currentUserEyes" width="250"><img src="../img/nose-0.png" style="position: absolute;" id="currentUserNose" alt="your nose" width="250"><img src="../img/mouth-0.png" style="position: absolute;" id="currentUserMouth" alt="your mouth" width="250"><img src="../img/shirt-0.png" style="position: absolute;" id="currentUserShirt" alt="your shirt" width="250"><img src="../img/base.png" alt="your profile picture" width="250"></div><p class="notifyTextChar" id="customType"><a class="arrow left" id="leftCustomizeArrow" href="javascript:void(0)"></a><a id="customButtonChange" href="javascript:void(0)">Eyes</a><a class="arrow right" id="arrowCustomizeRight" href="javascript:void(0)"></a></p><img height="90" id="customButtonChange2" style="cursor: pointer;" alt="Tap to change button..." src="img/tapToChange.png"></div> </br><button class=\"button  titleTransitionBack\" id=\"makebtn\">Make<\/button><button class=\"button  titleTransitionBack\" id=\"btn2\">Play<\/button><div class=\"link-background titleTransitionBack\"><ul><li><a href=\"javascript:void(0);\" class=\"middle\" id=\"signOutbtn\" style=\"font-family: \'Segoe UI\', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;\">Sign out<\/a> <\/li><\/ul><div></div><\/div>' + bottomBarHTML;
+const playData = '<h1 class=\'titleTransitionBack\' id=\'codeText\'>Game Code:<\/h1><form id="joinQuizForm"><input autofocus type="text" class=\'titleTransitionBack formInput button\' required autocomplete="off" pattern=\'^[0-9]*$\'  maxlength="9" title="valid game ID" id="gameID" placeholder="Game Code" name="gameID"> <br> <br> <button class="button titleTransitionBack" id="submitID" type="submit">Join</button> <\/form> <div class=\"link-background\"><ul class="textOverrideA titleTransitionBack"><li><a href=\"javascript:void(0);\" class=\"middle\" id=\"playMenuBack\" style=\"font-family: \'Segoe UI\', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;\">Back<\/a> <\/li><\/ul> <div></div><\/div>' + bottomBarHTML;
 const makeData = '<h1 id=\'homeText\' class=\"titleTransitionBack\">Your Quizzes:<\/h1><div id="makeDiv"><div id="removeButton"><button class="button  titleTransitionBack" id="createButtonA"><p class="notifyTextChar">Tap to create a quiz...</p><img width="400" id="plusButtonImage" src="../img/createQuiz.png"></button><br><br></div><button class="button titleTransitionBack" id="backButtonC">Back</button></div>';
 const svgData = '<svg version="1.1" id="loader-1" xmlns="www.w3.org/2000/svg" xmlns:xlink="www.w3.org/1999/xlink" x="0px" y="0px" width="40px" height="40px" viewBox="0 0 40 40" enable-background="new 0 0 40 40" xml:space="preserve"><path opacity="1" fill="#ffffff" d="M20.201,5.169c-8.254,0-14.946,6.692-14.946,14.946c0,8.255,6.692,14.946,14.946,14.946s14.946-6.691,14.946-14.946C35.146,11.861,28.455,5.169,20.201,5.169z M20.201,31.749c-6.425,0-11.634-5.208-11.634-11.634c0-6.425,5.209-11.634,11.634-11.634c6.425,0,11.633,5.209,11.633,11.634C31.834,26.541,26.626,31.749,20.201,31.749z"></path><path fill="#000" d="M26.013,10.047l1.654-2.866c-2.198-1.272-4.743-2.012-7.466-2.012h0v3.312h0C22.32,8.481,24.301,9.057,26.013,10.047z"></path><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0" to="360" dur="0.5s" repeatCount="indefinite"></animateTransform></svg>';
 var customOptions = ["Eyes", "Nose", "Mouth", "Shirt", "Arms"];
-var quizList = {
-	"177644": "Ilya's funny quiz 1",
-	"294332": "Ilya's not so funny quiz 2 !aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-	"922132": "Ilya's funny quiz 2",
-	"687213": "Ilya's funny quiz 3",
-	"238051": "Ilya's funny quiz 4"
-};
-// for quiz object order does matter for answers,
+// for quiz object order does matter for answers!
 const quizObject = {
 	quizID: "",
 	quizName: "",
@@ -159,6 +150,10 @@ var editState = false;
 // These are some helper functions used throughout the app!
 const $ = (a) => {
 	return document.getElementById(a);
+}
+
+var clamp = (num, min, max) => {
+	return num <= min ? min : num >= max ? max : num;
 }
 
 const getCaretCharacterOffsetWithin = (element) => {
@@ -232,9 +227,11 @@ const setCaretPosition = (element, offset) => {
 
 const initializeApp = () => {
 	contentEditableUpdate();
-	var $loader = document.querySelector(".loader");
+	const $loader = document.querySelector(".loader");
 	$loader.classList.remove('loader--active');
-	$('quizCreateForm').addEventListener('submit', createNewQuiz);
+	if (!window.location.href.includes("#performance-mode")) {
+		particlesJS.load('particles-js', jsonUri);
+	}
 	if (new URLSearchParams(window.location.search).get('shareQuiz')) {
 		setTimeout(() => {
 			$("errorActual").innerText = 'Quiz Copied';
@@ -252,7 +249,7 @@ var clickEvents = {
 	"btn2": playCode,
 	"makebtn": makeCode,
 	"signOutbtn": signOut,
-	"deleteQuiuzConfirm": deleteQuizConfirm,
+	"deleteQuizConfirm": deleteQuizConfirm,
 	"deleteQuiz": deleteQuiz,
 	"editQuiz": editQuiz,
 	"addQuestionButton": addQuestion,
@@ -274,13 +271,20 @@ var clickEvents = {
 	"backButtonZ": exitModalPopupA,
 	"backButtonY": exitModalPopupB,
 	"backButtonX": exitModalPopupC,
-	"backButtonShareQuiz": exitModalPopupG
+	"backButtonShareQuiz": exitModalPopupG,
+	"createButtonA": createQuiz
+};
+
+var submitEvents = {
+	"editQuizForm": editQuizForm,
+	"joinQuizForm": JoinGame,
+	"quizCreateForm": createNewQuiz
 };
 
 // Handles the majority of events.
 const eventHandle = () => {
 	window.addEventListener('click', (event) => {
-		if(event.target.id in clickEvents) {
+		if (event.target.id in clickEvents) {
 			clickEvents[event.target.id]();
 		}
 		if (event.target.id.includes("studentQuizButton")) {
@@ -288,46 +292,24 @@ const eventHandle = () => {
 		}
 
 	});
+	window.addEventListener('submit', function (event) {
+		event.preventDefault();
+		if (event.target.id in submitEvents) {
+			submitEvents[event.target.id]();
+		}
+	});
 	window.addEventListener("beforeunload", function (event) {
 		if (editState) {
 			event.preventDefault();
 			event.returnValue = ' ';
 		}
 	});
-	$('editQuizForm').addEventListener('submit', function (event) {
-		event.preventDefault();
-		$("modal-popupA").style.pointerEvents = "none";
-		$("saveQuizButton").disabled = true;
-		$("backButtonEditQuiz").disabled = true;
-		$("quizNameUpdate").disabled = true;
-		$("addQuestionButton").disabled = true;
-		collapseAllArea();
-		parseActiveQuiz();
-		if (!verifyQuiz()) {
-			$("modal-popupB").style.display = 'block';
-			$("editQuizMenu").style.animation = 'fadeOut 0.5s';
-			window.scrollTo(0, 0);
-			allowState = false;
-			allowState2 = false;
-			setTimeout(function () {
-				$("editQuizMenu").style.visibility = 'hidden';
-				allowState2 = true;
-			}, 500);
-		}
-		else {
-			quizObject2[currentQuizEdit] = tempQuiz;
-			quizList2[currentQuizEdit] = encodeHTML($("quizNameUpdate").value);
-			$("saveQuizButton").innerHTML = svgData;
-			setTimeout(function () {
-				exitModalPopupF(false);
-			}, 1000);
-			setTimeout(function () {
-				$("errorActual").innerText = 'Quiz Saved';
-				$("errorMessageA").style.display = "block";
-				setTimeout(function () {
-					$("errorMessageA").style.display = "none";
-				}, 1000);
-			}, 1200);
+	window.addEventListener('resize', () => {
+		if (gameStateStudent) {
+			bottomBarOffset = 15;
+			for (i = 0; i <= gameStateStudent.currentQuestion; i++) {
+				updateStudentLocation(i);
+			}
 		}
 	});
 	$('studentShortAnswerText').addEventListener('keydown', event => {
@@ -489,7 +471,7 @@ function editQuiz() {
 			for(i = 0; i < 4; i++) {
 				actualData[5].children[i].children[0].textContent = questionObject.Answers[i].answer;
 				characterCount(actualData[5].children[i].children[0], 50);
-				actualData[5].children[i].children[2].children[0].checked = questionObject.Answers[0].correct;
+				actualData[5].children[i].children[2].children[0].checked = questionObject.Answers[i].correct;
 			}
 		});
 		reorderProper();
@@ -516,6 +498,42 @@ function editQuiz() {
 		$('editQuizMenu').style.animation = 'modalPopin 0.3s';
 		contentEditableUpdate();
 	}, 300);
+}
+
+function editQuizForm() {
+	$("modal-popupA").style.pointerEvents = "none";
+	$("saveQuizButton").disabled = true;
+	$("backButtonEditQuiz").disabled = true;
+	$("quizNameUpdate").disabled = true;
+	$("addQuestionButton").disabled = true;
+	collapseAllArea();
+	parseActiveQuiz();
+	if (!verifyQuiz()) {
+		$("modal-popupB").style.display = 'block';
+		$("editQuizMenu").style.animation = 'fadeOut 0.5s';
+		window.scrollTo(0, 0);
+		allowState = false;
+		allowState2 = false;
+		setTimeout(function () {
+			$("editQuizMenu").style.visibility = 'hidden';
+			allowState2 = true;
+		}, 500);
+	}
+	else {
+		quizObject2[currentQuizEdit] = tempQuiz;
+		quizList2[currentQuizEdit] = encodeHTML($("quizNameUpdate").value);
+		$("saveQuizButton").innerHTML = svgData;
+		setTimeout(function () {
+			exitModalPopupF(false);
+		}, 1000);
+		setTimeout(function () {
+			$("errorActual").innerText = 'Quiz Saved';
+			$("errorMessageA").style.display = "block";
+			setTimeout(function () {
+				$("errorMessageA").style.display = "none";
+			}, 1000);
+		}, 1200);
+	}
 }
 
 function userClick(e, g = false, nabeelIsGreat = false) {
@@ -601,9 +619,6 @@ function makeCode() {
 			$('title').innerHTML = decodeURI(makeData);
 			$('title').style.top = '100px';
 			addQuiz();
-			$('createButtonA').addEventListener('click', function () {
-				createQuiz();
-			});
 		}, 300);
 	}, 1000);
 }
@@ -652,7 +667,6 @@ function playCode() {
 		$('containerBottomA').classList.add("containerPlayMenu");
 		$('title').style.height = '250px';
 		$('title').style.top = "30%";
-		$('joinQuizForm').addEventListener('submit', JoinGame);
 	}, 300);
 }
 
@@ -692,7 +706,6 @@ function JoinGame(event) {
 			$('submitID').innerHTML = 'Join';
 		}, 1000);
 	}
-	event.preventDefault();
 }
 
 function goBack() {
@@ -761,9 +774,6 @@ function exitModalPopupA() {
 		}, 300);
 		$('title').innerHTML = decodeURI(makeData);
 		addQuiz();
-		$('createButtonA').addEventListener('click', function () {
-			createQuiz();
-		});
 	}
 }
 var iconIterate = 0;
@@ -863,7 +873,6 @@ function createNewQuiz(event) {
 		quizList2[uuidv4()] = encodeHTML(g);
 		exitModalPopupA(true);
 	}, 1000);
-	event.preventDefault();
 }
 
 function exitModalPopupB() {
@@ -880,9 +889,6 @@ function exitModalPopupB() {
 		}, 300);
 		$('title').innerHTML = decodeURI(makeData);
 		addQuiz();
-		$('createButtonA').addEventListener('click', function () {
-			createQuiz();
-		});
 	}
 }
 
@@ -900,9 +906,6 @@ function exitModalPopupC() {
 	}, 300);
 	$('title').innerHTML = decodeURI(makeData);
 	addQuiz();
-	$('createButtonA').addEventListener('click', function () {
-		createQuiz();
-	});
 }
 
 function collapseSubArea(a) {
@@ -1303,9 +1306,6 @@ function exitModalPopupF(promptUser) {
 		}, 300);
 		$('title').innerHTML = decodeURI(makeData);
 		addQuiz();
-		$('createButtonA').addEventListener('click', function () {
-			createQuiz();
-		});
 	}
 }
 
@@ -1332,9 +1332,6 @@ function exitModalPopupG() {
 	}, 300);
 	$('title').innerHTML = decodeURI(makeData);
 	addQuiz();
-	$('createButtonA').addEventListener('click', function () {
-		createQuiz();
-	});
 }
 
 var otherInterval;
@@ -1553,19 +1550,6 @@ function setQuestion() {
 }
 
 var bottomBarOffset;
-
-function clamp(num, min, max) {
-	return num <= min ? min : num >= max ? max : num;
-}
-
-window.addEventListener('resize', () => {
-	if(gameStateStudent) {
-		bottomBarOffset = 15;
-		for(i = 0; i <= gameStateStudent.currentQuestion; i++) {
-			updateStudentLocation(i);
-		}
-	}
-});
 
 function updateStudentLocation(studentLocation) {
 	var internalPercentage = clamp((studentLocation * 114) / window.innerWidth, 0, 1);
