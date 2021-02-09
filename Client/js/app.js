@@ -119,8 +119,6 @@ const anotherTestCase2 = '{ "isQuestionCorrect": true, "nextQuestion": "heckDiff
 const anotherTestCase3 = '{ "gameFinish": true, "timeTillEnd": 180}';
 var gameStateStudent = null;
 console.log("%cUse link to get quiz answers:https://bit.ly/31Apj2U", "font-size: 32px;");
-const css69 = `text-shadow: -1px -1px hsl(0,100%,50%), 1px 1px hsl(5.4, 100%, 50%), 3px 2px hsl(10.8, 100%, 50%), 5px 3px hsl(16.2, 100%, 50%), 7px 4px hsl(21.6, 100%, 50%), 9px 5px hsl(27, 100%, 50%), 11px 6px hsl(32.4, 100%, 50%), 13px 7px hsl(37.8, 100%, 50%), 14px 8px hsl(43.2, 100%, 50%), 16px 9px hsl(48.6, 100%, 50%), 18px 10px hsl(54, 100%, 50%), 20px 11px hsl(59.4, 100%, 50%), 22px 12px hsl(64.8, 100%, 50%), 23px 13px hsl(70.2, 100%, 50%), 25px 14px hsl(75.6, 100%, 50%), 27px 15px hsl(81, 100%, 50%), 28px 16px hsl(86.4, 100%, 50%), 30px 17px hsl(91.8, 100%, 50%), 32px 18px hsl(97.2, 100%, 50%), 33px 19px hsl(102.6, 100%, 50%), 35px 20px hsl(108, 100%, 50%), 36px 21px hsl(113.4, 100%, 50%), 38px 22px hsl(118.8, 100%, 50%), 39px 23px hsl(124.2, 100%, 50%), 41px 24px hsl(129.6, 100%, 50%), 42px 25px hsl(135, 100%, 50%), 43px 26px hsl(140.4, 100%, 50%), 45px 27px hsl(145.8, 100%, 50%), 46px 28px hsl(151.2, 100%, 50%), 47px 29px hsl(156.6, 100%, 50%), 48px 30px hsl(162, 100%, 50%), 49px 31px hsl(167.4, 100%, 50%), 50px 32px hsl(172.8, 100%, 50%), 51px 33px hsl(178.2, 100%, 50%), 52px 34px hsl(183.6, 100%, 50%), 53px 35px hsl(189, 100%, 50%), 54px 36px hsl(194.4, 100%, 50%), 55px 37px hsl(199.8, 100%, 50%), 55px 38px hsl(205.2, 100%, 50%), 56px 39px hsl(210.6, 100%, 50%), 57px 40px hsl(216, 100%, 50%), 57px 41px hsl(221.4, 100%, 50%), 58px 42px hsl(226.8, 100%, 50%), 58px 43px hsl(232.2, 100%, 50%), 58px 44px hsl(237.6, 100%, 50%), 59px 45px hsl(243, 100%, 50%), 59px 46px hsl(248.4, 100%, 50%), 59px 47px hsl(253.8, 100%, 50%), 59px 48px hsl(259.2, 100%, 50%), 59px 49px hsl(264.6, 100%, 50%), 60px 50px hsl(270, 100%, 50%), 59px 51px hsl(275.4, 100%, 50%), 59px 52px hsl(280.8, 100%, 50%), 59px 53px hsl(286.2, 100%, 50%), 59px 54px hsl(291.6, 100%, 50%), 59px 55px hsl(297, 100%, 50%), 58px 56px hsl(302.4, 100%, 50%), 58px 57px hsl(307.8, 100%, 50%), 58px 58px hsl(313.2, 100%, 50%), 57px 59px hsl(318.6, 100%, 50%), 57px 60px hsl(324, 100%, 50%), 56px 61px hsl(329.4, 100%, 50%), 55px 62px hsl(334.8, 100%, 50%), 55px 63px hsl(340.2, 100%, 50%), 54px 64px hsl(345.6, 100%, 50%), 53px 65px hsl(351, 100%, 50%), 52px 66px hsl(356.4, 100%, 50%), 51px 67px hsl(361.8, 100%, 50%), 50px 68px hsl(367.2, 100%, 50%), 49px 69px hsl(372.6, 100%, 50%), 48px 70px hsl(378, 100%, 50%), 47px 71px hsl(383.4, 100%, 50%), 46px 72px hsl(388.8, 100%, 50%), 45px 73px hsl(394.2, 100%, 50%), 43px 74px hsl(399.6, 100%, 50%), 42px 75px hsl(405, 100%, 50%), 41px 76px hsl(410.4, 100%, 50%), 39px 77px hsl(415.8, 100%, 50%), 38px 78px hsl(421.2, 100%, 50%), 36px 79px hsl(426.6, 100%, 50%), 35px 80px hsl(432, 100%, 50%), 33px 81px hsl(437.4, 100%, 50%), 32px 82px hsl(442.8, 100%, 50%), 30px 83px hsl(448.2, 100%, 50%), 28px 84px hsl(453.6, 100%, 50%), 27px 85px hsl(459, 100%, 50%), 25px 86px hsl(464.4, 100%, 50%), 23px 87px hsl(469.8, 100%, 50%), 22px 88px hsl(475.2, 100%, 50%), 20px 89px hsl(480.6, 100%, 50%), 18px 90px hsl(486, 100%, 50%), 16px 91px hsl(491.4, 100%, 50%), 14px 92px hsl(496.8, 100%, 50%), 13px 93px hsl(502.2, 100%, 50%), 11px 94px hsl(507.6, 100%, 50%), 9px 95px hsl(513, 100%, 50%); font-size: 40px;`;
-console.log("%cMamklearn:                                                                                                      Version: 1.0.0                                                                                                             Dev. Build                                                                                                                     Particles-js V.2                                                                                                                                                                                                                       gapi OAuth 2.0 ", css69);
 const bottomBarHTML = '<div style="display: none;" id="containerBottomA" class=\"container\">\r\n\t\t\t<div class=\"centerA\">\r\n\t\t\t\t<div class=\"bottom-bar\">\r\n\t\t\t\t\t<div class=\"first\">\r\n\t\t\t\t\t\t<ul style=\"all: unset;\">\r\n\t\t\t\t\t\t\t<li class=\"float\">\r\n\t\t\t\t\t\t\t\t<a href=\"privacy.html\">Privacy Policy<\/a>\r\n\t\t\t\t\t\t\t<\/li>\r\n\t\t\t\t\t\t<\/ul>\r\n\t\t\t\t\t<\/div>\r\n\t\t\t\t\t<div class=\"center\">\r\n\t\t\t\t\t\t<ul style=\"all: unset;\">\r\n\t\t\t\t\t\t\t<li class=\"float\">\r\n\t\t\t\t\t\t\t\t<a href=\"tos.html\">Terms of Service<\/a>\r\n\t\t\t\t\t\t\t<\/li>\r\n\t\t\t\t\t\t<\/ul>\r\n\t\t\t\t\t<\/div>\r\n\t\t\t\t\t<div class=\"last\">\r\n\t\t\t\t\t\t<ul style=\"all: unset;\">\r\n\t\t\t\t\t\t\t<li class=\"float\" id=\"float\">\r\n\t\t\t\t\t\t\t\t<a class=\"btn\" href=\"javascript:void(0)\" id=\"AboutLink\">About<\/a>\r\n\t\t\t\t\t\t\t<\/li>\r\n\t\t\t\t\t\t<\/ul>\r\n\t\t\t\t\t<\/div>\r\n\t\t\t\t<\/div>\r\n\t\t\t<\/div>\r\n\t\t<\/div>';
 const newTitle = '<h1 id=\'homeText\' class=\"titleTransitionBack\">Home<\/h1><div id="charCustomize" class="button titleTransitionBack" tabindex="0"><p class="notifyTextChar" id="tapToCustom">Tap to customize...</p><div id="stableBody"><img src="../img/arms-0.png" id="currentUserArms" style="position: absolute;" alt="your arms" width="250"><img src="../img/eyes-0.png" style="position: absolute;" alt="your eyes" id="currentUserEyes" width="250"><img src="../img/nose-0.png" style="position: absolute;" id="currentUserNose" alt="your nose" width="250"><img src="../img/mouth-0.png" style="position: absolute;" id="currentUserMouth" alt="your mouth" width="250"><img src="../img/shirt-0.png" style="position: absolute;" id="currentUserShirt" alt="your shirt" width="250"><img src="../img/base.png" alt="your profile picture" width="250"></div><p class="notifyTextChar" id="customType"><a class="arrow left" id="leftCustomizeArrow" href="javascript:void(0)"></a><a id="customButtonChange" href="javascript:void(0)">Eyes</a><a class="arrow right" id="arrowCustomizeRight" href="javascript:void(0)"></a></p><img height="90" id="customButtonChange2" style="cursor: pointer;" alt="Tap to change button..." src="img/tapToChange.png"></div> </br><button class=\"button  titleTransitionBack\" id=\"makebtn\">Make<\/button><button class=\"button  titleTransitionBack\" id=\"btn2\">Play<\/button><div class=\"link-background titleTransitionBack\"><ul><li><a href=\"javascript:void(0);\" class=\"middle\" id=\"signOutbtn\" style=\"font-family: \'Segoe UI\', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;\">Sign out<\/a> <\/li><\/ul><div></div><\/div>' + bottomBarHTML;
 const playData = '<h1 class=\'titleTransitionBack\' id=\'codeText\'>Game Code:<\/h1><form id="joinQuizForm"><input autofocus type="text" class=\'titleTransitionBack formInput button\' required autocomplete="off" pattern=\'^[0-9]*$\'  maxlength="9" title="valid game ID" id="gameID" placeholder="Game Code" name="gameID"> <br> <br> <button class="button titleTransitionBack" id="submitID" type="submit">Join</button> <\/form> <div class=\"link-background\"><ul class="textOverrideA titleTransitionBack"><li><a href=\"javascript:void(0);\" class=\"middle\" id=\"playMenuBack\" style=\"font-family: \'Segoe UI\', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;\">Back<\/a> <\/li><\/ul> <div></div><\/div>' + bottomBarHTML;
@@ -136,7 +134,7 @@ const quizObject = {
 var quizObject2 = [];
 var quizList2 = {};
 var allowSubmit = true;
-var activeArea = 1;
+var activeArea = null;
 var highestQuestion = 0;
 var tempQuiz = null;
 var allowState = true;
@@ -210,6 +208,22 @@ const isObject = (object) => {
 	return object != null && typeof object === 'object';
 }
 
+const uuidv4 = () => {
+	return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16));
+}
+
+const encodeHTML = (str) => {
+	return str.replace(/[\u00A0-\u9999<>&#](?!#)/gim, function (i) {
+		return '&#' + i.charCodeAt(0) + ';';
+	});
+}
+
+const decodeHTML = (str) => {
+	return str.replace(/&#([0-9]{1,5});/gi, function (match, num) {
+		return String.fromCharCode(parseInt(num));
+	});
+}
+
 const throwExcept = (msg) => {
 	$('commError2').style.display = 'block';
 	$('CommError').style.display = 'block';
@@ -273,6 +287,14 @@ const initializeApp = () => {
 	}
 }
 
+const signOut = () => {
+	var auth2 = gapi.auth2.getAuthInstance();
+	auth2.signOut().then(function () {
+		console.log('User signed out.');
+		window.location.reload(false);
+	});
+}
+
 // Defines the initial click events, if you want to pass parameters use a lambda!
 var clickEvents = {
 	"btn2": playCode,
@@ -304,6 +326,14 @@ var clickEvents = {
 	"createButtonA": createQuiz
 };
 
+var clickIncludesEvents = {
+	"studentQuizButton": (event) => {submitMultipleChoice(event)},
+	"collapseSubArea": (event) => {collapseSubArea(event.target.id.slice(-1))},
+	"deleteQuestion": (event) => {deleteQuestion(event.target.id.slice(-1))},
+	"shortAnswerToggle": (event) => {shortAnswerToggle(event.target.id.slice(-1))},
+	"toggleTime": (event) => {toggleTime(event.target.id.slice(-1))}
+}
+
 var submitEvents = {
 	"editQuizForm": editQuizForm,
 	"joinQuizForm": JoinGame,
@@ -313,13 +343,16 @@ var submitEvents = {
 // Handles the majority of events.
 const eventHandle = () => {
 	window.addEventListener('click', (event) => {
+		const keys = Object.keys(clickIncludesEvents);
 		if (event.target.id in clickEvents) {
 			clickEvents[event.target.id]();
 		}
-		if (event.target.id.includes("studentQuizButton")) {
-			submitMultipleChoice(event);
+		for (i = 0; i < keys.length; i++) {
+			if (event.target.id.includes(keys[i])) {
+				clickIncludesEvents[keys[i]](event);
+				break;
+			}
 		}
-
 	});
 	window.addEventListener('submit', function (event) {
 		event.preventDefault();
@@ -874,22 +907,6 @@ function goBackMakeA() {
 	}, 300);
 }
 
-function uuidv4() {
-	return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16));
-}
-
-function encodeHTML(str) {
-	return str.replace(/[\u00A0-\u9999<>&#](?!#)/gim, function (i) {
-		return '&#' + i.charCodeAt(0) + ';';
-	});
-}
-
-function decodeHTML(str) {
-	return str.replace(/&#([0-9]{1,5});/gi, function (match, num) {
-		return String.fromCharCode(parseInt(num));
-	});
-}
-
 function createNewQuiz(event) {
 	checkOnce = false;
 	var button = $('submitQuizID');
@@ -1302,15 +1319,15 @@ function exitModalPopupF(promptUser) {
 
 function addquestionToDOM() {
 	highestQuestion++;
-	var temp41 = `<div style="margin-top: -50px; position: relative;" class="draggable" id="draggableQuestion${highestQuestion}">
-	<h3 style="font-family: 'Chelsea Market', cursive; color: white; text-align: left;"> <span class="draggableActual"><svg class="draggableActual" xmlns="http://www.w3.org/2000/svg" height="24" style="transform: scale(2);" viewBox="0 0 24 24" width="24"><path class="draggableActual" d="M0 0h24v24H0V0z" fill="none"/><path class="draggableActual" fill="white" d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></span> <span class="hackDoNotUse">Question ${highestQuestion}:</span><a href="javascript:void(0);" onclick="collapseSubArea(${highestQuestion});"  id="collapseSubArea${highestQuestion}" class="arrowBRight arrow"></a> <svg xmlns="http://www.w3.org/2000/svg" class="clickBoxGrey" onclick="deleteQuestion(${highestQuestion});" viewBox="0 0 24 24" style="transform: scale(2); margin-left: 22px;" fill="white" width="18px" height="18px"><path d="M0 0h24v24H0z" fill="none"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></h3>
+	const createdQuestion = `<div style="margin-top: -50px; position: relative;" class="draggable" id="draggableQuestion${highestQuestion}">
+	<h3 style="font-family: 'Chelsea Market', cursive; color: white; text-align: left;"> <span class="draggableActual"><svg class="draggableActual" xmlns="http://www.w3.org/2000/svg" height="24" style="transform: scale(2);" viewBox="0 0 24 24" width="24"><path class="draggableActual" d="M0 0h24v24H0V0z" fill="none"/><path class="draggableActual" fill="white" d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></span> <span class="hackDoNotUse">Question ${highestQuestion}:</span><a id="collapseSubArea${highestQuestion}" href="javascript:void(0)" class="arrowBRight arrow"></a> <svg xmlns="http://www.w3.org/2000/svg" class="clickBoxGrey" id="deleteQuestion${highestQuestion}" viewBox="0 0 24 24" style="transform: scale(2); margin-left: 22px;" fill="white" width="18px" height="18px"><path d="M0 0h24v24H0z" fill="none"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></h3>
 	<div id="collapsableContent${highestQuestion}" class="contentA2">
 		<div autofocus class='titleTransitionBack textAreaConfig formInput button' required autocomplete="off" maxlength="90" title="Question 2" id="Question2InputText" onkeypress="return (this.innerText.length < 90)" contenteditable="true" placeholder="Question" name="Question2InputText"></div>
 		<div class="charLimited"> 0/90</div>
 		<br>
 		<div class="checkboxCustomConfig" style="margin-top: 0px;">
 			<label class="toggleButton toggleButtonPosition">
-				<input type="checkbox" onclick="shortAnswerToggle(${highestQuestion})">
+				<input type="checkbox" id="shortAnswerToggle${highestQuestion}">
 				<div>
 					<svg viewBox="0 0 44 44">
 						<path d="M14,24 L21,31 L39.7428882,11.5937758 C35.2809627,6.53125861 30.0333333,4 24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,19.3 42.5809627,15.1645919 39.7428882,11.5937758" transform="translate(-2.000000, -2.000000)"></path>
@@ -1321,7 +1338,7 @@ function addquestionToDOM() {
 		</div>
 		<div class="checkboxCustomConfig" style="margin-top: 10px;">
 			<label class="toggleButton toggleButtonPosition">
-				<input type="checkbox" onclick="toggleTime(${highestQuestion})">
+				<input type="checkbox" id="toggleTime${highestQuestion}">
 				<div>
 					<svg viewBox="0 0 44 44">
 						<path d="M14,24 L21,31 L39.7428882,11.5937758 C35.2809627,6.53125861 30.0333333,4 24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,19.3 42.5809627,15.1645919 39.7428882,11.5937758" transform="translate(-2.000000, -2.000000)"></path>
@@ -1384,7 +1401,7 @@ function addquestionToDOM() {
 		</div>
 	</div>
 </div>`;
-	$('draggableDiv').insertAdjacentHTML('beforeEnd', temp41);
+	$('draggableDiv').insertAdjacentHTML('beforeEnd', createdQuestion);
 }
 
 function exitModalPopupG() {

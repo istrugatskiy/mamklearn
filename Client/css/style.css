@@ -66,11 +66,8 @@ th {
 	padding: 0px;
 	min-height: 100%;
 }
-*::selection {
-	background: #a8d1ff;
-}
-*::-moz-selection {
-	background: #a8d1ff;
+input[type="checkbox"] > * {
+	pointer-events: none;
 }
 @media (prefers-reduced-motion: reduce) {
 	* {
@@ -121,6 +118,7 @@ a {
 	color: white;
 	display: block;
 	transition: all 0.2s ease-in-out;
+	cursor: pointer;
 }
 a::before {
 	content: "";
@@ -205,7 +203,7 @@ li {
 	text-align: center;
 }
 #float>a::before {
-	width: 45px !important;
+	width: 45px ;
 }
 .last {
 	float: right;
@@ -1306,6 +1304,9 @@ html {
 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
 	filter: alpha(opacity=20);
 	transform: rotate(0deg);
+}
+.clickBoxGrey > * {
+	pointer-events: none;
 }
 .clickBoxGrey:hover {
 	cursor: pointer;

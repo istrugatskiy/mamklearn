@@ -54,15 +54,6 @@
 		<p style="color: black;">An error has occurred: JavaScript is disabled or not supported by your browser</p>
 	</noscript>
 	<script>
-		function signOut() {
-			var auth2 = gapi.auth2.getAuthInstance();
-			auth2.signOut().then(function () {
-				console.log('User signed out.');
-				window.location.reload(false);
-			});
-		}
-	</script>
-	<script>
 		function isIE() {
 			ua = navigator.userAgent;
 			/* MSIE used to detect old browsers and Trident used to newer ones*/
@@ -130,7 +121,7 @@
 					<div class="last">
 						<ul style="all: unset;">
 							<li class="float" id="float">
-								<a class="btn" href="javascript:void(0)" id="AboutLink">About</a>
+								<a class="btn" id="AboutLink" href="javascript:void(0)">About</a>
 							</li>
 						</ul>
 					</div>
