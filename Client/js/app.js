@@ -110,7 +110,6 @@ var ParticleData = {
 	"retina_detect": false
 };
 const jsonUri = "data:text/plain;base64," + window.btoa(JSON.stringify(ParticleData));
-var a = false;
 var currentQuizEdit;
 var drake = null;
 const quizStartTestCase = ' {"gameStart": true, "totalQuestions": 25, "currentQuestion": "If%20fish%20are%20fish", "choices": [ "heck", "null", "really%20I%20could%20not%20be%20bothered", "heckv2" ], "currentQuestionTime": 69, "questionID": 0 }';
@@ -137,9 +136,17 @@ var allowSubmit = true;
 var activeArea = null;
 var highestQuestion = 0;
 var tempQuiz = null;
+var checkOnce = true;
 var allowState = true;
 var allowState2 = true;
 var editState = false;
+var profile;
+var otherInterval;
+const root = document.documentElement;
+var customOptionsIncrement = 0;
+var iconIterate = 0;
+var currentUserConfig = [0, 0, 0, 0, 0];
+var bottomBarOffset;
 
 // These are some helper functions used throughout the app!
 const $ = (a) => {
@@ -266,6 +273,55 @@ const setCaretPosition = (element, offset) => {
 		sel.addRange(range);
 	}
 }
+
+const signOut = () => {
+	var auth2 = gapi.auth2.getAuthInstance();
+	auth2.signOut().then(function () {
+		console.log('User signed out.');
+		window.location.reload();
+	});
+}
+
+const questionErrorParse = (arrayToParse, questionValueSingular, questionValuePlural) => {
+	let output = 'Questions';
+	if(arrayToParse.length == 1) {
+		output = `Question ${arrayToParse[0]} ${questionValueSingular}`;
+	}
+	else if (arrayToParse.length == 2) {
+		output = `Questions ${arrayToParse[0]} and ${arrayToParse[1]} ${questionValuePlural}`;
+	}
+	else {
+		arrayToParse.forEach((error) => {
+			if (arrayToParse.slice(-1)[0] != error) {
+				output += ` ${error},`;
+			}
+			else {
+				output += ` and ${error}`;
+			}
+		});
+	}
+	return (output ? output : null);
+}
+
+const exitModalPopupTemplate = (popupToKill, special = false) => {
+	if (checkOnce || special) {
+		checkOnce = false;
+		$('modal-bg').style.animation = 'fadeOut 0.5s';
+		setTimeout(() => {
+			$('modal-bg').style.display = 'none';
+			checkOnce = true;
+		}, 500);
+		$(popupToKill).style.animation = 'modalPopout 0.3s';
+		setTimeout(() => {
+			$('modal-popupA').style.display = 'none';
+			if(special) {
+				$('quizDeleteConfirm').style.display = 'none';
+			}
+		}, 300);
+		$('title').innerHTML = decodeURI(makeData);
+		addQuiz();
+	}
+}
 // Helper functions end here!
 
 const initializeApp = () => {
@@ -285,14 +341,6 @@ const initializeApp = () => {
 			}, 1000);
 		}, 500);
 	}
-}
-
-const signOut = () => {
-	var auth2 = gapi.auth2.getAuthInstance();
-	auth2.signOut().then(function () {
-		console.log('User signed out.');
-		window.location.reload(false);
-	});
 }
 
 // Defines the initial click events, if you want to pass parameters use a lambda!
@@ -318,12 +366,13 @@ var clickEvents = {
 	"copyShareLink": copyShareLink,
 	"playMenuBack": goBack,
 	"AboutLink": () => {userClick('About.html')},
-	"modal-bg": exitModalPopupA,
-	"backButtonZ": exitModalPopupA,
-	"backButtonY": exitModalPopupB,
-	"backButtonX": exitModalPopupC,
+	"modal-bg": () => {exitModalPopupTemplate('createQuizMenu')},
+	"backButtonZ": () => {exitModalPopupTemplate('createQuizMenu')},
+	"backButtonY": () => {exitModalPopupTemplate('manageQuizMenu')},
+	"backButtonX": () => {exitModalPopupTemplate('quizDeleteConfirm', true)},
 	"backButtonShareQuiz": exitModalPopupG,
-	"createButtonA": createQuiz
+	"createButtonA": createQuiz,
+	"backButtonDeleteConfirm": () => {exitModalPopupTemplate('quizDeleteConfirm', true)}
 };
 
 var clickIncludesEvents = {
@@ -429,7 +478,6 @@ function shareQuiz() {
 }
 
 function login() {
-	a = true;
 	auth2 = gapi.auth2.getAuthInstance();
 	$('loginPage').style.display = "block";
 	$('loginBtn').classList.add('buttonPressed');
@@ -501,7 +549,7 @@ function deleteQuizConfirm() {
 	$('deleteQuizConfirm').style.backgroundColor = null;
 	$('deleteQuizConfirm').innerHTML = svgData;
 	setTimeout(function () {
-		exitModalPopupC();
+		exitModalPopupTemplate('quizDeleteConfirm', true);
 	}, 1000);
 }
 
@@ -612,7 +660,6 @@ function userClick(e, g = false, nabeelIsGreat = false) {
 	}, 1000);
 };
 
-var profile;
 function onSignIn(googleUser) {
 	profile = googleUser.getBasicProfile();
 	var $error = document.querySelector("#loginError1");
@@ -659,6 +706,7 @@ function onSignIn(googleUser) {
 		$error.innerHTML = 'Please use an account that ends in \'mamkschools.org\' or \'student.mamkschools.org\'';
 	}
 };
+
 // make and play on button click functions here!
 function makeCode() {
 	var makeButton = document.querySelector('#makebtn');
@@ -689,7 +737,7 @@ function createQuiz() {
 	if (checkOnce) {
 		$('createButtonA').disabled = true;
 		$('QuizName').disabled = false;
-		clickEvents['modal-bg'] = exitModalPopupA;
+		clickEvents['modal-bg'] = () => {exitModalPopupTemplate('createQuizMenu')};
 		$('submitQuizID').disabled = false;
 		$('QuizName').value = '';
 		$('createButtonA').classList.add('btnTransitionA');
@@ -732,7 +780,7 @@ function playCode() {
 	}, 300);
 }
 
-function JoinGame(event) {
+function JoinGame() {
 	$("gameID").disabled = true;
 	$("submitID").disabled = true;
 	var selects = document.getElementsByTagName("a");
@@ -785,7 +833,6 @@ function goBack() {
 		customOptionsIncrement = 0;
 	}, 300);
 }
-var customOptionsIncrement = 0;
 
 function arrowButtonPress(isLeft) {
 	if (isLeft) {
@@ -803,8 +850,6 @@ function arrowButtonPress(isLeft) {
 	$("charCustomize").focus();
 }
 
-var currentUserConfig = [0, 0, 0, 0, 0];
-
 function updateImageState() {
 	currentUserConfig[customOptionsIncrement]++;
 	if (currentUserConfig[customOptionsIncrement] > 9) {
@@ -820,25 +865,6 @@ function setCharImage(charID, currentUserConfig) {
 	$(charID + 'Shirt').src = `img/shirt-${currentUserConfig[3]}.png`;
 	$(charID + 'Arms').src = `img/arms-${currentUserConfig[4]}.png`;
 }
-var checkOnce = true;
-
-function exitModalPopupA() {
-	if (checkOnce) {
-		checkOnce = false;
-		$('modal-bg').style.animation = 'fadeOut 0.5s';
-		setTimeout(function () {
-			$('modal-bg').style.display = 'none';
-			checkOnce = true;
-		}, 500);
-		$('createQuizMenu').style.animation = 'modalPopout 0.3s';
-		setTimeout(function () {
-			$('modal-popupA').style.display = 'none';
-		}, 300);
-		$('title').innerHTML = decodeURI(makeData);
-		addQuiz();
-	}
-}
-var iconIterate = 0;
 
 function addQuiz() {
 	if (Object.keys(quizList2).length > 0) {
@@ -856,7 +882,7 @@ function addQuiz() {
 			item.addEventListener('click', event => {
 				if (checkOnce) {
 					$('createButtonA').disabled = true;
-					clickEvents['modal-bg'] = exitModalPopupB;
+					clickEvents['modal-bg'] = () => {exitModalPopupTemplate('manageQuizMenu')};
 					$('QuizName').disabled = false;
 					$('submitQuizID').disabled = false;
 					$('QuizName').value = '';
@@ -907,7 +933,7 @@ function goBackMakeA() {
 	}, 300);
 }
 
-function createNewQuiz(event) {
+function createNewQuiz() {
 	checkOnce = false;
 	var button = $('submitQuizID');
 	$('QuizName').disabled = true;
@@ -917,41 +943,8 @@ function createNewQuiz(event) {
 	setTimeout(function () {
 		checkOnce = true;
 		quizList2[uuidv4()] = encodeHTML(g);
-		exitModalPopupA(true);
+		exitModalPopupTemplate('createQuizMenu');
 	}, 1000);
-}
-
-function exitModalPopupB() {
-	if (checkOnce) {
-		checkOnce = false;
-		$('modal-bg').style.animation = 'fadeOut 0.5s';
-		setTimeout(function () {
-			$('modal-bg').style.display = 'none';
-			checkOnce = true;
-		}, 500);
-		$('manageQuizMenu').style.animation = 'modalPopout 0.3s';
-		setTimeout(function () {
-			$('modal-popupA').style.display = 'none';
-		}, 300);
-		$('title').innerHTML = decodeURI(makeData);
-		addQuiz();
-	}
-}
-
-function exitModalPopupC() {
-	checkOnce = false;
-	$('modal-bg').style.animation = 'fadeOut 0.5s';
-	setTimeout(function () {
-		$('modal-bg').style.display = 'none';
-		checkOnce = true;
-	}, 500);
-	$('quizDeleteConfirm').style.animation = 'modalPopout 0.3s';
-	setTimeout(function () {
-		$('modal-popupA').style.display = 'none';
-		$('quizDeleteConfirm').style.display = 'none';
-	}, 300);
-	$('title').innerHTML = decodeURI(makeData);
-	addQuiz();
 }
 
 function collapseSubArea(a) {
@@ -1099,7 +1092,7 @@ function parseActiveQuiz() {
 //verify that time limit is at least 5 or more; done
 //verify that at least one possible choice is correct; done
 //verify that at least two answer fields are filled out; done
-function verifyQuiz() {
+const verifyQuiz = () => {
 	quizParseError = [];
 	var finalResult = '';
 	if (tempQuiz.questionObjects.length === 0) {
@@ -1107,169 +1100,52 @@ function verifyQuiz() {
 	}
 	else {
 		var quizParseError = [];
-		var currentQuestion = 0;
 		var nullSpace01 = [];
-		var questionErrorString = 'Questions';
 		var timeLimitViolation = [];
 		var answerError0 = [];
 		var answerError1 = [];
 		var answerError2 = [];
-		var answerError1Content = 'Questions';
-		var timeLimitErrorString = 'Questions';
-		var answerError0Content = 'Questions';
-		var answerError2Content = 'Questions';
-		tempQuiz.questionObjects.forEach(function (question) {
-			currentQuestion++;
+		tempQuiz.questionObjects.forEach((question, index) => {
+			index++;
 			if (/^$/.test(question.questionName)) {
-				nullSpace01.push(currentQuestion);
+				nullSpace01.push(index);
 			}
 			if (!question.shortAnswer) {
 				if (!question.Answers[0].answer || !question.Answers[1].answer) {
-					answerError0.push(currentQuestion);
+					answerError0.push(index);
 				}
 				if (!question.Answers[0].correct && !question.Answers[1].correct) {
 					if (!question.Answers[2].correct && !question.Answers[3].correct) {
-						answerError1.push(currentQuestion);
+						answerError1.push(index);
 					}
 				}
 				if(!question.Answers[2].answer || !question.Answers[3].answer) {
 					if(question.Answers[2].correct && !question.Answers[2].answer) {
-						answerError2.push(currentQuestion);
+						answerError2.push(index);
 					}
 					else if(question.Answers[3].correct && !question.Answers[3].answer) {
-						answerError2.push(currentQuestion);
+						answerError2.push(index);
 					}
 				}
 			}
 			if (typeof question.timeLimit != "boolean") {
 				if (isNaN(question.timeLimit) || question.timeLimit < 5) {
-					timeLimitViolation.push(currentQuestion);
+					timeLimitViolation.push(index);
 				}
 			}
 		});
-		if (nullSpace01.length == 1) {
-			questionErrorString = `Question ${nullSpace01[0]} has an empty question field`;
-		}
-		else if (nullSpace01.length == 2) {
-			questionErrorString = `Questions ${nullSpace01[0]} and ${nullSpace01[1]} have an empty question field`;
-		}
-		else {
-			nullSpace01.forEach(function (error) {
-				if (nullSpace01.slice(-1)[0] != error) {
-					questionErrorString += ` ${error},`;
-				}
-				else {
-					questionErrorString += ` and ${error}`;
-				}
-			});
-		}
 
-		if(answerError0.length == 1) {
-			answerError0Content = `Question ${answerError0[0]} does not have the first two answer fields filled out`;
-		}
-		else if (answerError0.length == 2) {
-			answerError0Content = `Questions ${answerError0[0]} and ${answerError0[1]} do not have the first two answer fields filled out`;
-		}
-		else {
-			answerError0.forEach(function(error) {
-				if (answerError0.slice(-1)[0] != error) {
-					answerError0Content += ` ${error},`;
-				}
-				else {
-					answerError0Content += ` and ${error}`;
-				}
-			});
-		}
-
-		if (timeLimitViolation.length == 1) {
-			timeLimitErrorString = `Question ${timeLimitViolation[0]} has an invalid time limit or a time limit less than 5`;
-		}
-		else if (timeLimitViolation.length == 2) {
-			timeLimitErrorString = `Questions ${timeLimitViolation[0]} and ${timeLimitViolation[1]} have an invalid time limit or a time limit less than 5`
-		}
-		else {
-			timeLimitViolation.forEach(function (error) {
-				if (nullSpace01.slice(-1)[0] != error) {
-					timeLimitErrorString += ` ${error},`;
-				}
-				else {
-					timeLimitErrorString += ` and ${error}`;
-				}
-			});
-		}
-
-		if (answerError1.length == 1) {
-			answerError1Content = `Question ${answerError1[0]} does not have a correct option`;
-		}
-		else if (answerError1.length == 2) {
-			answerError1Content = `Questions ${answerError1[0]} and ${answerError1[1]} do not have a correct option`
-		}
-		else {
-			answerError1.forEach(function (error) {
-				if (answerError1.slice(-1)[0] != error) {
-					answerError1Content += ` ${error},`;
-				}
-				else {
-					answerError1Content += ` and ${error}`;
-				}
-			});
-		}
-
-		if(answerError2.length == 1) {
-			answerError2Content = `Question ${answerError2[0]} has a correct option which corresponds to an empty field`;
-		}
-		else if (answerError2.length == 2) {
-			answerError2Content = `Question ${answerError2[0]} and ${answerError2[1]} have a correct option which corresponds to an empty field`;
-		}
-		else {
-			answerError2.forEach(function (error) {
-				if (answerError2.slice(-1)[0] != error) {
-					answerError2Content += ` ${error},`;
-				}
-				else {
-					answerError2Content += ` and ${error}`;
-				}
-			});
-		}
-
-		if (questionErrorString != 'Questions') {
-			if (nullSpace01.length != 1 && nullSpace01.length != 2) {
-				questionErrorString += ' have an empty question field';
-			}
-			quizParseError.push(questionErrorString);
-		}
-
-		if (timeLimitErrorString != 'Questions') {
-			if (timeLimitViolation.length != 1 && timeLimitViolation.length != 2) {
-				timeLimitErrorString += ' have an invalid time limit or a time limit less than 5';
-			}
-			quizParseError.push(timeLimitErrorString);
-		}
-
-		if (answerError0Content != 'Questions') {
-			if (answerError0.length != 1 && answerError0.length != 2) {
-				answerError0Content += ' do not have the first two answer fields filled out';
-			}
-			quizParseError.push(answerError0Content);
-		}
-
-		if (answerError1Content != 'Questions') {
-			if (answerError1.length != 1 && answerError1.length != 2) {
-				answerError1Content += ' do not have a correct option';
-			}
-			quizParseError.push(answerError1Content);
-		}
-
-		if (answerError2Content != 'Questions') {
-			if (answerError2.length != 1 && answerError2.length != 2) {
-				answerError2Content += ' do not have a correct option';
-			}
-			quizParseError.push(answerError2Content);
-		}
+		quizParseError.push(questionErrorParse(nullSpace01, 'has an empty question field', 'have an empty question field'));
+		quizParseError.push(questionErrorParse(timeLimitViolation, 'has an invalid time limit or a time limit less than 5', 'have an invalid time limit or a time limit less than 5'));
+		quizParseError.push(questionErrorParse(answerError0, 'does not have the first two answer fields filled out', 'do not have the first two answer fields filled out'));
+		quizParseError.push(questionErrorParse(answerError1, 'does not have a correct option', 'do not have a correct option'));
+		quizParseError.push(questionErrorParse(answerError2, 'has a correct option which corresponds to an empty field', 'have a correct option which corresponds to an empty field'));
 	}
-	if (quizParseError.length) {
-		quizParseError.forEach(function (error) {
-			finalResult += `<li class="innerError">${encodeHTML(error)}</li>`;
+	if (quizParseError.join("").length == 0) {
+		quizParseError.forEach((error) => {
+			if(error !== 'Questions') {
+				finalResult += `<li class="innerError">${encodeHTML(error)}</li>`;
+			}
 		});
 		$('innerError3').innerHTML = finalResult;
 		return false;
@@ -1419,9 +1295,6 @@ function exitModalPopupG() {
 	$('title').innerHTML = decodeURI(makeData);
 	addQuiz();
 }
-
-var otherInterval;
-let root = document.documentElement;
 
 function studentGameProcessor(input) {
 	var inputInternal = JSON.parse(input);
@@ -1634,8 +1507,6 @@ function setQuestion() {
 		}, 10); 
 	}
 }
-
-var bottomBarOffset;
 
 function updateStudentLocation(studentLocation) {
 	var internalPercentage = mathClamp((studentLocation * 114) / window.innerWidth, 0, 1);
