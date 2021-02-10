@@ -118,9 +118,6 @@ const anotherTestCase2 = '{ "isQuestionCorrect": true, "nextQuestion": "heckDiff
 const anotherTestCase3 = '{ "gameFinish": true, "timeTillEnd": 180}';
 var gameStateStudent = null;
 console.log("%cUse link to get quiz answers:https://bit.ly/31Apj2U", "font-size: 32px;");
-const playData = '<h1 class=\'titleTransitionBack\' id=\'codeText\'>Game Code:<\/h1><form id="joinQuizForm"><input autofocus type="text" class=\'titleTransitionBack formInput button\' required autocomplete="off" pattern=\'^[0-9]*$\'  maxlength="9" title="valid game ID" id="gameID" placeholder="Game Code" name="gameID"> <br> <br> <button class="button titleTransitionBack" id="submitID" type="submit">Join</button> <\/form> <div class=\"link-background\"><ul class="textOverrideA titleTransitionBack"><li><a href=\"javascript:void(0);\" class=\"middle\" id=\"playMenuBack\" style=\"font-family: \'Segoe UI\', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;\">Back<\/a> <\/li><\/ul> <div></div><\/div>';
-const makeData = '<h1 id=\'homeText\' class=\"titleTransitionBack\">Your Quizzes:<\/h1><div id="makeDiv"><div id="removeButton"><button class="button  titleTransitionBack" id="createButtonA"><p class="notifyTextChar">Tap to create a quiz...</p><img width="400" id="plusButtonImage" src="../img/createQuiz.png"></button><br><br></div><button class="button titleTransitionBack" id="backButtonC">Back</button></div>';
-const svgData = '<svg version="1.1" id="loader-1" xmlns="www.w3.org/2000/svg" xmlns:xlink="www.w3.org/1999/xlink" x="0px" y="0px" width="40px" height="40px" viewBox="0 0 40 40" enable-background="new 0 0 40 40" xml:space="preserve"><path opacity="1" fill="#ffffff" d="M20.201,5.169c-8.254,0-14.946,6.692-14.946,14.946c0,8.255,6.692,14.946,14.946,14.946s14.946-6.691,14.946-14.946C35.146,11.861,28.455,5.169,20.201,5.169z M20.201,31.749c-6.425,0-11.634-5.208-11.634-11.634c0-6.425,5.209-11.634,11.634-11.634c6.425,0,11.633,5.209,11.633,11.634C31.834,26.541,26.626,31.749,20.201,31.749z"></path><path fill="#000" d="M26.013,10.047l1.654-2.866c-2.198-1.272-4.743-2.012-7.466-2.012h0v3.312h0C22.32,8.481,24.301,9.057,26.013,10.047z"></path><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0" to="360" dur="0.5s" repeatCount="indefinite"></animateTransform></svg>';
 const customOptions = ["Eyes", "Nose", "Mouth", "Shirt", "Arms"];
 // for quiz object order does matter for answers!
 const quizObject = {
@@ -226,6 +223,11 @@ const createTemplate = (templateID, place, modif = false, replace = false) => {
 	$(place).appendChild(content);
 }
 
+const setTitle = (templateID) => {
+	$('title').innerHTML = '';
+	createTemplate(templateID, 'title');
+}
+
 const uuidv4 = () => {
 	return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16));
 }
@@ -288,7 +290,6 @@ const setCaretPosition = (element, offset) => {
 const signOut = () => {
 	var auth2 = gapi.auth2.getAuthInstance();
 	auth2.signOut().then(function () {
-		console.log('User signed out.');
 		window.location.reload();
 	});
 }
@@ -318,6 +319,7 @@ const questionErrorParse = (arrayToParse, questionValueSingular, questionValuePl
 const exitModalPopupTemplate = (popupToKill, special = false) => {
 	if (checkOnce || special) {
 		checkOnce = false;
+		special = special === true ? !special : special;
 		$('modal-bg').style.animation = 'fadeOut 0.5s';
 		setTimeout(() => {
 			$('modal-bg').style.display = 'none';
@@ -330,7 +332,7 @@ const exitModalPopupTemplate = (popupToKill, special = false) => {
 				$(special).style.display = 'none';
 			}
 		}, 300);
-		$('title').innerHTML = decodeURI(makeData);
+		setTitle('makeMenu');
 		addQuiz();
 	}
 }
@@ -478,7 +480,8 @@ function submitMultipleChoice(event) {
 	Array.from($('studentAnswersFlex').children).forEach( (object, index) => {
 		object.disabled = true;
 		if(index + 1 == response) {
-			object.firstElementChild.innerHTML = svgData;
+			object.firstElementChild.innerHTML = '';
+			object.firstElementChild.appendChild($('svgLoader').content.cloneNode(true));
 		}
 	});
 }
@@ -571,7 +574,8 @@ function deleteQuizConfirm() {
 	$('deleteQuizConfirm').disabled = true;
 	$('backButtonDeleteConfirm').disabled = true;
 	$('deleteQuizConfirm').style.backgroundColor = null;
-	$('deleteQuizConfirm').innerHTML = svgData;
+	$('deleteQuizConfirm').innerHTML = '';
+	createTemplate('svgLoader', 'deleteQuizConfirm');
 	setTimeout(function () {
 		exitModalPopupTemplate('quizDeleteConfirm', true);
 	}, 1000);
@@ -656,7 +660,8 @@ function editQuizForm() {
 	else {
 		quizObject2[currentQuizEdit] = tempQuiz;
 		quizList2[currentQuizEdit] = encodeHTML($("quizNameUpdate").value);
-		$("saveQuizButton").innerHTML = svgData;
+		$('saveQuizButton').innerHTML = '';
+		createTemplate('svgLoader', 'saveQuizButton');
 		setTimeout(function () {
 			exitModalPopupF(false);
 		}, 1000);
@@ -686,35 +691,12 @@ function userClick(e, g = false, nabeelIsGreat = false) {
 
 function onSignIn(googleUser) {
 	profile = googleUser.getBasicProfile();
-	$('containerBotttomBarC').style.display = 'none';
 	var $error = document.querySelector("#loginError1");
 	var id_token = googleUser.getAuthResponse().id_token;
 	var auth2 = gapi.auth2.getAuthInstance();
 	// feel sorry for whoever reads this code - Ilya
 	if (googleUser.getHostedDomain() == 'student.mamkschools.org' || googleUser.getHostedDomain() == 'mamkschools.org') {
-		try {
-			// var xhr = new XMLHttpRequest();
-			//xhr.onerror = function(e) { $error.style.display = 'block'; $error.innerHTML = 'A communication error occured';  auth2.signOut().then(function () {
-			// console.log('User signed out.');
-			// });};
-			//  xhr.open('POST', 'api.mamklearn.com/loginVerify');
-			//  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-			//  xhr.onload = function() {
-			//  console.log('Signed in as: ' + xhr.responseText);
-			//  createTemplate('homeScreen', 'title');
-			//  $('loginPage').style.animation = 'animatezoomout 0.6s'; 
-			//  setTimeout(function() {$('loginPage').style.display = "none";},500);
-			//  };
-			//  xhr.send('token=' + id_token);
-		} catch (error) {
-			//  $error.style.display = 'block';
-			//  $error.innerHTML = 'A communication error occurred: ' + console.error();
-			//  auth2.signOut().then(function () {
-			//  console.log('User signed out.');
-			//  });
-		}
-		//console.log('Signed in as: ' + xhr.responseText);
-		createTemplate('homeScreen', 'title');
+		setTitle('homeScreen');
 		$('loginPage').style.animation = 'animatezoomout 0.6s';
 		$('title').style.top = "15%";
 		$('title').style.height = "800px";
@@ -722,9 +704,7 @@ function onSignIn(googleUser) {
 			$('loginPage').style.display = "none";
 		}, 500);
 	} else {
-		auth2.signOut().then(function () {
-			console.log('User signed out.');
-		});
+		auth2.signOut();
 		$error.style.display = 'block';
 		$error.innerHTML = 'Please use an account that ends in \'mamkschools.org\' or \'student.mamkschools.org\'';
 	}
@@ -738,7 +718,8 @@ function makeCode() {
 	var title = document.querySelector('#homeText');
 	makeButton.disabled = true;
 	playButton.disabled = true;
-	makeButton.innerHTML = svgData;
+	makeButton.innerHTML = '';
+	createTemplate('svgLoader', makeButton.id);
 	// replace this with request to server and await callback or if 5 seconds passes undo
 	setTimeout(function () {
 		title.classList.add('titleTransition');
@@ -749,7 +730,7 @@ function makeCode() {
 		signOutButton.classList.add('linkTransitionF');
 		$('charCustomize').classList.add('btnTransitionA');
 		setTimeout(function () {
-			$('title').innerHTML = decodeURI(makeData);
+			setTitle('makeMenu');
 			$('title').style.top = '100px';
 			addQuiz();
 		}, 300);
@@ -796,7 +777,7 @@ function playCode() {
 	signOutButton.classList.add('linkTransitionF');
 	$('charCustomize').classList.add('btnTransitionA');
 	setTimeout(function () {
-		$('title').innerHTML = decodeURI(playData);
+		setTitle('playMenu');
 		$('title').style.height = '250px';
 		$('title').style.top = "30%";
 	}, 300);
@@ -809,7 +790,8 @@ function JoinGame() {
 	for (var i = 0, il = selects.length; i < il; i++) {
 		selects[i].className += " disabled";
 	}
-	$('submitID').innerHTML = `${svgData}`;
+	$('submitID').innerHTML = '';
+	createTemplate('svgLoader', 'submitID');
 	if ($("gameID").value == "2794") {
 		setTimeout(function () {
 			$('loader-1').style.display = "none";
@@ -846,7 +828,7 @@ function goBack() {
 	document.querySelector('#submitID').classList.add('btnTransitionA');
 	document.querySelector('#playMenuBack').classList.add('linkTransitionF');
 	setTimeout(function () {
-		createTemplate('homeScreen', 'title');
+		setTitle('homeScreen');
 		$('title').style.height = "800px";
 		$('title').style.top = "15%";
 		setCharImage('currentUser', currentUserConfig);
@@ -944,7 +926,8 @@ function goBackMakeA() {
 	$('createButtonA').classList.add('btnTransitionA');
 	$('backButtonC').classList.add('btnTransitionA');
 	setTimeout(function () {
-		createTemplate('homeScreen', 'title');
+		$('title').innerHTML = '';
+		setTitle('homeScreen');
 		$('title').style.height = "800px";
 		$('title').style.top = "15%";
 		setCharImage('currentUser', currentUserConfig);
@@ -957,7 +940,8 @@ function createNewQuiz() {
 	$('QuizName').disabled = true;
 	var g = $('QuizName').value;
 	button.disabled = true;
-	button.innerHTML = svgData;
+	button.innerHTML = '';
+	createTemplate('svgLoader', button.id);
 	setTimeout(function () {
 		checkOnce = true;
 		quizList2[uuidv4()] = encodeHTML(g);
@@ -1050,7 +1034,7 @@ function contentEditableUpdate() {
 	}
 }
 
-window.addEventListener("error", function (e) {
+window.addEventListener("error", (e) => {
 	if(e.hasOwnProperty('details')) {
 		throwExcept('GAPI_ERROR');
 	}
@@ -1205,7 +1189,7 @@ function exitModalPopupF(promptUser) {
 		setTimeout(function () {
 			$('modal-popupA').style.display = 'none';
 		}, 300);
-		$('title').innerHTML = decodeURI(makeData);
+		setTitle('makeMenu');
 		addQuiz();
 	}
 }
@@ -1366,7 +1350,6 @@ function studentGameProcessor(input) {
 	else if(inputInternal.hasOwnProperty('gameFinish')) {
 		console.log("Finish up...");
 	}
-	console.log(gameStateStudent);
 }
 
 var timerInterval;
