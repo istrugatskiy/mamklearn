@@ -215,6 +215,19 @@ const isObject = (object) => {
 	return object != null && typeof object === 'object';
 }
 
+// Creates object from template!
+// Note modif can only replace children because of how templates work!
+const createTemplate = (templateID, place, modif = false, replace = false) => {
+	let content = $(templateID).content.cloneNode(true);
+	if(modif) {
+		for(i = 0; i < content.children.length; i++) {
+			content.children[i].innerHTML = content.children[i].innerHTML.replaceAll(modif, replace);
+		}
+		
+	}
+	$(place).appendChild(content);
+}
+
 const uuidv4 = () => {
 	return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16));
 }
@@ -290,7 +303,7 @@ const questionErrorParse = (arrayToParse, questionValueSingular, questionValuePl
 	else if (arrayToParse.length == 2) {
 		output = `Questions ${arrayToParse[0]} and ${arrayToParse[1]} ${questionValuePlural}`;
 	}
-	else {
+	else if(arrayToParse != 0) {
 		arrayToParse.forEach((error) => {
 			if (arrayToParse.slice(-1)[0] != error) {
 				output += ` ${error},`;
@@ -299,8 +312,9 @@ const questionErrorParse = (arrayToParse, questionValueSingular, questionValuePl
 				output += ` and ${error}`;
 			}
 		});
+		output += ` ${questionValuePlural}`;
 	}
-	return (output ? output : null);
+	return (output != 'Questions' ? output : null);
 }
 
 const exitModalPopupTemplate = (popupToKill, special = false) => {
@@ -323,6 +337,17 @@ const exitModalPopupTemplate = (popupToKill, special = false) => {
 	}
 }
 // Helper functions end here!
+
+const getID = (input) => {
+	var inputChars = Array.from(input);
+	var output = '';
+	for(i = inputChars.length; i >= 0; i--) {
+		if(!Number.isNaN(Number.parseInt(inputChars[i]))) {
+			output = inputChars[i] + output;
+		}
+	}
+	return output;
+}
 
 const initializeApp = () => {
 	contentEditableUpdate();
@@ -375,12 +400,13 @@ var clickEvents = {
 	"backButtonDeleteConfirm": () => {exitModalPopupTemplate('quizDeleteConfirm', true)}
 };
 
+//These are the events that include the first part
 var clickIncludesEvents = {
 	"studentQuizButton": (event) => {submitMultipleChoice(event)},
-	"collapseSubArea": (event) => {collapseSubArea(event.target.id.slice(-1))},
-	"deleteQuestion": (event) => {deleteQuestion(event.target.id.slice(-1))},
-	"shortAnswerToggle": (event) => {shortAnswerToggle(event.target.id.slice(-1))},
-	"toggleTime": (event) => {toggleTime(event.target.id.slice(-1))}
+	"collapseSubArea": (event) => {collapseSubArea(getID(event.target.id))},
+	"deleteQuestion": (event) => {deleteQuestion(getID(event.target.id))},
+	"shortAnswerToggle": (event) => {shortAnswerToggle(getID(event.target.id))},
+	"toggleTime": (event) => {toggleTime(getID(event.target.id))}
 }
 
 var submitEvents = {
@@ -1093,13 +1119,12 @@ function parseActiveQuiz() {
 //verify that at least one possible choice is correct; done
 //verify that at least two answer fields are filled out; done
 const verifyQuiz = () => {
-	quizParseError = [];
+	var quizParseError = [];
 	var finalResult = '';
 	if (tempQuiz.questionObjects.length === 0) {
 		quizParseError.push('No questions exist');
 	}
 	else {
-		var quizParseError = [];
 		var nullSpace01 = [];
 		var timeLimitViolation = [];
 		var answerError0 = [];
@@ -1141,9 +1166,9 @@ const verifyQuiz = () => {
 		quizParseError.push(questionErrorParse(answerError1, 'does not have a correct option', 'do not have a correct option'));
 		quizParseError.push(questionErrorParse(answerError2, 'has a correct option which corresponds to an empty field', 'have a correct option which corresponds to an empty field'));
 	}
-	if (quizParseError.join("").length == 0) {
+	if (quizParseError.join("").length !== 0) {
 		quizParseError.forEach((error) => {
-			if(error !== 'Questions') {
+			if(error != null) {
 				finalResult += `<li class="innerError">${encodeHTML(error)}</li>`;
 			}
 		});
@@ -1195,89 +1220,8 @@ function exitModalPopupF(promptUser) {
 
 function addquestionToDOM() {
 	highestQuestion++;
-	const createdQuestion = `<div style="margin-top: -50px; position: relative;" class="draggable" id="draggableQuestion${highestQuestion}">
-	<h3 style="font-family: 'Chelsea Market', cursive; color: white; text-align: left;"> <span class="draggableActual"><svg class="draggableActual" xmlns="http://www.w3.org/2000/svg" height="24" style="transform: scale(2);" viewBox="0 0 24 24" width="24"><path class="draggableActual" d="M0 0h24v24H0V0z" fill="none"/><path class="draggableActual" fill="white" d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></span> <span class="hackDoNotUse">Question ${highestQuestion}:</span><a id="collapseSubArea${highestQuestion}" href="javascript:void(0)" class="arrowBRight arrow"></a> <svg xmlns="http://www.w3.org/2000/svg" class="clickBoxGrey" id="deleteQuestion${highestQuestion}" viewBox="0 0 24 24" style="transform: scale(2); margin-left: 22px;" fill="white" width="18px" height="18px"><path d="M0 0h24v24H0z" fill="none"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></h3>
-	<div id="collapsableContent${highestQuestion}" class="contentA2">
-		<div autofocus class='titleTransitionBack textAreaConfig formInput button' required autocomplete="off" maxlength="90" title="Question 2" id="Question2InputText" onkeypress="return (this.innerText.length < 90)" contenteditable="true" placeholder="Question" name="Question2InputText"></div>
-		<div class="charLimited"> 0/90</div>
-		<br>
-		<div class="checkboxCustomConfig" style="margin-top: 0px;">
-			<label class="toggleButton toggleButtonPosition">
-				<input type="checkbox" id="shortAnswerToggle${highestQuestion}">
-				<div>
-					<svg viewBox="0 0 44 44">
-						<path d="M14,24 L21,31 L39.7428882,11.5937758 C35.2809627,6.53125861 30.0333333,4 24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,19.3 42.5809627,15.1645919 39.7428882,11.5937758" transform="translate(-2.000000, -2.000000)"></path>
-					</svg>
-				</div>
-			</label>
-			<p class="labelForCheck labelForCheckPosition">Short Answer</p>
-		</div>
-		<div class="checkboxCustomConfig" style="margin-top: 10px;">
-			<label class="toggleButton toggleButtonPosition">
-				<input type="checkbox" id="toggleTime${highestQuestion}">
-				<div>
-					<svg viewBox="0 0 44 44">
-						<path d="M14,24 L21,31 L39.7428882,11.5937758 C35.2809627,6.53125861 30.0333333,4 24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,19.3 42.5809627,15.1645919 39.7428882,11.5937758" transform="translate(-2.000000, -2.000000)"></path>
-					</svg>
-				</div>
-			</label>
-			<p class="labelForCheck labelForCheckPosition">Time Limit</p>
-			<div autofocus class='titleTransitionBack textAreaConfig formInput button questionInput timeLimitMagic' maxlength="3" onkeypress="return (this.innerText.length < 3)" autocomplete="off" id="Question${highestQuestion}Time" contenteditable="true"></div>
-			<div class="charLimited charLimited2"> 0/3</div>
-		</div>
-		<div class="answerContainer" id="answerContainerObject${highestQuestion}">
-			<div class="checkboxCustomConfig" style="margin-top: 50px;">
-				<div autofocus class='titleTransitionBack textAreaConfig formInput button questionInput' required maxlength="50" onkeypress="return (this.innerText.length < 50)" autocomplete="off" title="Question 1" id="Question${highestQuestion}InputText" contenteditable="true" placeholder="Answer 1" name="Question${highestQuestion}InputText"></div>
-				<div class="charLimited charLimited2"> 0/50</div>
-				<label class="toggleButton weirdButton2">
-					<input checked type="checkbox">
-					<div>
-						<svg viewBox="0 0 44 44">
-							<path d="M14,24 L21,31 L39.7428882,11.5937758 C35.2809627,6.53125861 30.0333333,4 24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,19.3 42.5809627,15.1645919 39.7428882,11.5937758" transform="translate(-2.000000, -2.000000)"></path>
-						</svg>
-					</div>
-				</label>
-			</div>
-			<div class="checkboxCustomConfig">
-				<div autofocus class='titleTransitionBack textAreaConfig formInput button questionInput' required maxlength="50" onkeypress="return (this.innerText.length < 50)" autocomplete="off" title="Question 1" id="Question${highestQuestion}InputText" contenteditable="true" placeholder="Answer 2" name="Question${highestQuestion}InputText"></div>
-				<div class="charLimited charLimited2"> 0/50</div>
-				<label class="toggleButton weirdButton2">
-					<input type="checkbox">
-					<div>
-						<svg viewBox="0 0 44 44">
-							<path d="M14,24 L21,31 L39.7428882,11.5937758 C35.2809627,6.53125861 30.0333333,4 24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,19.3 42.5809627,15.1645919 39.7428882,11.5937758" transform="translate(-2.000000, -2.000000)"></path>
-						</svg>
-					</div>
-				</label>
-			</div>
-			<div class="checkboxCustomConfig">
-				<div autofocus class='titleTransitionBack textAreaConfig formInput button questionInput' required maxlength="50" onkeypress="return (this.innerText.length < 50)" autocomplete="off" title="Question 1" id="Question${highestQuestion}InputText" contenteditable="true" placeholder="Answer 3" name="Question${highestQuestion}InputText"></div>
-				<div class="charLimited charLimited2"> 0/50</div>
-				<label class="toggleButton weirdButton2">
-					<input type="checkbox">
-					<div>
-						<svg viewBox="0 0 44 44">
-							<path d="M14,24 L21,31 L39.7428882,11.5937758 C35.2809627,6.53125861 30.0333333,4 24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,19.3 42.5809627,15.1645919 39.7428882,11.5937758" transform="translate(-2.000000, -2.000000)"></path>
-						</svg>
-					</div>
-				</label>
-			</div>
-			<div class="checkboxCustomConfig">
-				<div autofocus class='titleTransitionBack textAreaConfig formInput button questionInput' required maxlength="50" onkeypress="return (this.innerText.length < 50)" autocomplete="off" title="Question 1" id="Question${highestQuestion}InputText" contenteditable="true" placeholder="Answer 4" name="Question${highestQuestion}InputText"></div>
-				<div class="charLimited charLimited2"> 0/50</div>
-				<label class="toggleButton weirdButton2">
-					<input type="checkbox">
-					<div>
-						<svg viewBox="0 0 44 44">
-							<path d="M14,24 L21,31 L39.7428882,11.5937758 C35.2809627,6.53125861 30.0333333,4 24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,19.3 42.5809627,15.1645919 39.7428882,11.5937758" transform="translate(-2.000000, -2.000000)"></path>
-						</svg>
-					</div>
-				</label>
-			</div>
-		</div>
-	</div>
-</div>`;
-	$('draggableDiv').insertAdjacentHTML('beforeEnd', createdQuestion);
+	createTemplate('templateQuestion', 'draggableDiv', '${highestQuestion}', highestQuestion);
+	$('draggableQuestion${highestQuestion}').id = `draggableQuestion${highestQuestion}`;
 }
 
 function exitModalPopupG() {
