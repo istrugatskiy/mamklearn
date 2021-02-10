@@ -101,7 +101,7 @@
 	<div class="title" id="title" style="top: 30%;">
 		<h1>MamkLearn</h1>
 		<button class="button btn" id="loginBtn">Login</button>
-		<div class="container containerLoginMenu">
+		<div class="container containerLoginMenu" id="containerBottomBarC">
 			<div class="centerA">
 				<div class="bottom-bar">
 					<div class="first">
@@ -356,15 +356,20 @@
 		<div style="margin-top: -50px; position: relative;" class="draggable" id="draggableQuestion${highestQuestion}">
 		<h3 style="font-family: 'Chelsea Market', cursive; color: white; text-align: left;"> 
 			<span class="draggableActual">
-				<svg class="draggableActual" xmlns="http://www.w3.org/2000/svg" height="24" style="transform: scale(2);" viewBox="0 0 24 24" width="24"><path class="draggableActual" d="M0 0h24v24H0V0z" fill="none"/><path class="draggableActual" fill="white" d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+				<svg class="draggableActual" xmlns="http://www.w3.org/2000/svg" height="24" style="transform: scale(2);" viewBox="0 0 24 24" width="24">
+					<path class="draggableActual" d="M0 0h24v24H0V0z" fill="none"/>
+					<path class="draggableActual" fill="white" d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+				</svg>
 			</span> 
 			<span class="hackDoNotUse">Question ${highestQuestion}:</span>
 			<a id="collapseSubArea${highestQuestion}" href="javascript:void(0)" class="arrowBRight arrow"></a> 
 			<svg xmlns="http://www.w3.org/2000/svg" class="clickBoxGrey" id="deleteQuestion${highestQuestion}" viewBox="0 0 24 24" style="transform: scale(2); margin-left: 22px;" fill="white" width="18px" height="18px">
-				<path d="M0 0h24v24H0z" fill="none"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-			</svg></h3>
+				<path d="M0 0h24v24H0z" fill="none"/>
+				<path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+			</svg>
+		</h3>
 		<div id="collapsableContent${highestQuestion}" class="contentA2">
-			<div autofocus class='titleTransitionBack textAreaConfig formInput button' required autocomplete="off" maxlength="90" title="Question 2" id="Question2InputText" onkeypress="return (this.innerText.length < 90)" contenteditable="true" placeholder="Question" name="Question2InputText"></div>
+			<div autofocus class='titleTransitionBack textAreaConfig formInput button' required autocomplete="off" maxlength="90" id="Question2InputText" onkeypress="return (this.innerText.length < 90)" contenteditable="true" placeholder="Question"></div>
 			<div class="charLimited"> 0/90</div>
 			<br>
 			<div class="checkboxCustomConfig" style="margin-top: 0px;">
@@ -388,12 +393,12 @@
 					</div>
 				</label>
 				<p class="labelForCheck labelForCheckPosition">Time Limit</p>
-				<div autofocus class='titleTransitionBack textAreaConfig formInput button questionInput timeLimitMagic' maxlength="3" onkeypress="return (this.innerText.length < 3)" autocomplete="off" id="Question${highestQuestion}Time" contenteditable="true"></div>
+				<div autofocus class='titleTransitionBack textAreaConfig formInput button questionInput timeLimitMagic' maxlength="3" onkeypress="return (this.innerText.length < 3)" id="Question${highestQuestion}Time" contenteditable="true"></div>
 				<div class="charLimited charLimited2"> 0/3</div>
 			</div>
 			<div class="answerContainer" id="answerContainerObject${highestQuestion}">
 				<div class="checkboxCustomConfig" style="margin-top: 50px;">
-					<div autofocus class='titleTransitionBack textAreaConfig formInput button questionInput' required maxlength="50" onkeypress="return (this.innerText.length < 50)" autocomplete="off" title="Question 1" id="Question${highestQuestion}InputText" contenteditable="true" placeholder="Answer 1" name="Question${highestQuestion}InputText"></div>
+					<div autofocus class='titleTransitionBack textAreaConfig formInput button questionInput' required maxlength="50" onkeypress="return (this.innerText.length < 50)" id="Question${highestQuestion}InputText1" contenteditable="true" placeholder="Answer 1"></div>
 					<div class="charLimited charLimited2"> 0/50</div>
 					<label class="toggleButton weirdButton2">
 						<input checked type="checkbox">
@@ -405,7 +410,7 @@
 					</label>
 				</div>
 				<div class="checkboxCustomConfig">
-					<div autofocus class='titleTransitionBack textAreaConfig formInput button questionInput' required maxlength="50" onkeypress="return (this.innerText.length < 50)" autocomplete="off" title="Question 1" id="Question${highestQuestion}InputText" contenteditable="true" placeholder="Answer 2" name="Question${highestQuestion}InputText"></div>
+					<div autofocus class='titleTransitionBack textAreaConfig formInput button questionInput' required maxlength="50" onkeypress="return (this.innerText.length < 50)" id="Question${highestQuestion}InputText2" contenteditable="true" placeholder="Answer 2"></div>
 					<div class="charLimited charLimited2"> 0/50</div>
 					<label class="toggleButton weirdButton2">
 						<input type="checkbox">
@@ -417,7 +422,7 @@
 					</label>
 				</div>
 				<div class="checkboxCustomConfig">
-					<div autofocus class='titleTransitionBack textAreaConfig formInput button questionInput' required maxlength="50" onkeypress="return (this.innerText.length < 50)" autocomplete="off" title="Question 1" id="Question${highestQuestion}InputText" contenteditable="true" placeholder="Answer 3" name="Question${highestQuestion}InputText"></div>
+					<div autofocus class='titleTransitionBack textAreaConfig formInput button questionInput' required maxlength="50" onkeypress="return (this.innerText.length < 50)" autocomplete="off" title="Question 1" id="Question${highestQuestion}InputText3" contenteditable="true" placeholder="Answer 3"></div>
 					<div class="charLimited charLimited2"> 0/50</div>
 					<label class="toggleButton weirdButton2">
 						<input type="checkbox">
@@ -429,7 +434,7 @@
 					</label>
 				</div>
 				<div class="checkboxCustomConfig">
-					<div autofocus class='titleTransitionBack textAreaConfig formInput button questionInput' required maxlength="50" onkeypress="return (this.innerText.length < 50)" autocomplete="off" title="Question 1" id="Question${highestQuestion}InputText" contenteditable="true" placeholder="Answer 4" name="Question${highestQuestion}InputText"></div>
+					<div autofocus class='titleTransitionBack textAreaConfig formInput button questionInput' required maxlength="50" onkeypress="return (this.innerText.length < 50)" id="Question${highestQuestion}InputText4" contenteditable="true" placeholder="Answer 4"></div>
 					<div class="charLimited charLimited2"> 0/50</div>
 					<label class="toggleButton weirdButton2">
 						<input type="checkbox">
@@ -444,6 +449,36 @@
 		</div>
 	</div>
 	</template>
+	<template id="homeScreen">
+		<h1 class="titleTransitionBack" id='homeText'>Home</h1>
+		<div class="button titleTransitionBack" id="charCustomize" tabindex="0">
+		<p class="notifyTextChar" id="tapToCustom">Tap to customize...</p>
+		<div id="stableBody">
+			<img alt="your arms" id="currentUserArms" src="../img/arms-0.png" style="position: absolute;" width="250">
+			<img alt="your eyes" id="currentUserEyes" src="../img/eyes-0.png" style="position: absolute;" width="250">
+			<img alt="your nose" id="currentUserNose" src="../img/nose-0.png" style="position: absolute;" width="250">
+			<img alt="your mouth" id="currentUserMouth" src="../img/mouth-0.png" style="position: absolute;" width="250">
+			<img alt="your shirt" id="currentUserShirt" src="../img/shirt-0.png" style="position: absolute;" width="250">
+			<img alt="your profile picture" src="../img/base.png" width="250">
+		</div>
+		<p class="notifyTextChar" id="customType">
+			<a class="arrow left" href="javascript:void(0)" id="leftCustomizeArrow"></a>
+			<a href="javascript:void(0)" id="customButtonChange">Eyes</a>
+			<a class="arrow right" href="javascript:void(0)" id="arrowCustomizeRight"></a>
+		</p>
+		<img alt="Tap to change button..." height="90" id="customButtonChange2" src="img/tapToChange.png" style="cursor: pointer;"></div>
+		<br>
+		<button class="button titleTransitionBack" id="makebtn">Make</button>
+		<button class="button titleTransitionBack" id="btn2">Play</button>
+		<div class="link-background titleTransitionBack">
+			<ul>
+				<li>
+					<a class="middle" href="javascript:void(0);" id="signOutbtn" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;">Sign out</a>
+				</li>
+			</ul>
+		</div>
+	</template>
+	
 </body>
 
 </html>

@@ -170,18 +170,6 @@ a:hover {
 		bottom: 0px;
 	}
 }
-@media screen and (min-height: 1000px) {
-	.containerMainMenu {
-		position: fixed;
-		bottom: 0px;
-	}
-}
-@media screen and (min-height: 700px) {
-	.containerPlayMenu {
-		position: fixed;
-		bottom: 0px;
-	}
-}
 li {
 	list-style-type: none;
 	float: left;
