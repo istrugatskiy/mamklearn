@@ -23,7 +23,7 @@
 	</script>
 	<script defer src="js/app.js">
 	</script>
-	<script defer src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.0/dragula.min.js'>
+	<script defer src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.0/dragula.min.js">
 	</script>
 	<noscript>
 		<style>
@@ -129,12 +129,12 @@
 			</div>
 		</div>
 	</div>
-	<div class="modal-popup" id='modal-popupA'>
+	<div class="modal-popup" id="modal-popupA">
 		<div id="modal-bg" style="position: fixed; display: block; min-width: 100%; min-height: 100%; text-align: center;"></div>
 		<div id="createQuizMenu">
 			<h1 style="font-family: 'Chelsea Market', cursive; color: white;">Quiz Name:</h1>
 			<form id="quizCreateForm" name="quizCreateForm">
-				<input autocomplete="off" autofocus="" class='titleTransitionBack formInput button' id="QuizName"
+				<input autocomplete="off" autofocus="" class="titleTransitionBack formInput button" id="QuizName"
 					maxlength="15" name="QuizName" placeholder="Quiz Name" required="" title="Quiz Name"
 					type="text"><br>
 				<br>
@@ -146,7 +146,7 @@
 						<a class="middle" href="javascript:void(0);" id="backButtonZ" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;">Back</a>
 					</li>
 				</ul>
-				<div id='underline'></div>
+				<div id="underline"></div>
 			</div>
 		</div>
 		<div id="manageQuizMenu">
@@ -169,7 +169,7 @@
 							style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;">Back</a>
 					</li>
 				</ul>
-				<div id='underline'></div>
+				<div id="underline"></div>
 			</div>
 		</div>
 		<div id="quizDeleteConfirm" style="display: none;">
@@ -183,7 +183,7 @@
 		<div id="editQuizMenu" style="display: none;">
 			<h1 style="font-family: 'Chelsea Market', cursive; color: white;">Quiz Name:</h1>
 			<form id="editQuizForm" name="editQuizForm">
-				<input autocomplete="off" autofocus="" class='titleTransitionBack formInput button' id="quizNameUpdate"
+				<input autocomplete="off" autofocus="" class="titleTransitionBack formInput button" id="quizNameUpdate"
 					maxlength="15" name="QuizNameUpdate" placeholder="Quiz Name" required="" title="Quiz Name"
 					type="text">
 				<div id="draggableDiv" style="margin-top: 110px;">
@@ -206,7 +206,7 @@
 							style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px; width: 140px;">Copy Link</a>
 					</li>
 				</ul>
-				<div id='underline'></div>
+				<div id="underline"></div>
 			</div>
 			<br>
 			<button class="button titleTransitionBack" id="backButtonShareQuiz">Back</button>
@@ -232,7 +232,7 @@
 		<div class="innerdiv">
 			<p>Please login with your mamaroneck schools Google Account.</p>
 			<p id="loginError1" style="font-size: large; color: red; margin: 0px; display: none; padding: 0px;">Please
-				use an account that ends in 'mamkschools.org' or 'student.mamkschools.org'</p>
+				use an account that ends in "mamkschools.org" or "student.mamkschools.org"</p>
 			<div style="text-align: center; display: flex; align-items: center; justify-content: center;">
 				<div class="g-signin2" data-height="50" data-longtitle="true" data-onsuccess="onSignIn"
 					data-theme="dark" data-width="240" style="padding: 20px;"></div>
@@ -297,10 +297,10 @@
 		</div>
 		<div class="button buttonLikeTitle" id="titleButtonStudent"><div>Test text for app, test text works effectively for test text that is 90 characters long...</div><br><div class="timeLeft" id="timeLeftCounter">(Time Left: ${timeLeft}s)</div></div>
 		<div class="studentAnswersFlex" id="studentAnswersFlex">
-			<button id="studentQuizButton1" class="button playButtonStudent"><span class="internalText">Default text, if you're seeing this I messed it up</span></button>
+			<button id="studentQuizButton1" class="button playButtonStudent"><span class="internalText">Default text, if you"re seeing this I messed it up</span></button>
 			<button id="studentQuizButton2" class="button playButtonStudent"><span class="internalText">This is a template not something you should see...</span></button>
-			<button id="studentQuizButton3" class="button playButtonStudent"><span class="internalText">This is my sleep schedule you don't want to see it</span></button>
-			<button id="studentQuizButton4" class="button playButtonStudent"><span class="internalText">Reload the page, you're not supposed to see this..</span></button>	
+			<button id="studentQuizButton3" class="button playButtonStudent"><span class="internalText">This is my sleep schedule you don"t want to see it</span></button>
+			<button id="studentQuizButton4" class="button playButtonStudent"><span class="internalText">Reload the page, you"re not supposed to see this..</span></button>	
 		</div>
 		<div id="studentShortAnswer">
 			<div autofocus class="titleTransitionBack textAreaConfig formInput button" maxlength="180" id="studentShortAnswerText" onkeypress="return (this.innerText.length < 180)" contenteditable="true" placeholder="Answer"></div>
@@ -369,7 +369,7 @@
 			</svg>
 		</h3>
 		<div id="collapsableContent${highestQuestion}" class="contentA2">
-			<div autofocus class='titleTransitionBack textAreaConfig formInput button' required autocomplete="off" maxlength="90" id="Question2InputText" onkeypress="return (this.innerText.length < 90)" contenteditable="true" placeholder="Question"></div>
+			<div autofocus class="titleTransitionBack textAreaConfig formInput button" maxlength="90" id="Question2InputText" onkeypress="return (this.innerText.length < 90)" contenteditable="true" placeholder="Question"></div>
 			<div class="charLimited"> 0/90</div>
 			<br>
 			<div class="checkboxCustomConfig" style="margin-top: 0px;">
@@ -393,12 +393,12 @@
 					</div>
 				</label>
 				<p class="labelForCheck labelForCheckPosition">Time Limit</p>
-				<div autofocus class='titleTransitionBack textAreaConfig formInput button questionInput timeLimitMagic' maxlength="3" onkeypress="return (this.innerText.length < 3)" id="Question${highestQuestion}Time" contenteditable="true"></div>
+				<div autofocus class="titleTransitionBack textAreaConfig formInput button questionInput timeLimitMagic" maxlength="3" onkeypress="return (this.innerText.length < 3)" id="Question${highestQuestion}Time" contenteditable="true"></div>
 				<div class="charLimited charLimited2"> 0/3</div>
 			</div>
 			<div class="answerContainer" id="answerContainerObject${highestQuestion}">
 				<div class="checkboxCustomConfig" style="margin-top: 50px;">
-					<div autofocus class='titleTransitionBack textAreaConfig formInput button questionInput' required maxlength="50" onkeypress="return (this.innerText.length < 50)" id="Question${highestQuestion}InputText1" contenteditable="true" placeholder="Answer 1"></div>
+					<div autofocus class="titleTransitionBack textAreaConfig formInput button questionInput" maxlength="50" onkeypress="return (this.innerText.length < 50)" id="Question${highestQuestion}InputText1" contenteditable="true" placeholder="Answer 1"></div>
 					<div class="charLimited charLimited2"> 0/50</div>
 					<label class="toggleButton weirdButton2">
 						<input checked type="checkbox">
@@ -410,7 +410,7 @@
 					</label>
 				</div>
 				<div class="checkboxCustomConfig">
-					<div autofocus class='titleTransitionBack textAreaConfig formInput button questionInput' required maxlength="50" onkeypress="return (this.innerText.length < 50)" id="Question${highestQuestion}InputText2" contenteditable="true" placeholder="Answer 2"></div>
+					<div autofocus class="titleTransitionBack textAreaConfig formInput button questionInput" maxlength="50" onkeypress="return (this.innerText.length < 50)" id="Question${highestQuestion}InputText2" contenteditable="true" placeholder="Answer 2"></div>
 					<div class="charLimited charLimited2"> 0/50</div>
 					<label class="toggleButton weirdButton2">
 						<input type="checkbox">
@@ -422,7 +422,7 @@
 					</label>
 				</div>
 				<div class="checkboxCustomConfig">
-					<div autofocus class='titleTransitionBack textAreaConfig formInput button questionInput' required maxlength="50" onkeypress="return (this.innerText.length < 50)" autocomplete="off" title="Question 1" id="Question${highestQuestion}InputText3" contenteditable="true" placeholder="Answer 3"></div>
+					<div autofocus class="titleTransitionBack textAreaConfig formInput button questionInput" maxlength="50" onkeypress="return (this.innerText.length < 50)" autocomplete="off" title="Question 1" id="Question${highestQuestion}InputText3" contenteditable="true" placeholder="Answer 3"></div>
 					<div class="charLimited charLimited2"> 0/50</div>
 					<label class="toggleButton weirdButton2">
 						<input type="checkbox">
@@ -434,7 +434,7 @@
 					</label>
 				</div>
 				<div class="checkboxCustomConfig">
-					<div autofocus class='titleTransitionBack textAreaConfig formInput button questionInput' required maxlength="50" onkeypress="return (this.innerText.length < 50)" id="Question${highestQuestion}InputText4" contenteditable="true" placeholder="Answer 4"></div>
+					<div autofocus class="titleTransitionBack textAreaConfig formInput button questionInput" maxlength="50" onkeypress="return (this.innerText.length < 50)" id="Question${highestQuestion}InputText4" contenteditable="true" placeholder="Answer 4"></div>
 					<div class="charLimited charLimited2"> 0/50</div>
 					<label class="toggleButton weirdButton2">
 						<input type="checkbox">
@@ -450,7 +450,7 @@
 	</div>
 	</template>
 	<template id="homeScreen">
-		<h1 class="titleTransitionBack" id='homeText'>Home</h1>
+		<h1 class="titleTransitionBack" id="homeText">Home</h1>
 		<div class="button titleTransitionBack" id="charCustomize" tabindex="0">
 		<p class="notifyTextChar" id="tapToCustom">Tap to customize...</p>
 		<div id="stableBody">
@@ -478,7 +478,39 @@
 			</ul>
 		</div>
 	</template>
-	
+	<template id="playMenu">
+		<h1 class="titleTransitionBack" id="codeText">Game Code:</h1>
+	<form id="joinQuizForm" name="joinQuizForm">
+		<input autocomplete="off" autofocus="" class="titleTransitionBack formInput button" id="gameID" maxlength="9" name="gameID" pattern="^[0-9]*$" placeholder="Game Code" required="" title="valid game ID" type="text">
+		<br>
+		<br>
+		<button class="button titleTransitionBack" id="submitID" type="submit">Join</button>
+	</form>
+	<div class="link-background">
+		<ul class="textOverrideA titleTransitionBack">
+			<li>
+				<a class="middle" href="javascript:void(0);" id="playMenuBack" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;">Back</a>
+			</li>
+		</ul>
+	</div>
+	</template>
+	<template id="makeMenu">
+		<h1 class="titleTransitionBack" id='homeText'>Your Quizzes:</h1>
+		<div id="makeDiv">
+			<div id="removeButton">
+				<button class="button titleTransitionBack" id="createButtonA">
+				<p class="notifyTextChar">Tap to create a quiz...</p><img id="plusButtonImage" src="../img/createQuiz.png" alt="create quiz image" width="400"></button><br>
+				<br>
+			</div>
+			<button class="button titleTransitionBack" id="backButtonC">Back</button>
+		</div>
+	</template>
+	<template id="svgLoader">
+		<svg enable-background="new 0 0 40 40" height="40px" id="loader-1" version="1.1" viewbox="0 0 40 40" width="40px" x="0px" xml:space="preserve" xmlns="www.w3.org/2000/svg" xmlns:xlink="www.w3.org/1999/xlink" y="0px">
+			<path d="M20.201,5.169c-8.254,0-14.946,6.692-14.946,14.946c0,8.255,6.692,14.946,14.946,14.946s14.946-6.691,14.946-14.946C35.146,11.861,28.455,5.169,20.201,5.169z M20.201,31.749c-6.425,0-11.634-5.208-11.634-11.634c0-6.425,5.209-11.634,11.634-11.634c6.425,0,11.633,5.209,11.633,11.634C31.834,26.541,26.626,31.749,20.201,31.749z" fill="#ffffff" opacity="1"></path>
+			<path d="M26.013,10.047l1.654-2.866c-2.198-1.272-4.743-2.012-7.466-2.012h0v3.312h0C22.32,8.481,24.301,9.057,26.013,10.047z" fill="#000"></path>
+			<animatetransform attributename="transform" attributetype="xml" dur="0.5s" from="0" repeatcount="indefinite" to="360" type="rotate"></animatetransform>
+		</svg>		
+	</template>
 </body>
-
 </html>
