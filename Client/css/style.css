@@ -46,7 +46,7 @@ table {
     text-indent: initial;
     border-spacing: 2px;
 }
-th {
+th {	
     display: table-cell;
     vertical-align: inherit;
     font-weight: bold;
@@ -68,6 +68,19 @@ th {
 }
 input[type="checkbox"] > * {
 	pointer-events: none;
+}
+.labelForCheck:focus, .weirdButton2:focus {
+	transition: all 0.1s;
+	box-shadow: 0 0 3px 5px lightblue;
+	border-radius: 10px;
+}
+.labelForCheck, .weirdButton2 {
+	transition: all 0.1s;
+	box-shadow: none;
+}
+.labelForCheck:focus:focus:not(:focus-visible), .weirdButton2:focus:focus:not(:focus-visible) {
+	transition: all 0.1s;
+	box-shadow: none;
 }
 @media (prefers-reduced-motion: reduce) {
 	* {
@@ -639,7 +652,7 @@ input[type=number] {
 		opacity: 0;
 	}
 }
-#errorMessageA {
+.errorMessageA {
 	position: fixed;
 	z-index: 12;
 	min-width: 100%;
@@ -650,7 +663,7 @@ input[type=number] {
 	display: none;
 	animation: gotWrong 1s;
 }
-#errorActual {
+.errorActual {
 	text-align: center;
 	font-size: xxx-large;
 	position: fixed;
@@ -664,6 +677,12 @@ input[type=number] {
 	color: rgb(255, 255, 255);
 	z-index: inherit;
 	animation: coolAni 1s;
+}
+#errorMessageB {
+	animation: fadeIn 0.2 forwards;
+}
+#errorActual2 {
+	animation: coolAni2 0.4s forwards;
 }
 #charCustomize {
 	width: 300px;
@@ -718,6 +737,16 @@ input[type=number] {
 		transform: translateY(50%);
 	}
 }
+@keyframes coolAni2 {
+	0% {
+		opacity: 0;
+		transform: translateY(50%);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0%);
+	}
+}
 #stableBody {
 	animation: charDefault 2s infinite;
 	animation-timing-function: cubic-bezier(0.280, 0.840, 0.420, 1);
@@ -755,6 +784,7 @@ input[type=number] {
 	border-width: 0 3px 3px 0;
 	display: inline-block;
 	padding: 3px;
+	pointer-events: all;
 }
 .arrow::before {
 	all: initial;
@@ -1303,6 +1333,9 @@ html {
 	cursor: pointer;
 	fill: rgb(153, 153, 153);
 }
+.clickBoxGrey:focus {
+	fill: rgb(153, 153, 153);
+}
 .charLimited {
 	font-size: 20px;
 	margin-top: -22px;
@@ -1444,13 +1477,19 @@ img {
 	background: #00000000;
 }
 .arrow:hover, .arrow:active, .arrow:focus{
-	border-color: rgb(104, 104, 104);
+	border-color: rgb(153, 153, 153);
 }
 #customButtonChange:hover{
 	transform: scale(1.2);
 }
 #customButtonChange:active {
 	transform: scale(0.9);
+}
+#customButtonChange:focus {
+	color: rgb(153, 153, 153);
+}
+#customButtonChange:focus:not(:focus-visible) {
+	color: #000000;
 }
 .textarea2 {
 	min-height: 175px;
@@ -1683,69 +1722,4 @@ img {
 	border-radius: 5px;
 	border-width: 5px;
 	min-width: 100px;
-}
-.confettiContainer {
-	position: fixed;
-	width: 100%;
-	height: 100%;
-}
-.confetti {
-	width: 15px;
-	height: 15px;
-	background-color: #f2d74e;
-	position: absolute;
-	left: 50%;
-	animation: confetti 5s ease-in-out -2s infinite;
-	transform-origin: left top;
-}
-.confetti:nth-child(1) {
-	background-color: #f2d74e; left: 10%; animation-delay: 0;
-}
-.confetti:nth-child(2) {
-	background-color: #95c3de; left: 20%; animation-delay: -5s;
-}
-.confetti:nth-child(3) {
-	background-color: #ff9a91; left: 30%; animation-delay: -3s;
-}
-.confetti:nth-child(4) {
-	background-color: #f2d74e; left: 40%; animation-delay: -2.5s;
-}
-  .confetti:nth-child(5) {
-	background-color: #95c3de; left: 50%; animation-delay: -4s;
-}
-.confetti:nth-child(6) {
-	background-color: #ff9a91; left: 60%; animation-delay: -6s;
-}
-.confetti:nth-child(7) {
-	background-color: #f2d74e; left: 70%; animation-delay: -1.5s;
-}
-.confetti:nth-child(8) {
-	background-color: #95c3de; left: 80%; animation-delay: -2s;
-}
-.confetti:nth-child(9) {
-	background-color: #ff9a91; left: 90%; animation-delay: -3.5s;
-}
-.confetti:nth-child(10) {
-	background-color: #f2d74e; left: 100%; animation-delay: -2.5s;
-}
-
-@keyframes confetti {
-	0% {
-		transform: rotateZ(15deg) rotateY(0deg) translate(0,0);
-	}
-	25% {
-		transform: rotateZ(5deg) rotateY(360deg) translate(-5vw,20vh);
-	}
-	50% {
-		transform: rotateZ(15deg) rotateY(720deg) translate(5vw,60vh);
-	}
-	75% {
-		transform: rotateZ(5deg) rotateY(1080deg) translate(-10vw,80vh);
-	}
-	100% {
-		transform: rotateZ(15deg) rotateY(1440deg) translate(10vw,110vh);
-	}
-}
-#confetti {
-	display: none;
 }

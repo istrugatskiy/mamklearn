@@ -112,7 +112,7 @@ var ParticleData = {
 const jsonUri = "data:text/plain;base64," + window.btoa(JSON.stringify(ParticleData));
 var currentQuizEdit;
 var drake = null;
-const quizStartTestCase = ' {"gameStart": true, "totalQuestions": 25, "currentQuestion": "If%20fish%20are%20fish", "choices": [ "heck", "null", "really%20I%20could%20not%20be%20bothered", "heckv2" ], "currentQuestionTime": 69, "questionID": 0 }';
+const quizStartTestCase = ' {"gameStart": true, "totalQuestions": 5, "currentQuestion": "If%20fish%20are%20fish", "choices": [ "heck", "null", "really%20I%20could%20not%20be%20bothered", "heckv2" ], "currentQuestionTime": 69, "questionID": 0 }';
 const anotherTestCase = '{ "isQuestionCorrect": false, "nextQuestion": null, "choices": [ null ], "currentQuestionTime": 20 }';
 const anotherTestCase2 = '{ "isQuestionCorrect": true, "nextQuestion": "heckDifferentQuestionTooLazyTooPutPercent", "choices": [ "Nabeel", "Nabeel2", "Nabeel3", "Nabeel4" ], "currentQuestionTime": 69 }';
 const anotherTestCase3 = '{ "gameFinish": true, "timeTillEnd": 180}';
@@ -394,13 +394,13 @@ var clickEvents = {
 	"modal-bg": () => {exitModalPopupTemplate('createQuizMenu')},
 	"backButtonZ": () => {exitModalPopupTemplate('createQuizMenu')},
 	"backButtonY": () => {exitModalPopupTemplate('manageQuizMenu')},
-	"backButtonX": () => {exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm')},
+	"backButtonDeleteConfirm": () => {exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm')},
 	"backButtonShareQuiz": () => {exitModalPopupTemplate('shareQuizMenu', 'shareQuizMenu')},
 	"createButtonA": createQuiz,
-	"backButtonDeleteConfirm": () => {exitModalPopupTemplate('quizDeleteConfirm', true)}
+	"backButtonDeleteConfirm": () => {exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm')}
 };
 
-//These are the events that include the first part
+// These are the events that include the text in the elements id.
 var clickIncludesEvents = {
 	"studentQuizButton": (event) => {submitMultipleChoice(event)},
 	"collapseSubArea": (event) => {collapseSubArea(getID(event.target.id))},
@@ -415,6 +415,19 @@ var submitEvents = {
 	"quizCreateForm": createNewQuiz
 };
 
+var keyboardIncludesEvents = {
+	"deleteQuestion": (event) => {deleteQuestion(getID(event.target.id))},
+	"keyboardNavAnswer": (event) => {
+		shortAnswerToggle(getID(event.target.id));
+		$(event.target.id).previousElementSibling.firstElementChild.checked = !$(event.target.id).previousElementSibling.firstElementChild.checked;
+	},
+	"keyboardNavTime": (event) => {
+		toggleTime(getID(event.target.id));
+		$(event.target.id).previousElementSibling.firstElementChild.checked = !$(event.target.id).previousElementSibling.firstElementChild.checked;
+	},
+	"isCorrectQuestion": (event) => {$(event.target.id).children[0].checked = !$(event.target.id).children[0].checked}
+}
+
 // Handles the majority of events.
 const eventHandle = () => {
 	window.addEventListener('click', (event) => {
@@ -426,6 +439,17 @@ const eventHandle = () => {
 			if (event.target.id.includes(keys[i])) {
 				clickIncludesEvents[keys[i]](event);
 				break;
+			}
+		}
+	});
+	window.addEventListener('keydown', event => {
+		if(event.key == "Enter") {
+			const keys = Object.keys(keyboardIncludesEvents);
+			for (i = 0; i < keys.length; i++) {
+				if (event.target.id.includes(keys[i])) {
+					keyboardIncludesEvents[keys[i]](event);
+					break;
+				}
 			}
 		}
 	});
@@ -514,9 +538,7 @@ function addQuestion() {
 	addquestionToDOM();
 	contentEditableUpdate();
 	reorderProper();
-	setTimeout(() => {
-		$('addQuestionButton').blur();
-	}, 300);
+	$(`collapseSubArea${highestQuestion}`).focus();
 }
 
 function doneButtonA() {
@@ -546,6 +568,7 @@ function playQuiz() {
 	setTimeout(() => {
 		$('title').style.display = 'none';
 		$('mainTheme').play();
+		$('mainTheme').volume = 0.6;
 		$('teacherPlayScreen').style.display = 'block';
 	}, 1000);
 	$('manageQuizMenu').style.animation = 'modalPopout 0.3s';
@@ -750,7 +773,7 @@ function createQuiz() {
 		$('submitQuizID').innerHTML = 'Create';
 		$('modal-bg').style.animation = 'fadeIn 0.5s';
 		$('modal-bg').style.display = 'block';
-		$('homeText').classList.add('btnTransitionA');
+		$('homeText2').classList.add('btnTransitionA');
 		$('createQuizMenu').style.animation = 'modalPopin 0.3s';
 		$('manageQuizMenu').style.display = 'none';
 		$('createQuizMenu').style.display = 'block';
@@ -849,7 +872,12 @@ function arrowButtonPress(isLeft) {
 		}
 	}
 	$("customButtonChange").innerHTML = customOptions[customOptionsIncrement];
-	$("charCustomize").focus();
+	if(isLeft) {
+		$("leftCustomizeArrow").focus();
+	}
+	else {
+		$("arrowCustomizeRight").focus();
+	}
 }
 
 function updateImageState() {
@@ -895,7 +923,7 @@ function addQuiz() {
 					$('modal-bg').style.animation = 'fadeIn 0.5s';
 					$('modal-bg').style.display = 'block';
 					$('quizNameTitleA').innerHTML = quizList2[event.currentTarget.id] + ":";
-					$('homeText').classList.add('btnTransitionA');
+					$('homeText2').classList.add('btnTransitionA');
 					$('manageQuizMenu').style.animation = 'modalPopin 0.3s';
 					$('manageQuizMenu').style.display = 'block';
 					$('createQuizMenu').style.display = 'none';
@@ -917,7 +945,7 @@ function addQuiz() {
 function goBackMakeA() {
 	customOptionsIncrement = 0;
 	$('backButtonC').disabled = true;
-	$('homeText').classList.add('titleTransition');
+	$('homeText2').classList.add('titleTransition');
 	if (Object.keys(quizList2).length > 0) {
 		for (var key in quizList2) {
 			$(key).classList.add('btnTransitionA');
@@ -1241,13 +1269,13 @@ function studentGameProcessor(input) {
 	}
 	else if(inputInternal.hasOwnProperty('kickPlayer')) {
 		clearInterval(timerInterval);
+		$('errorMessageB').style.display = 'none';
 		$('userNotifyPlay').style.display = 'none';
 		$("errorActual").innerText = 'Kicked From Game';
-		$("errorMessageA").style.display = "block";
-		$('gameStartScreenStudent').style.display = "none";
-		$('studentPlayScreen').style.display = "none";
-		var $loader = document.querySelector(".loader");
-
+		$("errorMessageA").style.display = 'block';
+		$('gameStartScreenStudent').style.display = 'none';
+		$('studentPlayScreen').style.display = 'none';
+		var $loader = document.querySelector('.loader');
 		$loader.classList.remove('loader--active');
 		$('title').style.display = "block";
 		goBack();
@@ -1295,6 +1323,7 @@ function studentGameProcessor(input) {
 		else if(inputInternal.isQuestionCorrect && gameStateStudent.currentQuestion < gameStateStudent.totalQuestions) {
 			gameStateStudent.currentQuestion++;
 			updateStudentLocation(gameStateStudent.currentQuestion);
+			$('errorMessageB').style.display = 'block';
 		}
 		else if(!inputInternal.isQuestionCorrect) {
 			var start = Date.now();
