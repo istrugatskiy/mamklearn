@@ -472,7 +472,6 @@ a.middle:focus:before {
 }
 .link-background {
 	text-align: center;
-	margin-bottom: 4rem;
 	display: flex;
 	justify-content: center;
 }
@@ -1330,9 +1329,6 @@ html {
 #addQuestionButton {
 	margin-top: 50px;
 	position: relative;
-}
-#btn2 {
-	margin-left: 15px;
 }
 button::-moz-focus-inner {
 	border: 0;

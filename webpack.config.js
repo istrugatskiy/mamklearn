@@ -5,7 +5,12 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = {
-    entry: './src/js/app.js',
+    entry: [
+        './src/js/app.js',
+        './src/js/utils.js',
+        './src/js/events.js',
+        './src/js/loadParticles.js'
+    ],
     output: {
         filename: 'app.js',
         path: path.resolve(__dirname, 'dist/')
