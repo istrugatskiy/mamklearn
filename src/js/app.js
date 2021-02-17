@@ -20,6 +20,8 @@ const customOptions = ["Eyes", "Nose", "Mouth", "Shirt", "Arms"];
 var otherInterval;
 const root = document.documentElement;
 var bottomBarOffset;
+var timerInterval;
+
 
 const getID = (input) => {
 	var inputChars = Array.from(input);
@@ -528,8 +530,6 @@ function studentGameProcessor(input) {
 		console.log("Finish up...");
 	}
 }
-
-var timerInterval;
 
 function setQuestion() {
 	if(!gameStateStudent) return;
