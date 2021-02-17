@@ -9,20 +9,11 @@
   <meta name="author" content="mamkLearn">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <div id="particles-js"></div>
-  <div class="backdrop-filter"></div>
-
-<!-- scripts -->
-  
-
-  <link rel="stylesheet" href="css/style.css?v=1.0">
   <meta name="google-signin-client_id" content="917106980205-im519fknf8sfb1jc1gs1tr6eafmto4vs.apps.googleusercontent.com">
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Chelsea+Market&display=swap" rel="stylesheet">
-
-  <script src="js/particles.js?v=1.0"></script>
   <script src="https://apis.google.com/js/platform.js" async defer></script>
-  <script src="js/app.js?v=1.0"></script>
 
   <style>
       @media screen and (max-width: 800px) {
@@ -34,6 +25,18 @@
           }
       }
   </style>
+  <script>
+		function isIE() {
+			ua = navigator.userAgent;
+			/* MSIE used to detect old browsers and Trident used to newer ones*/
+			var is_ie = ua.indexOf("MSIE ") > -1 || ua.indexOf("Trident/") > -1;
+			return is_ie;
+		}
+
+		if (isIE()) {
+			//document.location.href = "https://support.microsoft.com/en-us/office/the-website-you-were-trying-to-reach-doesn-t-work-with-internet-explorer-8f5fc675-cd47-414c-9535-12821ddfc554?ui=en-us&rs=en-us&ad=us";
+		}
+	</script>
 <noscript>
     <style>
         .aboutContainer {
@@ -359,7 +362,7 @@ END OF TERMS AND CONDITIONS
             </p>       
           </pre>                    
       <div id="backButton">
-        <button class="button" id="btn" onclick="userClick('index.html',true)">Back</button>
+        <button class="button" id="aboutWindowButton">Back</button>
       </div>
   </div>
 </body>

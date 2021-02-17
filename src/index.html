@@ -14,44 +14,9 @@
 
 <body>
 	<div id="particles-js"></div>
-	<link href="css/style.css" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Chelsea+Market&display=swap" rel="stylesheet">
 	<script async defer src="https://apis.google.com/js/platform.js">
 	</script>
-	<script defer src="js/particles.js">
-	</script>
-	<script defer src="js/app.js">
-	</script>
-	<script defer src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.0/dragula.min.js">
-	</script>
-	<noscript>
-		<style>
-			.aboutContainer {
-				display: none;
-			}
-
-			#particles-js {
-				display: none;
-			}
-
-			.backdrop-filter {
-				display: none;
-			}
-
-			.title {
-				display: none;
-			}
-
-			.Container {
-				display: none;
-			}
-
-			.loader {
-				display: none;
-			}
-		</style>
-		<p style="color: black;">An error has occurred: JavaScript is disabled or not supported by your browser</p>
-	</noscript>
 	<script>
 		function isIE() {
 			ua = navigator.userAgent;
@@ -100,32 +65,22 @@
 	<div class="title" id="title" style="top: 30%;">
 		<h1>MamkLearn</h1>
 		<button class="button btn" id="loginBtn">Login</button>
-		<div class="container containerLoginMenu" id="containerBottomBarC">
-			<div class="centerA">
-				<div class="bottom-bar">
-					<div class="first">
-						<ul style="all: unset;">
-							<li class="float">
-								<a href="privacy.html">Privacy Policy</a>
-							</li>
-						</ul>
-					</div>
-					<div class="center">
-						<ul style="all: unset;">
-							<li class="float">
-								<a href="tos.html">Terms of Service</a>
-							</li>
-						</ul>
-					</div>
-					<div class="last">
-						<ul style="all: unset;">
-							<li class="float" id="float">
-								<a class="btn" id="AboutLink" href="javascript:void(0)">About</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
+		<div class="bottomBar">
+			<ul class="titleTransitionBack">
+				<li>
+					<a class="middle" href="javascript:void(0);" id="AboutLink" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;">Privacy Policy</a>
+				</li>
+			</ul>
+			<ul class="titleTransitionBack">
+				<li>
+					<a class="middle" href="javascript:void(0);" id="AboutLink" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;">Terms of Service</a>
+				</li>
+			</ul>
+			<ul class="titleTransitionBack">
+				<li>
+					<a class="middle" href="javascript:void(0);" id="AboutLink" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;">About</a>
+				</li>
+			</ul>
 		</div>
 	</div>
 	<div class="modal-popup" id="modal-popupA">
@@ -140,7 +95,7 @@
 				<button class="button titleTransitionBack" id="submitQuizID" type="submit">Create</button>
 			</form>
 			<div class="link-background">
-				<ul class="textOverrideA titleTransitionBack">
+				<ul class="titleTransitionBack">
 					<li>
 						<a class="middle" href="javascript:void(0);" id="backButtonZ" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;">Back</a>
 					</li>
@@ -161,7 +116,7 @@
 				style="min-width: 400px; background-color: orange;">Delete</button><br>
 			<br>
 			<div class="link-background">
-				<ul class="textOverrideA titleTransitionBack">
+				<ul class="titleTransitionBack">
 					<li>
 						<a class="middle" href="javascript:void(0);" id="backButtonY"
 							style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;">Back</a>
@@ -198,7 +153,7 @@
 				This link will create a copy of this quiz.<br> Note: the link cannot be revoked!</p>
 			<textarea disabled id="coolTextArea" class="textAreaConfig button titleTransitionBack formInput textarea2">mamklearn.com/?shareQuiz=1803b027-eaee-4784-a9a1-792ae3029450</textarea><br>
 			<div class="link-background">
-				<ul class="textOverrideA titleTransitionBack" style="width: 180px;">
+				<ul class="titleTransitionBack" style="width: 180px;">
 					<li>
 						<a class="middle" href="javascript:void(0);" id="copyShareLink"
 							style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px; width: 140px;">Copy Link</a>
@@ -339,7 +294,7 @@
 				</svg>
 			</span> 
 			<span class="hackDoNotUse">Question ${highestQuestion}:</span>
-			<a id="collapseSubArea${highestQuestion}" href="javascript:void(0)" class="arrowBRight arrow"></a> 
+			<a id="collapseSubArea${highestQuestion}" href="javascript:void(0)" class="arrowBRight arrow"> </a> 
 			<svg xmlns="http://www.w3.org/2000/svg" class="clickBoxGrey" tabindex="0" id="deleteQuestion${highestQuestion}" viewBox="0 0 24 24" style="transform: scale(2); margin-left: 22px;" fill="white" width="18px" height="18px">
 				<path d="M0 0h24v24H0z" fill="none"/>
 				<path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
@@ -439,9 +394,9 @@
 			<img alt="your profile picture" src="../img/base.png" width="250" height="337">
 		</div>
 		<p class="notifyTextChar" id="customType">
-			<a class="arrow left" href="javascript:void(0)" id="leftCustomizeArrow"></a>
+			<a class="arrow left" href="javascript:void(0)" id="leftCustomizeArrow"> </a>
 			<a href="javascript:void(0)" id="customButtonChange">Eyes</a>
-			<a class="arrow right" href="javascript:void(0)" id="arrowCustomizeRight"></a>
+			<a class="arrow right" href="javascript:void(0)" id="arrowCustomizeRight"> </a>
 		</p>
 		<img alt="Tap to change button..." width="195" height="90" id="customButtonChange2" src="img/tapToChange.png" style="cursor: pointer; pointer-events: all;"></div>
 		<br>
@@ -464,7 +419,7 @@
 		<button class="button titleTransitionBack" id="submitID" type="submit">Join</button>
 	</form>
 	<div class="link-background">
-		<ul class="textOverrideA titleTransitionBack">
+		<ul class="titleTransitionBack">
 			<li>
 				<a class="middle" href="javascript:void(0);" id="playMenuBack" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-top: 20px; padding-bottom: 0px;">Back</a>
 			</li>
