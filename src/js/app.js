@@ -4,15 +4,16 @@ import {$, mathClamp, getCaretCharacterOffsetWithin, characterCount, createTempl
 import {eventHandle} from './events';
 import {initParticles} from './loadParticles';
 window.onSignIn = onSignIn;
+window.studentGameProcessor = studentGameProcessor;
 var customOptionsIncrement = 0;
 window.customOptionsIncrement = customOptionsIncrement;
 var currentUserConfig = [0, 0, 0, 0, 0];
 window.currentUserConfig = currentUserConfig;
 
 const quizStartTestCase = ' {"gameStart": true, "totalQuestions": 5, "currentQuestion": "If%20fish%20are%20fish", "choices": [ null ], "currentQuestionTime": 69, "questionID": 0 }';
-const anotherTestCase = '{ "isQuestionCorrect": false, "nextQuestion": null, "choices": [ null ], "currentQuestionTime": 20 }';
-const anotherTestCase2 = '{ "isQuestionCorrect": true, "nextQuestion": "heckDifferentQuestionTooLazyTooPutPercent", "choices": [ "Nabeel", "Nabeel2", "Nabeel3", "Nabeel4" ], "currentQuestionTime": 69 }';
-const anotherTestCase3 = '{ "gameFinish": true, "timeTillEnd": 180}';
+window.anotherTestCase = '{ "isQuestionCorrect": false, "nextQuestion": null, "choices": [ null ], "currentQuestionTime": 20 }';
+window.anotherTestCase2 = '{ "isQuestionCorrect": true, "nextQuestion": "heckDifferentQuestionTooLazyTooPutPercent", "choices": [ "Nabeel", "Nabeel2", "Nabeel3", "Nabeel4" ], "currentQuestionTime": 69 }';
+window.anotherTestCase3 = '{ "gameFinish": true, "timeTillEnd": 180}';
 var gameStateStudent = null;
 console.log("%cUse link to get quiz answers:https://bit.ly/31Apj2U", "font-size: 32px;");
 const customOptions = ["Eyes", "Nose", "Mouth", "Shirt", "Arms"];
@@ -153,7 +154,8 @@ function submitShortAnswer() {
 	$('studentShortAnswerText').contentEditable = false;
 	$('shortAnswerSubmitButton').disabled = true;
 	$('studentShortAnswerText').classList.add('contentEditableDisabled');
-	answerQuestion("testing!");
+	answerQuestion($('studentShortAnswerText').textContent);
+	clearInterval(timerInterval);
 }
 
 function login() {
