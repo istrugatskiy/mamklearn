@@ -109,6 +109,12 @@ var ParticleData = {
 	},
 	"retina_detect": false
 };
+
+import '../css/style.css';
+import 'particles.js';
+import dragula from'dragula';
+window.onSignIn = onSignIn;
+
 const jsonUri = "data:text/plain;base64," + window.btoa(JSON.stringify(ParticleData));
 var currentQuizEdit;
 var drake = null;
@@ -215,7 +221,7 @@ const isObject = (object) => {
 const createTemplate = (templateID, place, modif = false, replace = false) => {
 	let content = $(templateID).content.cloneNode(true);
 	if(modif) {
-		for(i = 0; i < content.children.length; i++) {
+		for (var i = 0; i < content.children.length; i++) {
 			content.children[i].innerHTML = content.children[i].innerHTML.replaceAll(modif, replace);
 		}
 		
@@ -341,7 +347,7 @@ const exitModalPopupTemplate = (popupToKill, special = false) => {
 const getID = (input) => {
 	var inputChars = Array.from(input);
 	var output = '';
-	for(i = inputChars.length; i >= 0; i--) {
+	for (var i = inputChars.length; i >= 0; i--) {
 		if(!Number.isNaN(Number.parseInt(inputChars[i]))) {
 			output = inputChars[i] + output;
 		}
@@ -397,7 +403,8 @@ var clickEvents = {
 	"backButtonDeleteConfirm": () => {exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm')},
 	"backButtonShareQuiz": () => {exitModalPopupTemplate('shareQuizMenu', 'shareQuizMenu')},
 	"createButtonA": createQuiz,
-	"backButtonDeleteConfirm": () => {exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm')}
+	"backButtonDeleteConfirm": () => {exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm')},
+	"aboutWindowButton": () => {userClick('index.html', true)}
 };
 
 // These are the events that include the text in the elements id.
@@ -425,7 +432,9 @@ var keyboardIncludesEvents = {
 		toggleTime(getID(event.target.id));
 		$(event.target.id).previousElementSibling.firstElementChild.checked = !$(event.target.id).previousElementSibling.firstElementChild.checked;
 	},
-	"isCorrectQuestion": (event) => {$(event.target.id).children[0].checked = !$(event.target.id).children[0].checked}
+	"isCorrectQuestion": (event) => {$(event.target.id).children[0].checked = !$(event.target.id).children[0].checked},
+	'studentShortAnswerText': (event) => {submitShortAnswer}
+	
 }
 
 // Handles the majority of events.
@@ -435,7 +444,7 @@ const eventHandle = () => {
 		if (event.target.id in clickEvents) {
 			clickEvents[event.target.id]();
 		}
-		for (i = 0; i < keys.length; i++) {
+		for (var i = 0; i < keys.length; i++) {
 			if (event.target.id.includes(keys[i])) {
 				clickIncludesEvents[keys[i]](event);
 				break;
@@ -445,7 +454,7 @@ const eventHandle = () => {
 	window.addEventListener('keydown', event => {
 		if(event.key == "Enter") {
 			const keys = Object.keys(keyboardIncludesEvents);
-			for (i = 0; i < keys.length; i++) {
+			for (var i = 0; i < keys.length; i++) {
 				if (event.target.id.includes(keys[i])) {
 					keyboardIncludesEvents[keys[i]](event);
 					break;
@@ -468,14 +477,9 @@ const eventHandle = () => {
 	window.addEventListener('resize', () => {
 		if (gameStateStudent) {
 			bottomBarOffset = 15;
-			for (i = 0; i <= gameStateStudent.currentQuestion; i++) {
+			for (var i = 0; i <= gameStateStudent.currentQuestion; i++) {
 				updateStudentLocation(i);
 			}
-		}
-	});
-	$('studentShortAnswerText').addEventListener('keydown', event => {
-		if (event.key == "Enter") {
-			submitShortAnswer();
 		}
 	});
 }
@@ -529,7 +533,7 @@ function shareQuiz() {
 }
 
 function login() {
-	auth2 = gapi.auth2.getAuthInstance();
+	var auth2 = gapi.auth2.getAuthInstance();
 	$('loginPage').style.display = "block";
 	$('loginBtn').classList.add('buttonPressed');
 }
@@ -629,7 +633,7 @@ function editQuiz() {
 				actualData[4].children[2].textContent = questionObject.timeLimit;
 				characterCount(actualData[4].children[2], 3);
 			}
-			for(i = 0; i < 4; i++) {
+			for (var i = 0; i < 4; i++) {
 				actualData[5].children[i].children[0].textContent = questionObject.Answers[i].answer;
 				characterCount(actualData[5].children[i].children[0], 50);
 				actualData[5].children[i].children[2].children[0].checked = questionObject.Answers[i].correct;
@@ -702,7 +706,7 @@ function userClick(e, g = false, nabeelIsGreat = false) {
 	var $loader = document.querySelector(".loader");
 	$loader.classList.add('loader--active');
 	if (g) {
-		$('btn').classList.add('buttonPressed');
+		$('aboutWindowButton').classList.add('buttonPressed');
 	}
 	if (nabeelIsGreat) {
 		$('btn2').classList.add('buttonPressed');
@@ -1020,8 +1024,8 @@ function deleteQuestion(a) {
 
 function reorderProper() {
 	var test = 0;
-	for (i = 0; i <= $('draggableDiv').children.length - 1; i++) {
-		$('draggableDiv').children[i].firstElementChild.childNodes[3].innerHTML = `Question ${i + 1}:`;
+	for (var i = 0; i <= $('draggableDiv').children.length - 1; i++) {
+		$('draggableDiv').children[i].firstElementChild.children[1].innerHTML = `Question ${i + 1}:`;
 		test = i;
 	}
 	if(test >= 24) {
@@ -1088,7 +1092,7 @@ function parseActiveQuiz() {
 	tempQuiz.quizName = encodeHTML($("quizNameUpdate").value);
 	tempQuiz.quizID = currentQuizEdit;
 	if ($("draggableDiv").firstElementChild) {
-		quizDoc = Array.from($("draggableDiv").children);
+		var quizDoc = Array.from($("draggableDiv").children);
 		quizDoc.forEach(function (object) {
 			var timeLimit = false;
 			if (object.children[1].children[4].children[0].children[0].checked) {
@@ -1247,7 +1251,7 @@ function studentGameProcessor(input) {
 				}
 			};
 			var studentRaceBoxNumbers = '';
-			for (i = 1; i <= gameStateStudent.totalQuestions; i++) {
+			for (var i = 1; i <= gameStateStudent.totalQuestions; i++) {
 				studentRaceBoxNumbers += `<th>${i}</th>`
 			}
 			$('studentRaceNumbers').innerHTML = studentRaceBoxNumbers + `<th>finish</th>`;
@@ -1394,7 +1398,7 @@ function setQuestion() {
 	$('studentAnswersFlex').style.display = 'flex';
 	$('titleButtonStudent').firstElementChild.innerText = decodeURI(gameStateStudent.currentQuestionData.question);
 	var options = $('studentAnswersFlex').children;
-	for (i = 0; i < options.length; i++) {
+	for (var i = 0; i < options.length; i++) {
 		if (!gameStateStudent.currentQuestionData.answers[i]) {
 			options[i].style.display = 'none';
 		}
