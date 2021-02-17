@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // Definese the configuration data for particles js.
 var ParticleData = {
 	"particles": {
