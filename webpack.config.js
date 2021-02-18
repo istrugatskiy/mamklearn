@@ -27,6 +27,7 @@ module.exports = {
         ]
     },
     mode: 'production',
+    watch: true,
     plugins: [
         new HtmlWebpackPlugin({
             filename: 'index.html',

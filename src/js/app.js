@@ -22,7 +22,6 @@ const root = document.documentElement;
 var bottomBarOffset;
 var timerInterval;
 
-
 const getID = (input) => {
 	var inputChars = Array.from(input);
 	var output = '';
@@ -428,6 +427,7 @@ function studentGameProcessor(input) {
 		var $loader = document.querySelector('.loader');
 		$loader.classList.remove('loader--active');
 		$('title').style.display = "block";
+		$('gameFinishNotify').style.display = 'none';
 		goBack();
 		gameStateStudent = null;
 		setTimeout(() => {
@@ -527,7 +527,9 @@ function studentGameProcessor(input) {
 		}
 	}
 	else if(inputInternal.hasOwnProperty('gameFinish')) {
-		console.log("Finish up...");
+		$('gameFinishNotify').style.display = 'block';
+		gameStateStudent.timeLeft = inputInternal.timeTillEnd;
+		$('gameFinishNotify').innerText = `The game will end in ${gameStateStudent.timeLeft}s`;
 	}
 }
 

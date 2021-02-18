@@ -1685,3 +1685,41 @@ img {
 	border-width: 5px;
 	min-width: 100px;
 }
+@keyframes flowFromTop {
+	0% {
+		transform: translateX(-50%) translateY(-110px);
+		color: #fff;
+	}
+	30% {
+		transform: translateX(-50%) translateY(15px);
+		color: rgb(0, 0, 0);
+	}
+	50%, 70%, 90% {
+		transform: translateX(calc(-50% - 25px)) translateY(15px);
+		color: rgb(0, 0, 0);
+	}
+	40%, 60%, 80%{
+		transform: translateX(calc(-50% + 25px)) translateY(15px);
+		color: rgb(0, 0, 0);
+	}
+	100% {
+		transform: translateX(-50%) translateY(15px);
+		color: rgb(0, 0, 0);
+	}
+}
+.notifyTop {
+	display: none;
+	position: absolute;
+	left: 50%;
+  	transform: translateX(-50%) translateY(15px);
+	background-color: rgb(255, 255, 255);
+	border-radius: 25px;
+	box-shadow: 0 0 12px #000;
+	animation: flowFromTop  1s forwards;
+	animation-timing-function: cubic-bezier(.36,.07,.19,.97);
+	text-align: center;
+	font-family: 'Roboto Mono', monospace;
+	color: black;
+	font-size: xx-large;
+	padding: 15px;
+}
