@@ -117,15 +117,6 @@ body {
 :focus {
 	outline: -webkit-focus-ring-color auto 0;
 }
-.container {
-	position: absolute;
-	left: calc(50% -250px);
-	z-index: 9;
-	font-size: 16px;
-	margin-top: 50px;
-	width: 100%;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
 a {
 	text-decoration: none;
 	color: white;
@@ -402,7 +393,17 @@ body {
 	font-size: xx-large;
 	max-width: 800px;
 	display: none;
-	animation: animatezoom 0.6s;
+	animation: modalPopinLogin 0.6s;
+}
+@keyframes modalPopinLogin {
+	from {
+		transform: translate(-50%, 100%);
+		opacity: 0;
+	}
+	to {
+		transform: translate(-50%, -40%);
+		opacity: 1;
+	}
 }
 .error {
 	z-index: 9;
@@ -448,6 +449,7 @@ body {
 }
 a.middle {
 	position: relative;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 a.middle:before {
 	content: "";
@@ -1639,7 +1641,8 @@ img {
 	box-shadow: none;
 	display: block;
 	height: auto;
-	word-break: break-all;
+	word-break: break-word;
+	overflow-wrap: break-word;
 	-webkit-user-modify: read-only;
 	user-select: none;
 }

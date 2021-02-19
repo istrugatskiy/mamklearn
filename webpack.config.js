@@ -12,7 +12,7 @@ module.exports = {
         './src/js/loadParticles.js'
     ],
     output: {
-        filename: 'app.js',
+        filename: '[name].chonk.js',
         path: path.resolve(__dirname, 'dist/')
     },
     module: {

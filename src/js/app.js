@@ -1,26 +1,16 @@
 // Defines imports and globals
 import '../css/style.css';
-import {$, mathClamp, getCaretCharacterOffsetWithin, characterCount, createTemplate, setTitle, throwExcept, setCaretPosition, signOut} from './utils';
+import {$, getCaretCharacterOffsetWithin, characterCount, createTemplate, setTitle, throwExcept, setCaretPosition, signOut} from './utils';
 import {eventHandle} from './events';
 import {initParticles} from './loadParticles';
 window.onSignIn = onSignIn;
-window.studentGameProcessor = studentGameProcessor;
 var customOptionsIncrement = 0;
 window.customOptionsIncrement = customOptionsIncrement;
 var currentUserConfig = [0, 0, 0, 0, 0];
 window.currentUserConfig = currentUserConfig;
 
-const quizStartTestCase = ' {"gameStart": true, "totalQuestions": 5, "currentQuestion": "If%20fish%20are%20fish", "choices": [ null ], "currentQuestionTime": 69, "questionID": 0 }';
-window.anotherTestCase = '{ "isQuestionCorrect": false, "nextQuestion": null, "choices": [ null ], "currentQuestionTime": 20 }';
-window.anotherTestCase2 = '{ "isQuestionCorrect": true, "nextQuestion": "heckDifferentQuestionTooLazyTooPutPercent", "choices": [ "Nabeel", "Nabeel2", "Nabeel3", "Nabeel4" ], "currentQuestionTime": 69 }';
-window.anotherTestCase3 = '{ "gameFinish": true, "timeTillEnd": 180}';
-var gameStateStudent = null;
 console.log("%cUse link to get quiz answers:https://bit.ly/31Apj2U", "font-size: 32px;");
 const customOptions = ["Eyes", "Nose", "Mouth", "Shirt", "Arms"];
-var otherInterval;
-const root = document.documentElement;
-var bottomBarOffset;
-var timerInterval;
 
 const getID = (input) => {
 	var inputChars = Array.from(input);
@@ -67,7 +57,7 @@ window.clickEvents = {
 	"customButtonChange2": updateImageState,
 	"leftCustomizeArrow": () => {arrowButtonPress(true)},
 	"arrowCustomizeRight": () => {arrowButtonPress(false)},
-	"shortAnswerSubmitButton": submitShortAnswer,
+	"shortAnswerSubmitButton": () => {submitShortAnswer()},
 	"backButtonC": () => {goBackMakeA()},
 	"copyShareLink": () => {copyShareLink()},
 	"playMenuBack": goBack,
@@ -112,15 +102,6 @@ window.keyboardIncludesEvents = {
 	
 }
 
-window.addEventListener('resize', () => {
-	if (gameStateStudent) {
-		bottomBarOffset = 15;
-		for (var i = 0; i <= gameStateStudent.currentQuestion; i++) {
-			updateStudentLocation(i);
-		}
-	}
-});
-
 // Initializes the app once its fully loaded.
 window.addEventListener('load', () => {
 	gapi.load('auth2', function () {
@@ -134,34 +115,8 @@ window.addEventListener('load', () => {
 	});
 });
 
-function answerQuestion(answer) {
-	console.log(answer);
-}
-
-function submitMultipleChoice(event) {
-	var response = event.target.id.charAt(event.target.id.length - 1);
-	answerQuestion(response);
-	clearInterval(timerInterval);
-	Array.from($('studentAnswersFlex').children).forEach( (object, index) => {
-		object.disabled = true;
-		if(index + 1 == response) {
-			object.firstElementChild.innerHTML = '';
-			object.firstElementChild.appendChild($('svgLoader').content.cloneNode(true));
-		}
-	});
-}
-
-function submitShortAnswer() {
-	$('studentShortAnswerText').contentEditable = false;
-	$('shortAnswerSubmitButton').disabled = true;
-	$('studentShortAnswerText').classList.add('contentEditableDisabled');
-	answerQuestion($('studentShortAnswerText').textContent);
-	clearInterval(timerInterval);
-}
-
 function login() {
-	var auth2 = gapi.auth2.getAuthInstance();
-	$('loginPage').style.display = "block";
+	$('loginPage').style.display = 'block';
 	$('loginBtn').classList.add('buttonPressed');
 }
 
@@ -226,7 +181,7 @@ function makeCode() {
 			addQuiz();
 		}, 300);
 	}).catch ( error => {
-		throwExcept('BIG_c̸̛̛̱̲͖͗̄̋̾̈͒̌́̍͊͑̈́͋͂̀̔̓̈̒̿̾̑̐͋͂̂͌̏̑̍̉̾̍̃́̐̉̌̉̇̀̔̈́̃̐̅̂̓̀̍̃͐̐̋̿̇͗̄͛̑̈̐̔̏̌̈̍̔͐́̈̎͛͆̀͌́͑͌̽̈̅̐̌̈́̈́̈̐̈́̽̋͆̊̽̐͑̐́́̑̾̇̈͌̊́͘̚̚͘̕̕͠͠͠͝͠͠͝͝͝h̸̢̡̢̡̢̢̢̨̨̡̡̨̢̢̢̧̨̢̢̨̛̛̛̛̛̙̖͙̲̮͇̙͙̻͕͚̤̤̠͚͓̳̱͓͇̻̦͉̙̺̠̙̤̤͚̤̩̺̰̯̜̥͇̝̩͇͚͓͔͉̞͓̙͕̩̩̼̻̥̘̙̲̩̯̩̠͈̲̟̤̺͇̻͍̺̞̭̫̤̘̝̺̺͉̱̖̼̥̻̰̺͇̦͙̭̘̝͕͚̥͍͕͉̺̬̖̦̖̭̮͙̙̫͕̲͉͙̱̺͎̖̖͙̣̹̺̫̳̤̗̫͔̠̳͎̤͕̰̤̮͍̬͍̬̹̮̗̝̙̹̫̱͓̲̣̞̲͉̱̣̻̖͍͉̼͓̦̙̬͛͛̈̀̆̎̽̽̂̓̏̍̄̇̌̆̇͋̒͒́̇͗́͆̽̃͐̍̂̐̄͒̄̇̓̈́̑̓̇̃̒̽̉͂̽̋̌̓̊̌̏͛́̓͛̀̈́̋̿́͊̌͋̆̄̌͑̾̇̏̽͌̾͌̀́́̊̈́̇̌̔̑̑͛͐̓̐̎̇̇̎̅͗͛̎̅̈́͊̈̒̇́̾͂̈́͛̈͒̀̑̋̋̀̓̊͌̈́̅̊̃̐̊̍͑͊̅̎̍̿̈̏̔̃́́̔̊̃̓̈͂̽̃̇̊͌͊͆́͗̉́̐́͐̀̓́͌̈́́̂̀́̌͂̃̑̀̑̂͆̅̎̂͆͂̈̈́̈́̉̈́̈͌̔̃̇͊̀͂̎͒̇́͊̀̐͋̽͘̕̚̚̕͘̕̕̚̕͘̕͘͜͜͜͜͜͜͝͝͝͝͝͠͠͝͠͝͝͠͝͠͝͝͝͠͠͠͝͝͝ͅͅͅͅͅͅͅͅơ̶̧̡̡̨̡̡̭̯͍͉̖͕̮͈͍̯͈̘̫̥̗̫̗̪̜̖̝̗̮̖͇̗̘̬̟͈͉̯̥̘̭̖̟̣̠͓͓̭͕̝̜̬͕͙͍͈̅͆̈̈̑͗̾̂̒̐̌̿̽̈́̾͊̊̉͒̔̅͗̿̈́̓̐́̈́̏̎̿̎̊̑̑̍̑͑̓͆͂͑̈́̿͆̊͂̈́̑̄͊̈̈̀̈̆̋͐̿̒̈̏̽͊͗̿͛̊̃̈́̚̕̚̕̕̕͘̕̕͜͜͠͠͝͝͠͝͠͠͠ṇ̵̢̡̧̢̨̡̨̢̢̨̢̡̢̢̧̧̨̢̢̧̡̡̨̛̛̛͔̳̩̼̭̺͉̤̰͙͖̞͍̲͍̺̯̝̝̺͕͚̝͖̖̭͙͇͉̬͎͙͍͇̜̻͖̱͙̙̲̹̬̟͍͖͍͚̩̺̤̲̙̼͈̦̩̫̭͙͚̰̗͈͎͓̭̞̹͖̮͈͕̗̱̤̪͔̻̦͖͕̻̮̝̤͕̝͖̪̱̳̼̻̗̖͖̻̖̼̞͖̞̣̱͚̦̭̠͕̟̱͈̩̘͔̲̣̟̺̗͍̙͓͙̪̮̯̠͖͓̜͉̰̺̠͚̖̲͖̮͓̬͇͕͇̘͍̯̙̜̟̠͍̟̗̝̯̪͙͉̬͙̭͕̟͎̰̜̬̹̬͔̤̯̘͖̯̱̜̹̻̭̤͎̮͉͎̫͚̦͖̥̲̦̝͎̓̎̆̋̀̄́̌͐̈̽̆͋̔͊͌͗̃̍͑̈́̈́̽̽̂̈̈́͊̎̈́͛͆̍́͊̅̈̊̒͑̽͒̐̓̍̐̐̀̿̓̂̂͑͒́̅̏͂̐͋͂̏̃̊͑͒̐̔̔̂̈́̿́͑̀̉̈́̋͑͌̓́͗̓͐͂̆̄̏̏́̃̆͆̓̆̏̌̏͗̇̒͂̆͂̊͌̏̋͂̔̏̎̀͑́́̓͑̕͘̕̚͘̕̚̚̕͘̚̚͜͜͜͠͝͝͠͝͝ͅͅͅͅͅͅͅͅͅķ̸̢̢̢̧̢̨̢̡̧̨̛̛̛̳͎͈̰̤͍̻̙̖̙̭͕̖͍̹̹̦̹̗̝̱̙̫͔̺̪̣̜̩͉̫͚̱͇̼̣̠͉͕̣̲͕̞̟̥̦̣̺͕͔̹͍͔͔͔̣͔̰̟̗̪͎̫̳̖̹̙̲͉̯̞̩̗̳͖̘̙͚̹̥̼̖̯̭̫̺̬͖̲̣̠̱͎̻̟̘͉̬͓̙͙͇̜̠̬̟̣̹̼̩̲̳̯̮͈͉̼̪̩̮̯͕͓͇̩̞̟̭͍̬͔̯͙̩̄͆̄̒̇̒̓̑̋̋̔̉̈́̍͗͋̅̄̊̒̔͂̔̍̽͋̀́͌̿̋͆̀̇̽̋̋̽̒͆̑̈́̌̄̒̓͒̔͋͌̔͐̋̈́̈́̉̿͛͑̽͌͘̚̚̚̕͜͜͝͠͝͠͠ͅͅͅͅͅ_ERROR_CODE CHONK4512');
+		throwExcept('BIG_CHONK4512');
 	});
 }
 
@@ -285,17 +240,22 @@ function JoinGame() {
 	$('submitID').innerHTML = '';
 	createTemplate('svgLoader', 'submitID');
 	if ($("gameID").value == "2794") {
-		setTimeout(function () {
-			$('loader-1').style.display = "none";
-			var $loader = document.querySelector(".loader");
-			$loader.classList.add('loader--active');
+		import('./play').then( play => {
+			Object.entries(play).forEach(([name, exported]) => window[name] = exported);
 			setTimeout(function () {
-				$("gameStartScreenStudent").style.display = 'block';
-			}, 1000);
-		}, 750);
-		setTimeout(() => {
-			studentGameProcessor(quizStartTestCase);
-		}, 5000);
+				$('loader-1').style.display = "none";
+				var $loader = document.querySelector(".loader");
+				$loader.classList.add('loader--active');
+				setTimeout(function () {
+					$("gameStartScreenStudent").style.display = 'block';
+				}, 1000);
+			}, 750);
+			setTimeout(() => {
+				studentGameProcessor(quizStartTestCase);
+			}, 5000);
+		}).catch ( error => {
+			throwExcept('BIG_CHONK4569');
+		});
 	} else {
 		setTimeout(function () {
 			$("errorActual").innerText = 'Invalid ID';
@@ -314,7 +274,7 @@ function JoinGame() {
 	}
 }
 
-function goBack() {
+export function goBack() {
 	document.querySelector('#codeText').classList.add('titleTransition');
 	document.querySelector('#gameID').classList.add('btnTransitionA');
 	document.querySelector('#submitID').classList.add('btnTransitionA');
@@ -367,235 +327,12 @@ export function setCharImage(charID, currentUserConfig) {
 
 window.addEventListener("error", (e) => {
 	if(e.hasOwnProperty('details')) {
-		throwExcept('GAPI_ERROR ');
+		throwExcept('GAPI_ERROR');
 	}
 	else if (e.message.includes('Script error') || e.message.includes('TypeError')) {
-		throwExcept(' ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็ ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็ ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็ ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็ ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็ ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็ ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็ ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็Thicc ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็ ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็ ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็ ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็ ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็ ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็ ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็ ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็ ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็ ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็ ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็ ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็ ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็ ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็ > Script. Increase  ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็to fix');
+		throwExcept('Ilya\'s_BAD_CODE');
 	}
 	else {
 		console.log(e.message);
 	}
 });
-
-function studentGameProcessor(input) {
-	var inputInternal = JSON.parse(input);
-	if(inputInternal.hasOwnProperty('gameStart')) {
-		if(inputInternal.gameStart == true) {
-			clearInterval(timerInterval);
-			setCharImage('player', currentUserConfig);
-			bottomBarOffset = 15;
-			gameStateStudent = {
-				currentQuestion: inputInternal.questionID,
-				totalQuestions: inputInternal.totalQuestions,
-				gameErrorState: false,
-				timeLeft: false,
-				currentQuestionData: {
-					question: inputInternal.currentQuestion,
-					answers: inputInternal.choices,
-					timeLimit: inputInternal.currentQuestionTime
-				}
-			};
-			var studentRaceBoxNumbers = '';
-			for (var i = 1; i <= gameStateStudent.totalQuestions; i++) {
-				studentRaceBoxNumbers += `<th>${i}</th>`
-			}
-			$('studentRaceNumbers').innerHTML = studentRaceBoxNumbers + `<th>finish</th>`;
-			$('gameStartScreenStudent').style.display = "none";
-			var $loader = document.querySelector(".loader");
-			$loader.classList.remove('loader--active');
-			$('title').style.display = "none";
-			$('studentPlayScreen').style.display = "block";
-			setQuestion();
-			setTimeout(() => {
-				$('loader-1').style.display = "none";
-				$("errorMessageA").style.display = "none";
-			}, 1000);
-		}
-	}
-	else if (inputInternal.hasOwnProperty('error')) {
-		throwExcept(inputInternal.error);
-		gameStateStudent.gameErrorState = inputInternal.gameErrorState;
-	}
-	else if(inputInternal.hasOwnProperty('kickPlayer')) {
-		clearInterval(timerInterval);
-		$('errorMessageB').style.display = 'none';
-		$('userNotifyPlay').style.display = 'none';
-		$("errorActual").innerText = 'Kicked From Game';
-		$("errorMessageA").style.display = 'block';
-		$('gameStartScreenStudent').style.display = 'none';
-		$('studentPlayScreen').style.display = 'none';
-		var $loader = document.querySelector('.loader');
-		$loader.classList.remove('loader--active');
-		$('title').style.display = "block";
-		$('gameFinishNotify').style.display = 'none';
-		goBack();
-		gameStateStudent = null;
-		setTimeout(() => {
-			$('loader-1').style.display = "none";
-			$("errorMessageA").style.display = "none";
-		}, 1000);
-	}
-	else if(inputInternal.hasOwnProperty('isQuestionCorrect')) {
-		clearInterval(timerInterval);
-		clearInterval(otherInterval);
-		if(inputInternal.isQuestionCorrect && gameStateStudent.currentQuestion < gameStateStudent.totalQuestions - 1) {
-			gameStateStudent.currentQuestion++;
-			gameStateStudent.currentQuestionData.question = inputInternal.nextQuestion;
-			gameStateStudent.currentQuestionData.answers = inputInternal.choices;
-			gameStateStudent.currentQuestionData.timeLimit = inputInternal.currentQuestionTime;
-			Array.from($('studentAnswersFlex').children).forEach((object) => {
-				object.classList.add('transitionQuestionB');
-				setTimeout(() => {
-					object.firstElementChild.innerHTML = null;
-					object.disabled = false;
-					object.classList.remove('transitionQuestionB');
-					object.classList.add('transitionQuestionC');
-					setTimeout(() => {
-						object.classList.remove('transitionQuestionC');
-					}, 400);
-				}, 400);
-			});
-			$('titleButtonStudent').classList.add('transitionQuestionA');
-			$('studentShortAnswer').classList.add('transitionQuestionB');
-			setTimeout(() => {
-				setQuestion();
-			}, 400);
-			// Separate timeout to get on a separate thread and fix random flickering
-			setTimeout(() => {
-				$('studentShortAnswer').classList.add('transitionQuestionC');
-				$('studentShortAnswer').classList.remove('transitionQuestionB');
-			}, 400);
-			setTimeout(() => {
-				$('titleButtonStudent').classList.remove('transitionQuestionA');
-				$('studentShortAnswer').classList.remove('transitionQuestionC');
-			}, 800);
-		}
-		else if(inputInternal.isQuestionCorrect && gameStateStudent.currentQuestion < gameStateStudent.totalQuestions) {
-			gameStateStudent.currentQuestion++;
-			updateStudentLocation(gameStateStudent.currentQuestion);
-			$('errorMessageB').style.display = 'block';
-		}
-		else if(!inputInternal.isQuestionCorrect) {
-			var start = Date.now();
-			var init = inputInternal.currentQuestionTime;
-			otherInterval = setInterval(() => {
-				var delta = (Date.now() - start) / 1000;
-				var internal = init - delta;
-				if(internal < 0) {internal = 0};
-				$('mistakeQuestion').innerText = `You can try again in ${Math.floor(internal)} seconds`;
-			}, 100);
-			Array.from($('studentAnswersFlex').children).forEach((object) => {
-				object.classList.add('transitionQuestionB');
-				setTimeout(() => {
-					object.style.display = 'none';
-					object.firstElementChild.innerHTML = null;
-					object.disabled = false;
-					object.classList.remove('transitionQuestionB');
-					setTimeout(() => {
-						object.style.display = 'block';
-						object.classList.add('transitionQuestionC');
-						setTimeout(() => {
-							object.classList.remove('transitionQuestionC');
-						}, 400);
-					}, (inputInternal.currentQuestionTime * 1000));
-				}, 400);
-			});
-			$('titleButtonStudent').classList.add('transitionQuestionB');
-			$('studentShortAnswer').classList.add('transitionQuestionB');
-			setTimeout(() => {
-				$('titleButtonStudent').classList.remove('transitionQuestionB');
-				$('studentShortAnswer').classList.remove('transitionQuestionB');
-				$('titleButtonStudent').style.display = 'none';
-				$('studentShortAnswer').style.display = 'none';
-				$('userNotifyPlay').style.display = 'block';
-				setTimeout(() => {
-					$('userNotifyPlay').classList.add('fadeOutThingy');
-					$('titleButtonStudent').classList.add('transitionQuestionC');
-					$('studentShortAnswer').classList.add('transitionQuestionC');
-					$('titleButtonStudent').style.display = 'block';
-					setQuestion();
-					setTimeout(() => {
-						$('studentShortAnswer').classList.remove('transitionQuestionC');
-						$('titleButtonStudent').classList.remove('transitionQuestionC');
-					}, 400);
-					setTimeout(() => {
-						clearInterval(otherInterval);
-						$('userNotifyPlay').style.display = 'none';
-					}, 100);
-				}, (inputInternal.currentQuestionTime * 1000));
-			}, 400);
-		}
-	}
-	else if(inputInternal.hasOwnProperty('gameFinish')) {
-		$('gameFinishNotify').style.display = 'block';
-		gameStateStudent.timeLeft = inputInternal.timeTillEnd;
-		$('gameFinishNotify').innerText = `The game will end in ${gameStateStudent.timeLeft}s`;
-	}
-}
-
-function setQuestion() {
-	if(!gameStateStudent) return;
-	if(gameStateStudent.currentQuestion > gameStateStudent.totalQuestions) {
-		//waiting for other players...
-	}
-	else {
-		updateStudentLocation(gameStateStudent.currentQuestion);
-	}
-	$('studentAnswersFlex').style.display = 'flex';
-	$('titleButtonStudent').firstElementChild.innerText = decodeURI(gameStateStudent.currentQuestionData.question);
-	var options = $('studentAnswersFlex').children;
-	for (var i = 0; i < options.length; i++) {
-		if (!gameStateStudent.currentQuestionData.answers[i]) {
-			options[i].style.display = 'none';
-		}
-		else {
-			options[i].disabled = false;
-			options[i].style.display = 'block';
-			options[i].firstElementChild.textContent = decodeURI(gameStateStudent.currentQuestionData.answers[i]);
-		}
-	}
-	if (gameStateStudent.currentQuestionData.answers.join("").length == 0) {
-		$('resettableCharLimited').innerText = '0/180';
-		$('studentAnswersFlex').style.display = 'none';
-		$('studentShortAnswer').style.display = 'block';
-		$('studentShortAnswerText').textContent = null;
-		$('studentShortAnswerText').classList.remove('contentEditableDisabled');
-		$('studentShortAnswerText').contentEditable = true;
-		$('shortAnswerSubmitButton').disabled = false;
-	}
-	else {
-		$('studentShortAnswer').style.display = 'none';
-	}
-	if (gameStateStudent.currentQuestionData.timeLimit == false) {
-		$('timeLeftCounter').style.display = 'none';
-	}
-	else {
-		$('timeLeftCounter').style.display = 'block';
-		$('timeLeftCounter').innerText = `(Time Left: ${gameStateStudent.currentQuestionData.timeLimit}s)`;
-		var start = Date.now();
-		var init = gameStateStudent.currentQuestionData.timeLimit;
-		timerInterval = setInterval(() => {
-			var delta = (Date.now() - start) / 1000;
-			gameStateStudent.currentQuestionData.timeLimit = init - delta;
-			if(gameStateStudent.currentQuestionData.timeLimit < 0 && gameStateStudent.currentQuestionData.timeLimit > -999) {
-				$('timeLeftCounter').innerText = `(Time Penalty: ${Math.abs(Math.floor(gameStateStudent.currentQuestionData.timeLimit))}s)`;
-			}
-			else if(gameStateStudent.currentQuestionData.timeLimit < -999) {
-				$('timeLeftCounter').innerText = `(You're very slow)`;
-			}
-			else {
-				$('timeLeftCounter').innerText = `(Time Left: ${Math.floor(gameStateStudent.currentQuestionData.timeLimit)}s)`;
-			}
-		}, 10); 
-	}
-}
-
-function updateStudentLocation(studentLocation) {
-	var internalPercentage = mathClamp((studentLocation * 114) / window.innerWidth, 0, 1);
-	if(internalPercentage > 0.75) {
-		bottomBarOffset -= 114;
-	}
-	studentLocation = studentLocation - Math.abs((bottomBarOffset - 15) / 114);
-	root.style.setProperty('--questionOffset', studentLocation);
-	root.style.setProperty('--bottomBarOffset', bottomBarOffset + "px");
-}
