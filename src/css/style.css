@@ -1713,6 +1713,7 @@ img {
 .notifyTop {
 	display: none;
 	position: absolute;
+	z-index: 15;
 	left: 50%;
   	transform: translateX(-50%) translateY(15px);
 	background-color: rgb(255, 255, 255);

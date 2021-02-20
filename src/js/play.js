@@ -14,6 +14,7 @@ const root = document.documentElement;
 var bottomBarOffset;
 var resettableTime;
 var resettableTime2;
+var resettableTime3;
 
 function studentGameProcessor(input) {
 	var inputInternal = JSON.parse(input);
@@ -60,6 +61,8 @@ function studentGameProcessor(input) {
 		clearInterval(timerInterval);
         clearTimeout(resettableTime);
         clearTimeout(resettableTime2);
+		clearTimeout(resettableTime3);
+		$('gameFinishNotify').style.animation = 'flowFromTop 1s forwards';
 		$('titleButtonStudent').style.display = 'block';
 		$('studentShortAnswer').classList.remove('transitionQuestionC');
 		$('titleButtonStudent').classList.remove('transitionQuestionC');
@@ -123,7 +126,7 @@ function studentGameProcessor(input) {
 				$('studentShortAnswer').classList.remove('transitionQuestionC');
 			}, 800);
 		}
-		else if(inputInternal.isQuestionCorrect && gameStateStudent.currentQuestion < gameStateStudent.totalQuestions) {
+		else if(inputInternal.isQuestionCorrect) {
 			gameStateStudent.currentQuestion++;
 			updateStudentLocation(gameStateStudent.currentQuestion);
 			$('errorMessageB').style.display = 'block';
@@ -135,7 +138,6 @@ function studentGameProcessor(input) {
 				var delta = (Date.now() - start) / 1000;
 				var internal = init - delta;
 				if(internal < 0) {internal = 0};
-                console.log("Still Alive!");
 				$('mistakeQuestion').innerText = `You can try again in ${Math.floor(internal)} seconds`;
 			}, 100);
 			Array.from($('studentAnswersFlex').children).forEach((object) => {
@@ -187,15 +189,19 @@ function studentGameProcessor(input) {
         var start = Date.now();
 		var init = gameStateStudent.timeLeft;
 		finishUpInterval = setInterval(() => {
-            console.log("Still Alive!");
 			var delta = (Date.now() - start) / 1000;
 			var internal = init - delta;
             if(internal < 0) {internal = 0};
             gameStateStudent.timeLeft = internal;
 			$('gameFinishNotify').innerText = `The game will end in ${Math.floor(gameStateStudent.timeLeft)}s`;
 		}, 100);
-        setTimeout(() => {
+        resettableTime3 = setTimeout(() => {
             clearInterval(finishUpInterval);
+			$('gameFinishNotify').style.animation = 'fadeOut 0.3s';
+			setTimeout(() => {
+				$('gameFinishNotify').style.display = 'none';
+				$('gameFinishNotify').style.animation = 'flowFromTop 1s forwards';
+			}, 300);
         }, gameStateStudent.timeLeft * 1000);
 	}
 }
