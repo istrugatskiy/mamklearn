@@ -6,6 +6,7 @@ export const quizStartTestCase = ' {"gameStart": true, "totalQuestions": 5, "cur
 window.anotherTestCase = '{ "isQuestionCorrect": false, "nextQuestion": null, "choices": [ null ], "currentQuestionTime": 20 }';
 window.anotherTestCase2 = '{ "isQuestionCorrect": true, "nextQuestion": "heckDifferentQuestionTooLazyTooPutPercent", "choices": [ "Nabeel", "Nabeel2", "Nabeel3", "Nabeel4" ], "currentQuestionTime": 69 }';
 window.anotherTestCase3 = '{ "gameFinish": true, "timeTillEnd": 180}';
+window.anotherTestCase4 = '{ "gameEnd": true, "result-1st": "Ilya%20Strugatskiy", "1CharacterConfig": "0,0,1,2,9", "result-2nd": "Ilya%20Strugatskiy", "2CharacterConfig": "0,0,1,2,9", "result-3rd": "Ilya%20Strugatskiy", "3CharacterConfig": "0,0,1,2,9"}';
 var otherInterval;
 var timerInterval;
 var finishUpInterval;
@@ -203,6 +204,12 @@ function studentGameProcessor(input) {
 				$('gameFinishNotify').style.animation = 'flowFromTop 1s forwards';
 			}, 300);
         }, gameStateStudent.timeLeft * 1000);
+	}
+	else if(inputInternal.hasOwnProperty('gameEnd')) {
+		$('gameResults').style.display = 'block';
+		setTimeout(() => {
+			$('errorMessageB').style.display = 'none';
+		}, 500);
 	}
 }
 
