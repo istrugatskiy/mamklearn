@@ -1577,7 +1577,7 @@ img {
 		opacity: 1;
 	}
 	50% {
-		color: white;
+		color: rgba(255, 255, 255, 0);
 		transform: translateX(-50%) scale(0.7);
 		opacity: 0;
 	}
@@ -1593,12 +1593,11 @@ img {
 }
 @keyframes fadeOutInner2 {
 	0% {
-		color: white;
+		color: rgba(255, 255, 255, 0);
 		transform: translateX(-50%) scale(0.7);
 		opacity: 0;
 	}
 	40% {
-		color: black;
 		opacity: 0;
 		transform: translateX(50%);
 	}
@@ -1609,7 +1608,6 @@ img {
 }
 @keyframes fadeOutInner3 {
 	0% {
-		color: black;
 		transform: scale(1);
 	}
 	50% {
@@ -1617,7 +1615,7 @@ img {
 		opacity: 1;
 	}
 	100% {
-		color: white;
+		color: rgba(255, 255, 255, 0);
 		transform: translateX(-50%) scale(0.7);
 		opacity: 0;
 	}

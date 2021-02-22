@@ -42,7 +42,11 @@ function studentGameProcessor(input) {
 				studentRaceBoxNumbers += `<th>${i}</th>`
 			}
 			$('studentRaceNumbers').innerHTML = studentRaceBoxNumbers + `<th>finish</th>`;
-			$('gameStartScreenStudent').style.display = "none";
+			$('gameStartScreenStudent').style.animation = 'fadeOut 0.5s forwards';
+			setTimeout(() => {
+				$('gameStartScreenStudent').style.display = 'none';
+				$('gameStartScreenStudent').style.animation = '';
+			}, 500);
 			var $loader = document.querySelector(".loader");
 			$loader.classList.remove('loader--active');
 			$('title').style.display = "none";
