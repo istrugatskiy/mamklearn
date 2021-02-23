@@ -214,15 +214,6 @@ li {
 	color: white;
 	box-shadow: none;
 }
-.buttonPressed {
-	background-color: rgba(4, 57, 217, 0);
-	border-radius: 12px;
-	color: white;
-	box-shadow: none;
-}
-.backdrop-filter {
-	z-index: 1;
-}
 .aboutContainer {
 	position: absolute;
 	padding: 1rem;
@@ -503,7 +494,7 @@ ul {
 	.button:hover, .button:active, .button:focus, .button:disabled {
 		background-color: rgb(28, 37, 102) !important;
 	}
-	#charCustomize:focus {
+	#charCustomize:focus, #charCustomize:focus-within{
 		background-color: white !important;
 	}
 }

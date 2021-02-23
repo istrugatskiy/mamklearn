@@ -69,7 +69,7 @@ window.clickEvents = {
 	"backButtonShareQuiz": () => {exitModalPopupTemplate('shareQuizMenu', 'shareQuizMenu')},
 	"createButtonA": () => {createQuiz()},
 	"backButtonDeleteConfirm": () => {exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm')},
-	"aboutWindowButton": () => {userClick('index.html', true)}
+	"aboutWindowButton": () => {userClick('index.html', 'aboutWindowButton')}
 };
 
 // These are the events that include the text in the elements id.
@@ -117,20 +117,17 @@ window.addEventListener('load', () => {
 
 function login() {
 	$('loginPage').style.display = 'block';
-	$('loginBtn').classList.add('buttonPressed');
+	$('loginBtn').disabled = true;
 }
 
-function userClick(e, g = false, nabeelIsGreat = false) {
+function userClick(link, disableObject) {
 	var $loader = document.querySelector(".loader");
 	$loader.classList.add('loader--active');
-	if (g) {
-		$('aboutWindowButton').classList.add('buttonPressed');
-	}
-	if (nabeelIsGreat) {
-		$('btn2').classList.add('buttonPressed');
+	if (disableObject) {
+		$(disableObject).disabled = true;
 	}
 	setTimeout(function () {
-		window.location.href = e;
+		window.location.href = link;
 	}, 1000);
 };
 
