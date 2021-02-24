@@ -113,6 +113,7 @@ body {
 	bottom: 0px;
 	overflow-x: hidden;
 	outline: none;
+	overflow-y: overlay;
 }
 :focus {
 	outline: -webkit-focus-ring-color auto 0;
@@ -155,6 +156,19 @@ a:focus::before {
 }
 a:hover {
 	color: white;
+}
+::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+  
+::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, 0.596);
+	border-radius: 10px;
+}
+  
+::-webkit-scrollbar-track {
+	background: rgba(0, 0, 0, 0);
 }
 li {
 	list-style-type: none;
@@ -213,6 +227,15 @@ li {
 	border-radius: 12px;
 	color: white;
 	box-shadow: none;
+}
+.buttonPressed {
+	background-color: rgba(4, 57, 217, 0);
+	border-radius: 12px;
+	color: white;
+	box-shadow: none;
+}
+.backdrop-filter {
+	z-index: 1;
 }
 .aboutContainer {
 	position: absolute;
@@ -494,7 +517,7 @@ ul {
 	.button:hover, .button:active, .button:focus, .button:disabled {
 		background-color: rgb(28, 37, 102) !important;
 	}
-	#charCustomize:focus, #charCustomize:focus-within{
+	#charCustomize:focus {
 		background-color: white !important;
 	}
 }
