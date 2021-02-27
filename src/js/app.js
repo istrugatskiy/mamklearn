@@ -8,6 +8,7 @@ var customOptionsIncrement = 0;
 window.customOptionsIncrement = customOptionsIncrement;
 var currentUserConfig = [0, 0, 0, 0, 0];
 window.currentUserConfig = currentUserConfig;
+var errorCount = 0;
 
 console.log("%cUse link to get quiz answers:https://bit.ly/31Apj2U", "font-size: 32px;");
 const customOptions = ["Eyes", "Nose", "Mouth", "Shirt", "Arms"];
@@ -164,6 +165,7 @@ function makeCode() {
 	createTemplate('svgLoader', makeButton.id);
 	// replace this with request to server and await callback or if 5 seconds passes undo
 	import('./make').then( make => {
+		errorCount = 0;
 		Object.entries(make).forEach(([name, exported]) => window[name] = exported);
 		title.classList.add('titleTransition');
 		makeButton.classList.add('btnTransitionA');
@@ -178,7 +180,15 @@ function makeCode() {
 			addQuiz();
 		}, 300);
 	}).catch ( error => {
-		throwExcept('BIG_CHONK4512');
+		errorCount++;
+		if(errorCount < 15) {
+			setTimeout( () => {
+			makeCode();
+		}, 2000);
+		}
+		else {
+			throwExcept('BIG_CHONK4512');
+		}
 	});
 }
 
@@ -238,6 +248,7 @@ function JoinGame() {
 	createTemplate('svgLoader', 'submitID');
 	if ($("gameID").value == "2794") {
 		import('./play').then( play => {
+			errorCount = 0;
 			Object.entries(play).forEach(([name, exported]) => window[name] = exported);
 			setTimeout(function () {
 				$('loader-1').style.display = "none";
@@ -251,7 +262,15 @@ function JoinGame() {
 				studentGameProcessor(quizStartTestCase);
 			}, 5000);
 		}).catch ( error => {
-			throwExcept('BIG_CHONK4569');
+			errorCount++;
+			if(errorCount < 15) {
+				setTimeout( () => {
+					JoinGame();
+				}, 2000);
+			}
+			else {
+				throwExcept('BIG_CHONK4569');
+			}
 		});
 	} else {
 		setTimeout(function () {

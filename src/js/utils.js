@@ -146,5 +146,3 @@ export const signOut = () => {
 		window.location.reload();
 	});
 }
-
-// Helper functions end here!

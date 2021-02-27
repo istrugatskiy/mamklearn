@@ -1768,3 +1768,7 @@ img {
 		transform: translateY(40%);
 	}
 }
+#nameTextResults1 {
+	position: absolute;
+	transform: translate(50%, 40%);
+}
