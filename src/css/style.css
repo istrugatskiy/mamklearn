@@ -204,8 +204,8 @@ li {
 	font-family: 'Roboto Mono', monospace;
 	font-size: 64px;
 	transition: background-color 0.3s, border-radius 0.3s, color 0.3s, box-shadow 0.3s, transform 0.3s, width 0.3s, height 0.3s;
-	backdrop-filter: saturate(240%);
 	-webkit-backdrop-filter: saturate(240%);
+	backdrop-filter: saturate(240%);
 	box-shadow: 0px 0px 12px #000000;
 }
 .button > * {
@@ -223,12 +223,6 @@ li {
 	box-shadow: none;
 }
 .button:focus {
-	background-color: rgba(4, 57, 217, 0);
-	border-radius: 12px;
-	color: white;
-	box-shadow: none;
-}
-.buttonPressed {
 	background-color: rgba(4, 57, 217, 0);
 	border-radius: 12px;
 	color: white;
@@ -1765,7 +1759,7 @@ img {
 		transform: translateY(100%);
 	}
 	100% {
-		transform: translateY(40%);
+		transform: translateY(5%);
 	}
 }
 #nameTextResults1 {

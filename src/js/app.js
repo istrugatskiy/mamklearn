@@ -53,7 +53,7 @@ window.clickEvents = {
 	"doneButtonA": () => {doneButtonA()},
 	"shareQuiz": () => {shareQuiz()},
 	"backButtonEditQuiz": () => {exitModalPopupF(true)},
-	"loginBtn": login,
+	"loginBtn": () => {login()},
 	"customButtonChange": updateImageState,
 	"customButtonChange2": updateImageState,
 	"leftCustomizeArrow": () => {arrowButtonPress(true)},
@@ -116,7 +116,7 @@ window.addEventListener('load', () => {
 	});
 });
 
-function login() {
+const login = () => {
 	$('loginPage').style.display = 'block';
 	$('loginBtn').disabled = true;
 }
@@ -149,7 +149,7 @@ function onSignIn(googleUser) {
 	} else {
 		auth2.signOut();
 		$error.style.display = 'block';
-		$error.innerHTML = 'Please use an account that ends in \'mamkschools.org\' or \'student.mamkschools.org\'';
+		$error.innerText = 'Please use an account that ends in \'mamkschools.org\' or \'student.mamkschools.org\'';
 	}
 };
 
@@ -161,7 +161,7 @@ function makeCode() {
 	var title = document.querySelector('#homeText');
 	makeButton.disabled = true;
 	playButton.disabled = true;
-	makeButton.innerHTML = '';
+	$('makebtn').clearChildren();
 	createTemplate('svgLoader', makeButton.id);
 	// replace this with request to server and await callback or if 5 seconds passes undo
 	import('./make').then( make => {
@@ -244,7 +244,7 @@ function JoinGame() {
 	for (var i = 0, il = selects.length; i < il; i++) {
 		selects[i].className += " disabled";
 	}
-	$('submitID').innerHTML = '';
+	$('submitID').clearChildren();	
 	createTemplate('svgLoader', 'submitID');
 	if ($("gameID").value == "2794") {
 		import('./play').then( play => {
@@ -274,7 +274,7 @@ function JoinGame() {
 		});
 	} else {
 		setTimeout(function () {
-			$("errorActual").innerText = 'Invalid ID';
+			$("errorActual").textContent = 'Invalid ID';
 			$("gameID").disabled = false;
 			$("submitID").disabled = false;
 			$("errorMessageA").style.display = "block";
@@ -285,7 +285,7 @@ function JoinGame() {
 			for (var i = 0, il = selects.length; i < il; i++) {
 				selects[i].classList.remove("disabled");
 			}
-			$('submitID').innerHTML = 'Join';
+			$('submitID').innerText = 'Join';
 		}, 1000);
 	}
 }
@@ -316,7 +316,7 @@ function arrowButtonPress(isLeft) {
 			customOptionsIncrement = 0;
 		}
 	}
-	$("customButtonChange").innerHTML = customOptions[customOptionsIncrement];
+	$("customButtonChange").innerText = customOptions[customOptionsIncrement];
 	if(isLeft) {
 		$("leftCustomizeArrow").focus();
 	}

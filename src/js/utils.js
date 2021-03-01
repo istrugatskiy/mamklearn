@@ -1,7 +1,13 @@
 // These are some helper functions used throughout the app!
+
 export const $ = (a) => {
-	return document.getElementById(a);
+	let b = document.getElementById(a);
+	b.__proto__.clearChildren = function() {
+		while(this.firstChild) this.removeChild(this.lastChild);
+	}
+	return b;
 }
+
 
 export const mathClamp = (num, min, max) => {
 	return num <= min ? min : num >= max ? max : num;
@@ -32,7 +38,7 @@ export const getCaretCharacterOffsetWithin = (element) => {
 }
 
 export const characterCount = (thisVar, total) => {
-	thisVar.nextElementSibling.innerHTML = `${thisVar.textContent.length}/${total}`;
+	thisVar.nextElementSibling.textContent = `${thisVar.textContent.length}/${total}`;
 }
 
 export const deepEqual = (object1, object2) => {
@@ -76,7 +82,7 @@ export const createTemplate = (templateID, place, modif = false, replace = false
 }
 
 export const setTitle = (templateID) => {
-	$('title').innerHTML = '';
+	$('title').clearChildren();
 	createTemplate(templateID, 'title');
 }
 
@@ -99,7 +105,7 @@ export const decodeHTML = (str) => {
 export const throwExcept = (msg) => {
 	$('commError2').style.display = 'block';
 	$('CommError').style.display = 'block';
-	$('comError3').innerHTML = msg;
+	$('comError3').textContent = msg;
     document.body.display = 'none';
 }
 

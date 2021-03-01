@@ -39,7 +39,7 @@ export function createQuiz() {
 		$('createButtonA').classList.add('btnTransitionA');
 		$('backButtonC').disabled = true;
 		$('backButtonC').classList.add('btnTransitionA');
-		$('submitQuizID').innerHTML = 'Create';
+		$('submitQuizID').textContent = 'Create';
 		$('modal-bg').style.animation = 'fadeIn 0.5s';
 		$('modal-bg').style.display = 'block';
 		$('homeText2').classList.add('btnTransitionA');
@@ -68,7 +68,7 @@ export function goBackMakeA() {
 	$('createButtonA').classList.add('btnTransitionA');
 	$('backButtonC').classList.add('btnTransitionA');
 	setTimeout(() => {
-		$('title').innerHTML = '';
+		$('title').clearChildren();
 		setTitle('homeScreen');
 		$('title').style.height = "800px";
 		$('title').style.top = "15%";
@@ -80,9 +80,9 @@ export function createNewQuiz() {
 	checkOnce = false;
 	var button = $('submitQuizID');
 	$('QuizName').disabled = true;
-	var g = $('QuizName').value;
+	const g = $('QuizName').value;
 	button.disabled = true;
-	button.innerHTML = '';
+	button.textContent = '';
 	createTemplate('svgLoader', button.id);
 	setTimeout(() => {
 		checkOnce = true;
@@ -160,17 +160,17 @@ export function deleteQuestion(a) {
 export function reorderProper() {
 	var test = 0;
 	for (var i = 0; i <= $('draggableDiv').children.length - 1; i++) {
-		$('draggableDiv').children[i].firstElementChild.children[1].innerHTML = `Question ${i + 1}:`;
+		$('draggableDiv').children[i].firstElementChild.children[1].textContent = `Question ${i + 1}:`;
 		test = i;
 	}
 	if(test >= 24) {
 		$('addQuestionButton').disabled = true;
-		$('addQuestionButton').innerText = '25/25 questions';
+		$('addQuestionButton').textContent = '25/25 questions';
 		$('addQuestionButton').style.cursor = "no-drop";
 	}
 	else {
 		$('addQuestionButton').disabled = false;
-		$('addQuestionButton').innerText = 'add question...';
+		$('addQuestionButton').textContent = 'add question...';
 		$('addQuestionButton').style.cursor = "pointer";
 	}
 }
@@ -225,7 +225,7 @@ export function parseActiveQuiz() {
 //verify that at least two answer fields are filled out; done
 export const verifyQuiz = () => {
 	var quizParseError = [];
-	var finalResult = '';
+	var finalResult = document.createDocumentFragment();
 	if (tempQuiz.questionObjects.length === 0) {
 		quizParseError.push('No questions exist');
 	}
@@ -274,10 +274,12 @@ export const verifyQuiz = () => {
 	if (quizParseError.join("").length !== 0) {
 		quizParseError.forEach((error) => {
 			if(error != null) {
-				finalResult += `<li class="innerError">${encodeHTML(error)}</li>`;
+				finalResult.appendChild(document.createElement('li'));
+				finalResult.lastElementChild.textContent = error;
 			}
 		});
-		$('innerError3').innerHTML = finalResult;
+		$('innerError3').clearChildren();
+		$('innerError3').appendChild(finalResult);
 		return false;
 	}
 	else {
@@ -309,8 +311,9 @@ export function exitModalPopupF(promptUser) {
 			$("quizNameUpdate").disabled = false;
 			$("addQuestionButton").disabled = false;
 			$("modal-popupA").style.pointerEvents = "all";
-			$("saveQuizButton").innerHTML = "Save";
-			$("draggableDiv").innerHTML = "";
+			$('saveQuizButton').clearChildren();
+			$("saveQuizButton").textContent = 'Save';
+			$('draggableDiv').clearChildren();
 			drake.destroy();
 			highestQuestion = 0;
 			checkOnce = true;
@@ -352,10 +355,10 @@ export function addQuiz() {
 					$('createButtonA').classList.add('btnTransitionA');
 					$('backButtonC').disabled = true;
 					$('backButtonC').classList.add('btnTransitionA');
-					$('submitQuizID').innerHTML = 'Create';
+					$('submitQuizID').textContent = 'Create';
 					$('modal-bg').style.animation = 'fadeIn 0.5s';
 					$('modal-bg').style.display = 'block';
-					$('quizNameTitleA').innerHTML = quizList2[event.currentTarget.id] + ":";
+					$('quizNameTitleA').textContent = quizList2[event.currentTarget.id] + ":";
 					$('homeText2').classList.add('btnTransitionA');
 					$('manageQuizMenu').style.animation = 'modalPopin 0.3s';
 					$('manageQuizMenu').style.display = 'block';
@@ -440,7 +443,8 @@ export function deleteQuiz() {
 	$('manageQuizMenu').style.animation = 'modalPopout 0.3s';
 	$('deleteQuizConfirm').disabled = false;
 	$('backButtonDeleteConfirm').disabled = false;
-	$('deleteQuizConfirm').innerHTML = 'Delete';
+	$('deleteQuizConfirm').clearChildren();
+	$('deleteQuizConfirm').textContent = 'Delete';
 	$('deleteQuizConfirm').style.backgroundColor = 'orange';
 	setTimeout(function () {
 		$('manageQuizMenu').style.display = 'none';
@@ -455,7 +459,7 @@ export function deleteQuizConfirm() {
 	$('deleteQuizConfirm').disabled = true;
 	$('backButtonDeleteConfirm').disabled = true;
 	$('deleteQuizConfirm').style.backgroundColor = null;
-	$('deleteQuizConfirm').innerHTML = '';
+	$('deleteQuizCOnfirm').clearChildren();
 	createTemplate('svgLoader', 'deleteQuizConfirm');
 	setTimeout(function () {
 		exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm');
@@ -540,13 +544,13 @@ export function editQuizForm() {
 	else {
 		quizObject2[currentQuizEdit] = tempQuiz;
 		quizList2[currentQuizEdit] = encodeHTML($("quizNameUpdate").value);
-		$('saveQuizButton').innerHTML = '';
+		$('saveQuizConfirm').clearChildren();
 		createTemplate('svgLoader', 'saveQuizButton');
 		setTimeout(function () {
 			exitModalPopupF(false);
 		}, 1000);
 		setTimeout(function () {
-			$("errorActual").innerText = 'Quiz Saved';
+			$("errorActual").textContent = 'Quiz Saved';
 			$("errorMessageA").style.display = "block";
 			setTimeout(function () {
 				$("errorMessageA").style.display = "none";
@@ -568,7 +572,7 @@ export function shareQuiz() {
 
 export function copyShareLink() {
 	navigator.clipboard.writeText($('coolTextArea').textContent);
-	$("errorActual").innerText = 'Link Copied';
+	$("errorActual").textContent = 'Link Copied';
 	$("errorMessageA").style.display = "block";
 	setTimeout(function () {
 		$("errorMessageA").style.display = "none";

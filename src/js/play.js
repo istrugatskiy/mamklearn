@@ -80,7 +80,7 @@ function studentGameProcessor(input) {
         });
 		$('errorMessageB').style.display = 'none';
 		$('userNotifyPlay').style.display = 'none';
-		$("errorActual").innerText = 'Kicked From Game';
+		$("errorActual").textContent = 'Kicked From Game';
 		$("errorMessageA").style.display = 'block';
 		$('gameStartScreenStudent').style.display = 'none';
 		$('studentPlayScreen').style.display = 'none';
@@ -107,7 +107,7 @@ function studentGameProcessor(input) {
 			Array.from($('studentAnswersFlex').children).forEach((object) => {
 				object.classList.add('transitionQuestionB');
 				setTimeout(() => {
-					object.firstElementChild.innerHTML = null;
+					while(object.firstElementChild.firstChild) object.firstElementChild.removeChild(object.firstElementChild.lastChild);
 					object.disabled = false;
 					object.classList.remove('transitionQuestionB');
 					object.classList.add('transitionQuestionC');
@@ -143,13 +143,13 @@ function studentGameProcessor(input) {
 				var delta = (Date.now() - start) / 1000;
 				var internal = init - delta;
 				if(internal < 0) {internal = 0};
-				$('mistakeQuestion').innerText = `You can try again in ${Math.floor(internal)} seconds`;
+				$('mistakeQuestion').textContent = `You can try again in ${Math.floor(internal)} seconds`;
 			}, 100);
 			Array.from($('studentAnswersFlex').children).forEach((object) => {
 				object.classList.add('transitionQuestionB');
 				setTimeout(() => {
 					object.style.display = 'none';
-					object.firstElementChild.innerHTML = null;
+					while(object.firstElementChild.firstChild) object.firstElementChild.removeChild(object.firstElementChild.lastChild);
 					object.disabled = false;
 					object.classList.remove('transitionQuestionB');
 					resettableTime = setTimeout(() => {
@@ -190,7 +190,7 @@ function studentGameProcessor(input) {
 	else if(inputInternal.hasOwnProperty('gameFinish')) {
 		$('gameFinishNotify').style.display = 'block';
 		gameStateStudent.timeLeft = inputInternal.timeTillEnd;
-		$('gameFinishNotify').innerText = `The game will end in ${gameStateStudent.timeLeft}s`;
+		$('gameFinishNotify').textContent = `The game will end in ${gameStateStudent.timeLeft}s`;
         var start = Date.now();
 		var init = gameStateStudent.timeLeft;
 		finishUpInterval = setInterval(() => {
@@ -198,7 +198,7 @@ function studentGameProcessor(input) {
 			var internal = init - delta;
             if(internal < 0) {internal = 0};
             gameStateStudent.timeLeft = internal;
-			$('gameFinishNotify').innerText = `The game will end in ${Math.floor(gameStateStudent.timeLeft)}s`;
+			$('gameFinishNotify').textContent = `The game will end in ${Math.floor(gameStateStudent.timeLeft)}s`;
 		}, 100);
         resettableTime3 = setTimeout(() => {
             clearInterval(finishUpInterval);
@@ -226,7 +226,7 @@ function setQuestion() {
 		updateStudentLocation(gameStateStudent.currentQuestion);
 	}
 	$('studentAnswersFlex').style.display = 'flex';
-	$('titleButtonStudent').firstElementChild.innerText = decodeURI(gameStateStudent.currentQuestionData.question);
+	$('titleButtonStudent').firstElementChild.textContent = decodeURI(gameStateStudent.currentQuestionData.question);
 	var options = $('studentAnswersFlex').children;
 	for (var i = 0; i < options.length; i++) {
 		if (!gameStateStudent.currentQuestionData.answers[i]) {
@@ -239,7 +239,7 @@ function setQuestion() {
 		}
 	}
 	if (gameStateStudent.currentQuestionData.answers.join("").length == 0) {
-		$('resettableCharLimited').innerText = '0/180';
+		$('resettableCharLimited').textContent = '0/180';
 		$('studentAnswersFlex').style.display = 'none';
 		$('studentShortAnswer').style.display = 'block';
 		$('studentShortAnswerText').textContent = null;
@@ -255,20 +255,20 @@ function setQuestion() {
 	}
 	else {
 		$('timeLeftCounter').style.display = 'block';
-		$('timeLeftCounter').innerText = `(Time Left: ${gameStateStudent.currentQuestionData.timeLimit}s)`;
+		$('timeLeftCounter').textContent = `(Time Left: ${gameStateStudent.currentQuestionData.timeLimit}s)`;
 		var start = Date.now();
 		var init = gameStateStudent.currentQuestionData.timeLimit;
 		timerInterval = setInterval(() => {
 			var delta = (Date.now() - start) / 1000;
 			gameStateStudent.currentQuestionData.timeLimit = init - delta;
 			if(gameStateStudent.currentQuestionData.timeLimit < 0 && gameStateStudent.currentQuestionData.timeLimit > -999) {
-				$('timeLeftCounter').innerText = `(Time Penalty: ${Math.abs(Math.floor(gameStateStudent.currentQuestionData.timeLimit))}s)`;
+				$('timeLeftCounter').textContent = `(Time Penalty: ${Math.abs(Math.floor(gameStateStudent.currentQuestionData.timeLimit))}s)`;
 			}
 			else if(gameStateStudent.currentQuestionData.timeLimit < -999) {
-				$('timeLeftCounter').innerText = `(You're very slow)`;
+				$('timeLeftCounter').textContent = `(You're very slow)`;
 			}
 			else {
-				$('timeLeftCounter').innerText = `(Time Left: ${Math.floor(gameStateStudent.currentQuestionData.timeLimit)}s)`;
+				$('timeLeftCounter').textContent = `(Time Left: ${Math.floor(gameStateStudent.currentQuestionData.timeLimit)}s)`;
 			}
 		}, 10); 
 	}
@@ -295,7 +295,7 @@ export function submitMultipleChoice(event) {
 	Array.from($('studentAnswersFlex').children).forEach( (object, index) => {
 		object.disabled = true;
 		if(index + 1 == response) {
-			object.firstElementChild.innerHTML = '';
+			while(object.firstElementChild.firstChild) object.firstElementChild.removeChild(object.firstElementChild.lastChild);
 			object.firstElementChild.appendChild($('svgLoader').content.cloneNode(true));
 		}
 	});
