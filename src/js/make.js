@@ -1,6 +1,6 @@
 // Contains code related to making quizzes
 import dragula from 'dragula';
-import {$, characterCount, deepEqual, createTemplate, setTitle, uuidv4, encodeHTML, decodeHTML} from './utils';
+import {$, characterCount, deepEqual, createTemplate, setTitle, uuidv4, encodeHTML, decodeHTML, clearChildren} from './utils';
 import {setCharImage, contentEditableUpdate} from './app';
 
 var editState = false;
@@ -68,7 +68,7 @@ export function goBackMakeA() {
 	$('createButtonA').classList.add('btnTransitionA');
 	$('backButtonC').classList.add('btnTransitionA');
 	setTimeout(() => {
-		$('title').clearChildren();
+		clearChildren('title');
 		setTitle('homeScreen');
 		$('title').style.height = "800px";
 		$('title').style.top = "15%";
@@ -278,7 +278,7 @@ export const verifyQuiz = () => {
 				finalResult.lastElementChild.textContent = error;
 			}
 		});
-		$('innerError3').clearChildren();
+		clearChildren('innerError3');
 		$('innerError3').appendChild(finalResult);
 		return false;
 	}
@@ -311,9 +311,9 @@ export function exitModalPopupF(promptUser) {
 			$("quizNameUpdate").disabled = false;
 			$("addQuestionButton").disabled = false;
 			$("modal-popupA").style.pointerEvents = "all";
-			$('saveQuizButton').clearChildren();
+			clearChildren('saveQuizButton');
 			$("saveQuizButton").textContent = 'Save';
-			$('draggableDiv').clearChildren();
+			clearChildren('draggableDiv');
 			drake.destroy();
 			highestQuestion = 0;
 			checkOnce = true;
@@ -443,7 +443,7 @@ export function deleteQuiz() {
 	$('manageQuizMenu').style.animation = 'modalPopout 0.3s';
 	$('deleteQuizConfirm').disabled = false;
 	$('backButtonDeleteConfirm').disabled = false;
-	$('deleteQuizConfirm').clearChildren();
+	clearChildren('deleteQuizConfirm');
 	$('deleteQuizConfirm').textContent = 'Delete';
 	$('deleteQuizConfirm').style.backgroundColor = 'orange';
 	setTimeout(function () {
@@ -459,7 +459,7 @@ export function deleteQuizConfirm() {
 	$('deleteQuizConfirm').disabled = true;
 	$('backButtonDeleteConfirm').disabled = true;
 	$('deleteQuizConfirm').style.backgroundColor = null;
-	$('deleteQuizCOnfirm').clearChildren();
+	clearChildren('deleteQuizCOnfirm');
 	createTemplate('svgLoader', 'deleteQuizConfirm');
 	setTimeout(function () {
 		exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm');
@@ -544,7 +544,7 @@ export function editQuizForm() {
 	else {
 		quizObject2[currentQuizEdit] = tempQuiz;
 		quizList2[currentQuizEdit] = encodeHTML($("quizNameUpdate").value);
-		$('saveQuizConfirm').clearChildren();
+		clearChildren('saveQuizConfirm');
 		createTemplate('svgLoader', 'saveQuizButton');
 		setTimeout(function () {
 			exitModalPopupF(false);

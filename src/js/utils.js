@@ -1,13 +1,12 @@
 // These are some helper functions used throughout the app!
 
 export const $ = (a) => {
-	let b = document.getElementById(a);
-	b.__proto__.clearChildren = function() {
-		while(this.firstChild) this.removeChild(this.lastChild);
-	}
-	return b;
+	return document.getElementById(a);
 }
 
+export const clearChildren = (element) => {
+	while($(element).firstChild) $(element).removeChild($(element).lastChild);
+}
 
 export const mathClamp = (num, min, max) => {
 	return num <= min ? min : num >= max ? max : num;
@@ -82,7 +81,7 @@ export const createTemplate = (templateID, place, modif = false, replace = false
 }
 
 export const setTitle = (templateID) => {
-	$('title').clearChildren();
+	clearChildren('title');
 	createTemplate(templateID, 'title');
 }
 

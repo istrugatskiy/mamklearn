@@ -1,6 +1,6 @@
 // Defines imports and globals
 import '../css/style.css';
-import {$, getCaretCharacterOffsetWithin, characterCount, createTemplate, setTitle, throwExcept, setCaretPosition, signOut} from './utils';
+import {$, getCaretCharacterOffsetWithin, characterCount, createTemplate, setTitle, throwExcept, setCaretPosition, signOut, clearChildren} from './utils';
 import {eventHandle} from './events';
 import {initParticles} from './loadParticles';
 window.onSignIn = onSignIn;
@@ -161,7 +161,7 @@ function makeCode() {
 	var title = document.querySelector('#homeText');
 	makeButton.disabled = true;
 	playButton.disabled = true;
-	$('makebtn').clearChildren();
+	clearChildren('makebtn');
 	createTemplate('svgLoader', makeButton.id);
 	// replace this with request to server and await callback or if 5 seconds passes undo
 	import('./make').then( make => {
@@ -244,7 +244,7 @@ function JoinGame() {
 	for (var i = 0, il = selects.length; i < il; i++) {
 		selects[i].className += " disabled";
 	}
-	$('submitID').clearChildren();	
+	clearChildren('submitID');	
 	createTemplate('svgLoader', 'submitID');
 	if ($("gameID").value == "2794") {
 		import('./play').then( play => {
