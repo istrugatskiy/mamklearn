@@ -228,9 +228,6 @@ li {
 	color: white;
 	box-shadow: none;
 }
-.backdrop-filter {
-	z-index: 1;
-}
 .aboutContainer {
 	position: absolute;
 	padding: 1rem;
@@ -1765,4 +1762,24 @@ img {
 #nameTextResults1 {
 	position: absolute;
 	transform: translate(50%, 40%);
+}
+#inGame3rd {
+	animation: spawn3rdPlace 5s infinite;
+	animation-timing-function: cubic-bezier(0.280, 0.840, 0.420, 1);
+	position: absolute;
+	left: 50%;
+}
+@keyframes spawn3rdPlace {
+	0% {
+		transform: translate(-120%, -80%);
+	}
+	10% {
+		transform: translate(-120%, 65%) rotate(0);
+	}
+	20% {
+		transform: translate(0%, 120%) rotate(180deg);
+	}
+	30% {
+		transform: translate(100%, 180%) rotate(0deg);
+	}
 }

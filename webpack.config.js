@@ -27,8 +27,8 @@ module.exports = {
             },
         ]
     },
-    devtool: 'source-map',
-    mode: 'production',
+    devtool: false,
+    mode: 'development',
     watch: true,
     plugins: [
         new HtmlWebpackPlugin({
@@ -49,7 +49,7 @@ module.exports = {
         new CleanWebpackPlugin()
     ],
     optimization: {
-        minimize: true,
+        minimize: false,
         minimizer: [
             `...`,
             new CssMinimizerPlugin(),

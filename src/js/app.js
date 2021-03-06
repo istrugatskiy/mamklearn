@@ -260,7 +260,7 @@ function JoinGame() {
 			}, 750);
 			setTimeout(() => {
 				studentGameProcessor(quizStartTestCase);
-			}, 5000);
+			}, 2000);
 		}).catch ( error => {
 			errorCount++;
 			if(errorCount < 15) {
@@ -346,7 +346,7 @@ window.addEventListener("error", (e) => {
 		throwExcept('GAPI_ERROR');
 	}
 	else if (e.message.includes('Script error') || e.message.includes('TypeError')) {
-		throwExcept('Ilya\'s_BAD_CODE');
+		throwExcept('MISTAKE');
 	}
 	else {
 		console.log(e.message);

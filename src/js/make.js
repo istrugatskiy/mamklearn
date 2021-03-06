@@ -544,7 +544,7 @@ export function editQuizForm() {
 	else {
 		quizObject2[currentQuizEdit] = tempQuiz;
 		quizList2[currentQuizEdit] = encodeHTML($("quizNameUpdate").value);
-		clearChildren('saveQuizConfirm');
+		clearChildren('saveQuizButton');
 		createTemplate('svgLoader', 'saveQuizButton');
 		setTimeout(function () {
 			exitModalPopupF(false);

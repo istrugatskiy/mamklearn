@@ -219,9 +219,6 @@ function studentGameProcessor(input) {
 
 function setQuestion() {
 	if(!gameStateStudent) return;
-	if(gameStateStudent.currentQuestion > gameStateStudent.totalQuestions) {
-		//waiting for other players...
-	}
 	else {
 		updateStudentLocation(gameStateStudent.currentQuestion);
 	}
