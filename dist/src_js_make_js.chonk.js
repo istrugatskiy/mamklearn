@@ -500,7 +500,7 @@ function deleteQuizConfirm() {
 	(0,_utils__WEBPACK_IMPORTED_MODULE_1__.$)('deleteQuizConfirm').disabled = true;
 	(0,_utils__WEBPACK_IMPORTED_MODULE_1__.$)('backButtonDeleteConfirm').disabled = true;
 	(0,_utils__WEBPACK_IMPORTED_MODULE_1__.$)('deleteQuizConfirm').style.backgroundColor = null;
-	(0,_utils__WEBPACK_IMPORTED_MODULE_1__.clearChildren)('deleteQuizCOnfirm');
+	(0,_utils__WEBPACK_IMPORTED_MODULE_1__.clearChildren)('deleteQuizConfirm');
 	(0,_utils__WEBPACK_IMPORTED_MODULE_1__.createTemplate)('svgLoader', 'deleteQuizConfirm');
 	setTimeout(function () {
 		exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm');

@@ -459,7 +459,7 @@ export function deleteQuizConfirm() {
 	$('deleteQuizConfirm').disabled = true;
 	$('backButtonDeleteConfirm').disabled = true;
 	$('deleteQuizConfirm').style.backgroundColor = null;
-	clearChildren('deleteQuizCOnfirm');
+	clearChildren('deleteQuizConfirm');
 	createTemplate('svgLoader', 'deleteQuizConfirm');
 	setTimeout(function () {
 		exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm');

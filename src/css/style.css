@@ -1740,23 +1740,23 @@ img {
 	z-index: 13;
 }
 .gameResultImage {
-	height: 100%;
-	width: 100%;
-	object-fit: contain;
 	position: absolute;
+	left: 50%;
+	top: 50%;
 }
 #firstPodium {
 	animation: spawnPodium1 0.3s forwards;
 	animation-delay: 0.5s;
 	animation-timing-function: cubic-bezier(0.29, 0.09, 0.07, 1.4);
 	transform: translateY(100%);
+	margin-left: -30px;
 }
 @keyframes spawnPodium1 {
 	0% {
 		transform: translateY(100%);
 	}
 	100% {
-		transform: translateY(5%);
+		transform: translateY(-50%) translateX(-50%);
 	}
 }
 #nameTextResults1 {
@@ -1764,22 +1764,26 @@ img {
 	transform: translate(50%, 40%);
 }
 #inGame3rd {
-	animation: spawn3rdPlace 5s infinite;
-	animation-timing-function: cubic-bezier(0.280, 0.840, 0.420, 1);
+	animation: spawn3rdPlace 0.3s forwards;
+	animation-delay: 1s;
+	animation-timing-function: cubic-bezier(0.29, 0.09, 0.07, 1.4);
 	position: absolute;
+	top: 50%;
 	left: 50%;
+	visibility: hidden;
+}
+#inGame3rd > * {
+	position: absolute;
+	left: 210px;
+	top: -55px;
 }
 @keyframes spawn3rdPlace {
-	0% {
-		transform: translate(-120%, -80%);
+	from {
+		visibility: visible;
+		transform: scale(0) translateY(-50%) translateX(-50%);
 	}
-	10% {
-		transform: translate(-120%, 65%) rotate(0);
-	}
-	20% {
-		transform: translate(0%, 120%) rotate(180deg);
-	}
-	30% {
-		transform: translate(100%, 180%) rotate(0deg);
+	to {
+		visibility: visible;
+		transform: scale(1) translateY(-50%) translateX(-50%);
 	}
 }
