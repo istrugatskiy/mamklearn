@@ -1812,3 +1812,13 @@ img {
 		transform: scale(0.5);
 	}
 }
+@media screen and (max-height: 35em) {
+	#imageObjectContainer {
+		transform: scale(0.4);
+	}
+}
+@media screen and (max-height: 25em) {
+	#imageObjectContainer {
+		transform: scale(0.3);
+	}
+}
