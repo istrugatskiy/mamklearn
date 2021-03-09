@@ -1717,7 +1717,7 @@ function userClick(link, disableObject) {
 
 function onSignIn(googleUser) {
 	var profile = googleUser.getBasicProfile();
-	var $error = document.querySelector("#loginError1");
+	var $error = (0,_utils__WEBPACK_IMPORTED_MODULE_1__.$)('loginError1');
 	var id_token = googleUser.getAuthResponse().id_token;
 	var auth2 = gapi.auth2.getAuthInstance();
 	// feel sorry for whoever reads this code - Ilya
@@ -1738,10 +1738,10 @@ function onSignIn(googleUser) {
 
 // make and play on button click functions here!
 function makeCode() {
-	var makeButton = document.querySelector('#makebtn');
-	var playButton = document.querySelector('#btn2');
-	var signOutButton = document.querySelector('#signOutbtn');
-	var title = document.querySelector('#homeText');
+	const makeButton = (0,_utils__WEBPACK_IMPORTED_MODULE_1__.$)('makebtn');
+	const playButton = (0,_utils__WEBPACK_IMPORTED_MODULE_1__.$)('btn2');
+	const signOutButton = (0,_utils__WEBPACK_IMPORTED_MODULE_1__.$)('signOutbtn');
+	const title = (0,_utils__WEBPACK_IMPORTED_MODULE_1__.$)('homeText');
 	makeButton.disabled = true;
 	playButton.disabled = true;
 	(0,_utils__WEBPACK_IMPORTED_MODULE_1__.clearChildren)('makebtn');
@@ -1776,10 +1776,10 @@ function makeCode() {
 }
 
 function playCode() {
-	var makeButton = document.querySelector('#makebtn');
-	var playButton = document.querySelector('#btn2');
-	var signOutButton = document.querySelector('#signOutbtn');
-	var title = document.querySelector('#homeText');
+	var makeButton = (0,_utils__WEBPACK_IMPORTED_MODULE_1__.$)('makebtn');
+	var playButton = (0,_utils__WEBPACK_IMPORTED_MODULE_1__.$)('btn2');
+	var signOutButton = (0,_utils__WEBPACK_IMPORTED_MODULE_1__.$)('signOutbtn');
+	var title = (0,_utils__WEBPACK_IMPORTED_MODULE_1__.$)('homeText');
 	title.classList.add('titleTransition');
 	makeButton.classList.add('btnTransitionA');
 	playButton.classList.add('btnTransitionA');
@@ -1874,10 +1874,10 @@ function JoinGame() {
 }
 
 function goBack() {
-	document.querySelector('#codeText').classList.add('titleTransition');
-	document.querySelector('#gameID').classList.add('btnTransitionA');
-	document.querySelector('#submitID').classList.add('btnTransitionA');
-	document.querySelector('#playMenuBack').classList.add('linkTransitionF');
+	(0,_utils__WEBPACK_IMPORTED_MODULE_1__.$)('codeText').classList.add('titleTransition');
+	(0,_utils__WEBPACK_IMPORTED_MODULE_1__.$)('gameID').classList.add('btnTransitionA');
+	(0,_utils__WEBPACK_IMPORTED_MODULE_1__.$)('submitID').classList.add('btnTransitionA');
+	(0,_utils__WEBPACK_IMPORTED_MODULE_1__.$)('playMenuBack').classList.add('linkTransitionF');
 	setTimeout(function () {
 		(0,_utils__WEBPACK_IMPORTED_MODULE_1__.setTitle)('homeScreen');
 		(0,_utils__WEBPACK_IMPORTED_MODULE_1__.$)('title').style.height = "800px";

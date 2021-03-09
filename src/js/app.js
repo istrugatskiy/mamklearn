@@ -134,7 +134,7 @@ function userClick(link, disableObject) {
 
 function onSignIn(googleUser) {
 	var profile = googleUser.getBasicProfile();
-	var $error = document.querySelector("#loginError1");
+	var $error = $('loginError1');
 	var id_token = googleUser.getAuthResponse().id_token;
 	var auth2 = gapi.auth2.getAuthInstance();
 	// feel sorry for whoever reads this code - Ilya
@@ -155,10 +155,10 @@ function onSignIn(googleUser) {
 
 // make and play on button click functions here!
 function makeCode() {
-	var makeButton = document.querySelector('#makebtn');
-	var playButton = document.querySelector('#btn2');
-	var signOutButton = document.querySelector('#signOutbtn');
-	var title = document.querySelector('#homeText');
+	const makeButton = $('makebtn');
+	const playButton = $('btn2');
+	const signOutButton = $('signOutbtn');
+	const title = $('homeText');
 	makeButton.disabled = true;
 	playButton.disabled = true;
 	clearChildren('makebtn');
@@ -193,10 +193,10 @@ function makeCode() {
 }
 
 function playCode() {
-	var makeButton = document.querySelector('#makebtn');
-	var playButton = document.querySelector('#btn2');
-	var signOutButton = document.querySelector('#signOutbtn');
-	var title = document.querySelector('#homeText');
+	var makeButton = $('makebtn');
+	var playButton = $('btn2');
+	var signOutButton = $('signOutbtn');
+	var title = $('homeText');
 	title.classList.add('titleTransition');
 	makeButton.classList.add('btnTransitionA');
 	playButton.classList.add('btnTransitionA');
@@ -291,10 +291,10 @@ function JoinGame() {
 }
 
 export function goBack() {
-	document.querySelector('#codeText').classList.add('titleTransition');
-	document.querySelector('#gameID').classList.add('btnTransitionA');
-	document.querySelector('#submitID').classList.add('btnTransitionA');
-	document.querySelector('#playMenuBack').classList.add('linkTransitionF');
+	$('codeText').classList.add('titleTransition');
+	$('gameID').classList.add('btnTransitionA');
+	$('submitID').classList.add('btnTransitionA');
+	$('playMenuBack').classList.add('linkTransitionF');
 	setTimeout(function () {
 		setTitle('homeScreen');
 		$('title').style.height = "800px";

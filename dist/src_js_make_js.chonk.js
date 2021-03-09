@@ -317,6 +317,7 @@ const verifyQuiz = () => {
 			if(error != null) {
 				finalResult.appendChild(document.createElement('li'));
 				finalResult.lastElementChild.textContent = error;
+				finalResult.lastElementChild.classList.add('innerError');
 			}
 		});
 		(0,_utils__WEBPACK_IMPORTED_MODULE_1__.clearChildren)('innerError3');

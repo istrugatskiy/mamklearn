@@ -276,6 +276,7 @@ export const verifyQuiz = () => {
 			if(error != null) {
 				finalResult.appendChild(document.createElement('li'));
 				finalResult.lastElementChild.textContent = error;
+				finalResult.lastElementChild.classList.add('innerError');
 			}
 		});
 		clearChildren('innerError3');
