@@ -41,10 +41,10 @@ var clickListeners = {
 };
 
 var clickIncludesListeners = {
-	"collapseSubArea": (event: MouseEvent) => {collapseSubArea(getID(event.target.id))},
-	"deleteQuestion": (event: MouseEvent) => {deleteQuestion(getID(event.target.id))},
-	"shortAnswerToggle": (event: MouseEvent) => {shortAnswerToggle(getID(event.target.id))},
-	"toggleTime": (event: MouseEvent) => {toggleTime(getID(event.target.id))}
+	"collapseSubArea": (event: MouseEvent) => {collapseSubArea(getID(event) as unknown as number)},
+	"deleteQuestion": (event: MouseEvent) => {deleteQuestion(getID(event))},
+	"shortAnswerToggle": (event: MouseEvent) => {shortAnswerToggle(getID(event))},
+	"toggleTime": (event: MouseEvent) => {toggleTime(getID(event))}
 }
 
 var submitListeners = {
@@ -52,9 +52,29 @@ var submitListeners = {
 	"quizCreateForm": () => {createNewQuiz()}
 }
 
+var keyboardIncludesListeners = {
+	"deleteQuestion": (event: KeyboardEvent) => {deleteQuestion(getID(event))},
+	"keyboardNavAnswer": (event: KeyboardEvent) => {
+		const eventTarget = (event.target! as HTMLElement).id;
+		shortAnswerToggle(getID(event));
+		$(eventTarget).previousElementSibling!.firstElementChild!.checked = !$(eventTarget).previousElementSibling!.firstElementChild!.checked;
+	},
+	"keyboardNavTime": (event: KeyboardEvent) => {
+		toggleTime(getID(event));
+		const eventTarget = (event.target! as HTMLElement).id;
+		$(eventTarget).previousElementSibling!.firstElementChild!.checked = !$(eventTarget).previousElementSibling!.firstElementChild!.checked;
+	},
+	"isCorrectQuestion": (event: KeyboardEvent) => {
+		const eventTarget = (event.target! as HTMLElement).id;
+		$(eventTarget).children[0].checked = !$(eventTarget).children[0].checked;
+	},
+
+}
+
 window.clickEvents.push({clickListeners});
 window.clickIncludesEvents.push({clickIncludesListeners});
 window.submitEvents.push({submitListeners});
+window.keyboardIncludesEvents.push({keyboardIncludesListeners});
 
 window.addEventListener("beforeunload", (event) => {
 	if (editState) {
@@ -67,7 +87,7 @@ export function createQuiz() {
 	if (checkOnce) {
 		$('createButtonA').disabled = true;
 		$('QuizName').disabled = false;
-		clickEvents['modal-bg'] = () => {exitModalPopupTemplate('createQuizMenu')};
+		window.clickEvents['modal-bg'] = () => {exitModalPopupTemplate('createQuizMenu')};
 		$('submitQuizID').disabled = false;
 		$('QuizName').value = '';
 		$('createButtonA').classList.add('btnTransitionA');
@@ -91,7 +111,7 @@ export function createQuiz() {
 }
 
 export function goBackMakeA() {
-	customOptionsIncrement = 0;
+	window.customOptionsIncrement = 0;
 	$('backButtonC').disabled = true;
 	$('homeText2').classList.add('titleTransition');
 	if (Object.keys(quizList2).length > 0) {
@@ -106,7 +126,7 @@ export function goBackMakeA() {
 		setTitle('homeScreen');
 		$('title').style.height = "800px";
 		$('title').style.top = "15%";
-		setCharImage('currentUser', currentUserConfig);
+		setCharImage('currentUser', window.currentUserConfig);
 	}, 300);
 }
 
@@ -144,14 +164,14 @@ export function doneButtonA() {
 		$("addQuestionButton").disabled = false;
 		reorderProper();
 		setTimeout(function () {
-			$("modal-popupB").style = '';
+			($("modal-popupB") as HTMLDivElement).removeAttribute('style');
 			$("modal-popupB").style.visibility = 'none';
 			$("modal-popupA").style.pointerEvents = "all";
 		}, 500);
 	}
 }
 
-export function collapseSubArea(a) {
+export function collapseSubArea(a: number) {
 	var area = $(`collapseSubArea${a}`);
 	var objm = $(`collapsableContent${a}`);
 	area.classList.toggle('arrowBRight');
@@ -170,18 +190,18 @@ export function collapseSubArea(a) {
 }
 
 export function collapseAllArea() {
-	if (activeArea !== null && $(`collapseSubArea${activeArea}`) != null) {
+	if (activeArea !== -2 && $(`collapseSubArea${activeArea}`) != null) {
 		var area = $(`collapseSubArea${activeArea}`);
 		var objm = $(`collapsableContent${activeArea}`);
 		area.classList.add('arrowBRight');
 		area.classList.remove('arrowBDown');
 		objm.classList.add("contentA2");
 		objm.classList.remove("contentA1");
-		activeArea = null;
+		activeArea = -2;
 	}
 }
 
-export function deleteQuestion(a) {
+export function deleteQuestion(a: string) {
 	collapseAllArea();
 	$(`draggableQuestion${a}`).style.pointerEvents = 'none';
 	$(`draggableQuestion${a}`).classList.add('btnTransitionA');
@@ -195,7 +215,7 @@ export function deleteQuestion(a) {
 export function reorderProper() {
 	var test = 0;
 	for (var i = 0; i <= $('draggableDiv').children.length - 1; i++) {
-		$('draggableDiv').children[i].firstElementChild.children[1].textContent = `Question ${i + 1}:`;
+		$('draggableDiv').children[i]!.firstElementChild!.children[1].textContent = `Question ${i + 1}:`;
 		test = i;
 	}
 	if(test >= 24) {
@@ -210,12 +230,12 @@ export function reorderProper() {
 	}
 }
 
-export function shortAnswerToggle(endMe) {
+export function shortAnswerToggle(endMe: string) {
 	$(`answerContainerObject${endMe}`).classList.toggle('shortAnswerEditorStyles');
 	$(`collapsableContent${endMe}`).classList.toggle('noSpaceEditor');
 }
 
-export function toggleTime(order) {
+export function toggleTime(order: string) {
 	$(`Question${order}Time`).classList.toggle("displayTimeLimit");
 }
 
@@ -226,7 +246,7 @@ export function parseActiveQuiz() {
 	if ($("draggableDiv").firstElementChild) {
 		var quizDoc = Array.from($("draggableDiv").children);
 		quizDoc.forEach( (object) => {
-			var timeLimit = false;
+			var timeLimit: string | null | boolean = false;
 			if (object.children[1].children[4].children[0].children[0].checked) {
 				timeLimit = object.children[1].children[4].children[2].textContent;
 			}
@@ -265,12 +285,12 @@ export const verifyQuiz = () => {
 		quizParseError.push('No questions exist');
 	}
 	else {
-		var nullSpace01 = [];
-		var timeLimitViolation = [];
-		var answerError0 = [];
-		var answerError1 = [];
-		var answerError2 = [];
-		tempQuiz.questionObjects.forEach((question, index) => {
+		var nullSpace01: number[] = [];
+		var timeLimitViolation;
+		var answerError0: number[] = [];
+		var answerError1: number[] = [];
+		var answerError2: number[] = [];
+		tempQuiz.questionObjects.forEach((question: any, index: number) => {
 			index++;
 			if (/^$/.test(question.questionName)) {
 				nullSpace01.push(index);
@@ -310,8 +330,8 @@ export const verifyQuiz = () => {
 		quizParseError.forEach((error) => {
 			if(error != null) {
 				finalResult.appendChild(document.createElement('li'));
-				finalResult.lastElementChild.textContent = error;
-				finalResult.lastElementChild.classList.add('innerError');
+				finalResult!.lastElementChild!.textContent = error;
+				finalResult!.lastElementChild!.classList.add('innerError');
 			}
 		});
 		clearChildren('innerError3');
@@ -323,7 +343,7 @@ export const verifyQuiz = () => {
 	}
 }
 
-export function exitModalPopupF(promptUser) {
+export function exitModalPopupF(promptUser: boolean) {
 	if(promptUser) {
 		parseActiveQuiz();
 		if(deepEqual(tempQuiz, quizObject2[currentQuizEdit])) {
@@ -384,7 +404,7 @@ export function addQuiz() {
 			item.addEventListener('click', event => {
 				if (checkOnce) {
 					$('createButtonA').disabled = true;
-					clickEvents['modal-bg'] = () => {exitModalPopupTemplate('manageQuizMenu')};
+					window.clickEvents['modal-bg'] = () => {exitModalPopupTemplate('manageQuizMenu')};
 					$('QuizName').disabled = false;
 					$('submitQuizID').disabled = false;
 					$('QuizName').value = '';
@@ -436,10 +456,9 @@ export const questionErrorParse = (arrayToParse, questionValueSingular, question
 	return (output != 'Questions' ? output : null);
 }
 
-export const exitModalPopupTemplate = (popupToKill, special = false) => {
+export const exitModalPopupTemplate = (popupToKill: string, special?: string) => {
 	if (checkOnce || special) {
 		checkOnce = false;
-		special = special === true ? !special : special;
 		$('modal-bg').style.animation = 'fadeOut 0.5s';
 		setTimeout(() => {
 			$('modal-bg').style.display = 'none';
@@ -538,7 +557,7 @@ export function editQuiz() {
 	$('quizNameUpdate').value = decodeHTML(quizList2[currentQuizEdit]);
 	drake = dragula([$('draggableDiv')], {
 		moves: function (el, container, handle) {
-			return handle.classList.contains('draggableActual');
+			return handle!.classList.contains('draggableActual');
 		}
 	}).on('drag', function (el) {
 		el.classList.add('dragging');

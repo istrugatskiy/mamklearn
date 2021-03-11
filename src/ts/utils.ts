@@ -1,6 +1,7 @@
 // These are some helper functions used throughout the app!
 
-export const getID = (input: string) => {
+export const getID = (inputEvent: Event) => {
+	var input = (inputEvent.target as HTMLElement).id;
 	var inputChars = Array.from(input);
 	var output = '';
 	for (var i = inputChars.length; i >= 0; i--) {
@@ -11,7 +12,7 @@ export const getID = (input: string) => {
 	return output;
 }
 
-export const $ = (a: string) => {
+export const $ = (a: string): HTMLElement => {
 	const b = document.getElementById(a);
 	if(b) {
 		return b;
@@ -44,7 +45,7 @@ export const getCaretCharacterOffsetWithin = (element: HTMLElement) => {
 	return caretOffset;
 }
 
-export const characterCount = (thisVar: HTMLElement, total: string) => {
+export const characterCount = (thisVar: Element, total: string | null) => {
 	thisVar.nextElementSibling!.textContent = `${thisVar.textContent!.length}/${total}`;
 }
 

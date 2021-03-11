@@ -1,6 +1,6 @@
 // Defines imports and globals
 import '../css/style.css';
-import {$, getCaretCharacterOffsetWithin, characterCount, createTemplate, setTitle, throwExcept, setCaretPosition, signOut, clearChildren, getID} from './utils';
+import {$, getCaretCharacterOffsetWithin, characterCount, createTemplate, setTitle, throwExcept, setCaretPosition, signOut, clearChildren} from './utils';
 import {eventHandle} from './events';
 import {initParticles} from './loadParticles';
 declare global {
@@ -13,10 +13,11 @@ declare global {
 		keyboardIncludesEvents: any,
 		submitEvents: any,
 		studentGameProcessor: any,
-		anotherTestCase: any,
-		anotherTestCase2: any,
-		anotherTestCase3: any,
-		anotherTestCase4: any
+		quizStartTestCase: string,
+		anotherTestCase: string,
+		anotherTestCase2: string,
+		anotherTestCase3: string,
+		anotherTestCase4: string
 	}
 }
 window.onSignIn = onSignIn;
@@ -54,35 +55,19 @@ window.clickEvents = {
 	"customButtonChange2": updateImageState,
 	"leftCustomizeArrow": () => {arrowButtonPress(true)},
 	"arrowCustomizeRight": () => {arrowButtonPress(false)},
-	"shortAnswerSubmitButton": () => {submitShortAnswer()},
 	"playMenuBack": goBack,
 	"AboutLink": () => {userClick('about.html')},
 	"aboutWindowButton": () => {userClick('index.html', 'aboutWindowButton')}
 };
 
 // These are the events that include the text in the elements id.
-window.clickIncludesEvents = {
-	"studentQuizButton": (event: MouseEvent) => {submitMultipleChoice(event)}
-}
+window.clickIncludesEvents = {};
 
 window.submitEvents = {
 	"joinQuizForm": JoinGame,
 };
 
-window.keyboardIncludesEvents = {
-	"deleteQuestion": (event: KeyboardEvent) => {deleteQuestion(getID(event.target.id))},
-	"keyboardNavAnswer": (event: KeyboardEvent) => {
-		shortAnswerToggle(getID(event.target.id));
-		$(event.target.id).previousElementSibling.firstElementChild.checked = !$(event.target.id).previousElementSibling.firstElementChild.checked;
-	},
-	"keyboardNavTime": (event: KeyboardEvent) => {
-		toggleTime(getID(event.target.id));
-		$(event.target.id).previousElementSibling.firstElementChild.checked = !$(event.target.id).previousElementSibling.firstElementChild.checked;
-	},
-	"isCorrectQuestion": (event: KeyboardEvent) => {$(event.target.id).children[0].checked = !$(event.target.id).children[0].checked},
-	"studentShortAnswerText": () => {submitShortAnswer()}
-	
-}
+window.keyboardIncludesEvents = {};
 
 // Initializes the app once its fully loaded.
 window.addEventListener('load', () => {
@@ -142,7 +127,7 @@ function makeCode() {
 	clearChildren('makebtn');
 	createTemplate('svgLoader', makeButton.id);
 	// replace this with request to server and await callback or if 5 seconds passes undo
-	import('./make').then( () => {
+	import('./make').then( obj => {
 		errorCount = 0;
 		title.classList.add('titleTransition');
 		makeButton.classList.add('btnTransitionA');
@@ -154,9 +139,9 @@ function makeCode() {
 		setTimeout(function () {
 			setTitle('makeMenu');
 			$('title').style.top = '100px';
-			addQuiz();
+			obj.addQuiz();
 		}, 300);
-	}).catch ( error => {
+	}).catch ( () => {
 		errorCount++;
 		if(errorCount < 15) {
 			setTimeout( () => {
@@ -197,17 +182,21 @@ export function contentEditableUpdate() {
 				event.preventDefault();
 			});
 			contentBoxes[i].addEventListener('input', (event) => {
-				var a69 = getCaretCharacterOffsetWithin(event.target);
+				const eventTarget = event.target! as HTMLElement;
+				var a69 = getCaretCharacterOffsetWithin(eventTarget);
 				setTimeout(() => {
-					var a70 = String(event.target.textContent.replace(/(\r\n|\r|\n)/ , ""));
-					event.target.innerText = a70.substring(0, event.target.getAttribute("maxlength"));
+					var a70 = String(eventTarget.textContent!.replace(/(\r\n|\r|\n)/ , ""));
+					const maxLength = (eventTarget.getAttribute("maxlength") as unknown as number);
+					if(maxLength) {
+						eventTarget.innerText = a70.substring(0, );
+					}
 					try {
-						setCaretPosition(event.target, a69);
+						setCaretPosition(eventTarget, a69);
 					}
 					catch {
-						setCaretPosition(event.target, event.target.innerText.length);
+						setCaretPosition(eventTarget, eventTarget.innerText.length);
 					}
-					characterCount(event.target, event.target.getAttribute("maxlength"));
+					characterCount(eventTarget, eventTarget.getAttribute("maxlength"));
 				}, 0);
 			});
 		}
@@ -234,9 +223,9 @@ function JoinGame() {
 				}, 1000);
 			}, 750);
 			setTimeout(() => {
-				studentGameProcessor(quizStartTestCase);
+				window.studentGameProcessor(window.quizStartTestCase);
 			}, 2000);
-		}).catch ( error => {
+		}).catch ( () => {
 			errorCount++;
 			if(errorCount < 15) {
 				setTimeout( () => {
@@ -279,7 +268,7 @@ export function goBack() {
 	}, 300);
 }
 
-function arrowButtonPress(isLeft) {
+function arrowButtonPress(isLeft: boolean) {
 	if (isLeft) {
 		customOptionsIncrement = customOptionsIncrement - 1;
 		if (customOptionsIncrement < 0) {
@@ -308,7 +297,7 @@ function updateImageState() {
 	setCharImage('currentUser', currentUserConfig);
 }
 
-export function setCharImage(charID, currentUserConfig) {
+export function setCharImage(charID: string, currentUserConfig: number[]) {
 	$(charID + 'Eyes').src = `img/eyes-${currentUserConfig[0]}.png`;
 	$(charID + 'Nose').src = `img/nose-${currentUserConfig[1]}.png`;
 	$(charID + 'Mouth').src = `img/mouth-${currentUserConfig[2]}.png`;

@@ -1,8 +1,8 @@
-import {$, mathClamp, throwExcept} from './utils';
+import {$, mathClamp, throwExcept, getID} from './utils';
 import {setCharImage, goBack} from './app';
 window.studentGameProcessor = studentGameProcessor;
 
-export const quizStartTestCase = ' {"gameStart": true, "totalQuestions": 5, "currentQuestion": "If%20fish%20are%20fish", "choices": [ null ], "currentQuestionTime": 69, "questionID": 0 }';
+window.quizStartTestCase = ' {"gameStart": true, "totalQuestions": 5, "currentQuestion": "If%20fish%20are%20fish", "choices": [ null ], "currentQuestionTime": 69, "questionID": 0 }';
 window.anotherTestCase = '{ "isQuestionCorrect": false, "nextQuestion": null, "choices": [ null ], "currentQuestionTime": 20 }';
 window.anotherTestCase2 = '{ "isQuestionCorrect": true, "nextQuestion": "heckDifferentQuestionTooLazyTooPutPercent", "choices": [ "Nabeel", "Nabeel2", "Nabeel3", "Nabeel4" ], "currentQuestionTime": 69 }';
 window.anotherTestCase3 = '{ "gameFinish": true, "timeTillEnd": 180}';
@@ -10,12 +10,28 @@ window.anotherTestCase4 = '{ "gameEnd": true, "result-1st": "Ilya%20Strugatskiy"
 var otherInterval: number;
 var timerInterval: number;
 var finishUpInterval: number;
-var gameStateStudent: number;
+var gameStateStudent: object;
 const root = document.documentElement;
 var bottomBarOffset: number;
 var resettableTime: number;
 var resettableTime2: number;
 var resettableTime3: number;
+
+var clickListeners = {
+	"shortAnswerSubmitButton": () => {submitShortAnswer()},
+}
+
+var clickIncludesListeners = {
+	"studentQuizButton": (event: MouseEvent) => {submitMultipleChoice(getID(event))}
+}
+
+var keyboardIncludesListeners = {
+	"studentShortAnswerText": () => {submitShortAnswer()}
+}
+
+window.clickEvents.push({clickListeners});
+window.clickIncludesEvents.push({clickIncludesListeners});
+window.keyboardIncludesEvents.push({keyboardIncludesListeners});
 
 function studentGameProcessor(input: string) {
 	var inputInternal = JSON.parse(input);
@@ -24,7 +40,7 @@ function studentGameProcessor(input: string) {
 			clearInterval(timerInterval);
             clearInterval(finishUpInterval);
             clearInterval(otherInterval);
-			setCharImage('player', currentUserConfig);
+			setCharImage('player', window.currentUserConfig);
 			bottomBarOffset = 15;
 			gameStateStudent = {
 				currentQuestion: inputInternal.questionID,
@@ -269,22 +285,22 @@ function setQuestion() {
 	}
 }
 
-export function updateStudentLocation(studentLocation) {
+export function updateStudentLocation(studentLocation: number) {
 	var internalPercentage = mathClamp((studentLocation * 114) / window.innerWidth, 0, 1);
 	if(internalPercentage > 0.75) {
 		bottomBarOffset -= 114;
 	}
 	studentLocation = studentLocation - Math.abs((bottomBarOffset - 15) / 114);
-	root.style.setProperty('--questionOffset', studentLocation);
+	root.style.setProperty('--questionOffset', studentLocation.toString());
 	root.style.setProperty('--bottomBarOffset', bottomBarOffset + "px");
 }
 
-export function answerQuestion(answer) {
+export function answerQuestion(answer: string) {
 	console.log(answer);
 }
 
-export function submitMultipleChoice(event) {
-	var response = event.target.id.charAt(event.target.id.length - 1);
+export function submitMultipleChoice(event: string) {
+	var response = event.charAt(event.length - 1);
 	answerQuestion(response);
 	clearInterval(timerInterval);
 	Array.from($('studentAnswersFlex').children).forEach( (object, index) => {
