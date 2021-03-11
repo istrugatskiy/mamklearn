@@ -7,10 +7,10 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
     entry: [
-        './src/js/app.js',
-        './src/js/utils.js',
-        './src/js/events.js',
-        './src/js/loadParticles.js'
+        './src/ts/app.ts',
+        './src/ts/utils.ts',
+        './src/ts/events.ts',
+        './src/ts/loadParticles.ts'
     ],
     output: {
         filename: '[name].chonk.js',
@@ -23,6 +23,12 @@ module.exports = {
                 use: [
                     MiniCssExtractPlugin.loader,
                     'css-loader'
+                ]
+            },
+            {
+                test: /\.ts$/i,
+                use: [
+                    'ts-loader'
                 ]
             },
         ]

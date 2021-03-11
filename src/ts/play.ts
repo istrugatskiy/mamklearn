@@ -7,17 +7,17 @@ window.anotherTestCase = '{ "isQuestionCorrect": false, "nextQuestion": null, "c
 window.anotherTestCase2 = '{ "isQuestionCorrect": true, "nextQuestion": "heckDifferentQuestionTooLazyTooPutPercent", "choices": [ "Nabeel", "Nabeel2", "Nabeel3", "Nabeel4" ], "currentQuestionTime": 69 }';
 window.anotherTestCase3 = '{ "gameFinish": true, "timeTillEnd": 180}';
 window.anotherTestCase4 = '{ "gameEnd": true, "result-1st": "Ilya%20Strugatskiy", "1CharacterConfig": "0,0,1,2,9", "result-2nd": "Ilya%20Strugatskiy", "2CharacterConfig": "0,0,1,2,9", "result-3rd": "Ilya%20Strugatskiy", "3CharacterConfig": "0,0,1,2,9"}';
-var otherInterval;
-var timerInterval;
-var finishUpInterval;
-var gameStateStudent;
+var otherInterval: number;
+var timerInterval: number;
+var finishUpInterval: number;
+var gameStateStudent: number;
 const root = document.documentElement;
-var bottomBarOffset;
-var resettableTime;
-var resettableTime2;
-var resettableTime3;
+var bottomBarOffset: number;
+var resettableTime: number;
+var resettableTime2: number;
+var resettableTime3: number;
 
-function studentGameProcessor(input) {
+function studentGameProcessor(input: string) {
 	var inputInternal = JSON.parse(input);
 	if(inputInternal.hasOwnProperty('gameStart')) {
 		if(inputInternal.gameStart == true) {
@@ -47,8 +47,7 @@ function studentGameProcessor(input) {
 				$('gameStartScreenStudent').style.display = 'none';
 				$('gameStartScreenStudent').style.animation = '';
 			}, 500);
-			var $loader = document.querySelector(".loader");
-			$loader.classList.remove('loader--active');
+			$('mainLoader').classList.remove('loader--active');
 			$('title').style.display = "none";
 			$('studentPlayScreen').style.display = "block";
 			setQuestion();
@@ -84,8 +83,7 @@ function studentGameProcessor(input) {
 		$("errorMessageA").style.display = 'block';
 		$('gameStartScreenStudent').style.display = 'none';
 		$('studentPlayScreen').style.display = 'none';
-		var $loader = document.querySelector('.loader');
-		$loader.classList.remove('loader--active');
+		$('mainLoader').classList.remove('loader--active');
 		$('title').style.display = "block";
 		$('gameFinishNotify').style.display = 'none';
         clearInterval(finishUpInterval);
@@ -299,7 +297,7 @@ export function submitMultipleChoice(event) {
 }
 
 export function submitShortAnswer() {
-	$('studentShortAnswerText').contentEditable = false;
+	$('studentShortAnswerText').contentEditable = 'false';
 	$('shortAnswerSubmitButton').disabled = true;
 	$('studentShortAnswerText').classList.add('contentEditableDisabled');
 	answerQuestion($('studentShortAnswerText').textContent);

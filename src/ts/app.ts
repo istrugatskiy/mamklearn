@@ -1,8 +1,24 @@
 // Defines imports and globals
 import '../css/style.css';
-import {$, getCaretCharacterOffsetWithin, characterCount, createTemplate, setTitle, throwExcept, setCaretPosition, signOut, clearChildren} from './utils';
+import {$, getCaretCharacterOffsetWithin, characterCount, createTemplate, setTitle, throwExcept, setCaretPosition, signOut, clearChildren, getID} from './utils';
 import {eventHandle} from './events';
 import {initParticles} from './loadParticles';
+declare global {
+	interface Window {
+		onSignIn: any,
+		currentUserConfig: any,
+		customOptionsIncrement: any,
+		clickEvents: any,
+		clickIncludesEvents: any,
+		keyboardIncludesEvents: any,
+		submitEvents: any,
+		studentGameProcessor: any,
+		anotherTestCase: any,
+		anotherTestCase2: any,
+		anotherTestCase3: any,
+		anotherTestCase4: any
+	}
+}
 window.onSignIn = onSignIn;
 var customOptionsIncrement = 0;
 window.customOptionsIncrement = customOptionsIncrement;
@@ -13,29 +29,17 @@ var errorCount = 0;
 console.log("%cUse link to get quiz answers:https://bit.ly/31Apj2U", "font-size: 32px;");
 const customOptions = ["Eyes", "Nose", "Mouth", "Shirt", "Arms"];
 
-const getID = (input) => {
-	var inputChars = Array.from(input);
-	var output = '';
-	for (var i = inputChars.length; i >= 0; i--) {
-		if(!Number.isNaN(Number.parseInt(inputChars[i]))) {
-			output = inputChars[i] + output;
-		}
-	}
-	return output;
-}
-
 const initializeApp = () => {
 	contentEditableUpdate();
-	const $loader = document.querySelector(".loader");
-	$loader.classList.remove('loader--active');
+	$('mainLoader').classList.remove('loader--active');
 	initParticles();
 	if (new URLSearchParams(window.location.search).get('shareQuiz')) {
 		setTimeout(() => {
 			$("errorActual").innerText = 'Quiz Copied';
 			$("errorMessageA").style.display = "block";
-			setTimeout(function () {
+			setTimeout( () => {
 				$("errorMessageA").style.display = "none";
-				window.history.pushState({ "html": 1, "pageTitle": 5 }, "mamkLearn", "index.html");
+				window.history.pushState(null, "mamkLearn", "index.html");
 			}, 1000);
 		}, 500);
 	}
@@ -45,61 +49,38 @@ window.clickEvents = {
 	"btn2": playCode,
 	"makebtn": makeCode,
 	"signOutbtn": signOut,
-	"deleteQuizConfirm": () => {deleteQuizConfirm()},
-	"deleteQuiz": () => {deleteQuiz()},
-	"editQuiz": () => {editQuiz()},
-	"addQuestionButton": () => {addQuestion()},
-	"playQuiz": () => {playQuiz()},
-	"doneButtonA": () => {doneButtonA()},
-	"shareQuiz": () => {shareQuiz()},
-	"backButtonEditQuiz": () => {exitModalPopupF(true)},
 	"loginBtn": () => {login()},
 	"customButtonChange": updateImageState,
 	"customButtonChange2": updateImageState,
 	"leftCustomizeArrow": () => {arrowButtonPress(true)},
 	"arrowCustomizeRight": () => {arrowButtonPress(false)},
 	"shortAnswerSubmitButton": () => {submitShortAnswer()},
-	"backButtonC": () => {goBackMakeA()},
-	"copyShareLink": () => {copyShareLink()},
 	"playMenuBack": goBack,
 	"AboutLink": () => {userClick('about.html')},
-	"modal-bg": () => {exitModalPopupTemplate('createQuizMenu')},
-	"backButtonZ": () => {exitModalPopupTemplate('createQuizMenu')},
-	"backButtonY": () => {exitModalPopupTemplate('manageQuizMenu')},
-	"backButtonDeleteConfirm": () => {exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm')},
-	"backButtonShareQuiz": () => {exitModalPopupTemplate('shareQuizMenu', 'shareQuizMenu')},
-	"createButtonA": () => {createQuiz()},
-	"backButtonDeleteConfirm": () => {exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm')},
 	"aboutWindowButton": () => {userClick('index.html', 'aboutWindowButton')}
 };
 
 // These are the events that include the text in the elements id.
 window.clickIncludesEvents = {
-	"studentQuizButton": (event) => {submitMultipleChoice(event)},
-	"collapseSubArea": (event) => {collapseSubArea(getID(event.target.id))},
-	"deleteQuestion": (event) => {deleteQuestion(getID(event.target.id))},
-	"shortAnswerToggle": (event) => {shortAnswerToggle(getID(event.target.id))},
-	"toggleTime": (event) => {toggleTime(getID(event.target.id))}
+	"studentQuizButton": (event: MouseEvent) => {submitMultipleChoice(event)}
 }
 
 window.submitEvents = {
-	"editQuizForm": () => {editQuizForm()},
 	"joinQuizForm": JoinGame,
-	"quizCreateForm": () => {createNewQuiz()}
 };
 
 window.keyboardIncludesEvents = {
-	"deleteQuestion": (event) => {deleteQuestion(getID(event.target.id))},
-	"keyboardNavAnswer": (event) => {
+	"deleteQuestion": (event: KeyboardEvent) => {deleteQuestion(getID(event.target.id))},
+	"keyboardNavAnswer": (event: KeyboardEvent) => {
 		shortAnswerToggle(getID(event.target.id));
 		$(event.target.id).previousElementSibling.firstElementChild.checked = !$(event.target.id).previousElementSibling.firstElementChild.checked;
 	},
-	"keyboardNavTime": (event) => {
+	"keyboardNavTime": (event: KeyboardEvent) => {
 		toggleTime(getID(event.target.id));
 		$(event.target.id).previousElementSibling.firstElementChild.checked = !$(event.target.id).previousElementSibling.firstElementChild.checked;
 	},
-	"isCorrectQuestion": (event) => {$(event.target.id).children[0].checked = !$(event.target.id).children[0].checked},
-	"studentShortAnswerText": (event) => {submitShortAnswer()}
+	"isCorrectQuestion": (event: KeyboardEvent) => {$(event.target.id).children[0].checked = !$(event.target.id).children[0].checked},
+	"studentShortAnswerText": () => {submitShortAnswer()}
 	
 }
 
@@ -121,9 +102,8 @@ const login = () => {
 	$('loginBtn').disabled = true;
 }
 
-function userClick(link, disableObject) {
-	var $loader = document.querySelector(".loader");
-	$loader.classList.add('loader--active');
+function userClick(link: string, disableObject?: string) {
+	$('mainLoader').classList.remove('loader--active');
 	if (disableObject) {
 		$(disableObject).disabled = true;
 	}
@@ -132,10 +112,8 @@ function userClick(link, disableObject) {
 	}, 1000);
 };
 
-function onSignIn(googleUser) {
-	var profile = googleUser.getBasicProfile();
+function onSignIn(googleUser: any) {
 	var $error = $('loginError1');
-	var id_token = googleUser.getAuthResponse().id_token;
 	var auth2 = gapi.auth2.getAuthInstance();
 	// feel sorry for whoever reads this code - Ilya
 	if (googleUser.getHostedDomain() == 'student.mamkschools.org' || googleUser.getHostedDomain() == 'mamkschools.org') {
@@ -164,9 +142,8 @@ function makeCode() {
 	clearChildren('makebtn');
 	createTemplate('svgLoader', makeButton.id);
 	// replace this with request to server and await callback or if 5 seconds passes undo
-	import('./make').then( make => {
+	import('./make').then( () => {
 		errorCount = 0;
-		Object.entries(make).forEach(([name, exported]) => window[name] = exported);
 		title.classList.add('titleTransition');
 		makeButton.classList.add('btnTransitionA');
 		playButton.classList.add('btnTransitionA');
@@ -247,13 +224,11 @@ function JoinGame() {
 	clearChildren('submitID');	
 	createTemplate('svgLoader', 'submitID');
 	if ($("gameID").value == "2794") {
-		import('./play').then( play => {
+		import('./play').then( () => {
 			errorCount = 0;
-			Object.entries(play).forEach(([name, exported]) => window[name] = exported);
 			setTimeout(function () {
 				$('loader-1').style.display = "none";
-				var $loader = document.querySelector(".loader");
-				$loader.classList.add('loader--active');
+				$('mainLoader').classList.remove('loader--active');
 				setTimeout(function () {
 					$("gameStartScreenStudent").style.display = 'block';
 				}, 1000);

@@ -1,26 +1,60 @@
 // Contains code related to making quizzes
 import dragula from 'dragula';
-import {$, characterCount, deepEqual, createTemplate, setTitle, uuidv4, encodeHTML, decodeHTML, clearChildren} from './utils';
+import {$, characterCount, deepEqual, createTemplate, setTitle, encodeHTML, decodeHTML, clearChildren, getID} from './utils';
 import {setCharImage, contentEditableUpdate} from './app';
 
 var editState = false;
-var quizObject2 = [];
+var quizObject2: any[];
 const quizObject = {
 	quizID: "",
 	quizName: "",
 	questionObjects: []
 }
-var drake = null;
-var currentQuizEdit;
+var drake: any;
+var currentQuizEdit: any;
 var iconIterate = 0;
-var activeArea = null;
+var activeArea: number;
 var highestQuestion = 0;
-var tempQuiz = null;
+var tempQuiz: any;
 var allowState2 = true;
-var quizList2 = {};
+var quizList2: any = {};
 var checkOnce = true;
+var quizIncrement = 0;
 
+var clickListeners = {
+	"deleteQuizConfirm": () => {deleteQuizConfirm()},
+	"deleteQuiz": () => {deleteQuiz()},
+	"editQuiz": () => {editQuiz()},
+	"addQuestionButton": () => {addQuestion()},
+	"playQuiz": () => {playQuiz()},
+	"doneButtonA": () => {doneButtonA()},
+	"shareQuiz": () => {shareQuiz()},
+	"backButtonEditQuiz": () => {exitModalPopupF(true)},
+	"backButtonC": () => {goBackMakeA()},
+	"copyShareLink": () => {copyShareLink()},
+	"modal-bg": () => {exitModalPopupTemplate('createQuizMenu')},
+	"backButtonZ": () => {exitModalPopupTemplate('createQuizMenu')},
+	"backButtonY": () => {exitModalPopupTemplate('manageQuizMenu')},
+	"backButtonShareQuiz": () => {exitModalPopupTemplate('shareQuizMenu', 'shareQuizMenu')},
+	"createButtonA": () => {createQuiz()},
+	"backButtonDeleteConfirm": () => {exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm')},
+};
 
+var clickIncludesListeners = {
+	"collapseSubArea": (event: MouseEvent) => {collapseSubArea(getID(event.target.id))},
+	"deleteQuestion": (event: MouseEvent) => {deleteQuestion(getID(event.target.id))},
+	"shortAnswerToggle": (event: MouseEvent) => {shortAnswerToggle(getID(event.target.id))},
+	"toggleTime": (event: MouseEvent) => {toggleTime(getID(event.target.id))}
+}
+
+var submitListeners = {
+	"editQuizForm": () => {editQuizForm()},
+	"quizCreateForm": () => {createNewQuiz()}
+}
+
+window.clickEvents.push({clickListeners});
+window.clickIncludesEvents.push({clickIncludesListeners});
+window.submitEvents.push({submitListeners});
 
 window.addEventListener("beforeunload", (event) => {
 	if (editState) {
@@ -86,7 +120,8 @@ export function createNewQuiz() {
 	createTemplate('svgLoader', button.id);
 	setTimeout(() => {
 		checkOnce = true;
-		quizList2[uuidv4()] = encodeHTML(g);
+		quizList2[`quizID_${quizIncrement}`] = encodeHTML(g);
+		quizIncrement++;
 		exitModalPopupTemplate('createQuizMenu');
 	}, 1000);
 }
@@ -481,7 +516,7 @@ export function editQuiz() {
 			addquestionToDOM();
 			var actualData = $(`draggableQuestion${highestQuestion}`).children[1].children;
 			actualData[0].textContent = questionObject.questionName;
-			characterCount(actualData[0], 90);
+			characterCount(actualData[0], '90');
 			actualData[3].children[0].children[0].checked = questionObject.shortAnswer;
 			if (questionObject.shortAnswer) {
 				shortAnswerToggle(highestQuestion);
@@ -490,11 +525,11 @@ export function editQuiz() {
 			if (typeof questionObject.timeLimit != "boolean") {
 				toggleTime(highestQuestion);
 				actualData[4].children[2].textContent = questionObject.timeLimit;
-				characterCount(actualData[4].children[2], 3);
+				characterCount(actualData[4].children[2], '3');
 			}
 			for (var i = 0; i < 4; i++) {
 				actualData[5].children[i].children[0].textContent = questionObject.Answers[i].answer;
-				characterCount(actualData[5].children[i].children[0], 50);
+				characterCount(actualData[5].children[i].children[0], '50');
 				actualData[5].children[i].children[2].children[0].checked = questionObject.Answers[i].correct;
 			}
 		});

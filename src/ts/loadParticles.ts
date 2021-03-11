@@ -1,6 +1,6 @@
 // Definese the configuration data for particles js and initializes it.
 
-import 'particles.js';
+import {tsParticles} from 'tsparticles';
 
 
 var ParticleData = {
@@ -114,10 +114,10 @@ var ParticleData = {
 	"retina_detect": false
 };
 
-const particleDataCompiled = "data:text/plain;base64," + window.btoa(JSON.stringify(ParticleData));
+const particleDataCompiled = JSON.stringify(ParticleData);
 
 export const initParticles = () => {
     if (!window.location.href.includes("#performance-mode")) {
-        particlesJS.load('particles-js', particleDataCompiled);
+        tsParticles.loadJSON('particles-js', particleDataCompiled);
     }
 }
