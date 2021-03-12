@@ -34,7 +34,7 @@ module.exports = {
         ]
     },
     devtool: false,
-    mode: 'production',
+    mode: 'development',
     watch: true,
     plugins: [
         new HtmlWebpackPlugin({
@@ -55,7 +55,7 @@ module.exports = {
         new CleanWebpackPlugin()
     ],
     optimization: {
-        minimize: true,
+        minimize: false,
         minimizer: [
             `...`,
             new CssMinimizerPlugin(),

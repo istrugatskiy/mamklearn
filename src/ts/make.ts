@@ -21,7 +21,7 @@ var quizList2: any = {};
 var checkOnce = true;
 var quizIncrement = 0;
 
-var clickListeners: any = {
+var clickListeners = {
 	"deleteQuizConfirm": () => {deleteQuizConfirm()},
 	"deleteQuiz": () => {deleteQuiz()},
 	"editQuiz": () => {editQuiz()},
@@ -124,7 +124,7 @@ export function goBackMakeA() {
 	}
 	$('createButtonA').classList.add('btnTransitionA');
 	$('backButtonC').classList.add('btnTransitionA');
-	setTimeout(() => {
+	setTimeout( () => {
 		clearChildren('title');
 		setTitle('homeScreen');
 		$('title').style.height = "800px";
@@ -141,7 +141,7 @@ export function createNewQuiz() {
 	button.disabled = true;
 	button.textContent = '';
 	createTemplate('svgLoader', button.id);
-	setTimeout(() => {
+	setTimeout( () => {
 		checkOnce = true;
 		quizList2[`quizID_${quizIncrement}`] = encodeHTML(g);
 		quizIncrement++;
@@ -208,7 +208,7 @@ export function deleteQuestion(a: string) {
 	collapseAllArea();
 	$(`draggableQuestion${a}`).style.pointerEvents = 'none';
 	$(`draggableQuestion${a}`).classList.add('btnTransitionA');
-	setTimeout(() => {
+	setTimeout( () => {
 		drake.remove($(`draggableQuestion${a}`));
 		$(`draggableQuestion${a}`).remove();
 		reorderProper();
@@ -293,7 +293,7 @@ export const verifyQuiz = () => {
 		var answerError0: number[] = [];
 		var answerError1: number[] = [];
 		var answerError2: number[] = [];
-		tempQuiz.questionObjects.forEach((question: any, index: number) => {
+		tempQuiz.questionObjects.forEach( (question: any, index: number) => {
 			index++;
 			if (/^$/.test(question.questionName)) {
 				nullSpace01.push(index);
@@ -330,7 +330,7 @@ export const verifyQuiz = () => {
 		quizParseError.push(questionErrorParse(answerError2, 'has a correct option which corresponds to an empty field', 'have a correct option which corresponds to an empty field'));
 	}
 	if (quizParseError.join("").length !== 0) {
-		quizParseError.forEach((error) => {
+		quizParseError.forEach( (error) => {
 			if(error != null) {
 				finalResult.appendChild(document.createElement('li'));
 				finalResult!.lastElementChild!.textContent = error;
@@ -360,7 +360,7 @@ export function exitModalPopupF(promptUser: boolean) {
 		checkOnce = false;
 		$('modal-bg').style.animation = 'fadeOut 0.5s';
 		$('editQuizMenu').style.animation = 'modalPopout 0.3s';
-		setTimeout(() => {
+		setTimeout( () => {
 			editState = false;
 			($('editQuizMenu') as HTMLDivElement).removeAttribute('style');
 			$('modal-bg').style.display = 'none';
@@ -377,7 +377,7 @@ export function exitModalPopupF(promptUser: boolean) {
 			highestQuestion = 0;
 			checkOnce = true;
 		}, 500);
-		setTimeout(() => {
+		setTimeout( () => {
 			$('modal-popupA').style.display = 'none';
 		}, 300);
 		setTitle('makeMenu');
@@ -447,7 +447,7 @@ export const questionErrorParse = (arrayToParse: number[], questionValueSingular
 		output = `Questions ${arrayToParse[0]} and ${arrayToParse[1]} ${questionValuePlural}`;
 	}
 	else if(arrayToParse.length != 0) {
-		arrayToParse.forEach((error) => {
+		arrayToParse.forEach( (error) => {
 			if (arrayToParse.slice(-1)[0] != error) {
 				output += ` ${error},`;
 			}
@@ -464,12 +464,12 @@ export const exitModalPopupTemplate = (popupToKill: string, special?: string) =>
 	if (checkOnce || special) {
 		checkOnce = false;
 		$('modal-bg').style.animation = 'fadeOut 0.5s';
-		setTimeout(() => {
+		setTimeout( () => {
 			$('modal-bg').style.display = 'none';
 			checkOnce = true;
 		}, 500);
 		$(popupToKill).style.animation = 'modalPopout 0.3s';
-		setTimeout(() => {
+		setTimeout( () => {
 			$('modal-popupA').style.display = 'none';
 			if(special) {
 				$(special).style.display = 'none';
@@ -485,7 +485,7 @@ export function playQuiz() {
 	setTimeout(function () {
 		$('modal-bg').style.display = 'none';
 	}, 500);
-	setTimeout(() => {
+	setTimeout( () => {
 		$('title').style.display = 'none';
 		($('mainTheme') as HTMLMediaElement).play();
 		($('mainTheme') as HTMLMediaElement).volume = 0.6;

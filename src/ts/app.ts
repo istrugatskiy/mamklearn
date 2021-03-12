@@ -35,7 +35,7 @@ const initializeApp = () => {
 	$('mainLoader').classList.remove('loader--active');
 	initParticles();
 	if (new URLSearchParams(window.location.search).get('shareQuiz')) {
-		setTimeout(() => {
+		setTimeout( () => {
 			$("errorActual").innerText = 'Quiz Copied';
 			$("errorMessageA").style.display = "block";
 			setTimeout( () => {
@@ -127,7 +127,7 @@ function makeCode() {
 	clearChildren('makebtn');
 	createTemplate('svgLoader', makeButton.id);
 	// replace this with request to server and await callback or if 5 seconds passes undo
-	import('./make').then( obj => {
+	import('./make').then( (obj) => {
 		errorCount = 0;
 		obj.initEvents();
 		title.classList.add('titleTransition');
@@ -142,9 +142,10 @@ function makeCode() {
 			$('title').style.top = '100px';
 			obj.addQuiz();
 		}, 300);
-	}).catch ( () => {
+	}).catch ( (error) => {
 		errorCount++;
-		if(errorCount < 15) {
+		console.warn(`Failed to fetch chonk (${error})! Retrying...`);
+		if(errorCount < 100) {
 			setTimeout( () => {
 			makeCode();
 		}, 2000);
@@ -185,7 +186,7 @@ export function contentEditableUpdate() {
 			contentBoxes[i].addEventListener('input', (event) => {
 				const eventTarget = event.target! as HTMLElement;
 				var a69 = getCaretCharacterOffsetWithin(eventTarget);
-				setTimeout(() => {
+				setTimeout( () => {
 					var a70 = String(eventTarget.textContent!.replace(/(\r\n|\r|\n)/ , ""));
 					const maxLength = (eventTarget.getAttribute("maxlength") as unknown as number);
 					if(maxLength) {
@@ -214,22 +215,27 @@ function JoinGame() {
 	clearChildren('submitID');	
 	createTemplate('svgLoader', 'submitID');
 	if ($("gameID").value == "2794") {
-		import('./play').then( () => {
+		console.log('a');
+		import('./play').then( (obj) => {
+			console.log('b');
 			errorCount = 0;
-			setTimeout(function () {
+			$('mainLoader').classList.add('loader--active');
+			obj.initEvents();
+			setTimeout( () => {
 				$('loader-1').style.display = "none";
-				$('mainLoader').classList.remove('loader--active');
-				setTimeout(function () {
-					$("gameStartScreenStudent").style.display = 'block';
+				$("gameStartScreenStudent").style.display = 'block';
+				setTimeout( () => {
+					$('mainLoader').classList.remove('loader--active');
 				}, 1000);
 			}, 750);
-			setTimeout(() => {
+			setTimeout( () => {
 				window.studentGameProcessor(window.quizStartTestCase);
 			}, 2000);
-		}).catch ( () => {
+		}).catch ( (error) => {
 			errorCount++;
 			if(errorCount < 15) {
 				setTimeout( () => {
+					console.warn(`Failed to fetch chonk (${error})! Retrying...`);
 					JoinGame();
 				}, 2000);
 			}
