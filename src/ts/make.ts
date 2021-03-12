@@ -4,7 +4,7 @@ import {$, characterCount, deepEqual, createTemplate, setTitle, encodeHTML, deco
 import {setCharImage, contentEditableUpdate} from './app';
 
 var editState = false;
-var quizObject2: any[];
+var quizObject2: any[] = [];
 const quizObject = {
 	quizID: "",
 	quizName: "",
@@ -21,7 +21,7 @@ var quizList2: any = {};
 var checkOnce = true;
 var quizIncrement = 0;
 
-var clickListeners = {
+var clickListeners: any = {
 	"deleteQuizConfirm": () => {deleteQuizConfirm()},
 	"deleteQuiz": () => {deleteQuiz()},
 	"editQuiz": () => {editQuiz()},
@@ -71,10 +71,13 @@ var keyboardIncludesListeners = {
 
 }
 
-window.clickEvents.push({clickListeners});
-window.clickIncludesEvents.push({clickIncludesListeners});
-window.submitEvents.push({submitListeners});
-window.keyboardIncludesEvents.push({keyboardIncludesListeners});
+
+export const initEvents = () => {
+	window.clickEvents = {...window.clickEvents, ...clickListeners};
+	window.clickIncludesEvents = {...window.clickIncludesEvents, ...clickIncludesListeners};
+	window.submitEvents = {...window.submitEvents, ...submitListeners};
+	window.keyboardIncludesEvents = {...window.keyboardIncludesEvents, ...keyboardIncludesListeners};
+}
 
 window.addEventListener("beforeunload", (event) => {
 	if (editState) {
@@ -230,12 +233,12 @@ export function reorderProper() {
 	}
 }
 
-export function shortAnswerToggle(endMe: string) {
+export function shortAnswerToggle(endMe: string | number) {
 	$(`answerContainerObject${endMe}`).classList.toggle('shortAnswerEditorStyles');
 	$(`collapsableContent${endMe}`).classList.toggle('noSpaceEditor');
 }
 
-export function toggleTime(order: string) {
+export function toggleTime(order: string | number) {
 	$(`Question${order}Time`).classList.toggle("displayTimeLimit");
 }
 
@@ -286,7 +289,7 @@ export const verifyQuiz = () => {
 	}
 	else {
 		var nullSpace01: number[] = [];
-		var timeLimitViolation;
+		var timeLimitViolation: number[] = [];
 		var answerError0: number[] = [];
 		var answerError1: number[] = [];
 		var answerError2: number[] = [];
@@ -359,7 +362,7 @@ export function exitModalPopupF(promptUser: boolean) {
 		$('editQuizMenu').style.animation = 'modalPopout 0.3s';
 		setTimeout(() => {
 			editState = false;
-			$('editQuizMenu').style = "";
+			($('editQuizMenu') as HTMLDivElement).removeAttribute('style');
 			$('modal-bg').style.display = 'none';
 			$('editQuizMenu').style.display = 'none';
 			$("saveQuizButton").disabled = false;
@@ -402,6 +405,7 @@ export function addQuiz() {
 		$('makeDiv').style.textAlign = 'center';
 		document.querySelectorAll('.quizActionButton').forEach(item => {
 			item.addEventListener('click', event => {
+				const eventTarget = (event.target! as HTMLElement).id;
 				if (checkOnce) {
 					$('createButtonA').disabled = true;
 					window.clickEvents['modal-bg'] = () => {exitModalPopupTemplate('manageQuizMenu')};
@@ -414,14 +418,14 @@ export function addQuiz() {
 					$('submitQuizID').textContent = 'Create';
 					$('modal-bg').style.animation = 'fadeIn 0.5s';
 					$('modal-bg').style.display = 'block';
-					$('quizNameTitleA').textContent = quizList2[event.currentTarget.id] + ":";
+					$('quizNameTitleA').textContent = quizList2[eventTarget] + ":";
 					$('homeText2').classList.add('btnTransitionA');
 					$('manageQuizMenu').style.animation = 'modalPopin 0.3s';
 					$('manageQuizMenu').style.display = 'block';
 					$('createQuizMenu').style.display = 'none';
 					$('modal-popupA').style.display = 'block';
 					$('modal-popupA').classList.add('modal-popupActive');
-					currentQuizEdit = event.currentTarget.id;
+					currentQuizEdit = eventTarget;
 					if (Object.keys(quizList2).length > 0) {
 						for (var key in quizList2) {
 							$(key).classList.add('btnTransitionA');
@@ -434,7 +438,7 @@ export function addQuiz() {
 	}
 }
 
-export const questionErrorParse = (arrayToParse, questionValueSingular, questionValuePlural) => {
+export const questionErrorParse = (arrayToParse: number[], questionValueSingular: string, questionValuePlural: string) => {
 	let output = 'Questions';
 	if(arrayToParse.length == 1) {
 		output = `Question ${arrayToParse[0]} ${questionValueSingular}`;
@@ -442,7 +446,7 @@ export const questionErrorParse = (arrayToParse, questionValueSingular, question
 	else if (arrayToParse.length == 2) {
 		output = `Questions ${arrayToParse[0]} and ${arrayToParse[1]} ${questionValuePlural}`;
 	}
-	else if(arrayToParse != 0) {
+	else if(arrayToParse.length != 0) {
 		arrayToParse.forEach((error) => {
 			if (arrayToParse.slice(-1)[0] != error) {
 				output += ` ${error},`;
@@ -483,8 +487,8 @@ export function playQuiz() {
 	}, 500);
 	setTimeout(() => {
 		$('title').style.display = 'none';
-		$('mainTheme').play();
-		$('mainTheme').volume = 0.6;
+		($('mainTheme') as HTMLMediaElement).play();
+		($('mainTheme') as HTMLMediaElement).volume = 0.6;
 		$('teacherPlayScreen').style.display = 'block';
 	}, 1000);
 	$('manageQuizMenu').style.animation = 'modalPopout 0.3s';
@@ -513,7 +517,7 @@ export function deleteQuizConfirm() {
 	delete quizList2[currentQuizEdit];
 	$('deleteQuizConfirm').disabled = true;
 	$('backButtonDeleteConfirm').disabled = true;
-	$('deleteQuizConfirm').style.backgroundColor = null;
+	$('deleteQuizConfirm').style.backgroundColor = '';
 	clearChildren('deleteQuizConfirm');
 	createTemplate('svgLoader', 'deleteQuizConfirm');
 	setTimeout(function () {
@@ -531,7 +535,7 @@ export function editQuiz() {
 		quizObject2[currentQuizEdit].quizID = currentQuizEdit;
 	}
 	else {
-		quizObject2[currentQuizEdit].questionObjects.forEach(function (questionObject) {
+		quizObject2[currentQuizEdit].questionObjects.forEach( (questionObject: any) => {
 			addquestionToDOM();
 			var actualData = $(`draggableQuestion${highestQuestion}`).children[1].children;
 			actualData[0].textContent = questionObject.questionName;
@@ -556,7 +560,7 @@ export function editQuiz() {
 	}
 	$('quizNameUpdate').value = decodeHTML(quizList2[currentQuizEdit]);
 	drake = dragula([$('draggableDiv')], {
-		moves: function (el, container, handle) {
+		moves: function (_el, _container, handle) {
 			return handle!.classList.contains('draggableActual');
 		}
 	}).on('drag', function (el) {
@@ -626,7 +630,7 @@ export function shareQuiz() {
 }
 
 export function copyShareLink() {
-	navigator.clipboard.writeText($('coolTextArea').textContent);
+	navigator.clipboard.writeText($('coolTextArea').textContent!);
 	$("errorActual").textContent = 'Link Copied';
 	$("errorMessageA").style.display = "block";
 	setTimeout(function () {

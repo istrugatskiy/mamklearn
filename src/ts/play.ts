@@ -10,7 +10,7 @@ window.anotherTestCase4 = '{ "gameEnd": true, "result-1st": "Ilya%20Strugatskiy"
 var otherInterval: number;
 var timerInterval: number;
 var finishUpInterval: number;
-var gameStateStudent: object;
+var gameStateStudent: any;
 const root = document.documentElement;
 var bottomBarOffset: number;
 var resettableTime: number;
@@ -121,7 +121,7 @@ function studentGameProcessor(input: string) {
 			Array.from($('studentAnswersFlex').children).forEach((object) => {
 				object.classList.add('transitionQuestionB');
 				setTimeout(() => {
-					while(object.firstElementChild.firstChild) object.firstElementChild.removeChild(object.firstElementChild.lastChild);
+					while(object.firstElementChild!.firstChild) object.firstElementChild!.removeChild(object.firstElementChild!.lastChild!);
 					object.disabled = false;
 					object.classList.remove('transitionQuestionB');
 					object.classList.add('transitionQuestionC');
@@ -153,7 +153,7 @@ function studentGameProcessor(input: string) {
 		else if(!inputInternal.isQuestionCorrect) {
 			var start = Date.now();
 			var init = inputInternal.currentQuestionTime;
-			otherInterval = setInterval(() => {
+			otherInterval = window.setInterval(() => {
 				var delta = (Date.now() - start) / 1000;
 				var internal = init - delta;
 				if(internal < 0) {internal = 0};
@@ -163,10 +163,10 @@ function studentGameProcessor(input: string) {
 				object.classList.add('transitionQuestionB');
 				setTimeout(() => {
 					object.style.display = 'none';
-					while(object.firstElementChild.firstChild) object.firstElementChild.removeChild(object.firstElementChild.lastChild);
+					while(object.firstElementChild!.firstChild) object.firstElementChild!.removeChild(object.firstElementChild!.lastChild!);
 					object.disabled = false;
 					object.classList.remove('transitionQuestionB');
-					resettableTime = setTimeout(() => {
+					resettableTime = window.setTimeout(() => {
 						object.style.display = 'block';
 						object.classList.add('transitionQuestionC');
 						setTimeout(() => {
@@ -183,7 +183,7 @@ function studentGameProcessor(input: string) {
 				$('titleButtonStudent').style.display = 'none';
 				$('studentShortAnswer').style.display = 'none';
 				$('userNotifyPlay').style.display = 'block';
-				resettableTime2 = setTimeout(() => {
+				resettableTime2 = window.setTimeout(() => {
 					$('userNotifyPlay').classList.add('fadeOutThingy');
 					$('titleButtonStudent').classList.add('transitionQuestionC');
 					$('studentShortAnswer').classList.add('transitionQuestionC');
@@ -207,14 +207,14 @@ function studentGameProcessor(input: string) {
 		$('gameFinishNotify').textContent = `The game will end in ${gameStateStudent.timeLeft}s`;
         var start = Date.now();
 		var init = gameStateStudent.timeLeft;
-		finishUpInterval = setInterval(() => {
+		finishUpInterval = window.setInterval(() => {
 			var delta = (Date.now() - start) / 1000;
 			var internal = init - delta;
             if(internal < 0) {internal = 0};
             gameStateStudent.timeLeft = internal;
 			$('gameFinishNotify').textContent = `The game will end in ${Math.floor(gameStateStudent.timeLeft)}s`;
 		}, 100);
-        resettableTime3 = setTimeout(() => {
+        resettableTime3 = window.setTimeout(() => {
             clearInterval(finishUpInterval);
 			$('gameFinishNotify').style.animation = 'fadeOut 0.3s';
 			setTimeout(() => {
@@ -237,7 +237,7 @@ function setQuestion() {
 		updateStudentLocation(gameStateStudent.currentQuestion);
 	}
 	$('studentAnswersFlex').style.display = 'flex';
-	$('titleButtonStudent').firstElementChild.textContent = decodeURI(gameStateStudent.currentQuestionData.question);
+	$('titleButtonStudent').firstElementChild!.textContent = decodeURI(gameStateStudent.currentQuestionData.question);
 	var options = $('studentAnswersFlex').children;
 	for (var i = 0; i < options.length; i++) {
 		if (!gameStateStudent.currentQuestionData.answers[i]) {
@@ -246,7 +246,7 @@ function setQuestion() {
 		else {
 			options[i].disabled = false;
 			options[i].style.display = 'block';
-			options[i].firstElementChild.textContent = decodeURI(gameStateStudent.currentQuestionData.answers[i]);
+			options[i].firstElementChild!.textContent = decodeURI(gameStateStudent.currentQuestionData.answers[i]);
 		}
 	}
 	if (gameStateStudent.currentQuestionData.answers.join("").length == 0) {
@@ -255,7 +255,7 @@ function setQuestion() {
 		$('studentShortAnswer').style.display = 'block';
 		$('studentShortAnswerText').textContent = null;
 		$('studentShortAnswerText').classList.remove('contentEditableDisabled');
-		$('studentShortAnswerText').contentEditable = true;
+		$('studentShortAnswerText').contentEditable = "true";
 		$('shortAnswerSubmitButton').disabled = false;
 	}
 	else {
@@ -269,7 +269,7 @@ function setQuestion() {
 		$('timeLeftCounter').textContent = `(Time Left: ${gameStateStudent.currentQuestionData.timeLimit}s)`;
 		var start = Date.now();
 		var init = gameStateStudent.currentQuestionData.timeLimit;
-		timerInterval = setInterval(() => {
+		timerInterval = window.setInterval(() => {
 			var delta = (Date.now() - start) / 1000;
 			gameStateStudent.currentQuestionData.timeLimit = init - delta;
 			if(gameStateStudent.currentQuestionData.timeLimit < 0 && gameStateStudent.currentQuestionData.timeLimit > -999) {
@@ -305,9 +305,9 @@ export function submitMultipleChoice(event: string) {
 	clearInterval(timerInterval);
 	Array.from($('studentAnswersFlex').children).forEach( (object, index) => {
 		object.disabled = true;
-		if(index + 1 == response) {
-			while(object.firstElementChild.firstChild) object.firstElementChild.removeChild(object.firstElementChild.lastChild);
-			object.firstElementChild.appendChild($('svgLoader').content.cloneNode(true));
+		if((index + 1).toString() == response) {
+			while(object.firstElementChild!.firstChild) object.firstElementChild!.removeChild(object.firstElementChild!.lastChild!);
+			object.firstElementChild!.appendChild($('svgLoader').content.cloneNode(true));
 		}
 	});
 }
@@ -316,7 +316,7 @@ export function submitShortAnswer() {
 	$('studentShortAnswerText').contentEditable = 'false';
 	$('shortAnswerSubmitButton').disabled = true;
 	$('studentShortAnswerText').classList.add('contentEditableDisabled');
-	answerQuestion($('studentShortAnswerText').textContent);
+	answerQuestion($('studentShortAnswerText').textContent!);
 	clearInterval(timerInterval);
 }
 

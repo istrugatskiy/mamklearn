@@ -82,7 +82,9 @@ export const createTemplate = (templateID: string, place: string, modif: any = f
 	let content = ($(templateID) as HTMLTemplateElement).content.cloneNode(true);
 	if(modif) {
 		for (var i = 0; i < content.childNodes.length; i++) {
-			(content.childNodes[i] as HTMLElement).innerHTML = (content.childNodes[i] as HTMLElement).innerHTML.replace(new RegExp(modif, 'g'), replace);
+			if((content.childNodes[i] as HTMLElement).innerHTML) {
+				(content.childNodes[i] as HTMLElement).innerHTML = (content.childNodes[i] as HTMLElement).innerHTML.replace(new RegExp(modif, 'g'), replace);
+			}
 		}
 	}
 	$(place).appendChild(content);

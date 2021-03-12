@@ -129,6 +129,7 @@ function makeCode() {
 	// replace this with request to server and await callback or if 5 seconds passes undo
 	import('./make').then( obj => {
 		errorCount = 0;
+		obj.initEvents();
 		title.classList.add('titleTransition');
 		makeButton.classList.add('btnTransitionA');
 		playButton.classList.add('btnTransitionA');
