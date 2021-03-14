@@ -71,7 +71,7 @@ window.keyboardIncludesEvents = {};
 
 // Initializes the app once its fully loaded.
 window.addEventListener('load', () => {
-	gapi.load('auth2', function () {
+	gapi.load('auth2', () => {
 		gapi.auth2.init({
 			client_id: '917106980205-im519fknf8sfb1jc1gs1tr6eafmto4vs.apps.googleusercontent.com',
 		}).then( () => {
@@ -215,19 +215,17 @@ function JoinGame() {
 	clearChildren('submitID');	
 	createTemplate('svgLoader', 'submitID');
 	if ($("gameID").value == "2794") {
-		console.log('a');
 		import('./play').then( (obj) => {
-			console.log('b');
 			errorCount = 0;
 			$('mainLoader').classList.add('loader--active');
 			obj.initEvents();
 			setTimeout( () => {
-				$('loader-1').style.display = "none";
+				$('loader-1').style.display = 'none';
 				$("gameStartScreenStudent").style.display = 'block';
 				setTimeout( () => {
 					$('mainLoader').classList.remove('loader--active');
 				}, 1000);
-			}, 750);
+			}, 1000);
 			setTimeout( () => {
 				window.studentGameProcessor(window.quizStartTestCase);
 			}, 2000);
