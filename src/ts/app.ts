@@ -190,7 +190,7 @@ export function contentEditableUpdate() {
 					var a70 = String(eventTarget.textContent!.replace(/(\r\n|\r|\n)/ , ""));
 					const maxLength = (eventTarget.getAttribute("maxlength") as unknown as number);
 					if(maxLength) {
-						eventTarget.innerText = a70.substring(0, );
+						eventTarget.innerText = a70.substring(0, maxLength);
 					}
 					try {
 						setCaretPosition(eventTarget, a69);

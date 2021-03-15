@@ -13,13 +13,7 @@ export const getID = (inputEvent: Event) => {
 }
 
 export const $ = (a: string): HTMLElement => {
-	const b = document.getElementById(a);
-	if(b) {
-		return b;
-	}
-	else {
-		throw new TypeError('Object is undefined!');
-	}
+	return document.getElementById(a)!;
 }
 
 export const clearChildren = (element: string) => {
@@ -83,7 +77,7 @@ export const createTemplate = (templateID: string, place: string, modif: any = f
 	if(modif) {
 		for (var i = 0; i < content.childNodes.length; i++) {
 			if((content.childNodes[i] as HTMLElement).innerHTML) {
-				(content.childNodes[i] as HTMLElement).innerHTML = (content.childNodes[i] as HTMLElement).innerHTML.replace(new RegExp(modif, 'g'), replace);
+				(content.childNodes[i] as HTMLElement).innerHTML = (content.childNodes[i] as HTMLElement).innerHTML.split(modif).join(replace);
 			}
 		}
 	}

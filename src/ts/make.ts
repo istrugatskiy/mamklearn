@@ -13,7 +13,7 @@ const quizObject = {
 var drake: any;
 var currentQuizEdit: any;
 var iconIterate = 0;
-var activeArea: number;
+var activeArea: number | null;
 var highestQuestion = 0;
 var tempQuiz: any;
 var allowState2 = true;
@@ -181,7 +181,7 @@ export function collapseSubArea(a: number) {
 	area.classList.toggle('arrowBDown');
 	objm.classList.toggle('contentA1');
 	objm.classList.toggle('contentA2');
-	if (activeArea !== null && activeArea !== a) {
+	if (activeArea && activeArea !== a) {
 		var area = $(`collapseSubArea${activeArea}`);
 		var objm = $(`collapsableContent${activeArea}`);
 		area.classList.add('arrowBRight');
@@ -193,14 +193,14 @@ export function collapseSubArea(a: number) {
 }
 
 export function collapseAllArea() {
-	if (activeArea !== -2 && $(`collapseSubArea${activeArea}`) != null) {
+	if (activeArea && $(`collapseSubArea${activeArea}`) != null) {
 		var area = $(`collapseSubArea${activeArea}`);
 		var objm = $(`collapsableContent${activeArea}`);
 		area.classList.add('arrowBRight');
 		area.classList.remove('arrowBDown');
 		objm.classList.add("contentA2");
 		objm.classList.remove("contentA1");
-		activeArea = -2;
+		activeArea = null;
 	}
 }
 

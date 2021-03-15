@@ -80,37 +80,7 @@ function studentGameProcessor(input: string) {
 		gameStateStudent.gameErrorState = inputInternal.gameErrorState;
 	}
 	else if(inputInternal.hasOwnProperty('kickPlayer')) {
-		clearInterval(timerInterval);
-        clearTimeout(resettableTime);
-        clearTimeout(resettableTime2);
-		clearTimeout(resettableTime3);
-		$('gameFinishNotify').style.animation = 'flowFromTop 1s forwards';
-		$('titleButtonStudent').style.display = 'block';
-		$('studentShortAnswer').classList.remove('transitionQuestionC');
-		$('titleButtonStudent').classList.remove('transitionQuestionC');
-        $('studentShortAnswer').style.display = 'block';
-		$('titleButtonStudent').style.display = 'block';
-        Array.from($('studentAnswersFlex').children).forEach((object) => {
-            object.classList.remove('transitionQuestionB');
-            object.style.display = 'block';
-            object.classList.remove('transitionQuestionC');
-        });
-		$('errorMessageB').style.display = 'none';
-		$('userNotifyPlay').style.display = 'none';
-		$("errorActual").textContent = 'Kicked From Game';
-		$("errorMessageA").style.display = 'block';
-		$('gameStartScreenStudent').style.display = 'none';
-		$('studentPlayScreen').style.display = 'none';
-		$('mainLoader').classList.remove('loader--active');
-		$('title').style.display = "block";
-		$('gameFinishNotify').style.display = 'none';
-        clearInterval(finishUpInterval);
-		goBack();
-		gameStateStudent = null;
-		setTimeout( () => {
-			$('loader-1').style.display = "none";
-			$("errorMessageA").style.display = "none";
-		}, 1000);
+		kickPlayer();
 	}
 	else if(inputInternal.hasOwnProperty('isQuestionCorrect')) {
 		clearInterval(timerInterval);
@@ -231,6 +201,41 @@ function studentGameProcessor(input: string) {
 			$('errorMessageB').style.display = 'none';
 		}, 500);
 	}
+}
+
+function kickPlayer() {
+	clearInterval(timerInterval);
+    clearTimeout(resettableTime);
+    clearTimeout(resettableTime2);
+	clearTimeout(resettableTime3);
+	$('gameResults').style.display = 'block';
+	$('gameFinishNotify').style.animation = 'flowFromTop 1s forwards';
+	$('titleButtonStudent').style.display = 'block';
+	$('studentShortAnswer').classList.remove('transitionQuestionC');
+	$('titleButtonStudent').classList.remove('transitionQuestionC');
+    $('studentShortAnswer').style.display = 'block';
+	$('titleButtonStudent').style.display = 'block';
+    Array.from($('studentAnswersFlex').children).forEach((object) => {
+        object.classList.remove('transitionQuestionB');
+        object.style.display = 'block';
+        object.classList.remove('transitionQuestionC');
+    });
+	$('errorMessageB').style.display = 'none';
+	$('userNotifyPlay').style.display = 'none';
+	$("errorActual").textContent = 'Kicked From Game';
+	$("errorMessageA").style.display = 'block';
+	$('gameStartScreenStudent').style.display = 'none';
+	$('studentPlayScreen').style.display = 'none';
+	$('mainLoader').classList.remove('loader--active');
+	$('title').style.display = "block";
+	$('gameFinishNotify').style.display = 'none';
+    clearInterval(finishUpInterval);
+	goBack();
+	gameStateStudent = null;
+	setTimeout( () => {
+		$('loader-1').style.display = "none";
+		$("errorMessageA").style.display = "none";
+	}, 1000);
 }
 
 function setQuestion() {

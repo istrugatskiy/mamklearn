@@ -1844,26 +1844,39 @@ img {
 		transform: translateY(50vh) translateX(-50%);
 	}
 }
-#inGame1st {
-	animation: spawn1stPlace 10s forwards;
-	animation-delay: 4s;
-	transform-origin: 50% 100%;
-}
-#inGame1st > * {
+#inGame1stContainer {
 	position: absolute;
+	transform: translateY(-470px) translateX(-400px);
+	animation: spawn1stPlaceContainer 0.1s forwards;
+	animation-delay: 4s;
+	visibility: hidden;
+}
+#inGame1st {
+	position: relative;
+	animation: spawn1stPlace 3s forwards;
+	animation-delay: 4s;
+	transform-origin: 50% 78%;
+}
+@keyframes spawn1stPlaceContainer {
+	to {
+		visibility: visible;
+	}
+	from {
+		visibility: visible;
+	}
 }
 @keyframes spawn1stPlace {
 	0% {
 		visibility: visible;
 		opacity: 0;
-		transform: scaleX(1) translateY(-470px) translateX(-400px);
+		transform: scale(1);
 	}
 	10% {
 		opacity: 1;
-		transform: scaleX(1) translateY(-470px) translateX(-400px);
+		transform: scale(1);
 	}
 	100% {
 		visibility: visible;
-		transform: scaleX(5) translateY(-470px) translateX(-400px);
+		transform: scale(2);
 	}
 }
