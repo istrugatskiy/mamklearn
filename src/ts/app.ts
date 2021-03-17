@@ -157,10 +157,10 @@ function makeCode() {
 }
 
 function playCode() {
-	var makeButton = $('makebtn');
-	var playButton = $('btn2');
-	var signOutButton = $('signOutbtn');
-	var title = $('homeText');
+	const makeButton = $('makebtn');
+	const playButton = $('btn2');
+	const signOutButton = $('signOutbtn');
+	const title = $('homeText');
 	title.classList.add('titleTransition');
 	makeButton.classList.add('btnTransitionA');
 	playButton.classList.add('btnTransitionA');
@@ -170,6 +170,7 @@ function playCode() {
 	$('charCustomize').classList.add('btnTransitionA');
 	setTimeout(function () {
 		setTitle('playMenu');
+		$('gameID').focus();
 		$('title').style.height = '250px';
 		$('title').style.top = "30%";
 	}, 300);

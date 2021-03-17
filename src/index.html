@@ -319,7 +319,7 @@
 		The game will end in ${seconds}s
 	</p>
 	<template id="templateQuestion">
-		<div style="margin-top: -50px; position: relative;" class="draggable" id="draggableQuestion${highestQuestion}">
+		<div style="margin-top: -50px; position: relative;" class="draggable titleTransitionBack" id="draggableQuestion${highestQuestion}">
 		<h3 style="font-family: 'Chelsea Market', cursive; color: white; text-align: left;"> 
 			<span class="draggableActual">
 				<svg class="draggableActual" xmlns="http://www.w3.org/2000/svg" height="24" style="transform: scale(2);" viewBox="0 0 24 24" width="24">
@@ -447,7 +447,7 @@
 	<template id="playMenu">
 		<h1 class="titleTransitionBack" id="codeText">Game Code:</h1>
 	<form id="joinQuizForm" name="joinQuizForm">
-		<input autocomplete="off" class="titleTransitionBack formInput button" id="gameID" maxlength="9" name="gameID" autofocus pattern="^[0-9]*$" placeholder="Game Code" required="" title="valid game ID" type="text">
+		<input autocomplete="off" class="titleTransitionBack formInput button" id="gameID" maxlength="9" name="gameID" pattern="^[0-9]*$" placeholder="Game Code" required="" title="valid game ID" type="text">
 		<br>
 		<br>
 		<button class="button titleTransitionBack" id="submitID" type="submit">Join</button>
