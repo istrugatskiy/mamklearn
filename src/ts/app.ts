@@ -21,11 +21,11 @@ declare global {
 	}
 }
 window.onSignIn = onSignIn;
-var customOptionsIncrement = 0;
+let customOptionsIncrement = 0;
 window.customOptionsIncrement = customOptionsIncrement;
-var currentUserConfig = [0, 0, 0, 0, 0];
+let currentUserConfig = [0, 0, 0, 0, 0];
 window.currentUserConfig = currentUserConfig;
-var errorCount = 0;
+let errorCount = 0;
 
 console.log("%cUse link to get quiz answers:https://bit.ly/31Apj2U", "font-size: 32px;");
 const customOptions = ["Eyes", "Nose", "Mouth", "Shirt", "Arms"];
@@ -98,8 +98,8 @@ function userClick(link: string, disableObject?: string) {
 };
 
 function onSignIn(googleUser: any) {
-	var $error = $('loginError1');
-	var auth2 = gapi.auth2.getAuthInstance();
+	let $error = $('loginError1');
+	let auth2 = gapi.auth2.getAuthInstance();
 	// feel sorry for whoever reads this code - Ilya
 	if (googleUser.getHostedDomain() == 'student.mamkschools.org' || googleUser.getHostedDomain() == 'mamkschools.org') {
 		setTitle('homeScreen');
@@ -177,7 +177,7 @@ function playCode() {
 }
 
 export function contentEditableUpdate() {
-	var contentBoxes = document.querySelectorAll('[contenteditable]');
+	let contentBoxes = document.querySelectorAll('[contenteditable]');
 	for (let i = 0; i < contentBoxes.length; i++) {
 		if (contentBoxes[i].getAttribute("initialized") != "true") {
 			contentBoxes[i].setAttribute("initialized", "true");
@@ -186,9 +186,9 @@ export function contentEditableUpdate() {
 			});
 			contentBoxes[i].addEventListener('input', (event) => {
 				const eventTarget = event.target! as HTMLElement;
-				var a69 = getCaretCharacterOffsetWithin(eventTarget);
+				let a69 = getCaretCharacterOffsetWithin(eventTarget);
 				setTimeout( () => {
-					var a70 = String(eventTarget.textContent!.replace(/(\r\n|\r|\n)/ , ""));
+					let a70 = String(eventTarget.textContent!.replace(/(\r\n|\r|\n)/ , ""));
 					const maxLength = (eventTarget.getAttribute("maxlength") as unknown as number);
 					if(maxLength) {
 						eventTarget.innerText = a70.substring(0, maxLength);
@@ -209,8 +209,8 @@ export function contentEditableUpdate() {
 function JoinGame() {
 	$("gameID").disabled = true;
 	$("submitID").disabled = true;
-	var selects = document.getElementsByTagName("a");
-	for (var i = 0, il = selects.length; i < il; i++) {
+	let selects = document.getElementsByTagName("a");
+	for (let i = 0, il = selects.length; i < il; i++) {
 		selects[i].className += " disabled";
 	}
 	clearChildren('submitID');	
@@ -251,8 +251,8 @@ function JoinGame() {
 			setTimeout(function () {
 				$("errorMessageA").style.display = "none";
 			}, 1000);
-			var selects = document.getElementsByTagName("a");
-			for (var i = 0, il = selects.length; i < il; i++) {
+			let selects = document.getElementsByTagName("a");
+			for (let i = 0, il = selects.length; i < il; i++) {
 				selects[i].classList.remove("disabled");
 			}
 			$('submitID').innerText = 'Join';

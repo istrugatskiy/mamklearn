@@ -3,25 +3,25 @@ import dragula from 'dragula';
 import {$, characterCount, deepEqual, createTemplate, setTitle, encodeHTML, decodeHTML, clearChildren, getID} from './utils';
 import {setCharImage, contentEditableUpdate} from './app';
 
-var editState = false;
-var quizObject2: any[] = [];
+let editState = false;
+let quizObject2: any[] = [];
 const quizObject = {
 	quizID: "",
 	quizName: "",
 	questionObjects: []
 }
-var drake: any;
-var currentQuizEdit: any;
-var iconIterate = 0;
-var activeArea: number | null;
-var highestQuestion = 0;
-var tempQuiz: any;
-var allowState2 = true;
-var quizList2: any = {};
-var checkOnce = true;
-var quizIncrement = 0;
+let drake: any;
+let currentQuizEdit: any;
+let iconIterate = 0;
+let activeArea: number | null;
+let highestQuestion = 0;
+let tempQuiz: any;
+let allowState2 = true;
+let quizList2: any = {};
+let checkOnce = true;
+let quizIncrement = 0;
 
-var clickListeners = {
+let clickListeners = {
 	"deleteQuizConfirm": () => {deleteQuizConfirm()},
 	"deleteQuiz": () => {deleteQuiz()},
 	"editQuiz": () => {editQuiz()},
@@ -40,19 +40,19 @@ var clickListeners = {
 	"backButtonDeleteConfirm": () => {exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm')},
 };
 
-var clickIncludesListeners = {
+let clickIncludesListeners = {
 	"collapseSubArea": (event: MouseEvent) => {collapseSubArea(getID(event) as unknown as number)},
 	"deleteQuestion": (event: MouseEvent) => {deleteQuestion(getID(event))},
 	"shortAnswerToggle": (event: MouseEvent) => {shortAnswerToggle(getID(event))},
 	"toggleTime": (event: MouseEvent) => {toggleTime(getID(event))}
 }
 
-var submitListeners = {
+let submitListeners = {
 	"editQuizForm": () => {editQuizForm()},
 	"quizCreateForm": () => {createNewQuiz()}
 }
 
-var keyboardIncludesListeners = {
+let keyboardIncludesListeners = {
 	"deleteQuestion": (event: KeyboardEvent) => {deleteQuestion(getID(event))},
 	"keyboardNavAnswer": (event: KeyboardEvent) => {
 		const eventTarget = (event.target! as HTMLElement).id;
@@ -106,7 +106,7 @@ export function createQuiz() {
 		$('modal-popupA').style.display = 'block';
 		$('modal-popupA').classList.add('modal-popupActive');
 		if (Object.keys(quizList2).length > 0) {
-			for (var key in quizList2) {
+			for (let key in quizList2) {
 				$(key).classList.add('btnTransitionA');
 			};
 		}
@@ -118,7 +118,7 @@ export function goBackMakeA() {
 	$('backButtonC').disabled = true;
 	$('homeText2').classList.add('titleTransition');
 	if (Object.keys(quizList2).length > 0) {
-		for (var key in quizList2) {
+		for (let key in quizList2) {
 			$(key).classList.add('btnTransitionA');
 		};
 	}
@@ -135,7 +135,7 @@ export function goBackMakeA() {
 
 export function createNewQuiz() {
 	checkOnce = false;
-	var button = $('submitQuizID');
+	let button = $('submitQuizID');
 	$('QuizName').disabled = true;
 	const g = $('QuizName').value;
 	button.disabled = true;
@@ -175,15 +175,15 @@ export function doneButtonA() {
 }
 
 export function collapseSubArea(a: number) {
-	var area = $(`collapseSubArea${a}`);
-	var objm = $(`collapsableContent${a}`);
+	let area = $(`collapseSubArea${a}`);
+	let objm = $(`collapsableContent${a}`);
 	area.classList.toggle('arrowBRight');
 	area.classList.toggle('arrowBDown');
 	objm.classList.toggle('contentA1');
 	objm.classList.toggle('contentA2');
 	if (activeArea && activeArea !== a) {
-		var area = $(`collapseSubArea${activeArea}`);
-		var objm = $(`collapsableContent${activeArea}`);
+		let area = $(`collapseSubArea${activeArea}`);
+		let objm = $(`collapsableContent${activeArea}`);
 		area.classList.add('arrowBRight');
 		area.classList.remove('arrowBDown');
 		objm.classList.add("contentA2");
@@ -194,8 +194,8 @@ export function collapseSubArea(a: number) {
 
 export function collapseAllArea() {
 	if (activeArea && $(`collapseSubArea${activeArea}`) != null) {
-		var area = $(`collapseSubArea${activeArea}`);
-		var objm = $(`collapsableContent${activeArea}`);
+		let area = $(`collapseSubArea${activeArea}`);
+		let objm = $(`collapsableContent${activeArea}`);
 		area.classList.add('arrowBRight');
 		area.classList.remove('arrowBDown');
 		objm.classList.add("contentA2");
@@ -216,8 +216,8 @@ export function deleteQuestion(a: string) {
 }
 
 export function reorderProper() {
-	var test = 0;
-	for (var i = 0; i <= $('draggableDiv').children.length - 1; i++) {
+	let test = 0;
+	for (let i = 0; i <= $('draggableDiv').children.length - 1; i++) {
 		$('draggableDiv').children[i]!.firstElementChild!.children[1].textContent = `Question ${i + 1}:`;
 		test = i;
 	}
@@ -247,9 +247,9 @@ export function parseActiveQuiz() {
 	tempQuiz.quizName = encodeHTML($("quizNameUpdate").value);
 	tempQuiz.quizID = currentQuizEdit;
 	if ($("draggableDiv").firstElementChild) {
-		var quizDoc = Array.from($("draggableDiv").children);
+		let quizDoc = Array.from($("draggableDiv").children);
 		quizDoc.forEach( (object) => {
-			var timeLimit: string | null | boolean = false;
+			let timeLimit: string | null | boolean = false;
 			if (object.children[1].children[4].children[0].children[0].checked) {
 				timeLimit = object.children[1].children[4].children[2].textContent;
 			}
@@ -282,17 +282,17 @@ export function parseActiveQuiz() {
 //verify that at least one possible choice is correct; done
 //verify that at least two answer fields are filled out; done
 export const verifyQuiz = () => {
-	var quizParseError = [];
-	var finalResult = document.createDocumentFragment();
+	let quizParseError = [];
+	let finalResult = document.createDocumentFragment();
 	if (tempQuiz.questionObjects.length === 0) {
 		quizParseError.push('No questions exist');
 	}
 	else {
-		var nullSpace01: number[] = [];
-		var timeLimitViolation: number[] = [];
-		var answerError0: number[] = [];
-		var answerError1: number[] = [];
-		var answerError2: number[] = [];
+		let nullSpace01: number[] = [];
+		let timeLimitViolation: number[] = [];
+		let answerError0: number[] = [];
+		let answerError1: number[] = [];
+		let answerError2: number[] = [];
 		tempQuiz.questionObjects.forEach( (question: any, index: number) => {
 			index++;
 			if (/^$/.test(question.questionName)) {
@@ -393,7 +393,7 @@ export function addquestionToDOM() {
 
 export function addQuiz() {
 	if (Object.keys(quizList2).length > 0) {
-		for (var key in quizList2) {
+		for (let key in quizList2) {
 			$('makeDiv').innerHTML += `<button style="min-width: 300px; min-height: 300px;  margin-top: 30px; text-align: center; font-size: xx-large; margin-left: 30px;" class="button titleTransitionBack quizActionButton" id="${key}"><img src="../img/qIcon-${iconIterate % 4}.png" width="250"><br>${quizList2[key]}</button>`
 			iconIterate++;
 		};
@@ -427,7 +427,7 @@ export function addQuiz() {
 					$('modal-popupA').classList.add('modal-popupActive');
 					currentQuizEdit = eventTarget;
 					if (Object.keys(quizList2).length > 0) {
-						for (var key in quizList2) {
+						for (let key in quizList2) {
 							$(key).classList.add('btnTransitionA');
 						};
 					}
@@ -537,7 +537,7 @@ export function editQuiz() {
 	else {
 		quizObject2[currentQuizEdit].questionObjects.forEach( (questionObject: any) => {
 			addquestionToDOM();
-			var actualData = $(`draggableQuestion${highestQuestion}`).children[1].children;
+			let actualData = $(`draggableQuestion${highestQuestion}`).children[1].children;
 			actualData[0].textContent = questionObject.questionName;
 			characterCount(actualData[0], '90');
 			actualData[3].children[0].children[0].checked = questionObject.shortAnswer;
@@ -550,7 +550,7 @@ export function editQuiz() {
 				actualData[4].children[2].textContent = questionObject.timeLimit;
 				characterCount(actualData[4].children[2], '3');
 			}
-			for (var i = 0; i < 4; i++) {
+			for (let i = 0; i < 4; i++) {
 				actualData[5].children[i].children[0].textContent = questionObject.Answers[i].answer;
 				characterCount(actualData[5].children[i].children[0], '50');
 				actualData[5].children[i].children[2].children[0].checked = questionObject.Answers[i].correct;

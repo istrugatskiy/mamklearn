@@ -6,26 +6,26 @@ window.quizStartTestCase = ' {"gameStart": true, "totalQuestions": 5, "currentQu
 window.anotherTestCase = '{ "isQuestionCorrect": false, "nextQuestion": null, "choices": [ null ], "currentQuestionTime": 20 }';
 window.anotherTestCase2 = '{ "isQuestionCorrect": true, "nextQuestion": "heckDifferentQuestionTooLazyTooPutPercent", "choices": [ "Nabeel", "Nabeel2", "Nabeel3", "Nabeel4" ], "currentQuestionTime": 69 }';
 window.anotherTestCase3 = '{ "gameFinish": true, "timeTillEnd": 180}';
-window.anotherTestCase4 = '{ "gameEnd": true, "result-1st": "Ilya%20Strugatskiy", "1CharacterConfig": "0,0,1,2,9", "result-2nd": "Ilya%20Strugatskiy", "2CharacterConfig": "0,0,1,2,9", "result-3rd": "Ilya%20Strugatskiy", "3CharacterConfig": "0,0,1,2,9", "userPlace":}';
-var otherInterval: number;
-var timerInterval: number;
-var finishUpInterval: number;
-var gameStateStudent: any;
+window.anotherTestCase4 = '{ "gameEnd": true, "result-1st": "Ilya%20Strugatskiy", "1CharacterConfig": "0,0,1,2,9", "result-2nd": "Ilya%20Strugatskiy", "2CharacterConfig": "0,0,1,2,9", "result-3rd": "Ilya%20Strugatskiy", "3CharacterConfig": "0,0,1,2,9", "userPlace": 12}';
+let otherInterval: number;
+let timerInterval: number;
+let finishUpInterval: number;
+let gameStateStudent: any;
 const root = document.documentElement;
-var bottomBarOffset: number;
-var resettableTime: number;
-var resettableTime2: number;
-var resettableTime3: number;
+let bottomBarOffset: number;
+let resettableTime: number;
+let resettableTime2: number;
+let resettableTime3: number;
 
-var clickListeners = {
+let clickListeners = {
 	"shortAnswerSubmitButton": () => {submitShortAnswer()},
 }
 
-var clickIncludesListeners = {
+let clickIncludesListeners = {
 	"studentQuizButton": (event: MouseEvent) => {submitMultipleChoice(getID(event))}
 }
 
-var keyboardIncludesListeners = {
+let keyboardIncludesListeners = {
 	"studentShortAnswerText": () => {submitShortAnswer()}
 }
 
@@ -36,7 +36,7 @@ export const initEvents = () => {
 }
 
 function studentGameProcessor(input: string) {
-	var inputInternal = JSON.parse(input);
+	let inputInternal = JSON.parse(input);
 	if(inputInternal.hasOwnProperty('gameStart')) {
 		if(inputInternal.gameStart == true) {
 			clearInterval(timerInterval);
@@ -55,8 +55,8 @@ function studentGameProcessor(input: string) {
 					timeLimit: inputInternal.currentQuestionTime
 				}
 			};
-			var studentRaceBoxNumbers = '';
-			for (var i = 1; i <= gameStateStudent.totalQuestions; i++) {
+			let studentRaceBoxNumbers = '';
+			for (let i = 1; i <= gameStateStudent.totalQuestions; i++) {
 				studentRaceBoxNumbers += `<th>${i}</th>`
 			}
 			$('studentRaceNumbers').innerHTML = studentRaceBoxNumbers + `<th>finish</th>`;
@@ -123,11 +123,11 @@ function studentGameProcessor(input: string) {
 			$('errorMessageB').style.display = 'block';
 		}
 		else if(!inputInternal.isQuestionCorrect) {
-			var start = Date.now();
-			var init = inputInternal.currentQuestionTime;
+			let start = Date.now();
+			let init = inputInternal.currentQuestionTime;
 			otherInterval = window.setInterval( () => {
-				var delta = (Date.now() - start) / 1000;
-				var internal = init - delta;
+				let delta = (Date.now() - start) / 1000;
+				let internal = init - delta;
 				if(internal < 0) {internal = 0};
 				$('mistakeQuestion').textContent = `You can try again in ${Math.floor(internal)} seconds`;
 			}, 100);
@@ -177,11 +177,11 @@ function studentGameProcessor(input: string) {
 		$('gameFinishNotify').style.display = 'block';
 		gameStateStudent.timeLeft = inputInternal.timeTillEnd;
 		$('gameFinishNotify').textContent = `The game will end in ${gameStateStudent.timeLeft}s`;
-        var start = Date.now();
-		var init = gameStateStudent.timeLeft;
+        let start = Date.now();
+		let init = gameStateStudent.timeLeft;
 		finishUpInterval = window.setInterval( () => {
-			var delta = (Date.now() - start) / 1000;
-			var internal = init - delta;
+			let delta = (Date.now() - start) / 1000;
+			let internal = init - delta;
             if(internal < 0) {internal = 0};
             gameStateStudent.timeLeft = internal;
 			$('gameFinishNotify').textContent = `The game will end in ${Math.floor(gameStateStudent.timeLeft)}s`;
@@ -245,8 +245,8 @@ function setQuestion() {
 	}
 	$('studentAnswersFlex').style.display = 'flex';
 	$('titleButtonStudent').firstElementChild!.textContent = decodeURI(gameStateStudent.currentQuestionData.question);
-	var options = $('studentAnswersFlex').children;
-	for (var i = 0; i < options.length; i++) {
+	let options = $('studentAnswersFlex').children;
+	for (let i = 0; i < options.length; i++) {
 		if (!gameStateStudent.currentQuestionData.answers[i]) {
 			options[i].style.display = 'none';
 		}
@@ -274,10 +274,10 @@ function setQuestion() {
 	else {
 		$('timeLeftCounter').style.display = 'block';
 		$('timeLeftCounter').textContent = `(Time Left: ${gameStateStudent.currentQuestionData.timeLimit}s)`;
-		var start = Date.now();
-		var init = gameStateStudent.currentQuestionData.timeLimit;
+		let start = Date.now();
+		let init = gameStateStudent.currentQuestionData.timeLimit;
 		timerInterval = window.setInterval( () => {
-			var delta = (Date.now() - start) / 1000;
+			let delta = (Date.now() - start) / 1000;
 			gameStateStudent.currentQuestionData.timeLimit = init - delta;
 			if(gameStateStudent.currentQuestionData.timeLimit < 0 && gameStateStudent.currentQuestionData.timeLimit > -999) {
 				$('timeLeftCounter').textContent = `(Time Penalty: ${Math.abs(Math.floor(gameStateStudent.currentQuestionData.timeLimit))}s)`;
@@ -293,7 +293,7 @@ function setQuestion() {
 }
 
 export function updateStudentLocation(studentLocation: number) {
-	var internalPercentage = mathClamp((studentLocation * 114) / window.innerWidth, 0, 1);
+	let internalPercentage = mathClamp((studentLocation * 114) / window.innerWidth, 0, 1);
 	if(internalPercentage > 0.75) {
 		bottomBarOffset -= 114;
 	}
@@ -307,7 +307,7 @@ export function answerQuestion(answer: string) {
 }
 
 export function submitMultipleChoice(event: string) {
-	var response = event.charAt(event.length - 1);
+	let response = event.charAt(event.length - 1);
 	answerQuestion(response);
 	clearInterval(timerInterval);
 	Array.from($('studentAnswersFlex').children).forEach( (object, index) => {
@@ -330,7 +330,7 @@ export function submitShortAnswer() {
 window.addEventListener('resize', () => {
 	if (gameStateStudent) {
 		bottomBarOffset = 15;
-		for (var i = 0; i <= gameStateStudent.currentQuestion; i++) {
+		for (let i = 0; i <= gameStateStudent.currentQuestion; i++) {
 			updateStudentLocation(i);
 		}
 	}
