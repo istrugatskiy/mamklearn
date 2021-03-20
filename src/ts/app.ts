@@ -57,7 +57,8 @@ window.clickEvents = {
 	"arrowCustomizeRight": () => {arrowButtonPress(false)},
 	"playMenuBack": goBack,
 	"AboutLink": () => {userClick('about.html')},
-	"aboutWindowButton": () => {userClick('index.html', 'aboutWindowButton')}
+	"aboutWindowButton": () => {userClick('index.html', 'aboutWindowButton')},
+	"PrivacyPolicyLink": () => {userClick('privacy.html')}
 };
 
 // These are the events that include the text in the elements id.
@@ -88,7 +89,7 @@ const login = () => {
 }
 
 function userClick(link: string, disableObject?: string) {
-	$('mainLoader').classList.remove('loader--active');
+	$('mainLoader').classList.add('loader--active');
 	if (disableObject) {
 		$(disableObject).disabled = true;
 	}

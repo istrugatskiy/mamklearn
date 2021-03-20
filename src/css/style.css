@@ -251,6 +251,8 @@ li {
 	text-align: center;
 	border-radius: 3px;
 	box-shadow: 0px 0px 12px #000000;
+	text-align: left; 
+	padding: 10px 10px 10px 10px;
 }
 #backButton {
 	height: 100px;
