@@ -69,7 +69,7 @@ th {
 input[type="checkbox"] > * {
 	pointer-events: none;
 }
-.labelForCheck:focus, .weirdButton2:focus {
+.labelForCheck:focus, .weirdButton2:focus, .middle2:focus {
 	transition: all 0.1s;
 	box-shadow: 0 0 3px 5px lightblue;
 	border-radius: 10px;
@@ -78,7 +78,7 @@ input[type="checkbox"] > * {
 	transition: all 0.1s;
 	box-shadow: none;
 }
-.labelForCheck:focus:focus:not(:focus-visible), .weirdButton2:focus:focus:not(:focus-visible) {
+.labelForCheck:focus:focus:not(:focus-visible), .weirdButton2:focus:focus:not(:focus-visible), .middle2:focus:focus:not(:focus-visible) {
 	transition: all 0.1s;
 	box-shadow: none;
 }
@@ -118,44 +118,19 @@ body {
 :focus {
 	outline: -webkit-focus-ring-color auto 0;
 }
-a {
+.middle {
 	text-decoration: none;
 	color: white;
 	display: block;
 	transition: all 0.2s ease-in-out;
 	cursor: pointer;
 }
-a::before {
-	content: "";
-	position: absolute;
-	width: 95px;
-	height: 2px;
-	bottom: calc(50% - 0.6em);
-	left: 5%;
-	background-color: white;
-	visibility: hidden;
-	transform: scaleX(0);
-	transition: all 0.2s ease-in-out 0s;
-}
-a:hover::before {
-	visibility: visible;
-	transform: scaleX(1);
-}
-a:focus::before {
-	content: "";
-	position: absolute;
-	width: 95px;
-	height: 2px;
-	bottom: calc(50% - 0.6em);
-	left: 5%;
-	visibility: visible;
-	transform: scaleX(1);
+.middle2 {
+	color: white;
+	cursor: pointer;
 }
 .override::before {
 	display: none;
-}
-a:hover {
-	color: white;
 }
 ::-webkit-scrollbar {
 	width: 10px;
