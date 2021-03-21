@@ -1,4 +1,4 @@
-import {$, mathClamp, throwExcept, getID} from './utils';
+import {$, mathClamp, throwExcept, getID, ordinalSuffix} from './utils';
 import {setCharImage, goBack} from './app';
 window.studentGameProcessor = studentGameProcessor;
 
@@ -6,7 +6,7 @@ window.quizStartTestCase = ' {"gameStart": true, "totalQuestions": 5, "currentQu
 window.anotherTestCase = '{ "isQuestionCorrect": false, "nextQuestion": null, "choices": [ null ], "currentQuestionTime": 20 }';
 window.anotherTestCase2 = '{ "isQuestionCorrect": true, "nextQuestion": "heckDifferentQuestionTooLazyTooPutPercent", "choices": [ "Nabeel", "Nabeel2", "Nabeel3", "Nabeel4" ], "currentQuestionTime": 69 }';
 window.anotherTestCase3 = '{ "gameFinish": true, "timeTillEnd": 180}';
-window.anotherTestCase4 = '{ "gameEnd": true, "result-1st": "Ilya%20Strugatskiy", "1CharacterConfig": "0,0,1,2,9", "result-2nd": "Ilya%20Strugatskiy", "2CharacterConfig": "0,0,1,2,9", "result-3rd": "Ilya%20Strugatskiy", "3CharacterConfig": "0,0,1,2,9", "userPlace": 12}';
+window.anotherTestCase4 = '{ "gameEnd": true, "CharacterConfig1": [0,0,0,0,0], "CharacterConfig2": [9,9,9,9,9], "CharacterConfig3": [0,1,2,3,4], "userPlace": 12}';
 let otherInterval: number;
 let timerInterval: number;
 let finishUpInterval: number;
@@ -16,6 +16,7 @@ let bottomBarOffset: number;
 let resettableTime: number;
 let resettableTime2: number;
 let resettableTime3: number;
+let resettableTime4: number;
 
 let clickListeners = {
 	"shortAnswerSubmitButton": () => {submitShortAnswer()},
@@ -38,6 +39,7 @@ export const initEvents = () => {
 function studentGameProcessor(input: string) {
 	let inputInternal = JSON.parse(input);
 	if(inputInternal.hasOwnProperty('gameStart')) {
+		kickPlayer();
 		if(inputInternal.gameStart == true) {
 			clearInterval(timerInterval);
             clearInterval(finishUpInterval);
@@ -80,7 +82,7 @@ function studentGameProcessor(input: string) {
 		gameStateStudent.gameErrorState = inputInternal.gameErrorState;
 	}
 	else if(inputInternal.hasOwnProperty('kickPlayer')) {
-		kickPlayer();
+		kickPlayer(true);
 	}
 	else if(inputInternal.hasOwnProperty('isQuestionCorrect')) {
 		clearInterval(timerInterval);
@@ -197,23 +199,59 @@ function studentGameProcessor(input: string) {
 	}
 	else if(inputInternal.hasOwnProperty('gameEnd')) {
 		$('gameResults').style.display = 'block';
+		setCharImage('firstPlace', inputInternal.CharacterConfig1);
+		setCharImage('secondPlace', inputInternal.CharacterConfig2);
+		setCharImage('thirdPlace', inputInternal.CharacterConfig3);
+		$('userEndPlaceNumber').innerText = inputInternal.userPlace;
+		$('currentUserEndPlaceSup').innerText = ordinalSuffix(inputInternal.userPlace);
 		setTimeout( () => {
 			$('errorMessageB').style.display = 'none';
 		}, 500);
+		resettableTime4 = window.setTimeout( () => {
+			$('imageObjectContainer').style.animation = 'fadeOut 0.3s';
+			setTimeout( () => {
+				$('imageObjectContainer').style.display = 'none';
+				$('currentUserEndPlace').style.display = 'block';
+				setTimeout( () => {
+					$('currentUserEndPlace').classList.remove('titleTransitionBack');
+					$('currentUserEndPlace').classList.add('btnTransitionA');
+					setTimeout( () => {
+						$('currentUserEndPlace').style.display = 'none';
+						kickPlayer(true, 'Game Has Ended');
+					}, 300);
+				}, 5000);
+			}, 200);
+		}, 7000);
 	}
 }
 
-function kickPlayer() {
+function kickPlayer(special?: boolean, specialText: string = 'Kicked From Game') {
+	if(special) {
+		$('errorActual').textContent = specialText;
+		$('errorMessageA').style.display = 'block';
+		setTimeout( () => {
+			$('loader-1').style.display = "none";
+			$("errorMessageA").style.display = "none";
+		}, 1000);
+		$('gameStartScreenStudent').style.display = 'none';
+		goBack();
+	}
 	clearInterval(timerInterval);
     clearTimeout(resettableTime);
     clearTimeout(resettableTime2);
 	clearTimeout(resettableTime3);
+	clearTimeout(resettableTime4);
+	$('currentUserEndPlace').style.display = 'none';
 	$('gameResults').style.display = 'none';
+	$('currentUserEndPlace').classList.add('titleTransitionBack');
+	$('currentUserEndPlace').classList.remove('btnTransitionA');
+	$('imageObjectContainer').style.display = 'block';
 	$('gameFinishNotify').style.animation = 'flowFromTop 1s forwards';
 	$('titleButtonStudent').style.display = 'block';
 	$('studentShortAnswer').classList.remove('transitionQuestionC');
 	$('titleButtonStudent').classList.remove('transitionQuestionC');
     $('studentShortAnswer').style.display = 'block';
+	$('imageObjectContainer').style.animation = '';
 	$('titleButtonStudent').style.display = 'block';
     Array.from($('studentAnswersFlex').children).forEach((object) => {
         object.classList.remove('transitionQuestionB');
@@ -222,20 +260,12 @@ function kickPlayer() {
     });
 	$('errorMessageB').style.display = 'none';
 	$('userNotifyPlay').style.display = 'none';
-	$("errorActual").textContent = 'Kicked From Game';
-	$("errorMessageA").style.display = 'block';
-	$('gameStartScreenStudent').style.display = 'none';
 	$('studentPlayScreen').style.display = 'none';
 	$('mainLoader').classList.remove('loader--active');
 	$('title').style.display = "block";
 	$('gameFinishNotify').style.display = 'none';
     clearInterval(finishUpInterval);
-	goBack();
 	gameStateStudent = null;
-	setTimeout( () => {
-		$('loader-1').style.display = "none";
-		$("errorMessageA").style.display = "none";
-	}, 1000);
 }
 
 function setQuestion() {

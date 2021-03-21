@@ -1814,7 +1814,7 @@ img {
 @keyframes spawn2ndPlace {
 	from {
 		visibility: visible;
-		transform: translateY(0vh) translateX(-50%);
+		transform: translateY(-50vh) translateX(-50%);
 	}
 	to {
 		visibility: visible;
@@ -1856,4 +1856,16 @@ img {
 		visibility: visible;
 		transform: scale(2);
 	}
+}
+#currentUserEndPlaceParent {
+	position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-size: 4em;
+	text-align: center;
+}
+#currentUserEndPlace {
+	display: none;
 }
