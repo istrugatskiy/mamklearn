@@ -58,7 +58,8 @@ window.clickEvents = {
 	"playMenuBack": goBack,
 	"AboutLink": () => {userClick('about.html')},
 	"aboutWindowButton": () => {userClick('index.html', 'aboutWindowButton')},
-	"PrivacyPolicyLink": () => {userClick('privacy.html')}
+	"PrivacyPolicyLink": () => {userClick('privacy.html')},
+	"TermsOfServiceLink": () => {userClick('tos.html')}
 };
 
 // These are the events that include the text in the elements id.

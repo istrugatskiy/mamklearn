@@ -218,7 +218,7 @@ li {
 	text-align: center;
 }
 .parastandard {
-	font-size: large;
+	font-size: x-large;
 	text-shadow: 0px 0px 12px black;
 	-webkit-backdrop-filter: blur(20px);
 	backdrop-filter: blur(20px);

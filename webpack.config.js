@@ -49,6 +49,10 @@ module.exports = {
             filename: 'privacy.html',
             template: './src/privacy.html'
         }),
+        new HtmlWebpackPlugin({
+            filename: 'tos.html',
+            template: './src/tos.html'
+        }),
         new CopyPlugin({
             patterns: [
                 { from: './src/img', to: './img'},
