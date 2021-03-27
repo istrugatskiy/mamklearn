@@ -44,7 +44,8 @@ let clickIncludesListeners = {
 	"collapseSubArea": (event: MouseEvent) => {collapseSubArea(getID(event) as unknown as number)},
 	"deleteQuestion": (event: MouseEvent) => {deleteQuestion(getID(event))},
 	"shortAnswerToggle": (event: MouseEvent) => {shortAnswerToggle(getID(event))},
-	"toggleTime": (event: MouseEvent) => {toggleTime(getID(event))}
+	"toggleTime": (event: MouseEvent) => {toggleTime(getID(event))},
+	"studentCharacterImage": (event: MouseEvent) => {kickPlayer(getID(event))}
 }
 
 let submitListeners = {
@@ -68,7 +69,7 @@ let keyboardIncludesListeners = {
 		const eventTarget = (event.target! as HTMLElement).id;
 		$(eventTarget).children[0].checked = !$(eventTarget).children[0].checked;
 	},
-
+	"studentCharacterImage": (event: KeyboardEvent) => {kickPlayer(getID(event))}
 }
 
 
@@ -482,18 +483,30 @@ export const exitModalPopupTemplate = (popupToKill: string, special?: string) =>
 
 export function playQuiz() {
 	$('modal-bg').style.animation = 'fadeOut 0.5s';
-	setTimeout(function () {
+	setTimeout( () => {
 		$('modal-bg').style.display = 'none';
 	}, 500);
 	setTimeout( () => {
 		$('title').style.display = 'none';
 		($('mainTheme') as HTMLMediaElement).play();
 		($('mainTheme') as HTMLMediaElement).volume = 0.6;
+		for(let i = 0; i < 100; i++) {
+			createTemplate('playerForTeacherScreen', 'characterPeopleDiv');
+			$('characterPeopleDiv').lastElementChild!.id = `studentCharacterImage_${i}` 
+		}
 		$('teacherPlayScreen').style.display = 'block';
 	}, 1000);
 	$('manageQuizMenu').style.animation = 'modalPopout 0.3s';
-	setTimeout(function () {
+	setTimeout( () => {
 		$('modal-popupA').style.display = 'none';
+	}, 300);
+}
+
+export function kickPlayer(eventId: string) {
+	const el = $(`studentCharacterImage_${eventId}`);
+	el.classList.add('btnTransitionA');
+	setTimeout( () => {
+		el.remove();
 	}, 300);
 }
 
