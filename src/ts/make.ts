@@ -492,7 +492,7 @@ export function playQuiz() {
 		($('mainTheme') as HTMLMediaElement).volume = 0.6;
 		for(let i = 0; i < 100; i++) {
 			createTemplate('playerForTeacherScreen', 'characterPeopleDiv');
-			$('characterPeopleDiv').lastElementChild!.id = `studentCharacterImage_${i}` 
+			$('characterPeopleDiv').lastElementChild!.firstElementChild!.id = `studentCharacterImage_${i}` 
 		}
 		$('teacherPlayScreen').style.display = 'block';
 	}, 1000);
@@ -504,9 +504,10 @@ export function playQuiz() {
 
 export function kickPlayer(eventId: string) {
 	const el = $(`studentCharacterImage_${eventId}`);
-	el.classList.add('btnTransitionA');
+	el.disabled = true;
+	el.style.animation = 'hideme 0.3s';
 	setTimeout( () => {
-		el.remove();
+		el.parentElement!.remove();
 	}, 300);
 }
 

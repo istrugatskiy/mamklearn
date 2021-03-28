@@ -653,16 +653,16 @@ input[type=number] {
 	font-size: 64px;
 	cursor: initial;
 }
-#charCustomize:focus-within>#tapToCustom {
+#charCustomize:focus-within > #tapToCustom {
 	opacity: 0;
 	visibility: hidden;
 }
-#charCustomize>#customType {
+#charCustomize > #customType {
 	opacity: 0;
 	display: none;
 	margin: 0px;
 }
-#charCustomize:focus-within>#customType {
+#charCustomize:focus-within > #customType {
 	display: block;
 	opacity: 1;
 }
@@ -1869,11 +1869,58 @@ img {
 	display: none;
 }
 #characterPeopleDiv {
-	text-align: left;
+	text-align: center;
 	margin: 100px 100px;
 }
 .studentPlayer {
+	position: absolute;
+	width: 300px;
+	height: 420px;
+}
+.studentPlayer > p {
+	max-height: 64px;
+}
+.studentPlayer > * {
+	transition: transform 0.3s;
+}
+.studentPlayer > ul {
+	display: none;
+	position: absolute;
+}
+.studentPlayer:hover > * {
+	transform: scale(0);
+}
+.studentPlayer:active > * {
+	transform: scale(0);
+}
+.studentPlayer:focus > * {
+	transform: scale(0);
+}
+.studentPlayer:hover > ul {
+	display: block;
+	transform: scale(1);
+}
+.studentPlayer:active > ul {
+	display: block;
+	transform: scale(1);
+}
+.studentPlayer:focus > ul {
+	display: block;
+	transform: scale(1);
+}
+.parentTransformElement {
 	width: 300px;
 	display: inline-block;
+	height: 420px;
 	margin-bottom: 25px;
+}
+@keyframes hideme {
+	0% {
+		transform: translateY(0px);
+		opacity: 1;
+	}
+	100% {
+		transform: translateY(-100px);
+		opacity: 0;
+	}
 }
