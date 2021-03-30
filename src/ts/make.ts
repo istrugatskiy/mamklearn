@@ -20,6 +20,7 @@ let allowState2 = true;
 let quizList2: any = {};
 let checkOnce = true;
 let quizIncrement = 0;
+let playerNumber = 0;
 
 let clickListeners = {
 	"deleteQuizConfirm": () => {deleteQuizConfirm()},
@@ -480,8 +481,8 @@ export const exitModalPopupTemplate = (popupToKill: string, special?: string) =>
 		addQuiz();
 	}
 }
-
-export function playQuiz() {
+ 
+function playQuiz() {
 	$('modal-bg').style.animation = 'fadeOut 0.5s';
 	setTimeout( () => {
 		$('modal-bg').style.display = 'none';
@@ -490,16 +491,25 @@ export function playQuiz() {
 		$('title').style.display = 'none';
 		($('mainTheme') as HTMLMediaElement).play();
 		($('mainTheme') as HTMLMediaElement).volume = 0.6;
-		for(let i = 0; i < 100; i++) {
-			createTemplate('playerForTeacherScreen', 'characterPeopleDiv');
-			$('characterPeopleDiv').lastElementChild!.firstElementChild!.id = `studentCharacterImage_${i}` 
+		for (let index = 0; index < 99; index++) {	
+			renderPlayer();
 		}
+		setTimeout(() => {
+			renderPlayer();
+		}, 5000);
 		$('teacherPlayScreen').style.display = 'block';
 	}, 1000);
 	$('manageQuizMenu').style.animation = 'modalPopout 0.3s';
 	setTimeout( () => {
 		$('modal-popupA').style.display = 'none';
 	}, 300);
+}
+
+function renderPlayer() {
+	playerNumber++;
+	createTemplate('playerForTeacherScreen', 'characterPeopleDiv');
+	$('characterPeopleDiv').lastElementChild!.firstElementChild!.id = `studentCharacterImage_${playerNumber}`; 
+
 }
 
 export function kickPlayer(eventId: string) {

@@ -52,6 +52,19 @@ th {
     font-weight: bold;
     text-align: center;
 }
+html {
+	-webkit-font-smoothing: antialiased;
+	box-sizing: border-box;
+}
+img {
+	-webkit-user-drag: none;
+  	-khtml-user-drag: none;
+  	-moz-user-drag: none;
+	-o-user-drag: none;
+}
+*:before, *:after {
+	box-sizing: inherit;
+}
 #particles-js {
 	position: fixed;
 	height: 100%;
@@ -159,7 +172,6 @@ li {
 	text-align: center;
 	top: 15%;
 	margin-top: -50px;
-	margin-bottom: auto;
 	font-size: xx-large;
 }
 .title>* {
@@ -391,8 +403,6 @@ body {
 	z-index: 9;
 	top: 40%;
 	left: 50%;
-	-webkit-transform: translate(-50%, -40%);
-	-ms-transform: translate(-50%, -40%);
 	transform: translate(-50%, -40%);
 	position: absolute;
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -540,14 +550,6 @@ input[type=number] {
 	box-shadow: none;
 	cursor: default;
 }
-@-webkit-keyframes backTransition {
-	from {
-		transform: scale(0);
-	}
-	to {
-		transform: scale(1);
-	}
-}
 @keyframes backTransition {
 	from {
 		transform: scale(0);
@@ -658,8 +660,6 @@ input[type=number] {
 	visibility: hidden;
 }
 #charCustomize > #customType {
-	opacity: 0;
-	display: none;
 	margin: 0px;
 }
 #charCustomize:focus-within > #customType {
@@ -739,11 +739,9 @@ input[type=number] {
 }
 .right {
 	transform: rotate(-45deg) scale(2);
-	-webkit-transform: rotate(-45deg) scale(2);
 }
 .left {
 	transform: rotate(135deg) scale(2);
-	-webkit-transform: rotate(135deg) scale(2);
 }
 #customButtonChange {
 	all: initial;
@@ -825,16 +823,6 @@ input[type=number] {
 		opacity: 1;
 	}
 }
-@-webkit-keyframes modalPopin {
-	from {
-		transform: translate(-50%, 100%);
-		opacity: 0;
-	}
-	to {
-		transform: translate( -50%, -15%);
-		opacity: 1;
-	}
-}
 @keyframes modalPopout {
 	from {
 		transform: translate(-50%, -15%);
@@ -903,17 +891,11 @@ input[type=number] {
 .toggleButton {
 	cursor: pointer;
 	display: block;
-	-webkit-transform-origin: 50% 50%;
 	transform-origin: 50% 50%;
-	-webkit-transform-style: preserve-3d;
 	transform-style: preserve-3d;
-	-webkit-transition: -webkit-transform 0.14s ease;
-	transition: -webkit-transform 0.14s ease;
 	transition: transform 0.14s ease;
-	transition: transform 0.14s ease, -webkit-transform 0.14s ease;
 }
 .toggleButton:active {
-	-webkit-transform: rotateX(30deg);
 	transform: rotateX(30deg);
 }
 .toggleButton input {
@@ -943,7 +925,6 @@ input[type=number] {
 	z-index: 1;
 	stroke-dashoffset: 124.6;
 	stroke-dasharray: 0 162.6 133 29.6;
-	-webkit-transition: all 0.4s ease 0s;
 	transition: all 0.4s ease 0s;
 }
 .toggleButton input+div:before, .toggleButton input+div:after {
@@ -958,180 +939,84 @@ input[type=number] {
 }
 .toggleButton input+div:before {
 	opacity: 0;
-	-webkit-transform: scale(0.3) translate(-50%, -50%) rotate(45deg);
 	transform: scale(0.3) translate(-50%, -50%) rotate(45deg);
-	-webkit-animation: bounceInBefore 0.3s linear forwards 0.3s;
 	animation: bounceInBefore 0.3s linear forwards 0.3s;
 }
 .toggleButton input+div:after {
 	opacity: 0;
-	-webkit-transform: scale(0.3) translate(-50%, -50%) rotate(-45deg);
 	transform: scale(0.3) translate(-50%, -50%) rotate(-45deg);
-	-webkit-animation: bounceInAfter 0.3s linear forwards 0.3s;
 	animation: bounceInAfter 0.3s linear forwards 0.3s;
 }
 .toggleButton input:checked+div svg {
 	stroke-dashoffset: 162.6;
 	stroke-dasharray: 0 162.6 28 134.6;
-	-webkit-transition: all 0.4s ease 0.2s;
 	transition: all 0.4s ease 0.2s;
 }
 .toggleButton input:checked+div:before {
 	opacity: 0;
-	-webkit-transform: scale(0.3) translate(-50%, -50%) rotate(45deg);
 	transform: scale(0.3) translate(-50%, -50%) rotate(45deg);
-	-webkit-animation: bounceInBeforeDont 0.3s linear forwards 0s;
 	animation: bounceInBeforeDont 0.3s linear forwards 0s;
 }
 .toggleButton input:checked+div:after {
 	opacity: 0;
-	-webkit-transform: scale(0.3) translate(-50%, -50%) rotate(-45deg);
 	transform: scale(0.3) translate(-50%, -50%) rotate(-45deg);
-	-webkit-animation: bounceInAfterDont 0.3s linear forwards 0s;
 	animation: bounceInAfterDont 0.3s linear forwards 0s;
-}
-@-webkit-keyframes bounceInBefore {
-	0% {
-		opacity: 0;
-		-webkit-transform: scale(0.3) translate(-50%, -50%) rotate(45deg);
-		transform: scale(0.3) translate(-50%, -50%) rotate(45deg);
-	}
-	50% {
-		opacity: 0.9;
-		-webkit-transform: scale(1.1) translate(-50%, -50%) rotate(45deg);
-		transform: scale(1.1) translate(-50%, -50%) rotate(45deg);
-	}
-	80% {
-		opacity: 1;
-		-webkit-transform: scale(0.89) translate(-50%, -50%) rotate(45deg);
-		transform: scale(0.89) translate(-50%, -50%) rotate(45deg);
-	}
-	100% {
-		opacity: 1;
-		-webkit-transform: scale(1) translate(-50%, -50%) rotate(45deg);
-		transform: scale(1) translate(-50%, -50%) rotate(45deg);
-	}
 }
 @keyframes bounceInBefore {
 	0% {
 		opacity: 0;
-		-webkit-transform: scale(0.3) translate(-50%, -50%) rotate(45deg);
 		transform: scale(0.3) translate(-50%, -50%) rotate(45deg);
 	}
 	50% {
 		opacity: 0.9;
-		-webkit-transform: scale(1.1) translate(-50%, -50%) rotate(45deg);
 		transform: scale(1.1) translate(-50%, -50%) rotate(45deg);
 	}
 	80% {
 		opacity: 1;
-		-webkit-transform: scale(0.89) translate(-50%, -50%) rotate(45deg);
 		transform: scale(0.89) translate(-50%, -50%) rotate(45deg);
 	}
 	100% {
 		opacity: 1;
-		-webkit-transform: scale(1) translate(-50%, -50%) rotate(45deg);
 		transform: scale(1) translate(-50%, -50%) rotate(45deg);
-	}
-}
-@-webkit-keyframes bounceInAfter {
-	0% {
-		opacity: 0;
-		-webkit-transform: scale(0.3) translate(-50%, -50%) rotate(-45deg);
-		transform: scale(0.3) translate(-50%, -50%) rotate(-45deg);
-	}
-	50% {
-		opacity: 0.9;
-		-webkit-transform: scale(1.1) translate(-50%, -50%) rotate(-45deg);
-		transform: scale(1.1) translate(-50%, -50%) rotate(-45deg);
-	}
-	80% {
-		opacity: 1;
-		-webkit-transform: scale(0.89) translate(-50%, -50%) rotate(-45deg);
-		transform: scale(0.89) translate(-50%, -50%) rotate(-45deg);
-	}
-	100% {
-		opacity: 1;
-		-webkit-transform: scale(1) translate(-50%, -50%) rotate(-45deg);
-		transform: scale(1) translate(-50%, -50%) rotate(-45deg);
 	}
 }
 @keyframes bounceInAfter {
 	0% {
 		opacity: 0;
-		-webkit-transform: scale(0.3) translate(-50%, -50%) rotate(-45deg);
 		transform: scale(0.3) translate(-50%, -50%) rotate(-45deg);
 	}
 	50% {
 		opacity: 0.9;
-		-webkit-transform: scale(1.1) translate(-50%, -50%) rotate(-45deg);
 		transform: scale(1.1) translate(-50%, -50%) rotate(-45deg);
 	}
 	80% {
 		opacity: 1;
-		-webkit-transform: scale(0.89) translate(-50%, -50%) rotate(-45deg);
 		transform: scale(0.89) translate(-50%, -50%) rotate(-45deg);
 	}
 	100% {
 		opacity: 1;
-		-webkit-transform: scale(1) translate(-50%, -50%) rotate(-45deg);
 		transform: scale(1) translate(-50%, -50%) rotate(-45deg);
-	}
-}
-@-webkit-keyframes bounceInBeforeDont {
-	0% {
-		opacity: 1;
-		-webkit-transform: scale(1) translate(-50%, -50%) rotate(45deg);
-		transform: scale(1) translate(-50%, -50%) rotate(45deg);
-	}
-	100% {
-		opacity: 0;
-		-webkit-transform: scale(0.3) translate(-50%, -50%) rotate(45deg);
-		transform: scale(0.3) translate(-50%, -50%) rotate(45deg);
 	}
 }
 @keyframes bounceInBeforeDont {
 	0% {
 		opacity: 1;
-		-webkit-transform: scale(1) translate(-50%, -50%) rotate(45deg);
 		transform: scale(1) translate(-50%, -50%) rotate(45deg);
 	}
 	100% {
 		opacity: 0;
-		-webkit-transform: scale(0.3) translate(-50%, -50%) rotate(45deg);
 		transform: scale(0.3) translate(-50%, -50%) rotate(45deg);
-	}
-}
-@-webkit-keyframes bounceInAfterDont {
-	0% {
-		opacity: 1;
-		-webkit-transform: scale(1) translate(-50%, -50%) rotate(-45deg);
-		transform: scale(1) translate(-50%, -50%) rotate(-45deg);
-	}
-	100% {
-		opacity: 0;
-		-webkit-transform: scale(0.3) translate(-50%, -50%) rotate(-45deg);
-		transform: scale(0.3) translate(-50%, -50%) rotate(-45deg);
 	}
 }
 @keyframes bounceInAfterDont {
 	0% {
 		opacity: 1;
-		-webkit-transform: scale(1) translate(-50%, -50%) rotate(-45deg);
 		transform: scale(1) translate(-50%, -50%) rotate(-45deg);
 	}
 	100% {
 		opacity: 0;
-		-webkit-transform: scale(0.3) translate(-50%, -50%) rotate(-45deg);
 		transform: scale(0.3) translate(-50%, -50%) rotate(-45deg);
 	}
-}
-html {
-	-webkit-font-smoothing: antialiased;
-	box-sizing: border-box;
-}
-*:before, *:after {
-	box-sizing: inherit;
 }
 .textAreaConfig {
 	width: 100%;
@@ -1194,7 +1079,6 @@ html {
 	display: inline-block;
 	padding: 3px;
 	transform: rotate(-45deg) scale(4) translateZ(0);
-	-webkit-transform: rotate(-45deg) scale(4) translateZ(0);
 	margin-left: 30px;
 	margin-bottom: 10px;
 	transition: transform 0.3s;
@@ -1206,7 +1090,6 @@ html {
 	display: inline-block;
 	padding: 3px;
 	transform: rotate(45deg) scale(4) translateZ(0);
-	-webkit-transform: rotate(45deg) scale(4) translateZ(0);
 	margin-left: 30px;
 	margin-bottom: 10px;
 	transition: transform 0.3s;
@@ -1388,12 +1271,6 @@ button::-moz-focus-inner {
 }
 .noSpaceEditor {
 	margin-bottom: 0px;
-}
-img {
-	-webkit-user-drag: none;
-  	-khtml-user-drag: none;
-  	-moz-user-drag: none;
-	-o-user-drag: none;
 }
 .timeLimitMagic {
 	left: 210px;
@@ -1877,15 +1754,8 @@ img {
 	width: 300px;
 	height: 420px;
 }
-.studentPlayer > p {
-	max-height: 64px;
-}
 .studentPlayer > * {
 	transition: transform 0.3s;
-}
-.studentPlayer > ul {
-	display: none;
-	position: absolute;
 }
 .studentPlayer:hover > * {
 	transform: scale(0);
@@ -1896,17 +1766,16 @@ img {
 .studentPlayer:focus > * {
 	transform: scale(0);
 }
-.studentPlayer:hover > ul {
-	display: block;
+.studentPlayer:hover > .kickPlayerDiv {
 	transform: scale(1);
 }
-.studentPlayer:active > ul {
-	display: block;
+.studentPlayer:active > .kickPlayerDiv {
 	transform: scale(1);
+	text-decoration: underline;
 }
-.studentPlayer:focus > ul {
-	display: block;
+.studentPlayer:focus > .kickPlayerDiv {
 	transform: scale(1);
+	text-decoration: underline;
 }
 .parentTransformElement {
 	width: 300px;
@@ -1923,4 +1792,10 @@ img {
 		transform: translateY(-100px);
 		opacity: 0;
 	}
+}
+.kickPlayerDiv {
+	transform: scale(0);
+	position: absolute;
+	top: 130px;
+	transition: transform 0.3s;
 }

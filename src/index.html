@@ -226,12 +226,10 @@
 			<p style="font-size: large;">Error Code: <span id="comError3">UKNOWN</span></p>
 		</div>
 	</div>
-	<div class="title titleTransitionBack" id="teacherPlayScreen" style="display: none;">
+	<div class="title " id="teacherPlayScreen" style="display: none;">
 		<h1>Game Code: ****</h1>
-		<button disabled class="button" style="cursor: not-allowed; display: none;">Play!</button>
-		<div id="characterPeopleDiv">
-
-		</div>
+		<button class="button">Start Game</button>
+		<div id="characterPeopleDiv"></div>
 	</div>
 	<div class="title" id="studentPlayScreen">
 		<div class="button buttonLikeTitle playerContainer" id="studentRaceBox">
@@ -474,7 +472,7 @@
 	</template>
 	<template id="playerForTeacherScreen">
 		<div class="parentTransformElement">
-			<div class="button studentPlayer" tabindex="0" role="button">
+			<div class="button studentPlayer titleTransitionBack" tabindex="0" role="button">
 				<p class="notifyTextChar">${username + lastName[0].}</p>
 				<div>
 					<img alt="your arms" src="img/arms-0.png" style="position: absolute;" width="250" height="337">
@@ -484,11 +482,9 @@
 					<img alt="your shirt" src="img/shirt-0.png" style="position: absolute;" width="250" height="337">
 					<img alt="your profile picture" src="img/base.png" width="250" height="337">
 				</div>
-				<ul>
-					<li>
-						<a class="middle" href="javascript:void(0);" style="padding-top: 20px; padding-bottom: 0px; width: 140px;">Kick Player</a>
-					</li>
-				</ul>
+				<div class="kickPlayerDiv">
+					Kick Player
+				</div>
 			</div>
 		</div>
 	</template>
