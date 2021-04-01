@@ -226,9 +226,9 @@
 			<p style="font-size: large;">Error Code: <span id="comError3">UKNOWN</span></p>
 		</div>
 	</div>
-	<div class="title " id="teacherPlayScreen" style="display: none;">
-		<h1>Game Code: ****</h1>
-		<button class="button">Start Game</button>
+	<div class="title" id="teacherPlayScreen" style="display: none;">
+		<h1 class="titleTransitionBack">Game Code: ****</h1>
+		<button class="button titleTransitionBack" id="gameStartButtonTeacher">Start Game</button>
 		<div id="characterPeopleDiv"></div>
 	</div>
 	<div class="title" id="studentPlayScreen">
@@ -290,28 +290,28 @@
 	<div id="gameResults">
 		<div id="imageObjectContainer">
 			<div id="inGame3rd" class="inGamePlayer">
-				<img alt="your arms" id="thirdPlaceArms" src="img/arms-0.png" style="position: absolute;" width="250" height="337">
-				<img alt="your eyes" id="thirdPlaceEyes" src="img/eyes-0.png" style="position: absolute;" width="250" height="337">
-				<img alt="your nose" id="thirdPlaceNose" src="img/nose-0.png" style="position: absolute;" width="250" height="337">
-				<img alt="your mouth" id="thirdPlaceMouth" src="img/mouth-0.png" style="position: absolute;" width="250" height="337">
-				<img alt="your shirt" id="thirdPlaceShirt" src="img/shirt-0.png" style="position: absolute;" width="250" height="337">
+				<img alt="your arms" id="thirdPlaceArms" src="data:," style="position: absolute;" width="250" height="337">
+				<img alt="your eyes" id="thirdPlaceEyes" src="data:," style="position: absolute;" width="250" height="337">
+				<img alt="your nose" id="thirdPlaceNose" src="data:," style="position: absolute;" width="250" height="337">
+				<img alt="your mouth" id="thirdPlaceMouth" src="data:," style="position: absolute;" width="250" height="337">
+				<img alt="your shirt" id="thirdPlaceShirt" src="data:," style="position: absolute;" width="250" height="337">
 				<img alt="your profile picture" src="img/base.png" width="250" height="337">
 			</div>
 			<div id="inGame2nd" class="inGamePlayer">
-				<img alt="your arms" id="secondPlaceArms" src="img/arms-1.png" style="position: absolute;" width="250" height="337">
-				<img alt="your eyes" id="secondPlaceEyes" src="img/eyes-2.png" style="position: absolute;" width="250" height="337">
-				<img alt="your nose" id="secondPlaceNose" src="img/nose-3.png" style="position: absolute;" width="250" height="337">
-				<img alt="your mouth" id="secondPlaceMouth" src="img/mouth-4.png" style="position: absolute;" width="250" height="337">
-				<img alt="your shirt" id="secondPlaceShirt" src="img/shirt-5.png" style="position: absolute;" width="250" height="337">
+				<img alt="your arms" id="secondPlaceArms" src="data:," style="position: absolute;" width="250" height="337">
+				<img alt="your eyes" id="secondPlaceEyes" src="data:," style="position: absolute;" width="250" height="337">
+				<img alt="your nose" id="secondPlaceNose" src="data:," style="position: absolute;" width="250" height="337">
+				<img alt="your mouth" id="secondPlaceMouth" src="data:," style="position: absolute;" width="250" height="337">
+				<img alt="your shirt" id="secondPlaceShirt" src="data:," style="position: absolute;" width="250" height="337">
 				<img alt="your profile picture" src="img/base.png" width="250" height="337">
 			</div>
 			<div id="inGame1stContainer" class="inGamePlayer">
 				<div id="inGame1st">
-					<img alt="your arms" id="firstPlaceArms" src="img/arms-6.png" style="position: absolute;" width="250" height="337">
-					<img alt="your eyes" id="firstPlaceEyes" src="img/eyes-9.png" style="position: absolute;" width="250" height="337">
-					<img alt="your nose" id="firstPlaceNose" src="img/nose-4.png" style="position: absolute;" width="250" height="337">
-					<img alt="your mouth" id="firstPlaceMouth" src="img/mouth-2.png" style="position: absolute;" width="250" height="337">
-					<img alt="your shirt" id="firstPlaceShirt" src="img/shirt-0.png" style="position: absolute;" width="250" height="337">
+					<img alt="your arms" id="firstPlaceArms" src="data:," style="position: absolute;" width="250" height="337">
+					<img alt="your eyes" id="firstPlaceEyes" src="data:," style="position: absolute;" width="250" height="337">
+					<img alt="your nose" id="firstPlaceNose" src="data:," style="position: absolute;" width="250" height="337">
+					<img alt="your mouth" id="firstPlaceMouth" src="data:," style="position: absolute;" width="250" height="337">
+					<img alt="your shirt" id="firstPlaceShirt" src="data:," style="position: absolute;" width="250" height="337">
 					<img alt="your profile picture" src="img/base.png" width="250" height="337">
 				</div>
 			</div>
@@ -521,6 +521,18 @@
 			<path d="M26.013,10.047l1.654-2.866c-2.198-1.272-4.743-2.012-7.466-2.012h0v3.312h0C22.32,8.481,24.301,9.057,26.013,10.047z" fill="#000"></path>
 			<animatetransform attributename="transform" attributetype="xml" dur="0.5s" from="0" repeatcount="indefinite" to="360" type="rotate"></animatetransform>
 		</svg>		
+	</template>
+	<template id="makeDivCreateQuizButton">
+		<button class="button titleTransitionBack createQuizButton" id="createButtonA">
+			<img src="../img/createQuiz-2.png" width="250">
+			<br>(Create quiz)</button>
+	</template>
+	<template id="makeDivBackButton">
+		<br>
+		<br>
+		<div style="text-align: center;">
+			<button class="button titleTransitionBack" id="backButtonC">Back</button>
+		</div>
 	</template>
 </body>
 </html>

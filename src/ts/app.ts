@@ -36,7 +36,7 @@ const initializeApp = () => {
 	initParticles();
 	if (new URLSearchParams(window.location.search).get('shareQuiz')) {
 		setTimeout( () => {
-			$("errorActual").innerText = 'Quiz Copied';
+			$("errorActual").textContent = 'Quiz Copied';
 			$("errorMessageA").style.display = "block";
 			setTimeout( () => {
 				$("errorMessageA").style.display = "none";
@@ -106,15 +106,15 @@ function onSignIn(googleUser: any) {
 	if (googleUser.getHostedDomain() == 'student.mamkschools.org' || googleUser.getHostedDomain() == 'mamkschools.org') {
 		setTitle('homeScreen');
 		$('loginPage').style.animation = 'animatezoomout 0.6s';
-		$('title').style.top = "15%";
-		$('title').style.height = "800px";
+		$('title').style.top = '15%';
+		$('title').style.height = '800px';
 		setTimeout(function () {
-			$('loginPage').style.display = "none";
+			$('loginPage').style.display = 'none';
 		}, 500);
 	} else {
 		auth2.signOut();
 		$error.style.display = 'block';
-		$error.innerText = 'Please use an account that ends in \'mamkschools.org\' or \'student.mamkschools.org\'';
+		$error.textContent = 'Please use an account that ends in \'mamkschools.org\' or \'student.mamkschools.org\'';
 	}
 };
 
@@ -193,13 +193,13 @@ export function contentEditableUpdate() {
 					let a70 = String(eventTarget.textContent!.replace(/(\r\n|\r|\n)/ , ""));
 					const maxLength = (eventTarget.getAttribute("maxlength") as unknown as number);
 					if(maxLength) {
-						eventTarget.innerText = a70.substring(0, maxLength);
+						eventTarget.textContent = a70.substring(0, maxLength);
 					}
 					try {
 						setCaretPosition(eventTarget, a69);
 					}
 					catch {
-						setCaretPosition(eventTarget, eventTarget.innerText.length);
+						setCaretPosition(eventTarget, eventTarget.textContent!.length);
 					}
 					characterCount(eventTarget, eventTarget.getAttribute("maxlength"));
 				}, 0);
@@ -257,7 +257,7 @@ function JoinGame() {
 			for (let i = 0, il = selects.length; i < il; i++) {
 				selects[i].classList.remove("disabled");
 			}
-			$('submitID').innerText = 'Join';
+			$('submitID').textContent = 'Join';
 		}, 1000);
 	}
 }
@@ -288,7 +288,7 @@ function arrowButtonPress(isLeft: boolean) {
 			customOptionsIncrement = 0;
 		}
 	}
-	$("customButtonChange").innerText = customOptions[customOptionsIncrement];
+	$("customButtonChange").textContent = customOptions[customOptionsIncrement];
 	if(isLeft) {
 		$("leftCustomizeArrow").focus();
 	}

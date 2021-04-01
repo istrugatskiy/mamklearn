@@ -1,4 +1,4 @@
-import {$, mathClamp, throwExcept, getID, ordinalSuffix} from './utils';
+import {$, mathClamp, throwExcept, getID, ordinalSuffix, clearChildren} from './utils';
 import {setCharImage, goBack} from './app';
 window.studentGameProcessor = studentGameProcessor;
 
@@ -57,11 +57,17 @@ function studentGameProcessor(input: string) {
 					timeLimit: inputInternal.currentQuestionTime
 				}
 			};
-			let studentRaceBoxNumbers = '';
+			let studentRaceBoxNumbers = document.createDocumentFragment();
 			for (let i = 1; i <= gameStateStudent.totalQuestions; i++) {
-				studentRaceBoxNumbers += `<th>${i}</th>`
+				let node = document.createElement('th');
+				node.textContent = i.toString();
+				studentRaceBoxNumbers.appendChild(node);
 			}
-			$('studentRaceNumbers').innerHTML = studentRaceBoxNumbers + `<th>finish</th>`;
+			let node = document.createElement('th');
+			node.textContent = 'finish';
+			studentRaceBoxNumbers.appendChild(node);
+			clearChildren('studentRaceNumbers');
+			$('studentRaceNumbers').appendChild(studentRaceBoxNumbers)
 			$('gameStartScreenStudent').style.animation = 'fadeOut 0.5s forwards';
 			setTimeout( () => {
 				$('gameStartScreenStudent').style.display = 'none';
@@ -202,8 +208,8 @@ function studentGameProcessor(input: string) {
 		setCharImage('firstPlace', inputInternal.CharacterConfig1);
 		setCharImage('secondPlace', inputInternal.CharacterConfig2);
 		setCharImage('thirdPlace', inputInternal.CharacterConfig3);
-		$('userEndPlaceNumber').innerText = inputInternal.userPlace;
-		$('currentUserEndPlaceSup').innerText = ordinalSuffix(inputInternal.userPlace);
+		$('userEndPlaceNumber').textContent = inputInternal.userPlace;
+		$('currentUserEndPlaceSup').textContent = ordinalSuffix(inputInternal.userPlace);
 		setTimeout( () => {
 			$('errorMessageB').style.display = 'none';
 		}, 500);

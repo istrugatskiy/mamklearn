@@ -766,9 +766,6 @@ input[type=number] {
 #makeDiv {
 	top: 50px;
 }
-#createButtonA {
-	min-height: 400px;
-}
 .modal-popup {
 	position: absolute;
 	display: none;
@@ -1782,6 +1779,7 @@ button::-moz-focus-inner {
 	display: inline-block;
 	height: 420px;
 	margin-bottom: 25px;
+	margin-left: 10px;
 }
 @keyframes hideme {
 	0% {
@@ -1798,4 +1796,13 @@ button::-moz-focus-inner {
 	position: absolute;
 	top: 130px;
 	transition: transform 0.3s;
+}
+.createQuizButton {
+    min-width: 300px;
+    min-height: 300px;
+    margin-top: 30px;
+    text-align: center;
+    font-size: xx-large;
+    max-width: 300px;
+    margin-left: 30px;
 }

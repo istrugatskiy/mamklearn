@@ -1,6 +1,6 @@
 // Contains code related to making quizzes
 import dragula from 'dragula';
-import {$, characterCount, deepEqual, createTemplate, setTitle, encodeHTML, decodeHTML, clearChildren, getID} from './utils';
+import {$, characterCount, deepEqual, createTemplate, setTitle, encodeHTML, decodeHTML, clearChildren, getID, mathClamp} from './utils';
 import {setCharImage, contentEditableUpdate} from './app';
 
 let editState = false;
@@ -39,6 +39,7 @@ let clickListeners = {
 	"backButtonShareQuiz": () => {exitModalPopupTemplate('shareQuizMenu', 'shareQuizMenu')},
 	"createButtonA": () => {createQuiz()},
 	"backButtonDeleteConfirm": () => {exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm')},
+	"gameStartButtonTeacher": () => {startGameTeacher()}
 };
 
 let clickIncludesListeners = {
@@ -395,15 +396,31 @@ export function addquestionToDOM() {
 
 export function addQuiz() {
 	if (Object.keys(quizList2).length > 0) {
+		// Generates the button object using the DOM API
+		let quizObject = document.createDocumentFragment();
+		let button = document.createElement('button');
+		button.classList.add('button', 'titleTransitionBack', 'quizActionButton', 'createQuizButton');
+		let image = document.createElement('img');
+		image.width = 250;
+		button.appendChild(image);
+		button.appendChild(document.createElement('br'));
+		quizObject.appendChild(button);
+
+		let renderableQuizObject = document.createDocumentFragment();
 		for (let key in quizList2) {
-			$('makeDiv').innerHTML += `<button style="min-width: 300px; min-height: 300px;  margin-top: 30px; text-align: center; font-size: xx-large; margin-left: 30px;" class="button titleTransitionBack quizActionButton" id="${key}"><img src="../img/qIcon-${iconIterate % 4}.png" width="250"><br>${quizList2[key]}</button>`
+			let internalObject = quizObject.cloneNode(true);
+			(internalObject as HTMLElement).firstElementChild!.id = key;
+			((internalObject as HTMLElement).firstElementChild!.firstElementChild! as HTMLImageElement).src = `img/qIcon-${(iconIterate % 4).toString()}.png`;
+			(internalObject as HTMLElement).firstElementChild!.appendChild(document.createTextNode(quizList2[key]));
+			renderableQuizObject.appendChild(internalObject);
 			iconIterate++;
 		};
+		$('makeDiv').appendChild(renderableQuizObject);
 		iconIterate = 0;
 		$('backButtonC').remove();
 		$('removeButton').remove();
-		$('makeDiv').innerHTML += '<button style="min-width: 300px; min-height: 300px;  margin-top: 30px; text-align: center; font-size: xx-large;  max-width:300px; margin-left: 30px;" class="button titleTransitionBack" id="createButtonA"><img src="../img/createQuiz-2.png" width="250"><br>(Create quiz)</button>'
-		$('makeDiv').innerHTML += '<br><br><div style="text-align:center; width: 100%25;"><button class="button titleTransitionBack" id="backButtonC">Back</button></div>';
+		createTemplate('makeDivCreateQuizButton' , 'makeDiv');
+		createTemplate('makeDivBackButton', 'makeDiv');
 		$('makeDiv').style.textAlign = 'center';
 		document.querySelectorAll('.quizActionButton').forEach(item => {
 			item.addEventListener('click', event => {
@@ -491,7 +508,7 @@ function playQuiz() {
 		$('title').style.display = 'none';
 		($('mainTheme') as HTMLMediaElement).play();
 		($('mainTheme') as HTMLMediaElement).volume = 0.6;
-		for (let index = 0; index < 99; index++) {	
+		for (let index = 0; index < 99; index++) {
 			renderPlayer();
 		}
 		setTimeout(() => {
@@ -507,12 +524,13 @@ function playQuiz() {
 
 function renderPlayer() {
 	playerNumber++;
+	($('mainTheme') as HTMLMediaElement).volume = mathClamp(0.6 + ((playerNumber/5) * 0.1), 0.6, 1);
 	createTemplate('playerForTeacherScreen', 'characterPeopleDiv');
 	$('characterPeopleDiv').lastElementChild!.firstElementChild!.id = `studentCharacterImage_${playerNumber}`; 
 
 }
 
-export function kickPlayer(eventId: string) {
+function kickPlayer(eventId: string) {
 	const el = $(`studentCharacterImage_${eventId}`);
 	el.disabled = true;
 	el.style.animation = 'hideme 0.3s';
@@ -521,7 +539,20 @@ export function kickPlayer(eventId: string) {
 	}, 300);
 }
 
-export function deleteQuiz() {
+function startGameTeacher() {
+	console.log('Game Started!');
+	$('gameStartButtonTeacher').disabled = true;
+	const people = Array.from($('characterPeopleDiv').children);
+	people.forEach( (object) => {
+		object.disabled = true;
+		object.classList.add('btnTransitionA');
+	});
+	setTimeout( () => {
+		clearChildren('characterPeopleDiv');
+	}, 300);
+}
+
+function deleteQuiz() {
 	checkOnce = false;
 	$('manageQuizMenu').style.animation = 'modalPopout 0.3s';
 	$('deleteQuizConfirm').disabled = false;
