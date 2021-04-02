@@ -1,6 +1,6 @@
 // Contains code related to making quizzes
 import dragula from 'dragula';
-import {$, characterCount, deepEqual, createTemplate, setTitle, encodeHTML, decodeHTML, clearChildren, getID, mathClamp} from './utils';
+import {$, characterCount, deepEqual, createTemplate, setTitle, clearChildren, getID, mathClamp} from './utils';
 import {setCharImage, contentEditableUpdate} from './app';
 
 let editState = false;
@@ -146,7 +146,7 @@ export function createNewQuiz() {
 	createTemplate('svgLoader', button.id);
 	setTimeout( () => {
 		checkOnce = true;
-		quizList2[`quizID_${quizIncrement}`] = encodeHTML(g);
+		quizList2[`quizID_${quizIncrement}`] = g;
 		quizIncrement++;
 		exitModalPopupTemplate('createQuizMenu');
 	}, 1000);
@@ -247,7 +247,7 @@ export function toggleTime(order: string | number) {
 
 export function parseActiveQuiz() {
 	tempQuiz = JSON.parse(JSON.stringify(quizObject));
-	tempQuiz.quizName = encodeHTML($("quizNameUpdate").value);
+	tempQuiz.quizName = $("quizNameUpdate").value;
 	tempQuiz.quizID = currentQuizEdit;
 	if ($("draggableDiv").firstElementChild) {
 		let quizDoc = Array.from($("draggableDiv").children);
@@ -511,9 +511,6 @@ function playQuiz() {
 		for (let index = 0; index < 99; index++) {
 			renderPlayer();
 		}
-		setTimeout(() => {
-			renderPlayer();
-		}, 5000);
 		$('teacherPlayScreen').style.display = 'block';
 	}, 1000);
 	$('manageQuizMenu').style.animation = 'modalPopout 0.3s';
@@ -540,7 +537,6 @@ function kickPlayer(eventId: string) {
 }
 
 function startGameTeacher() {
-	console.log('Game Started!');
 	$('gameStartButtonTeacher').disabled = true;
 	const people = Array.from($('characterPeopleDiv').children);
 	people.forEach( (object) => {
@@ -549,7 +545,33 @@ function startGameTeacher() {
 	});
 	setTimeout( () => {
 		clearChildren('characterPeopleDiv');
+		$('gameStartButtonTeacher').classList.add('btnTransitionA');
+		$('gameCodeTeacher').classList.add('btnTransitionA');
+		doCountdown();
 	}, 300);
+}
+
+function doCountdown() {
+	const countdown = $('teacherCountdown');
+	countdown.textContent = '3';
+	countdown.style.display = 'block';
+	let iterator = 3;
+	for (let index = 0; index <= 3; index++) {
+		setCountdown(index, iterator.toString());
+		iterator--;
+	}
+	setCountdown(3, 'GO!');
+	function setCountdown(num: number, iterator: string) {
+		setTimeout( () => {
+			countdown.classList.remove('titleTransitionBack');
+			countdown.classList.add('teacherCountdownAnim');
+			setTimeout( () => {
+				countdown.textContent = iterator;
+				countdown.classList.add('titleTransitionBack');
+				countdown.classList.remove('teacherCountdownAnim');
+			}, 300);
+		}, 1000 * num);
+	}
 }
 
 function deleteQuiz() {
@@ -613,7 +635,7 @@ export function editQuiz() {
 		});
 		reorderProper();
 	}
-	$('quizNameUpdate').value = decodeHTML(quizList2[currentQuizEdit]);
+	$('quizNameUpdate').value = quizList2[currentQuizEdit];
 	drake = dragula([$('draggableDiv')], {
 		moves: function (_el, _container, handle) {
 			return handle!.classList.contains('draggableActual');
@@ -657,7 +679,7 @@ export function editQuizForm() {
 	}
 	else {
 		quizObject2[currentQuizEdit] = tempQuiz;
-		quizList2[currentQuizEdit] = encodeHTML($("quizNameUpdate").value);
+		quizList2[currentQuizEdit] = $("quizNameUpdate").value;
 		clearChildren('saveQuizButton');
 		createTemplate('svgLoader', 'saveQuizButton');
 		setTimeout(function () {

@@ -105,18 +105,6 @@ export const setTitle = (templateID: string) => {
 	createTemplate(templateID, 'title');
 }
 
-export const encodeHTML = (str: string) => {
-	return str.replace(/[\u00A0-\u9999<>&#](?!#)/gim, function (i) {
-		return '&#' + i.charCodeAt(0) + ';';
-	});
-}
-
-export const decodeHTML = (str: string) => {
-	return str.replace(/&#([0-9]{1,5});/gi, function (num) {
-		return String.fromCharCode(parseInt(num));
-	});
-}
-
 export const throwExcept = (msg: string) => {
 	$('commError2').style.display = 'block';
 	$('CommError').style.display = 'block';

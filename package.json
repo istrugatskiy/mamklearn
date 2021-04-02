@@ -38,6 +38,6 @@
     "@types/gapi.auth2": "^0.0.53",
     "@types/node": "^14.14.33",
     "dragula": "^3.7.3",
-    "tsparticles": "^1.19.4"
+    "particles.js": "^2.0.0"
   }
 }

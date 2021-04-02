@@ -82,9 +82,15 @@ img {
 input[type="checkbox"] > * {
 	pointer-events: none;
 }
+::selection {
+  background: hsla(212, 100%, 83%, 0.678); /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+  background: hsla(212, 100%, 83%, 0.678); /* Gecko Browsers */
+}
 .labelForCheck:focus, .weirdButton2:focus, .middle2:focus {
 	transition: all 0.1s;
-	box-shadow: 0 0 3px 5px lightblue;
+	box-shadow: 0 0 0 0.25rem #ffffff9f;
 	border-radius: 10px;
 }
 .labelForCheck, .weirdButton2 {
@@ -225,6 +231,7 @@ li {
 	margin: 0 auto;
 	text-align: left;
 	color: white;
+	width: auto;
 }
 .importHeader {
 	text-align: center;
@@ -240,6 +247,14 @@ li {
 	box-shadow: 0px 0px 12px #000000;
 	text-align: left; 
 	padding: 10px 10px 10px 10px;
+	-webkit-user-select: text; /* Safari */
+  	-ms-user-select: text; /* IE 10 and IE 11 */
+  	user-select: text;
+}
+@media screen and (max-width: 800px) {
+    .aboutContainer {
+        left: 0% !important;
+    }
 }
 #backButton {
 	height: 100px;
@@ -313,6 +328,19 @@ body {
 	text-align: center;
 	border-radius: 3px;
 	box-shadow: 0px 0px 12px #000000;
+	-webkit-user-select: text; /* Safari */
+  	-ms-user-select: text; /* IE 10 and IE 11 */
+  	user-select: text;
+}
+@media screen and (max-width: 800px) {
+	.preWrap {
+		font-size: x-small;
+	}
+}
+@media screen and (max-width: 600px) {
+	.preWrap {
+		font-size: xx-small;
+	}
 }
 .loader .loader__tile {
 	position: fixed;
@@ -1805,4 +1833,11 @@ button::-moz-focus-inner {
     font-size: xx-large;
     max-width: 300px;
     margin-left: 30px;
+}
+.teacherCountdownAnim {
+	transition: transform 0.3s;
+	transform: scale(0) rotate(360deg);
+}
+#teacherCountdown {
+	font-size: 128px;
 }
