@@ -415,17 +415,6 @@ body {
 	font-size: xx-large;
 	max-width: 800px;
 	display: none;
-	animation: modalPopinLogin 0.6s;
-}
-@keyframes modalPopinLogin {
-	from {
-		transform: translate(-50%, 100%);
-		opacity: 0;
-	}
-	to {
-		transform: translate(-50%, -40%);
-		opacity: 1;
-	}
 }
 .error {
 	z-index: 9;
@@ -1840,4 +1829,8 @@ button::-moz-focus-inner {
 }
 #teacherCountdown {
 	font-size: 128px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, 0);
 }

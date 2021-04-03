@@ -154,3 +154,79 @@ export const signOut = () => {
 		window.location.reload();
 	});
 }
+
+export const mathLerp = (x: number, y: number, a: number) => x * (1 - a) + y * a;
+
+// Demo of what the mamklearn codebase COULD be like, like I'll ever bother using classes
+export class AudioManager {
+	audioObjects: { [key: string]: {source: string, index: number | null}; } = {};
+	currentlyPlaying: HTMLMediaElement[] = [];
+
+	constructor(audioObjects: { [name: string]: string; }) {
+		Object.entries(audioObjects).forEach( ([key, value]) => {
+			this.audioObjects[key] = {
+				source: value,
+				index: null
+			};
+		});
+	}
+	
+	play(name: string, shouldLoop: boolean = false, volume: number = 1) {
+		if(this.audioObjects[name]) {
+			let newAudio = new Audio(this.audioObjects[name].source);
+			newAudio.loop = shouldLoop;
+			newAudio.volume = volume;
+			newAudio.play();
+			this.audioObjects[name].index = this.currentlyPlaying.push(newAudio) - 1;
+		}
+		else {
+			throw new TypeError('The audio clip you attempted to play is not defined!');
+		}
+	}
+
+	setVolume(name: string, newVolume: number) {
+		if(this.audioObjects[name].index !== null) {
+			const currentAudio = this.currentlyPlaying[this.audioObjects[name].index!];
+			let distance = 0;
+			let initVolume = currentAudio.volume;
+			const interval = window.setInterval( () => {
+				if(currentAudio.volume >= newVolume && initVolume - newVolume < 0 ) {
+					clearInterval(interval);
+				}
+				else if(currentAudio.volume <= newVolume && initVolume - newVolume > 0 ) {
+					clearInterval(interval);
+				}
+				else {
+					distance += 0.05;
+					currentAudio.volume = mathClamp(mathLerp(initVolume, newVolume, distance), 0, 1);
+				}
+			}, 100);
+		}
+		else {
+			throw new TypeError('You need to play the clip before modifying it!');
+		}
+	}
+
+	setSpeed(name: string, newSpeed: number) {
+		if(this.audioObjects[name].index !== null) {
+			const currentAudio = this.currentlyPlaying[this.audioObjects[name].index!];
+			let distance = 0;
+			let initVolume = currentAudio.playbackRate;
+			const interval = window.setInterval( () => {
+				if(currentAudio.playbackRate >= newSpeed && initVolume - newSpeed < 0 ) {
+					clearInterval(interval);
+				}
+				else if(currentAudio.playbackRate <= newSpeed && initVolume - newSpeed > 0 ) {
+					clearInterval(interval);
+				}
+				else {
+					distance += 0.05;
+					currentAudio.playbackRate = mathClamp(mathLerp(initVolume, newSpeed, distance), 0, 10);
+				}
+			}, 100);
+		}
+		else {
+			throw new TypeError('You need to play the clip before modifying it!');
+		}
+	}
+}

@@ -1,6 +1,6 @@
 // Contains code related to making quizzes
 import dragula from 'dragula';
-import {$, characterCount, deepEqual, createTemplate, setTitle, clearChildren, getID, mathClamp} from './utils';
+import {$, characterCount, deepEqual, createTemplate, setTitle, clearChildren, getID, AudioManager, mathClamp} from './utils';
 import {setCharImage, contentEditableUpdate} from './app';
 
 let editState = false;
@@ -21,6 +21,7 @@ let quizList2: any = {};
 let checkOnce = true;
 let quizIncrement = 0;
 let playerNumber = 0;
+let mainAudio: AudioManager;
 
 let clickListeners = {
 	"deleteQuizConfirm": () => {deleteQuizConfirm()},
@@ -500,28 +501,26 @@ export const exitModalPopupTemplate = (popupToKill: string, special?: string) =>
 }
  
 function playQuiz() {
-	$('modal-bg').style.animation = 'fadeOut 0.5s';
-	setTimeout( () => {
-		$('modal-bg').style.display = 'none';
-	}, 500);
+	mainAudio = new AudioManager({
+		'mainTheme': 'data/MainTheme.mp3',
+		'playTheme': 'data/MusicOfTheShavedBears.mp3',
+		'loadingTheme': 'data/AmbientSpace.mp3'
+	});
+	exitModalPopupTemplate('manageQuizMenu');
+	$('title').style.display = 'none';
 	setTimeout( () => {
 		$('title').style.display = 'none';
-		($('mainTheme') as HTMLMediaElement).play();
-		($('mainTheme') as HTMLMediaElement).volume = 0.6;
-		for (let index = 0; index < 99; index++) {
+		mainAudio.play('mainTheme', true);
+		for (let index = 0; index < 9; index++) {
 			renderPlayer();
 		}
 		$('teacherPlayScreen').style.display = 'block';
 	}, 1000);
-	$('manageQuizMenu').style.animation = 'modalPopout 0.3s';
-	setTimeout( () => {
-		$('modal-popupA').style.display = 'none';
-	}, 300);
 }
 
 function renderPlayer() {
 	playerNumber++;
-	($('mainTheme') as HTMLMediaElement).volume = mathClamp(0.6 + ((playerNumber/5) * 0.1), 0.6, 1);
+	mainAudio.setVolume('mainTheme', mathClamp(0.6 + ((playerNumber/5) * 0.1), 0.6, 1))
 	createTemplate('playerForTeacherScreen', 'characterPeopleDiv');
 	$('characterPeopleDiv').lastElementChild!.firstElementChild!.id = `studentCharacterImage_${playerNumber}`; 
 
@@ -544,23 +543,30 @@ function startGameTeacher() {
 		object.classList.add('btnTransitionA');
 	});
 	setTimeout( () => {
+		mainAudio.setVolume('mainTheme', 0);
+		mainAudio.play('loadingTheme', false, 0);
+		mainAudio.setVolume('loadingTheme', 1);
 		clearChildren('characterPeopleDiv');
 		$('gameStartButtonTeacher').classList.add('btnTransitionA');
 		$('gameCodeTeacher').classList.add('btnTransitionA');
 		doCountdown();
 	}, 300);
+	setTimeout( () => {
+		mainAudio.play('playTheme', true);
+	}, 22000);
 }
 
 function doCountdown() {
-	const countdown = $('teacherCountdown');
+	const countdown = $('teacherCountdown').firstElementChild!;
 	countdown.textContent = '3';
-	countdown.style.display = 'block';
+	$('teacherCountdown').style.display = 'block';
 	let iterator = 3;
 	for (let index = 0; index <= 3; index++) {
 		setCountdown(index, iterator.toString());
 		iterator--;
 	}
 	setCountdown(3, 'GO!');
+	
 	function setCountdown(num: number, iterator: string) {
 		setTimeout( () => {
 			countdown.classList.remove('titleTransitionBack');

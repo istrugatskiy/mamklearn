@@ -54,9 +54,6 @@
             An error has occurred: JavaScript is disabled or not supported by your browser
         </p>
     </noscript>
-	<audio loop id="mainTheme">
-		<source src="data/MainTheme.mp3" type="audio/mp3">
-	</audio>
 	<div id="gameStartScreenStudent">
 		<span style="--i:1;">G</span> <span style="--i:2;">a</span> <span style="--i:3;">m</span> <span
 			style="--i:4;">e</span> <span style="--i:5;">&nbsp;</span> <span style="--i:6;">w</span> <span
@@ -207,7 +204,7 @@
 	</div>
 	<div id="blackSquare"></div>
 	<div id="loginPage">
-		<div class="innerdiv">
+		<div class="innerdiv titleTransitionBack">
 			<p>Please login with your mamaroneck schools Google Account.</p>
 			<p id="loginError1" style="font-size: large; color: red; margin: 0px; display: none; padding: 0px;">Please
 				use an account that ends in "mamkschools.org" or "student.mamkschools.org"</p>
@@ -230,8 +227,8 @@
 		<h1 class="titleTransitionBack" id="gameCodeTeacher">Game Code: ****</h1>
 		<button class="button titleTransitionBack" id="gameStartButtonTeacher">Start Game</button>
 		<div id="characterPeopleDiv"></div>
-		<div style="display: none;" id="teacherCountdown" class="titleTransitionBack">
-			3
+		<div style="display: none;" id="teacherCountdown">
+			<h1 class="titleTransitionBack">3</h1>
 		</div>
 	</div>
 	<div class="title" id="studentPlayScreen">
