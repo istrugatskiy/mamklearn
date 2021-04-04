@@ -231,6 +231,9 @@
 			<h1 class="titleTransitionBack">3</h1>
 		</div>
 	</div>
+	<div id="liveLeaderboards" class="title" style="display: none; top: 10%;">
+		<h1 class="titleTransitionBack">Live Leaderboards:</h1>
+	</div>
 	<div class="title" id="studentPlayScreen">
 		<div class="button buttonLikeTitle playerContainer" id="studentRaceBox">
 			<div id="playerInGame" class="playerCharacter">
@@ -323,7 +326,7 @@
 	</div>
 	<div id="userNotifyPlay">
 		<div class="title" style="top: 30%;">
-			<svg class="titleTransitionBack" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="120px" height="120px"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+			<svg class="titleTransitionBack" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="white" width="120px" height="120px"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
 			<p class="titleTransitionBack">
 				Incorrect Answer<br>
 				<span id="mistakeQuestion">You can try again in 5 seconds</span>
@@ -348,14 +351,14 @@
 		<div style="margin-top: -50px; position: relative;" class="draggable titleTransitionBack" id="draggableQuestion${highestQuestion}">
 		<h3 style="font-family: 'Chelsea Market', cursive; color: white; text-align: left;"> 
 			<span class="draggableActual">
-				<svg class="draggableActual" xmlns="http://www.w3.org/2000/svg" height="24" style="transform: scale(2);" viewBox="0 0 24 24" width="24">
+				<svg class="draggableActual" xmlns="http://www.w3.org/2000/svg" height="24" style="transform: scale(2);" viewbox="0 0 24 24" width="24">
 					<path class="draggableActual" d="M0 0h24v24H0V0z" fill="none"/>
 					<path class="draggableActual" fill="white" d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
 				</svg>
 			</span> 
 			<span class="hackDoNotUse">Question ${highestQuestion}:</span>
 			<a id="collapseSubArea${highestQuestion}" href="javascript:void(0)" class="arrowBRight arrow"> </a> 
-			<svg xmlns="http://www.w3.org/2000/svg" class="clickBoxGrey" tabindex="0" id="deleteQuestion${highestQuestion}" viewBox="0 0 24 24" style="transform: scale(2); margin-left: 22px;" fill="white" width="18px" height="18px">
+			<svg xmlns="http://www.w3.org/2000/svg" class="clickBoxGrey" tabindex="0" id="deleteQuestion${highestQuestion}" viewbox="0 0 24 24" style="transform: scale(2); margin-left: 22px;" fill="white" width="18px" height="18px">
 				<path d="M0 0h24v24H0z" fill="none"/>
 				<path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
 			</svg>
@@ -368,7 +371,7 @@
 				<label class="toggleButton toggleButtonPosition">
 					<input type="checkbox" id="shortAnswerToggle${highestQuestion}">
 					<div>
-						<svg viewBox="0 0 44 44">
+						<svg viewbox="0 0 44 44">
 							<path d="M14,24 L21,31 L39.7428882,11.5937758 C35.2809627,6.53125861 30.0333333,4 24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,19.3 42.5809627,15.1645919 39.7428882,11.5937758" transform="translate(-2.000000, -2.000000)"></path>
 						</svg>
 					</div>
@@ -379,7 +382,7 @@
 				<label class="toggleButton toggleButtonPosition">
 					<input type="checkbox" id="toggleTime${highestQuestion}">
 					<div>
-						<svg viewBox="0 0 44 44">
+						<svg viewbox="0 0 44 44">
 							<path d="M14,24 L21,31 L39.7428882,11.5937758 C35.2809627,6.53125861 30.0333333,4 24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,19.3 42.5809627,15.1645919 39.7428882,11.5937758" transform="translate(-2.000000, -2.000000)"></path>
 						</svg>
 					</div>
@@ -395,7 +398,7 @@
 					<label class="toggleButton weirdButton2" tabindex="0" id="isCorrectQuestion1${highestQuestion}">
 						<input checked type="checkbox">
 						<div>
-							<svg viewBox="0 0 44 44">
+							<svg viewbox="0 0 44 44">
 								<path d="M14,24 L21,31 L39.7428882,11.5937758 C35.2809627,6.53125861 30.0333333,4 24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,19.3 42.5809627,15.1645919 39.7428882,11.5937758" transform="translate(-2.000000, -2.000000)"></path>
 							</svg>
 						</div>
@@ -407,7 +410,7 @@
 					<label class="toggleButton weirdButton2" tabindex="0"  id="isCorrectQuestion2${highestQuestion}">
 						<input type="checkbox">
 						<div>
-							<svg viewBox="0 0 44 44">
+							<svg viewbox="0 0 44 44">
 								<path d="M14,24 L21,31 L39.7428882,11.5937758 C35.2809627,6.53125861 30.0333333,4 24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,19.3 42.5809627,15.1645919 39.7428882,11.5937758" transform="translate(-2.000000, -2.000000)"></path>
 							</svg>
 						</div>
@@ -419,7 +422,7 @@
 					<label class="toggleButton weirdButton2" tabindex="0" id="isCorrectQuestion3${highestQuestion}">
 						<input type="checkbox">
 						<div>
-							<svg viewBox="0 0 44 44">
+							<svg viewbox="0 0 44 44">
 								<path d="M14,24 L21,31 L39.7428882,11.5937758 C35.2809627,6.53125861 30.0333333,4 24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,19.3 42.5809627,15.1645919 39.7428882,11.5937758" transform="translate(-2.000000, -2.000000)"></path>
 							</svg>
 						</div>
@@ -431,7 +434,7 @@
 					<label class="toggleButton weirdButton2" tabindex="0" id="isCorrectQuestion4${highestQuestion}">
 						<input type="checkbox">
 						<div>
-							<svg viewBox="0 0 44 44">
+							<svg viewbox="0 0 44 44">
 								<path d="M14,24 L21,31 L39.7428882,11.5937758 C35.2809627,6.53125861 30.0333333,4 24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,19.3 42.5809627,15.1645919 39.7428882,11.5937758" transform="translate(-2.000000, -2.000000)"></path>
 							</svg>
 						</div>
@@ -449,7 +452,7 @@
 			<img alt="your arms" id="currentUserArms" src="img/arms-0.png" style="position: absolute;" width="250" height="337">
 			<img alt="your eyes" id="currentUserEyes" src="img/eyes-0.png" style="position: absolute;" width="250" height="337">
 			<img alt="your nose" id="currentUserNose" src="img/nose-0.png" style="position: absolute;" width="250" height="337">
-			<img alt="your mouth" id="currentUserMouth"src="img/mouth-0.png" style="position: absolute;" width="250" height="337">
+			<img alt="your mouth" id="currentUserMouth" src="img/mouth-0.png" style="position: absolute;" width="250" height="337">
 			<img alt="your shirt" id="currentUserShirt" src="img/shirt-0.png" style="position: absolute;" width="250" height="337">
 			<img alt="your profile picture" src="img/base.png" width="250" height="337">
 		</div>
@@ -473,10 +476,10 @@
 	<template id="playerForTeacherScreen">
 		<div class="parentTransformElement">
 			<div class="button studentPlayer titleTransitionBack" tabindex="0" role="button">
-				<p class="notifyTextChar">${username + lastName[0].}</p>
-				<div>
+				<p class="notifyTextChar">012345678901234567890123456789</p>
+				<div class="teacherScreenPlayer">
 					<img alt="your arms" src="img/arms-0.png" style="position: absolute;" width="250" height="337">
-					<img alt="your eyes"src="img/eyes-0.png" style="position: absolute;" width="250" height="337">
+					<img alt="your eyes" src="img/eyes-0.png" style="position: absolute;" width="250" height="337">
 					<img alt="your nose" src="img/nose-0.png" style="position: absolute;" width="250" height="337">
 					<img alt="your mouth" src="img/mouth-0.png" style="position: absolute;" width="250" height="337">
 					<img alt="your shirt" src="img/shirt-0.png" style="position: absolute;" width="250" height="337">
@@ -505,14 +508,14 @@
 	</div>
 	</template>
 	<template id="makeMenu">
-		<h1 class="titleTransitionBack" id='homeText2'>Your Quizzes:</h1>
+		<h1 class="titleTransitionBack" id="homeText2">Your Quizzes:</h1>
 		<div id="makeDiv">
 			<div id="removeButton">
-				<button class="button titleTransitionBack" id="createButtonA">
+				<button class="button titleTransitionBack createButtonA" id="createButtonA">
 				<p class="notifyTextChar">Tap to create a quiz...</p><img id="plusButtonImage" src="img/createQuiz.png" alt="create quiz image" width="400"></button><br>
 				<br>
 			</div>
-			<button class="button titleTransitionBack" id="backButtonC">Back</button>
+			<button class="button titleTransitionBack backButtonC" id="backButtonC">Back</button>
 		</div>
 	</template>
 	<template id="svgLoader">
@@ -523,7 +526,7 @@
 		</svg>		
 	</template>
 	<template id="makeDivCreateQuizButton">
-		<button class="button titleTransitionBack createQuizButton" id="createButtonA">
+		<button class="button titleTransitionBack createQuizButton createButtonA" id="createButtonA2">
 			<img src="../img/createQuiz-2.png" width="250">
 			<br>(Create quiz)</button>
 	</template>
@@ -531,7 +534,7 @@
 		<br>
 		<br>
 		<div style="text-align: center;">
-			<button class="button titleTransitionBack" id="backButtonC">Back</button>
+			<button class="button titleTransitionBack backButtonC" id="backButtonC2">Back</button>
 		</div>
 	</template>
 </body>

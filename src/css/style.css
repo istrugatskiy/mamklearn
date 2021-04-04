@@ -687,6 +687,7 @@ input[type=number] {
 	font-size: x-large;
 	text-align: center;
 	z-index: 1;
+	word-break: break-word;
 }
 @keyframes coolAni {
 	0% {
@@ -1761,7 +1762,7 @@ button::-moz-focus-inner {
 }
 #characterPeopleDiv {
 	text-align: center;
-	margin: 100px 100px;
+	margin: 100px;
 }
 .studentPlayer {
 	position: absolute;
@@ -1833,4 +1834,9 @@ button::-moz-focus-inner {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, 0);
+}
+.teacherScreenPlayer {
+	position: absolute;
+	top: 130px;
+	left: 30px;
 }

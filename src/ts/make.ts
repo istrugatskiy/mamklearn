@@ -33,12 +33,14 @@ let clickListeners = {
 	"shareQuiz": () => {shareQuiz()},
 	"backButtonEditQuiz": () => {exitModalPopupF(true)},
 	"backButtonC": () => {goBackMakeA()},
+	"backButtonC2": () => {goBackMakeA()},
 	"copyShareLink": () => {copyShareLink()},
 	"modal-bg": () => {exitModalPopupTemplate('createQuizMenu')},
 	"backButtonZ": () => {exitModalPopupTemplate('createQuizMenu')},
 	"backButtonY": () => {exitModalPopupTemplate('manageQuizMenu')},
 	"backButtonShareQuiz": () => {exitModalPopupTemplate('shareQuizMenu', 'shareQuizMenu')},
 	"createButtonA": () => {createQuiz()},
+	"createButtonA2": () => {createQuiz()},
 	"backButtonDeleteConfirm": () => {exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm')},
 	"gameStartButtonTeacher": () => {startGameTeacher()}
 };
@@ -92,14 +94,14 @@ window.addEventListener("beforeunload", (event) => {
 
 export function createQuiz() {
 	if (checkOnce) {
-		$('createButtonA').disabled = true;
+		document.querySelector('.createButtonA')!.disabled = true;
 		$('QuizName').disabled = false;
 		window.clickEvents['modal-bg'] = () => {exitModalPopupTemplate('createQuizMenu')};
 		$('submitQuizID').disabled = false;
 		$('QuizName').value = '';
-		$('createButtonA').classList.add('btnTransitionA');
-		$('backButtonC').disabled = true;
-		$('backButtonC').classList.add('btnTransitionA');
+		document.querySelector('.createButtonA')!.classList.add('btnTransitionA');
+		document.querySelector('.backButtonC')!.disabled = true;
+		document.querySelector('.backButtonC')!.classList.add('btnTransitionA');
 		$('submitQuizID').textContent = 'Create';
 		$('modal-bg').style.animation = 'fadeIn 0.5s';
 		$('modal-bg').style.display = 'block';
@@ -119,15 +121,15 @@ export function createQuiz() {
 
 export function goBackMakeA() {
 	window.customOptionsIncrement = 0;
-	$('backButtonC').disabled = true;
+	document.querySelector('.backButtonC')!.disabled = true;
 	$('homeText2').classList.add('titleTransition');
 	if (Object.keys(quizList2).length > 0) {
 		for (let key in quizList2) {
 			$(key).classList.add('btnTransitionA');
 		};
 	}
-	$('createButtonA').classList.add('btnTransitionA');
-	$('backButtonC').classList.add('btnTransitionA');
+	document.querySelector('.createButtonA')!.classList.add('btnTransitionA');
+	document.querySelector('.backButtonC')!.classList.add('btnTransitionA');
 	setTimeout( () => {
 		clearChildren('title');
 		setTitle('homeScreen');
@@ -418,7 +420,7 @@ export function addQuiz() {
 		};
 		$('makeDiv').appendChild(renderableQuizObject);
 		iconIterate = 0;
-		$('backButtonC').remove();
+		document.querySelector('.backButtonC')!.remove();
 		$('removeButton').remove();
 		createTemplate('makeDivCreateQuizButton' , 'makeDiv');
 		createTemplate('makeDivBackButton', 'makeDiv');
@@ -427,14 +429,14 @@ export function addQuiz() {
 			item.addEventListener('click', event => {
 				const eventTarget = (event.target! as HTMLElement).id;
 				if (checkOnce) {
-					$('createButtonA').disabled = true;
+					document.querySelector('.createButtonA')!.disabled = true;
 					window.clickEvents['modal-bg'] = () => {exitModalPopupTemplate('manageQuizMenu')};
 					$('QuizName').disabled = false;
 					$('submitQuizID').disabled = false;
 					$('QuizName').value = '';
-					$('createButtonA').classList.add('btnTransitionA');
-					$('backButtonC').disabled = true;
-					$('backButtonC').classList.add('btnTransitionA');
+					document.querySelector('.createButtonA')!.classList.add('btnTransitionA');
+					document.querySelector('.backButtonC')!.disabled = true;
+					document.querySelector('.backButtonC')!.classList.add('btnTransitionA');
 					$('submitQuizID').textContent = 'Create';
 					$('modal-bg').style.animation = 'fadeIn 0.5s';
 					$('modal-bg').style.display = 'block';
@@ -544,16 +546,18 @@ function startGameTeacher() {
 	});
 	setTimeout( () => {
 		mainAudio.setVolume('mainTheme', 0);
-		mainAudio.play('loadingTheme', false, 0);
-		mainAudio.setVolume('loadingTheme', 1);
 		clearChildren('characterPeopleDiv');
 		$('gameStartButtonTeacher').classList.add('btnTransitionA');
 		$('gameCodeTeacher').classList.add('btnTransitionA');
 		doCountdown();
 	}, 300);
 	setTimeout( () => {
-		mainAudio.play('playTheme', true);
-	}, 22000);
+		mainAudio.play('playTheme', true, 0);
+		mainAudio.setVolume('playTheme', 1);
+	}, 3000);
+	setTimeout( () => {
+		$('liveLeaderboards').style.display = 'block';
+	}, 5000);
 }
 
 function doCountdown() {
@@ -578,6 +582,9 @@ function doCountdown() {
 			}, 300);
 		}, 1000 * num);
 	}
+	setTimeout( () => {
+		countdown.classList.add('teacherCountdownAnim');
+	}, 4000);
 }
 
 function deleteQuiz() {

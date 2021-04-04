@@ -159,8 +159,8 @@ export const mathLerp = (x: number, y: number, a: number) => x * (1 - a) + y * a
 
 // Demo of what the mamklearn codebase COULD be like, like I'll ever bother using classes
 export class AudioManager {
-	audioObjects: { [key: string]: {source: string, index: number | null}; } = {};
-	currentlyPlaying: HTMLMediaElement[] = [];
+	private audioObjects: { [key: string]: {source: string, index: number | null}; } = {};
+	private currentlyPlaying: HTMLMediaElement[] = [];
 
 	constructor(audioObjects: { [name: string]: string; }) {
 		Object.entries(audioObjects).forEach( ([key, value]) => {
@@ -228,5 +228,13 @@ export class AudioManager {
 		else {
 			throw new TypeError('You need to play the clip before modifying it!');
 		}
+	}
+
+	clearAll() {
+		this.currentlyPlaying.forEach( (audioClip) => {
+			audioClip.pause();
+		});
+		this.currentlyPlaying = [];
+		
 	}
 }
