@@ -1425,7 +1425,7 @@ button::-moz-focus-inner {
 		min-height: 50px;
 		padding: 30px;
 	}
-	.buttonLikeTitle {
+	#studentPlayScreen .buttonLikeTitle {
 		font-size: 24px;
 		height: auto;
 	}
@@ -1839,4 +1839,26 @@ button::-moz-focus-inner {
 	position: absolute;
 	top: 130px;
 	left: 30px;
+}
+.inGamePlayerButton {
+	max-width: 600px;
+	animation: slideAndFade 0.3s;
+	animation-delay: calc(0.1s * var(--c));
+	opacity: 0;
+	animation-fill-mode: forwards;
+	animation-timing-function: cubic-bezier(0.29, 0.09, 0.07, 1.4);
+}
+.liveLeaderboards {
+	display: none;
+	top: 10%;
+}
+@keyframes slideAndFade {
+	from {
+		transform: translateX(450px);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
 }
