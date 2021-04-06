@@ -1,4 +1,5 @@
 // These are some helper functions used throughout the app!
+import firebase from "firebase/app";
 
 export const getID = (inputEvent: Event) => {
 	var input = (inputEvent.target as HTMLElement).id;
@@ -106,6 +107,9 @@ export const setTitle = (templateID: string) => {
 }
 
 export const throwExcept = (msg: string) => {
+	firebase.analytics().logEvent('handled error', {
+		msg
+	});
 	$('commError2').style.display = 'block';
 	$('CommError').style.display = 'block';
 	$('comError3').textContent = msg;
@@ -149,8 +153,7 @@ export const setCaretPosition = (element: HTMLElement, offset: number) => {
 }
 
 export const signOut = () => {
-	var auth2 = gapi.auth2.getAuthInstance();
-	auth2.signOut().then(function () {
+	firebase.auth().signOut().then(function () {
 		window.location.reload();
 	});
 }

@@ -403,19 +403,6 @@ body {
 .loader--active .loader__tile:nth-child(5) {
 	transition-delay: 0.4s;
 }
-#loginPage {
-	z-index: 9;
-	top: 40%;
-	left: 50%;
-	transform: translate(-50%, -40%);
-	position: absolute;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-	color: rgb(255, 255, 255);
-	text-align: center;
-	font-size: xx-large;
-	max-width: 800px;
-	display: none;
-}
 .error {
 	z-index: 9;
 	top: 40%;
@@ -445,16 +432,6 @@ body {
 	to {
 		transform: translate(100%, -40%);
 	}
-}
-.innerdiv {
-	background-color: rgba(255, 255, 255, 0.226);
-	width: 100%;
-	text-align: center;
-	border-radius: 10px;
-	-webkit-backdrop-filter: blur(20px);
-	backdrop-filter: blur(20px);
-	box-shadow: 0px 0px 12px #000000;
-	max-width: 800px;
 }
 a.middle {
 	position: relative;
@@ -505,10 +482,6 @@ ul {
 	padding: 0;
 }
 @supports (not (backdrop-filter: blur(20px))) and (not (-webkit-backdrop-filter: blur(20px))) {
-	.innerdiv {
-		background-color: rgb(255, 255, 255);
-		color: black;
-	}
 	.button:hover, .button:active, .button:focus, .button:disabled {
 		background-color: rgb(28, 37, 102) !important;
 	}
@@ -1605,7 +1578,7 @@ button::-moz-focus-inner {
 	background-color: rgb(255, 255, 255);
 	display: none;
 	animation: fadein 0.5s forwards;
-	z-index: 10;
+	z-index: 13;
 }
 .gameResultImage {
 	position: absolute;
@@ -1861,4 +1834,18 @@ button::-moz-focus-inner {
 		transform: translateX(0);
 		opacity: 1;
 	}
+}
+#loginBtn {
+	font-size: xx-large;
+	padding-bottom: 20px;
+	padding-top: 20px;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.pleaseLogin {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	max-width: 500px;
+	font-size: xx-large;
+}
+.initTitle {
+	margin-bottom: 0;
 }

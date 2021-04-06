@@ -3,9 +3,12 @@ import '../css/style.css';
 import {$, getCaretCharacterOffsetWithin, characterCount, createTemplate, setTitle, throwExcept, setCaretPosition, signOut, clearChildren} from './utils';
 import {eventHandle} from './events';
 import {initParticles} from './loadParticles';
+import firebase from 'firebase/app';
+import 'firebase/analytics';
+import 'firebase/auth';
+
 declare global {
 	interface Window {
-		onSignIn: any,
 		currentUserConfig: any,
 		customOptionsIncrement: any,
 		clickEvents: any,
@@ -20,15 +23,51 @@ declare global {
 		anotherTestCase4: string
 	}
 }
-window.onSignIn = onSignIn;
 let customOptionsIncrement = 0;
 window.customOptionsIncrement = customOptionsIncrement;
 let currentUserConfig = [0, 0, 0, 0, 0];
 window.currentUserConfig = currentUserConfig;
 let errorCount = 0;
-
-console.log("%cUse link to get quiz answers:https://bit.ly/31Apj2U", "font-size: 32px;");
 const customOptions = ["Eyes", "Nose", "Mouth", "Shirt", "Arms"];
+
+
+// Creates a console message that rickrolls you
+console.log("%cUse link to get quiz answers:https://bit.ly/31Apj2U", "font-size: 32px;");
+
+// Configuration for firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyAFnj_KFkypyRhlBLceV7FIQwLBOk-13ek",
+  authDomain: "mamaroneck-learn.firebaseapp.com",
+  databaseURL: "https://mamaroneck-learn-default-rtdb.firebaseio.com",
+  projectId: "mamaroneck-learn",
+  storageBucket: "mamaroneck-learn.appspot.com",
+  messagingSenderId: "917106980205",
+  appId: "1:917106980205:web:6d36bd431bbc3d91fa5664",
+  measurementId: "G-G1J2MYS1LJ"
+};
+
+// Configures firebase authentication
+firebase.initializeApp(firebaseConfig);
+let provider = new firebase.auth.GoogleAuthProvider();
+firebase.auth().useDeviceLanguage();
+
+// If the user is logged in initiliaze appropriate code
+firebase.auth().onAuthStateChanged( (user) => {
+	initializeApp();
+	eventHandle();
+	if(user) {
+		let error = $('loginError1');
+		let userDomainLocation = user!.email!.indexOf('@') + 1;
+		let userDomain = user!.email!.substring(userDomainLocation, user!.email!.length);
+		if (userDomain == 'student.mamkschools.org' || userDomain == 'mamkschools.org') {
+			completeLoginFlow();
+		} else {
+			firebase.auth().signOut();
+			error.style.display = 'block';
+			error.textContent = 'Please use an account that ends in \'mamkschools.org\' or \'student.mamkschools.org\'';
+		}
+	}
+});
 
 const initializeApp = () => {
 	contentEditableUpdate();
@@ -71,22 +110,22 @@ window.submitEvents = {
 
 window.keyboardIncludesEvents = {};
 
-// Initializes the app once its fully loaded.
-window.addEventListener('load', () => {
-	gapi.load('auth2', () => {
-		gapi.auth2.init({
-			client_id: '917106980205-im519fknf8sfb1jc1gs1tr6eafmto4vs.apps.googleusercontent.com',
-		}).then( () => {
-			initializeApp();
-			eventHandle();
-		}
-		);
-	});
-});
-
 const login = () => {
-	$('loginPage').style.display = 'block';
-	$('loginBtn').disabled = true;
+	firebase.auth().signInWithPopup(provider)
+	.catch( (error) => {
+		$('loginError1').textContent = `${error.code}: ${error.message}`;
+	});
+}
+
+function completeLoginFlow() {
+	Array.from($('title').children).forEach( (element) => {
+		element.classList.add('btnTransitionA');
+	});
+	setTimeout( () => {
+		setTitle('homeScreen');
+		$('title').style.top = '15%';
+		$('title').style.height = '800px';
+	}, 300);
 }
 
 function userClick(link: string, disableObject?: string) {
@@ -97,25 +136,6 @@ function userClick(link: string, disableObject?: string) {
 	setTimeout(function () {
 		window.location.href = link;
 	}, 1000);
-};
-
-function onSignIn(googleUser: any) {
-	let $error = $('loginError1');
-	let auth2 = gapi.auth2.getAuthInstance();
-	// feel sorry for whoever reads this code - Ilya
-	if (googleUser.getHostedDomain() == 'student.mamkschools.org' || googleUser.getHostedDomain() == 'mamkschools.org') {
-		setTitle('homeScreen');
-		$('loginPage').style.animation = 'animatezoomout 0.6s';
-		$('title').style.top = '15%';
-		$('title').style.height = '800px';
-		setTimeout(function () {
-			$('loginPage').style.display = 'none';
-		}, 500);
-	} else {
-		auth2.signOut();
-		$error.style.display = 'block';
-		$error.textContent = 'Please use an account that ends in \'mamkschools.org\' or \'student.mamkschools.org\'';
-	}
 };
 
 // make and play on button click functions here!
@@ -211,10 +231,7 @@ export function contentEditableUpdate() {
 function JoinGame() {
 	$("gameID").disabled = true;
 	$("submitID").disabled = true;
-	let selects = document.getElementsByTagName("a");
-	for (let i = 0, il = selects.length; i < il; i++) {
-		selects[i].className += " disabled";
-	}
+	$('playMenuBack').classList.add('disabled');
 	clearChildren('submitID');	
 	createTemplate('svgLoader', 'submitID');
 	if ($("gameID").value == "2794") {
@@ -313,14 +330,17 @@ export function setCharImage(charID: string, currentUserConfig: number[]) {
 	$(charID + 'Arms').src = `img/arms-${currentUserConfig[4]}.png`;
 }
 
-window.addEventListener("error", (e) => {
-	if(e.hasOwnProperty('details')) {
+window.addEventListener("error", (error) => {
+	firebase.analytics().logEvent('error', {
+		error
+	});
+	if(error.hasOwnProperty('details')) {
 		throwExcept('GAPI_ERROR');
 	}
-	else if (e.message.includes('Script error') || e.message.includes('TypeError')) {
+	else if (error.message.includes('Script error') || error.message.includes('TypeError')) {
 		throwExcept('MISTAKE');
 	}
 	else {
-		console.log(e.message);
+		console.log(error.message);
 	}
 });

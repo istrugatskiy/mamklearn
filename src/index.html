@@ -6,8 +6,6 @@
 	<meta content="mamkLearn" name="description">
 	<meta content="mamkLearn" name="author">
 	<meta content="width=device-width, initial-scale=1" name="viewport">
-	<meta content="917106980205-im519fknf8sfb1jc1gs1tr6eafmto4vs.apps.googleusercontent.com"
-		name="google-signin-client_id">
 	<link href="data:;base64,iVBORw0KGgo=" rel="icon">
 	<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
 </head>
@@ -15,8 +13,6 @@
 <body>
 	<div id="particles-js"></div>
 	<link href="https://fonts.googleapis.com/css2?family=Chelsea+Market&display=swap" rel="stylesheet">
-	<script defer src="https://apis.google.com/js/platform.js">
-	</script>
 	<script>
 		function isIE() {
 			ua = navigator.userAgent;
@@ -84,9 +80,24 @@
 		<div class="loader__tile"></div>
 		<div class="loader__tile"></div>
 	</div>
-	<div class="title" id="title" style="top: 30%;">
-		<h1>MamkLearn</h1>
-		<button class="button btn" id="loginBtn">Login</button>
+	<div class="title" id="title" style="top: 20%;">
+		<h1 class="initTitle">MamkLearn</h1>
+		<div>
+			<div style="text-align: center; display: flex; align-items: center; justify-content: center;">
+				<p class="pleaseLogin button buttonLikeTitle">Please login with your mamaroneck schools Google Account.</p>
+			</div>
+			<p id="loginError1" style="font-size: large; color: red; margin: 0px; display: none; padding: 0px;">Please
+				use an account that ends in "mamkschools.org" or "student.mamkschools.org"</p>
+			<div style="text-align: center; display: flex; align-items: center; justify-content: center;">
+				<button class="button btn" id="loginBtn">
+					<img src="img/Google__G__Logo.svg" alt="Google Logo" width="30" height="30">
+					Sign in with Google
+				</button>
+			</div>
+			<p style="font-size: large; text-align: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">By signing in you agree to our terms of service and privacy
+				policy.
+			</p>
+		</div>
 		<div class="bottomBar">
 			<ul class="titleTransitionBack">
 				<li>
@@ -203,19 +214,6 @@
 		</div>
 	</div>
 	<div id="blackSquare"></div>
-	<div id="loginPage">
-		<div class="innerdiv titleTransitionBack">
-			<p>Please login with your mamaroneck schools Google Account.</p>
-			<p id="loginError1" style="font-size: large; color: red; margin: 0px; display: none; padding: 0px;">Please
-				use an account that ends in "mamkschools.org" or "student.mamkschools.org"</p>
-			<div style="text-align: center; display: flex; align-items: center; justify-content: center;">
-				<div class="g-signin2" data-height="50" data-longtitle="true" data-onsuccess="onSignIn"
-					data-theme="dark" data-width="240" style="padding: 20px;"></div>
-			</div>
-			<p style="font-size: large; text-align: center;">By signing in you agree to our terms of service and privacy
-				policy.</p>
-		</div>
-	</div>
 	<div class="error" id="CommError" style="display: none; z-index: 20;">
 		<div class="innerdiv"
 			style="background-color: rgba(25, 25, 25, 0.65); border-radius: 0px; border-color: rgb(25, 25, 25); border-width: 5px; border-style: solid;">
@@ -233,7 +231,7 @@
 	</div>
 	<div id="liveLeaderboards" class="title liveLeaderboards">
 		<h1 class="titleTransitionBack">Live Leaderboards:</h1>
-		<div class="button inGamePlayerButton buttonLikeTitle"><b>1.</b> &nbsp; Ilya S.</div>
+		<div class="button inGamePlayerButton buttonLikeTitle" style="--c: 1;"><b>1.</b> &nbsp; Ilya S.</div>
 		<div class="button inGamePlayerButton buttonLikeTitle" style="--c: 1;"><b>1.</b> &nbsp; Ilya S.</div>
 		<div class="button inGamePlayerButton buttonLikeTitle" style="--c: 2;"><b>1.</b> &nbsp; Ilya S.</div>
 		<div class="button inGamePlayerButton buttonLikeTitle" style="--c: 3;"><b>1.</b> &nbsp; Ilya S.</div>
