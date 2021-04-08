@@ -57,7 +57,7 @@ let userObject: firebase.database.Reference;
 const monitorUserState = () => {
 	userObject.on('value', 
 	(snap) => {
-		if(!errorHasBeenThrown) {
+		if(!errorHasBeenThrown && firebase.auth().currentUser) {
 			if(snap.val()) {
 				window.currentUserConfig = snap.val().charConfig;
 				if($('currentUserArms')) {
