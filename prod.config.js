@@ -13,7 +13,7 @@ module.exports = {
         './src/ts/loadParticles.ts'
     ],
     output: {
-        filename: '[name].chonk.js',
+        filename: 'mamkEngine~[name].js',
         path: path.resolve(__dirname, 'dist/')
     },
     module: {
@@ -64,6 +64,9 @@ module.exports = {
     ],
     optimization: {
         minimize: true,
+        splitChunks: {
+            chunks: 'all'
+        },
         minimizer: [
             `...`,
             new CssMinimizerPlugin(),
@@ -72,5 +75,4 @@ module.exports = {
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
     },
-
 }

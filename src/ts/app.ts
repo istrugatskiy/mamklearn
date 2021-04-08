@@ -1,4 +1,5 @@
 // Defines imports and globals
+import '../css/globals.css';
 import '../css/style.css';
 import {$, getCaretCharacterOffsetWithin, characterCount, createTemplate, setTitle, throwExcept, setCaretPosition, signOut, clearChildren} from './utils';
 import {eventHandle} from './events';
@@ -6,11 +7,12 @@ import {initParticles} from './loadParticles';
 import firebase from 'firebase/app';
 import 'firebase/analytics';
 import 'firebase/auth';
+import 'firebase/database'
 
 declare global {
 	interface Window {
-		currentUserConfig: any,
-		customOptionsIncrement: any,
+		currentUserConfig: number[],
+		customOptionsIncrement: number,
 		clickEvents: any,
 		clickIncludesEvents: any,
 		keyboardIncludesEvents: any,
@@ -23,12 +25,12 @@ declare global {
 		anotherTestCase4: string
 	}
 }
-let customOptionsIncrement = 0;
-window.customOptionsIncrement = customOptionsIncrement;
-let currentUserConfig = [0, 0, 0, 0, 0];
-window.currentUserConfig = currentUserConfig;
+window.customOptionsIncrement = 0;
+window.currentUserConfig = [0, 0, 0, 0, 0];
 let errorCount = 0;
 const customOptions = ["Eyes", "Nose", "Mouth", "Shirt", "Arms"];
+let hasAppBeenInitialized = false;
+let errorHasBeenThrown = false;
 
 
 // Creates a console message that rickrolls you
@@ -37,7 +39,7 @@ console.log("%cUse link to get quiz answers:https://bit.ly/31Apj2U", "font-size:
 // Configuration for firebase
 const firebaseConfig = {
   apiKey: "AIzaSyAFnj_KFkypyRhlBLceV7FIQwLBOk-13ek",
-  authDomain: "mamaroneck-learn.firebaseapp.com",
+  authDomain: "mamklearn.com",
   databaseURL: "https://mamaroneck-learn-default-rtdb.firebaseio.com",
   projectId: "mamaroneck-learn",
   storageBucket: "mamaroneck-learn.appspot.com",
@@ -50,17 +52,54 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 let provider = new firebase.auth.GoogleAuthProvider();
 firebase.auth().useDeviceLanguage();
+let userObject: firebase.database.Reference;
+
+const monitorUserState = () => {
+	userObject.on('value', 
+	(snap) => {
+		if(!errorHasBeenThrown) {
+			if(snap.val()) {
+				window.currentUserConfig = snap.val().charConfig;
+				if($('currentUserArms')) {
+					setCharImage('currentUser', window.currentUserConfig);
+				}
+			}
+			else {
+				userObject.set({
+					charConfig: 
+					{
+						0: 0,
+						1: 0,
+						2: 0,
+						3: 0,
+						4: 0
+					}
+				});
+			}
+		}
+		
+	},
+	(error) => {
+		throwExcept(error.message);
+		errorHasBeenThrown = true;
+	});
+}
 
 // If the user is logged in initiliaze appropriate code
 firebase.auth().onAuthStateChanged( (user) => {
-	initializeApp();
-	eventHandle();
+	if(!hasAppBeenInitialized) {
+		initializeApp();
+		eventHandle();
+		hasAppBeenInitialized = true;
+	}
 	if(user) {
 		let error = $('loginError1');
 		let userDomainLocation = user!.email!.indexOf('@') + 1;
 		let userDomain = user!.email!.substring(userDomainLocation, user!.email!.length);
 		if (userDomain == 'student.mamkschools.org' || userDomain == 'mamkschools.org') {
 			completeLoginFlow();
+			userObject = firebase.database().ref().child('userProfiles').child(firebase.auth().currentUser!.uid);
+			monitorUserState();
 		} else {
 			firebase.auth().signOut();
 			error.style.display = 'block';
@@ -125,6 +164,7 @@ function completeLoginFlow() {
 		setTitle('homeScreen');
 		$('title').style.top = '15%';
 		$('title').style.height = '800px';
+		setCharImage('currentUser', window.currentUserConfig);
 	}, 300);
 }
 
@@ -288,24 +328,24 @@ export function goBack() {
 		setTitle('homeScreen');
 		$('title').style.height = "800px";
 		$('title').style.top = "15%";
-		setCharImage('currentUser', currentUserConfig);
-		customOptionsIncrement = 0;
+		setCharImage('currentUser', window.currentUserConfig);
+		window.customOptionsIncrement = 0;
 	}, 300);
 }
 
 function arrowButtonPress(isLeft: boolean) {
 	if (isLeft) {
-		customOptionsIncrement = customOptionsIncrement - 1;
-		if (customOptionsIncrement < 0) {
-			customOptionsIncrement = 4;
+		window.customOptionsIncrement = window.customOptionsIncrement - 1;
+		if (window.customOptionsIncrement < 0) {
+			window.customOptionsIncrement = 4;
 		}
 	} else {
-		customOptionsIncrement = customOptionsIncrement + 1;
-		if (customOptionsIncrement > 4) {
-			customOptionsIncrement = 0;
+		window.customOptionsIncrement = window.customOptionsIncrement + 1;
+		if (window.customOptionsIncrement > 4) {
+			window.customOptionsIncrement = 0;
 		}
 	}
-	$("customButtonChange").textContent = customOptions[customOptionsIncrement];
+	$("customButtonChange").textContent = customOptions[window.customOptionsIncrement];
 	if(isLeft) {
 		$("leftCustomizeArrow").focus();
 	}
@@ -315,11 +355,14 @@ function arrowButtonPress(isLeft: boolean) {
 }
 
 function updateImageState() {
-	currentUserConfig[customOptionsIncrement]++;
-	if (currentUserConfig[customOptionsIncrement] > 9) {
-		currentUserConfig[customOptionsIncrement] = 0;
+	window.currentUserConfig[window.customOptionsIncrement]++;
+	if (window.currentUserConfig[window.customOptionsIncrement] > 9) {
+		window.currentUserConfig[window.customOptionsIncrement] = 0;
 	}
-	setCharImage('currentUser', currentUserConfig);
+	setCharImage('currentUser', window.currentUserConfig);
+	userObject.set({
+		charConfig: window.currentUserConfig
+	});
 }
 
 export function setCharImage(charID: string, currentUserConfig: number[]) {
