@@ -110,6 +110,11 @@ firebase.auth().onAuthStateChanged( (user) => {
 
 const initializeApp = () => {
 	contentEditableUpdate();
+	alert(`[WARNING: THIS IS A DEV BUILD YOUR DATA MAY GET DELETED AND STUF MAY NOT WORK!]
+	(This message will be removed as soon as the app goes live.)
+	Chagelog: 
+	1.0.1: Added support for logging out and improved character customization ui!`
+	);
 	$('mainLoader').classList.remove('loader--active');
 	initParticles();
 	if (new URLSearchParams(window.location.search).get('shareQuiz')) {
@@ -129,10 +134,10 @@ window.clickEvents = {
 	"makebtn": makeCode,
 	"signOutbtn": signOut,
 	"loginBtn": () => {login()},
-	"customButtonChange": updateImageState,
-	"customButtonChange2": updateImageState,
-	"leftCustomizeArrow": () => {arrowButtonPress(true)},
-	"arrowCustomizeRight": () => {arrowButtonPress(false)},
+	"customButtonChange": arrowButtonPress,
+	"customButtonChange2": () => {updateImageState(true)},
+	"leftCustomizeArrow": () => {updateImageState(true)},
+	"arrowCustomizeRight": () => {updateImageState(false)},
 	"playMenuBack": goBack,
 	"AboutLink": () => {userClick('about.html')},
 	"aboutWindowButton": () => {userClick('index.html', 'aboutWindowButton')},
@@ -333,31 +338,28 @@ export function goBack() {
 	}, 300);
 }
 
-function arrowButtonPress(isLeft: boolean) {
-	if (isLeft) {
-		window.customOptionsIncrement = window.customOptionsIncrement - 1;
-		if (window.customOptionsIncrement < 0) {
-			window.customOptionsIncrement = 4;
-		}
-	} else {
-		window.customOptionsIncrement = window.customOptionsIncrement + 1;
-		if (window.customOptionsIncrement > 4) {
-			window.customOptionsIncrement = 0;
-		}
+function arrowButtonPress() {
+	window.customOptionsIncrement = window.customOptionsIncrement + 1;
+	if (window.customOptionsIncrement > 4) {
+		window.customOptionsIncrement = 0;
 	}
 	$("customButtonChange").textContent = customOptions[window.customOptionsIncrement];
-	if(isLeft) {
-		$("leftCustomizeArrow").focus();
-	}
-	else {
-		$("arrowCustomizeRight").focus();
-	}
+	$("customButtonChange").focus();
+
 }
 
-function updateImageState() {
-	window.currentUserConfig[window.customOptionsIncrement]++;
-	if (window.currentUserConfig[window.customOptionsIncrement] > 9) {
-		window.currentUserConfig[window.customOptionsIncrement] = 0;
+function updateImageState(data: boolean) {
+	if(data) {
+		window.currentUserConfig[window.customOptionsIncrement]++;
+		if (window.currentUserConfig[window.customOptionsIncrement] < 0) {
+			window.currentUserConfig[window.customOptionsIncrement] = 9;
+		}
+	}
+	else {
+		window.currentUserConfig[window.customOptionsIncrement]--;
+		if (window.currentUserConfig[window.customOptionsIncrement] > 9) {
+			window.currentUserConfig[window.customOptionsIncrement] = 0;
+		}
 	}
 	setCharImage('currentUser', window.currentUserConfig);
 	userObject.set({
