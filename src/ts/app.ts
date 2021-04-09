@@ -112,7 +112,7 @@ const initializeApp = () => {
 	contentEditableUpdate();
 	alert(`[WARNING: THIS IS A DEV BUILD YOUR DATA MAY GET DELETED AND STUF MAY NOT WORK!]
 	(This message will be removed as soon as the app goes live.)
-	Chagelog: 
+	Changelog: 
 	1.0.1: Added support for logging out and improved character customization ui!`
 	);
 	$('mainLoader').classList.remove('loader--active');
@@ -135,9 +135,9 @@ window.clickEvents = {
 	"signOutbtn": signOut,
 	"loginBtn": () => {login()},
 	"customButtonChange": arrowButtonPress,
-	"customButtonChange2": () => {updateImageState(true)},
-	"leftCustomizeArrow": () => {updateImageState(true)},
-	"arrowCustomizeRight": () => {updateImageState(false)},
+	"customButtonChange2": () => {updateImageState(false)},
+	"leftCustomizeArrow": () => {updateImageState(false)},
+	"arrowCustomizeRight": () => {updateImageState(true)},
 	"playMenuBack": goBack,
 	"AboutLink": () => {userClick('about.html')},
 	"aboutWindowButton": () => {userClick('index.html', 'aboutWindowButton')},
@@ -351,14 +351,14 @@ function arrowButtonPress() {
 function updateImageState(data: boolean) {
 	if(data) {
 		window.currentUserConfig[window.customOptionsIncrement]++;
-		if (window.currentUserConfig[window.customOptionsIncrement] < 0) {
-			window.currentUserConfig[window.customOptionsIncrement] = 9;
+		if (window.currentUserConfig[window.customOptionsIncrement] > 9) {
+			window.currentUserConfig[window.customOptionsIncrement] = 0;
 		}
 	}
 	else {
 		window.currentUserConfig[window.customOptionsIncrement]--;
-		if (window.currentUserConfig[window.customOptionsIncrement] > 9) {
-			window.currentUserConfig[window.customOptionsIncrement] = 0;
+		if (window.currentUserConfig[window.customOptionsIncrement] < 0) {
+			window.currentUserConfig[window.customOptionsIncrement] = 9;
 		}
 	}
 	setCharImage('currentUser', window.currentUserConfig);
