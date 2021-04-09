@@ -32,4 +32,5 @@ Install the following extensions from vscode:
 3. HTML CSS Support
 4. Intellisense for CSS Class Names
 5. HTMLHint
+
 You're done!
