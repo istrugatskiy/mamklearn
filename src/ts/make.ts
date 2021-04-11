@@ -522,13 +522,15 @@ function playQuiz() {
 
 function renderPlayer() {
 	playerNumber++;
-	mainAudio.setVolume('mainTheme', mathClamp(0.6 + ((playerNumber/5) * 0.1), 0.6, 1))
+	mainAudio.setVolume('mainTheme', mathClamp(0.6 + ((playerNumber/5) * 0.1), 0.6, 1), true);
 	createTemplate('playerForTeacherScreen', 'characterPeopleDiv');
 	$('characterPeopleDiv').lastElementChild!.firstElementChild!.id = `studentCharacterImage_${playerNumber}`; 
 
 }
 
 function kickPlayer(eventId: string) {
+	playerNumber--;
+	mainAudio.setVolume('mainTheme', mathClamp(0.6 + ((playerNumber/5) * 0.1), 0.6, 1), true);
 	const el = $(`studentCharacterImage_${eventId}`);
 	el.disabled = true;
 	el.style.animation = 'hideme 0.3s';

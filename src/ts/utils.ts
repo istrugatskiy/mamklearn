@@ -191,23 +191,30 @@ export class AudioManager {
 		}
 	}
 
-	setVolume(name: string, newVolume: number) {
+	setVolume(name: string, newVolume: number, noInterpolate: boolean = false) {
 		if(this.audioObjects[name].index !== null) {
 			const currentAudio = this.currentlyPlaying[this.audioObjects[name].index!];
 			let distance = 0;
 			let initVolume = currentAudio.volume;
-			const interval = window.setInterval( () => {
-				if(currentAudio.volume >= newVolume && initVolume - newVolume < 0 ) {
-					clearInterval(interval);
-				}
-				else if(currentAudio.volume <= newVolume && initVolume - newVolume > 0 ) {
-					clearInterval(interval);
-				}
-				else {
-					distance += 0.05;
-					currentAudio.volume = mathClamp(mathLerp(initVolume, newVolume, distance), 0, 1);
-				}
-			}, 100);
+			if(noInterpolate) {
+				currentAudio.volume = newVolume;
+				console.log(currentAudio.volume);
+			}
+			else {
+				const interval = window.setInterval( () => {
+					if(currentAudio.volume >= newVolume && initVolume - newVolume < 0 ) {
+						clearInterval(interval);
+					}
+					else if(currentAudio.volume <= newVolume && initVolume - newVolume > 0 ) {
+						console.log(currentAudio.volume);
+						clearInterval(interval);
+					}
+					else {
+						distance += 0.05;
+						currentAudio.volume = mathClamp(mathLerp(initVolume, newVolume, distance), 0, 1);
+					}
+					}, 100);
+			}
 		}
 		else {
 			throw new TypeError('You need to play the clip before modifying it!');
