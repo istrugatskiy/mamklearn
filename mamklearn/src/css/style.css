@@ -228,7 +228,7 @@ ul {
 		background-color: white !important;
 	}
 }
-.btnTransitionA {
+.btnTransitionA-leave-active {
 	transition: all 0.3s ease-out;
 	transform: scale(0);
 	visibility: hidden;

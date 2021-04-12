@@ -1,7 +1,7 @@
 <template>
     <div id="particles-js"></div>
-    <Home v-if="isLoggedIn" />
-    <Login v-if="!isLoggedIn" />
+    <Home v-if="currentAppState == 'home'" />
+    <Login v-if="currentAppState == 'login'" />
 </template>
 
 <script lang="ts">
@@ -22,11 +22,11 @@ export default class App extends Vue {
             document.getElementById('mainLoader')!.classList.remove('loader--active');
             if (user) {
                 if (user.email!.endsWith('mamkschools.org')) {
-                    this.isLoggedIn = true;
+                    this.currentAppState = 'home';
                 }
             }
         });
     }
-    isLoggedIn: boolean = false;
+    currentAppState: string = 'login';
 }
 </script>

@@ -7,9 +7,9 @@
                 <Character :characterConfig="currentCharacterConfig" />
             </div>
             <p class="notifyTextChar" id="customType">
-                <a class="arrow left" href="javascript:void(0)"> </a>
+                <a class="arrow left" href="javascript:void(0)" @click="changeCustomization(false)"> </a>
                 <a href="javascript:void(0)" id="customButtonChange" @click="incrementSelector()">{{ currentSelectorText }}</a>
-                <a class="arrow right" href="javascript:void(0)"> </a>
+                <a class="arrow right" href="javascript:void(0)" @click="changeCustomization(true)"> </a>
             </p>
             <img alt="Tap to change button..." width="195" height="90" src="img/tapToChange.png" style="cursor: pointer; pointer-events: all;" />
         </div>
@@ -79,10 +79,26 @@ export default class Home extends Vue {
         this.currentSelector = this.currentSelector > 3 ? 0 : this.currentSelector + 1;
         this.currentSelectorText = this.characterConfig[this.currentSelector];
     }
+    changeCustomization(whichWay: boolean) {
+        if (whichWay) {
+            this.currentCharacterConfig[this.currentSelector]++;
+            if(this.currentCharacterConfig[this.currentSelector] > 9) {
+                this.currentCharacterConfig[this.currentSelector] = 0;
+            }
+        } else {
+            this.currentCharacterConfig[this.currentSelector]--;
+            if(this.currentCharacterConfig[this.currentSelector] < 0) {
+                this.currentCharacterConfig[this.currentSelector] = 9;
+            }
+        }
+    }
     signOut() {
-        firebase.auth().signOut().then(() => {
-            window.location.reload();
-        })
+        firebase
+            .auth()
+            .signOut()
+            .then(() => {
+                window.location.reload();
+            });
     }
 }
 </script>

@@ -4,7 +4,9 @@ import App from './App.vue';
 import './css/globals.css';
 import './css/style.css';
 import { initParticles } from './loadParticles';
+import { store } from './store';
 
+createApp(App).use(store);
 createApp(App).mount('#app');
 initParticles();
 
