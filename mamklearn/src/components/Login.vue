@@ -1,6 +1,6 @@
 <template>
     <div class="title" id="title" style="top: 20%;">
-        <transition-group name="btnTransitionA" v-if="">
+        <transition-group name="btnTransitionA" v-if="currentState == 'login'">
             <h1 class="initTitle">MamkLearn</h1>
             <div>
                 <div style="text-align: center; display: flex; align-items: center; justify-content: center;">
@@ -37,8 +37,14 @@
 </template>
 
 <script lang="ts">
-import { Vue } from 'vue-class-component';
+import { Options, Vue } from 'vue-class-component';
 import firebase from 'firebase/app';
+
+@Options({
+    props: {
+        currentState: String,
+    },
+})
 
 export default class Login extends Vue {
     created() {
@@ -55,6 +61,7 @@ export default class Login extends Vue {
     provider = new firebase.auth.GoogleAuthProvider();
     
     errorMsg = '';
+    currentState: string = 'login';
     login() {
         firebase
             .auth()

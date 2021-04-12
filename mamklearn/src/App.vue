@@ -1,7 +1,7 @@
 <template>
     <div id="particles-js"></div>
-    <Home v-if="currentAppState == 'home'" />
-    <Login v-if="currentAppState == 'login'" />
+    <Home :currentState="currentAppState" />
+    <Login />
 </template>
 
 <script lang="ts">
@@ -18,6 +18,7 @@ import firebase from 'firebase/app';
 })
 export default class App extends Vue {
     created() {
+        
         firebase.auth().onAuthStateChanged(user => {
             document.getElementById('mainLoader')!.classList.remove('loader--active');
             if (user) {
