@@ -110,11 +110,11 @@ firebase.auth().onAuthStateChanged( (user) => {
 
 const initializeApp = () => {
 	contentEditableUpdate();
-	alert(`[WARNING: THIS IS A DEV BUILD YOUR DATA MAY GET DELETED AND STUF MAY NOT WORK!]
+	/*alert(`[WARNING: THIS IS A DEV BUILD YOUR DATA MAY GET DELETED AND STUF MAY NOT WORK!]
 	(This message will be removed as soon as the app goes live.)
 	Changelog: 
 	1.0.1: Added support for logging out and improved character customization ui!`
-	);
+	);*/
 	$('mainLoader').classList.remove('loader--active');
 	initParticles();
 	if (new URLSearchParams(window.location.search).get('shareQuiz')) {

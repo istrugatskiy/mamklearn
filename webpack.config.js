@@ -27,9 +27,10 @@ module.exports = {
             },
             {
                 test: /\.ts$/i,
-                use: [
-                    'ts-loader'
-                ]
+                loader: 'ts-loader',
+                options: {
+                    appendTsSuffixTo: [/\.vue$/],
+                },
             },
         ]
     },
@@ -72,6 +73,9 @@ module.exports = {
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
+        alias: {
+            'vue$': 'vue/dist/vue.esm.js'
+        }
     },
 
 }

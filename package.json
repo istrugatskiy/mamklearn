@@ -37,6 +37,7 @@
     "@types/dragula": "^3.7.0",
     "dragula": "^3.7.3",
     "firebase": "^8.3.2",
-    "particles.js": "^2.0.0"
+    "particles.js": "^2.0.0",
+    "vue": "^2.6.12"
   }
 }
