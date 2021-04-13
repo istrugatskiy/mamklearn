@@ -394,7 +394,6 @@ export function exitModalPopupF(promptUser: boolean) {
 export function addquestionToDOM() {
 	highestQuestion++;
 	createTemplate('templateQuestion', 'draggableDiv', '${highestQuestion}', highestQuestion);
-	$('draggableQuestion${highestQuestion}').id = `draggableQuestion${highestQuestion}`;
 }
 
 export function addQuiz() {

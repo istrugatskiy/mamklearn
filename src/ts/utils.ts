@@ -89,15 +89,13 @@ export const isObject = (object: object) => {
 }
 
 // Creates object from template!
-// Note modif can only replace children because of how templates work!
-export const createTemplate = (templateID: string, place: string, modif: any = false, replace: any = false) => {
-	let content = ($(templateID) as HTMLTemplateElement).content.cloneNode(true);
-	if(modif) {
-		for (var i = 0; i < content.childNodes.length; i++) {
-			if((content.childNodes[i] as HTMLElement).innerHTML) {
-				(content.childNodes[i] as HTMLElement).innerHTML = (content.childNodes[i] as HTMLElement).innerHTML.split(modif).join(replace);
-			}
-		}
+// Uniqifies the id's if specified.
+export const createTemplate = (templateID: string, place: string, modifID: any = false, replace: any = false) => {
+	let content = (($(templateID) as HTMLTemplateElement).content.cloneNode(true) as HTMLElement);
+	if(modifID !== null) {
+		content.querySelectorAll('[id]').forEach((element) => {
+			element.id = element.id.replace(modifID, replace);
+		});
 	}
 	$(place).appendChild(content);
 }

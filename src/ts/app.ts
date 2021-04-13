@@ -261,32 +261,29 @@ function playCode() {
 }
 
 export function contentEditableUpdate() {
-    let contentBoxes = document.querySelectorAll('[contenteditable]');
-    for (let i = 0; i < contentBoxes.length; i++) {
-        if (contentBoxes[i].getAttribute('initialized') != 'true') {
-            contentBoxes[i].setAttribute('initialized', 'true');
-            contentBoxes[i].addEventListener('drop', (event) => {
-                event.preventDefault();
-            });
-            contentBoxes[i].addEventListener('input', (event) => {
+    let contentBoxes = Array.from(document.querySelectorAll('[contenteditable]'));
+    contentBoxes.forEach((object) => {
+        // Prevents event listeners from being added twice
+        if (object.getAttribute('data-initialized') != 'true') {
+            object.setAttribute('data-initialized', 'true');
+            // Input event fires whenber input happens
+            object.addEventListener('input', (event) => {
                 const eventTarget = event.target! as HTMLElement;
                 let a69 = getCaretCharacterOffsetWithin(eventTarget);
-                setTimeout(() => {
-                    let a70 = String(eventTarget.textContent!.replace(/(\r\n|\r|\n)/, ''));
-                    const maxLength = (eventTarget.getAttribute('maxlength') as unknown) as number;
-                    if (maxLength) {
-                        eventTarget.textContent = a70.substring(0, maxLength);
-                    }
-                    try {
-                        setCaretPosition(eventTarget, a69);
-                    } catch {
-                        setCaretPosition(eventTarget, eventTarget.textContent!.length);
-                    }
-                    characterCount(eventTarget, eventTarget.getAttribute('maxlength'));
-                }, 0);
+                let a70 = String(eventTarget.textContent!.replace(/(\r\n|\r|\n)/, ''));
+                const maxLength = (eventTarget.getAttribute('data-maxlength') as unknown) as number;
+                if (maxLength) {
+                    eventTarget.textContent = a70.substring(0, maxLength);
+                }
+                try {
+                    setCaretPosition(eventTarget, a69);
+                } catch {
+                    setCaretPosition(eventTarget, eventTarget.textContent!.length);
+                }
+                characterCount(eventTarget, eventTarget.getAttribute('data-maxlength'));
             });
         }
-    }
+    });
 }
 
 function JoinGame() {
