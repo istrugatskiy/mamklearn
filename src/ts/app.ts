@@ -1,5 +1,7 @@
 // Defines imports and globals
 import '../css/globals.css';
+import '../css/button.css';
+import '../css/loader.css'
 import '../css/style.css';
 import { $, getCaretCharacterOffsetWithin, characterCount, createTemplate, setTitle, throwExcept, setCaretPosition, signOut, clearChildren } from './utils';
 import { eventHandle } from './events';
@@ -9,15 +11,19 @@ import 'firebase/analytics';
 import 'firebase/auth';
 import 'firebase/database';
 
+interface eventList {
+    [key: string]: (event: Event) => void
+}
+
 declare global {
     interface Window {
         currentUserConfig: number[];
         customOptionsIncrement: number;
-        clickEvents: any;
-        clickIncludesEvents: any;
-        keyboardIncludesEvents: any;
-        submitEvents: any;
-        studentGameProcessor: any;
+        clickEvents: eventList;
+        clickIncludesEvents: eventList;
+        keyboardIncludesEvents: eventList;
+        submitEvents: eventList;
+        studentGameProcessor: (inputConfig: string) => void;
         quizStartTestCase: string;
         anotherTestCase: string;
         anotherTestCase2: string;
@@ -108,11 +114,14 @@ firebase.auth().onAuthStateChanged((user) => {
 
 const initializeApp = () => {
     contentEditableUpdate();
-    /*alert(`[WARNING: THIS IS A DEV BUILD YOUR DATA MAY GET DELETED AND STUF MAY NOT WORK!]
+    alert(`[WARNING: THIS IS A DEV BUILD YOUR DATA MAY GET DELETED AND STUF MAY NOT WORK!]
 	(This message will be removed as soon as the app goes live.)
 	Changelog: 
-	1.0.1: Added support for logging out and improved character customization ui!`
-	);*/
+	1.0.1: Added support for logging out and improved character customization ui!
+    1.0.2: Fixed flicker when typing into some input fields and fixed a bug where text could get smooshed
+           whenever playing on mobile
+    `
+	);
     $('mainLoader').classList.remove('loader--active');
     initParticles();
     if (new URLSearchParams(window.location.search).get('shareQuiz')) {

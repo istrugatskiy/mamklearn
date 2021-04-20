@@ -54,44 +54,6 @@
 .title>* {
 	pointer-events: all;
 }
-.button {
-	-webkit-appearance: none;
-	background-color: white;
-	border: 2px solid white;
-	text-decoration: none;
-	border-radius: 30px;
-	transform: scale(1);
-	border-color: rgba(255, 255, 255, 0);
-	color: black;
-	cursor: pointer;
-	text-align: center;
-	font-family: 'Roboto Mono', monospace;
-	font-size: 64px;
-	transition: background-color 0.3s, border-radius 0.3s, color 0.3s, box-shadow 0.3s, transform 0.3s, width 0.3s, height 0.3s;
-	-webkit-backdrop-filter: saturate(240%);
-	backdrop-filter: saturate(240%);
-	box-shadow: 0px 0px 12px #000000;
-}
-.button > * {
-	pointer-events: none;
-}
-.button:hover {
-	background-color: rgba(4, 57, 217, 0);
-	border-radius: 12px;
-	color: white;
-}
-.button:active {
-	background-color: rgba(4, 57, 217, 0);
-	border-radius: 12px;
-	color: white;
-	box-shadow: none;
-}
-.button:focus {
-	background-color: rgba(4, 57, 217, 0);
-	border-radius: 12px;
-	color: white;
-	box-shadow: none;
-}
 .aboutContainer {
 	position: absolute;
 	padding: 1rem;
@@ -140,96 +102,8 @@
 	top: 50%;
 	transform: translateY(-50%);
 }
-.loader {
-	position: fixed;
-	z-index: 10;
-	top: 0;
-	left: 0;
-	width: 0;
-	height: 100vh;
-	transition: width 0s 1s ease;
-}
 .particles-js-canvas-el {
 	z-index: 0;
-}
-.loader .loader__icon {
-	position: absolute;
-	z-index: 1;
-	top: 50%;
-	left: 50%;
-	transform: translateX(-50%) translateY(-50%);
-	opacity: 0;
-	transition: opacity 0.5s ease;
-	animation: .6s linear infinite rotate;
-
-}
-@keyframes rotate { 
-	from { transform: translateX(-50%) translateY(-50%) rotate(0); } 
-	to { transform: translateX(-50%) translateY(-50%) rotate(360deg); }  
-}
-.loader .loader__icon svg {
-	transform-origin: 50% 50%;
-}
-.loader .loader__tile {
-	position: fixed;
-	left: 0;
-	width: 0;
-	height: 20.5%;
-	background-color: rgb(0, 0, 0);
-	transition: width 0.3s linear;
-}
-.loader .loader__tile:nth-child(0) {
-	top: calc(-1 * 20%);
-	transition-delay: -0.1s;
-}
-.loader .loader__tile:nth-child(1) {
-	top: calc(0 * 20%);
-	transition-delay: 0s;
-}
-.loader .loader__tile:nth-child(2) {
-	top: calc(1 * 20%);
-	transition-delay: 0.1s;
-}
-.loader .loader__tile:nth-child(3) {
-	top: calc(2 * 20%);
-	transition-delay: 0.2s;
-}
-.loader .loader__tile:nth-child(4) {
-	top: calc(3 * 20%);
-	transition-delay: 0.3s;
-}
-.loader .loader__tile:nth-child(5) {
-	top: calc(4 * 20%);
-	transition-delay: 0.4s;
-}
-.loader--active {
-	width: 100%;
-	transition-delay: 0s;
-}
-.loader--active .loader__icon {
-	opacity: 1;
-	transition: opacity 0.5s 1.4s ease;
-}
-.loader--active .loader__tile {
-	width: 100%;
-}
-.loader--active .loader__tile:nth-child(0) {
-	transition-delay: -0.1s;
-}
-.loader--active .loader__tile:nth-child(1) {
-	transition-delay: 0s;
-}
-.loader--active .loader__tile:nth-child(2) {
-	transition-delay: 0.1s;
-}
-.loader--active .loader__tile:nth-child(3) {
-	transition-delay: 0.2s;
-}
-.loader--active .loader__tile:nth-child(4) {
-	transition-delay: 0.3s;
-}
-.loader--active .loader__tile:nth-child(5) {
-	transition-delay: 0.4s;
 }
 .error {
 	z-index: 9;
@@ -309,14 +183,6 @@ ul {
 	margin: 10px;
 	padding: 0;
 }
-@supports (not (backdrop-filter: blur(20px))) and (not (-webkit-backdrop-filter: blur(20px))) {
-	.button:hover, .button:active, .button:focus, .button:disabled {
-		background-color: rgb(28, 37, 102) !important;
-	}
-	#charCustomize:focus {
-		background-color: white !important;
-	}
-}
 .btnTransitionA {
 	transition: all 0.3s ease-out;
 	transform: scale(0);
@@ -337,7 +203,7 @@ ul {
 .titleTransitionBack {
 	animation-name: backTransition;
 	animation-duration: 0.3s;
-	animation-timing-function: cubic-bezier(0.29, 0.09, 0.07, 1.4);
+	animation-timing-function: cubic-bezier(0.29, 0.09, 0.07, 1.6);
 }
 .disabled {
 	transition: all 0.3s ease-in-out;
@@ -353,13 +219,6 @@ ul {
 	font-size: xxx-large;
 	box-shadow: 0px 0px 12px #000000;
 	cursor: text;
-}
-.button:disabled {
-	background-color: rgba(4, 57, 217, 0);
-	border-radius: 12px;
-	color: white;
-	box-shadow: none;
-	cursor: default;
 }
 @keyframes backTransition {
 	from {
@@ -1217,6 +1076,11 @@ button::-moz-focus-inner {
 	}
 	.playButtonStudent {
 		font-size: 24px;
+	}
+}
+@media screen and (max-height: 50em) {
+	#titleButtonStudent {
+		min-height: 200px;
 	}
 }
 #studentShortAnswer {

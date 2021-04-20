@@ -4,7 +4,7 @@ export const eventHandle = () => {
 		const keys = Object.keys(window.clickIncludesEvents);
 		const eventTarget = (event.target! as HTMLElement).id;
 		if (eventTarget in window.clickEvents) {
-			window.clickEvents[eventTarget]();
+			window.clickEvents[eventTarget](event);
 		}
 		for (var i = 0; i < keys.length; i++) {
 			if (eventTarget.includes(keys[i])) {
@@ -29,7 +29,7 @@ export const eventHandle = () => {
 		event.preventDefault();
 		const eventTarget = (event.target! as HTMLElement).id;
 		if (eventTarget in window.submitEvents) {
-			window.submitEvents[eventTarget]();
+			window.submitEvents[eventTarget](event);
 		}
 	});
 }

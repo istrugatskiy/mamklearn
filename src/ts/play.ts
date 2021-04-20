@@ -2,7 +2,7 @@ import {$, mathClamp, throwExcept, getID, ordinalSuffix, clearChildren} from './
 import {setCharImage, goBack} from './app';
 window.studentGameProcessor = studentGameProcessor;
 
-window.quizStartTestCase = ' {"gameStart": true, "totalQuestions": 5, "currentQuestion": "If%20fish%20are%20fish", "choices": [ null ], "currentQuestionTime": 69, "questionID": 0 }';
+window.quizStartTestCase = ' {"gameStart": true, "totalQuestions": 5, "currentQuestion": "TTTTTTTHHTHHTHTHTHTTHTTTTTTTHTHHHHTHTTTTTHHTTHHTHTTTTTTHTTTHTTTHTHHHTTTTHTHTHHT HHTTHHHTHT", "choices": [ null ], "currentQuestionTime": 69, "questionID": 0 }';
 window.anotherTestCase = '{ "isQuestionCorrect": false, "nextQuestion": null, "choices": [ null ], "currentQuestionTime": 20 }';
 window.anotherTestCase2 = '{ "isQuestionCorrect": true, "nextQuestion": "heckDifferentQuestionTooLazyTooPutPercent", "choices": [ "Nabeel", "Nabeel2", "Nabeel3", "Nabeel4" ], "currentQuestionTime": 69 }';
 window.anotherTestCase3 = '{ "gameFinish": true, "timeTillEnd": 180}';
@@ -23,7 +23,7 @@ let clickListeners = {
 }
 
 let clickIncludesListeners = {
-	"studentQuizButton": (event: MouseEvent) => {submitMultipleChoice(getID(event))}
+	"studentQuizButton": (event: Event) => {submitMultipleChoice(getID(event))}
 }
 
 let keyboardIncludesListeners = {
