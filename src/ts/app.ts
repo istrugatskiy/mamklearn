@@ -1,9 +1,9 @@
 // Defines imports and globals
 import '../css/globals.css';
 import '../css/button.css';
-import '../css/loader.css'
+import '../css/loader.css';
 import '../css/style.css';
-import { $, getCaretCharacterOffsetWithin, characterCount, createTemplate, setTitle, throwExcept, setCaretPosition, signOut, clearChildren } from './utils';
+import { $, createTemplate, setTitle, throwExcept, signOut, clearChildren } from './utils';
 import { eventHandle } from './events';
 import { initParticles } from './loadParticles';
 import firebase from 'firebase/app';
@@ -12,7 +12,7 @@ import 'firebase/auth';
 import 'firebase/database';
 
 interface eventList {
-    [key: string]: (event: Event) => void
+    [key: string]: (event: Event) => void;
 }
 
 declare global {
@@ -113,15 +113,13 @@ firebase.auth().onAuthStateChanged((user) => {
 });
 
 const initializeApp = () => {
-    contentEditableUpdate();
-    alert(`[WARNING: THIS IS A DEV BUILD YOUR DATA MAY GET DELETED AND STUF MAY NOT WORK!]
+    /* alert(`[WARNING: THIS IS A DEV BUILD YOUR DATA MAY GET DELETED AND STUF MAY NOT WORK!]
 	(This message will be removed as soon as the app goes live.)
 	Changelog: 
 	1.0.1: Added support for logging out and improved character customization ui!
     1.0.2: Fixed flicker when typing into some input fields and fixed a bug where text could get smooshed
            whenever playing on mobile
-    `
-	);
+    `); */
     $('mainLoader').classList.remove('loader--active');
     initParticles();
     if (new URLSearchParams(window.location.search).get('shareQuiz')) {
@@ -230,7 +228,7 @@ function makeCode() {
             playButton.disabled = true;
             signOutButton.classList.add('linkTransitionF');
             $('charCustomize').classList.add('btnTransitionA');
-            setTimeout(function () {
+            setTimeout(() => {
                 setTitle('makeMenu');
                 $('title').style.top = '100px';
                 obj.addQuiz();
@@ -267,32 +265,6 @@ function playCode() {
         $('title').style.height = '250px';
         $('title').style.top = '30%';
     }, 300);
-}
-
-export function contentEditableUpdate() {
-    let contentBoxes = Array.from(document.querySelectorAll('[contenteditable]'));
-    contentBoxes.forEach((object) => {
-        // Prevents event listeners from being added twice
-        if (object.getAttribute('data-initialized') != 'true') {
-            object.setAttribute('data-initialized', 'true');
-            // Input event fires whenber input happens
-            object.addEventListener('input', (event) => {
-                const eventTarget = event.target! as HTMLElement;
-                let a69 = getCaretCharacterOffsetWithin(eventTarget);
-                let a70 = String(eventTarget.textContent!.replace(/(\r\n|\r|\n)/, ''));
-                const maxLength = (eventTarget.getAttribute('data-maxlength') as unknown) as number;
-                if (maxLength) {
-                    eventTarget.textContent = a70.substring(0, maxLength);
-                }
-                try {
-                    setCaretPosition(eventTarget, a69);
-                } catch {
-                    setCaretPosition(eventTarget, eventTarget.textContent!.length);
-                }
-                characterCount(eventTarget, eventTarget.getAttribute('data-maxlength'));
-            });
-        }
-    });
 }
 
 function JoinGame() {

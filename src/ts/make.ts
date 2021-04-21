@@ -1,7 +1,8 @@
 // Contains code related to making quizzes
+import '../css/make.css'
 import dragula from 'dragula';
 import { $, characterCount, deepEqual, createTemplate, setTitle, clearChildren, getID, AudioManager, mathClamp } from './utils';
-import { setCharImage, contentEditableUpdate } from './app';
+import { setCharImage } from './app';
 
 let editState = false;
 let quizObject2: any[] = [];
@@ -147,7 +148,7 @@ window.addEventListener('beforeunload', (event) => {
     }
 });
 
-export function createQuiz() {
+function createQuiz() {
     if (checkOnce) {
         document.querySelector('.createButtonA')!.disabled = true;
         $('QuizName').disabled = false;
@@ -176,7 +177,7 @@ export function createQuiz() {
     }
 }
 
-export function goBackMakeA() {
+function goBackMakeA() {
     window.customOptionsIncrement = 0;
     document.querySelector('.backButtonC')!.disabled = true;
     $('homeText2').classList.add('titleTransition');
@@ -196,7 +197,7 @@ export function goBackMakeA() {
     }, 300);
 }
 
-export function createNewQuiz() {
+function createNewQuiz() {
     checkOnce = false;
     let button = $('submitQuizID');
     $('QuizName').disabled = true;
@@ -212,14 +213,13 @@ export function createNewQuiz() {
     }, 1000);
 }
 
-export function addQuestion() {
+function addQuestion() {
     addquestionToDOM();
-    contentEditableUpdate();
     reorderProper();
     $(`collapseSubArea${highestQuestion}`).focus();
 }
 
-export function doneButtonA() {
+function doneButtonA() {
     if (allowState2) {
         $('modal-popupB').style.animation = 'modalPopout2 0.5s';
         $('editQuizMenu').style.animation = 'fadein 0.5s';
@@ -237,7 +237,7 @@ export function doneButtonA() {
     }
 }
 
-export function collapseSubArea(a: number) {
+function collapseSubArea(a: number) {
     let area = $(`collapseSubArea${a}`);
     let objm = $(`collapsableContent${a}`);
     area.classList.toggle('arrowBRight');
@@ -255,7 +255,7 @@ export function collapseSubArea(a: number) {
     activeArea = a;
 }
 
-export function collapseAllArea() {
+function collapseAllArea() {
     if (activeArea && $(`collapseSubArea${activeArea}`) != null) {
         let area = $(`collapseSubArea${activeArea}`);
         let objm = $(`collapsableContent${activeArea}`);
@@ -267,7 +267,7 @@ export function collapseAllArea() {
     }
 }
 
-export function deleteQuestion(a: string) {
+function deleteQuestion(a: string) {
     collapseAllArea();
     $(`draggableQuestion${a}`).style.pointerEvents = 'none';
     $(`draggableQuestion${a}`).classList.add('btnTransitionA');
@@ -277,7 +277,7 @@ export function deleteQuestion(a: string) {
     }, 300);
 }
 
-export function reorderProper() {
+function reorderProper() {
     let test = 0;
     for (let i = 0; i <= $('draggableDiv').children.length - 1; i++) {
         $('draggableDiv').children[i]!.firstElementChild!.children[1].textContent = `Question ${i + 1}:`;
@@ -294,16 +294,16 @@ export function reorderProper() {
     }
 }
 
-export function shortAnswerToggle(endMe: string | number) {
+function shortAnswerToggle(endMe: string | number) {
     $(`answerContainerObject${endMe}`).classList.toggle('shortAnswerEditorStyles');
     $(`collapsableContent${endMe}`).classList.toggle('noSpaceEditor');
 }
 
-export function toggleTime(order: string | number) {
+function toggleTime(order: string | number) {
     $(`Question${order}Time`).classList.toggle('displayTimeLimit');
 }
 
-export function parseActiveQuiz() {
+function parseActiveQuiz() {
     tempQuiz = JSON.parse(JSON.stringify(quizObject));
     tempQuiz.quizName = $('quizNameUpdate').value;
     tempQuiz.quizID = currentQuizEdit;
@@ -347,7 +347,7 @@ export function parseActiveQuiz() {
 //verify that time limit is at least 5 or more; done
 //verify that at least one possible choice is correct; done
 //verify that at least two answer fields are filled out; done
-export const verifyQuiz = () => {
+const verifyQuiz = () => {
     let quizParseError = [];
     let finalResult = document.createDocumentFragment();
     if (tempQuiz.questionObjects.length === 0) {
@@ -409,7 +409,7 @@ export const verifyQuiz = () => {
     }
 };
 
-export function exitModalPopupF(promptUser: boolean) {
+function exitModalPopupF(promptUser: boolean) {
     if (promptUser) {
         parseActiveQuiz();
         if (deepEqual(tempQuiz, quizObject2[currentQuizEdit])) {
@@ -446,7 +446,7 @@ export function exitModalPopupF(promptUser: boolean) {
     }
 }
 
-export function addquestionToDOM() {
+function addquestionToDOM() {
     highestQuestion++;
     createTemplate('templateQuestion', 'draggableDiv', '${highestQuestion}', highestQuestion);
 }
@@ -516,7 +516,7 @@ export function addQuiz() {
     }
 }
 
-export const questionErrorParse = (arrayToParse: number[], questionValueSingular: string, questionValuePlural: string) => {
+const questionErrorParse = (arrayToParse: number[], questionValueSingular: string, questionValuePlural: string) => {
     let output = 'Questions';
     if (arrayToParse.length == 1) {
         output = `Question ${arrayToParse[0]} ${questionValueSingular}`;
@@ -535,7 +535,7 @@ export const questionErrorParse = (arrayToParse: number[], questionValueSingular
     return output != 'Questions' ? output : null;
 };
 
-export const exitModalPopupTemplate = (popupToKill: string, special?: string) => {
+const exitModalPopupTemplate = (popupToKill: string, special?: string) => {
     if (checkOnce || special) {
         checkOnce = false;
         $('modal-bg').style.animation = 'fadeOut 0.5s';
@@ -657,7 +657,7 @@ function deleteQuiz() {
     }, 300);
 }
 
-export function deleteQuizConfirm() {
+function deleteQuizConfirm() {
     delete quizList2[currentQuizEdit];
     $('deleteQuizConfirm').disabled = true;
     $('backButtonDeleteConfirm').disabled = true;
@@ -669,7 +669,7 @@ export function deleteQuizConfirm() {
     }, 1000);
 }
 
-export function editQuiz() {
+function editQuiz() {
     checkOnce = false;
     editState = true;
     $('manageQuizMenu').style.animation = 'modalPopout 0.3s';
@@ -718,16 +718,15 @@ export function editQuiz() {
                 reorderProper();
             }, 100);
         });
-    setTimeout(function () {
+    setTimeout(() => {
         $('manageQuizMenu').style.display = 'none';
         $('editQuizMenu').style.display = 'block';
         $('manageQuizMenu').style.animation = 'modalPopin 0.3s';
         $('editQuizMenu').style.animation = 'modalPopin 0.3s';
-        contentEditableUpdate();
     }, 300);
 }
 
-export function editQuizForm() {
+function editQuizForm() {
     $('modal-popupA').style.pointerEvents = 'none';
     $('saveQuizButton').disabled = true;
     $('backButtonEditQuiz').disabled = true;
@@ -762,7 +761,7 @@ export function editQuizForm() {
     }
 }
 
-export function shareQuiz() {
+function shareQuiz() {
     checkOnce = false;
     $('manageQuizMenu').style.animation = 'modalPopout 0.3s';
     setTimeout(function () {
@@ -773,7 +772,7 @@ export function shareQuiz() {
     }, 300);
 }
 
-export function copyShareLink() {
+function copyShareLink() {
     navigator.clipboard.writeText($('coolTextArea').textContent!);
     $('errorActual').textContent = 'Link Copied';
     $('errorMessageA').style.display = 'block';

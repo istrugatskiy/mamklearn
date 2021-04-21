@@ -149,3 +149,9 @@ input[type=number] {
 	word-break: break-word;
 	white-space: break-spaces;
 }
+button::-moz-focus-inner {
+	border: 0;
+}
+*:focus {
+	outline: 0;
+}
