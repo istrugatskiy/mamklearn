@@ -35,19 +35,21 @@ export const eventHandle = () => {
         }
     });
     window.addEventListener('input', (event) => {
-        const target = event.target! as HTMLElement;
-		target
-        let a69 = getCaretCharacterOffsetWithin(target);
-        let a70 = String(target.textContent!.replace(/(\r\n|\r|\n)/, ''));
-        const maxLength = (target.dataset!.maxlength as unknown) as number;
-        if (maxLength) {
-            target.textContent = a70.substring(0, maxLength);
+        if ((event.target! as HTMLElement).matches('[contenteditable]')) {
+            const target = event.target! as HTMLElement;
+            target;
+            let a69 = getCaretCharacterOffsetWithin(target);
+            let a70 = String(target.textContent!.replace(/(\r\n|\r|\n)/, ''));
+            const maxLength = (target.dataset!.maxlength as unknown) as number;
+            if (maxLength) {
+                target.textContent = a70.substring(0, maxLength);
+            }
+            try {
+                setCaretPosition(target, a69);
+            } catch {
+                setCaretPosition(target, target.textContent!.length);
+            }
+            characterCount(target, target.dataset!.maxlength as string);
         }
-        try {
-            setCaretPosition(target, a69);
-        } catch {
-            setCaretPosition(target, target.textContent!.length);
-        }
-        characterCount(target, (target.dataset!.maxlength as string));
     });
 };

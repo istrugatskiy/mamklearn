@@ -7,10 +7,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
     entry: [
-        './src/ts/app.ts',
-        './src/ts/utils.ts',
-        './src/ts/events.ts',
-        './src/ts/loadParticles.ts'
+        './src/ts/app.ts'
     ],
     output: {
         filename: 'mamkEngine~[name].js',
