@@ -247,7 +247,7 @@ function studentGameProcessor(input: string) {
     }
 }
 
-function kickPlayer(special?: boolean, specialText: string = 'Kicked From Game') {
+function kickPlayer(special: boolean = false, specialText: string = 'Kicked From Game') {
     if (special) {
         $('errorActual').textContent = specialText;
         $('errorMessageA').style.display = 'block';
@@ -287,7 +287,17 @@ function kickPlayer(special?: boolean, specialText: string = 'Kicked From Game')
     $('title').style.display = 'block';
     $('gameFinishNotify').style.display = 'none';
     clearInterval(finishUpInterval);
-    gameStateStudent = null;
+    gameStateStudent = {
+        currentQuestion: 0,
+        totalQuestions: 0,
+        gameErrorState: false,
+        timeLeft: false,
+        currentQuestionData: {
+            question: '',
+            answers: [],
+            timeLimit: 0,
+        },
+    };
 }
 
 function setQuestion() {
@@ -318,7 +328,7 @@ function setQuestion() {
     } else {
         $('studentShortAnswer').style.display = 'none';
     }
-    if ((gameStateStudent.currentQuestionData.timeLimit as unknown) as boolean == false) {
+    if (((gameStateStudent.currentQuestionData.timeLimit as unknown) as boolean) == false) {
         $('timeLeftCounter').style.display = 'none';
     } else {
         $('timeLeftCounter').style.display = 'block';

@@ -5,18 +5,33 @@ import { $, characterCount, deepEqual, createTemplate, setTitle, clearChildren, 
 import { setCharImage } from './app';
 
 let editState = false;
-let quizObject2: any[] = [];
+interface answer {
+    answer: string | null;
+    correct: boolean;
+}
+interface questionObject {
+    questionName: string;
+    shortAnswer: boolean;
+    timeLimit: string | boolean;
+    Answers: [answer, answer, answer, answer];
+}
+interface quizObject {
+    quizID: string;
+    quizName: string;
+    questionObjects: [questionObject];
+}
+let quizObject2: { [key: string]: quizObject } = {};
 const quizObject = {
     quizID: '',
     quizName: '',
     questionObjects: [],
 };
 let drake: dragula.Drake;
-let currentQuizEdit: any;
+let currentQuizEdit: string;
 let iconIterate = 0;
 let activeArea: number | null;
 let highestQuestion = 0;
-let tempQuiz: any;
+let tempQuiz: quizObject;
 let allowState2 = true;
 let quizList2: any = {};
 let checkOnce = true;
@@ -223,7 +238,7 @@ function doneButtonA() {
         $('quizNameUpdate').disabled = false;
         $('addQuestionButton').disabled = false;
         reorderProper();
-        setTimeout(() =>  {
+        setTimeout(() => {
             ($('modal-popupB') as HTMLDivElement).removeAttribute('style');
             $('modal-popupB').style.visibility = 'none';
             $('modal-popupA').style.pointerEvents = 'all';
@@ -309,9 +324,9 @@ function parseActiveQuiz() {
                 timeLimit = object.children[1].children[4].children[2].textContent;
             }
             tempQuiz.questionObjects.push({
-                questionName: object.children[1].children[0].textContent,
+                questionName: object.children[1].children[0].textContent!,
                 shortAnswer: object.children[1].children[3].children[0].children[0].checked,
-                timeLimit: timeLimit,
+                timeLimit: timeLimit!,
                 Answers: [
                     {
                         answer: object.children[1].children[5].children[0].children[0].textContent,
@@ -643,7 +658,7 @@ function deleteQuiz() {
     clearChildren('deleteQuizConfirm');
     $('deleteQuizConfirm').textContent = 'Delete';
     $('deleteQuizConfirm').style.backgroundColor = 'orange';
-    setTimeout(() =>  {
+    setTimeout(() => {
         $('manageQuizMenu').style.display = 'none';
         $('quizDeleteConfirm').style.display = 'block';
         $('manageQuizMenu').style.animation = 'modalPopin 0.3s';
@@ -658,7 +673,7 @@ function deleteQuizConfirm() {
     $('deleteQuizConfirm').style.backgroundColor = '';
     clearChildren('deleteQuizConfirm');
     createTemplate('svgLoader', 'deleteQuizConfirm');
-    setTimeout(() =>  {
+    setTimeout(() => {
         exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm');
     }, 1000);
 }
@@ -708,7 +723,7 @@ function editQuiz() {
         .on('dragend', function (el) {
             el.classList.remove('dragging');
             document.body.style.cursor = 'inherit';
-            setTimeout(() =>  {
+            setTimeout(() => {
                 reorderProper();
             }, 100);
         });
@@ -733,7 +748,7 @@ function editQuizForm() {
         $('editQuizMenu').style.animation = 'fadeOut 0.5s';
         window.scrollTo(0, 0);
         allowState2 = false;
-        setTimeout(() =>  {
+        setTimeout(() => {
             $('editQuizMenu').style.visibility = 'hidden';
             allowState2 = true;
         }, 500);
@@ -742,13 +757,13 @@ function editQuizForm() {
         quizList2[currentQuizEdit] = $('quizNameUpdate').value;
         clearChildren('saveQuizButton');
         createTemplate('svgLoader', 'saveQuizButton');
-        setTimeout(() =>  {
+        setTimeout(() => {
             exitModalPopupF(false);
         }, 1000);
-        setTimeout(() =>  {
+        setTimeout(() => {
             $('errorActual').textContent = 'Quiz Saved';
             $('errorMessageA').style.display = 'block';
-            setTimeout(() =>  {
+            setTimeout(() => {
                 $('errorMessageA').style.display = 'none';
             }, 1000);
         }, 1200);
@@ -758,7 +773,7 @@ function editQuizForm() {
 function shareQuiz() {
     checkOnce = false;
     $('manageQuizMenu').style.animation = 'modalPopout 0.3s';
-    setTimeout(() =>  {
+    setTimeout(() => {
         $('manageQuizMenu').style.display = 'none';
         $('shareQuizMenu').style.display = 'block';
         $('manageQuizMenu').style.animation = 'modalPopin 0.3s';
@@ -770,7 +785,7 @@ function copyShareLink() {
     navigator.clipboard.writeText($('coolTextArea').textContent!);
     $('errorActual').textContent = 'Link Copied';
     $('errorMessageA').style.display = 'block';
-    setTimeout(() =>  {
+    setTimeout(() => {
         $('errorMessageA').style.display = 'none';
     }, 1000);
 }
