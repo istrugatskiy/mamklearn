@@ -3,11 +3,10 @@ import '../css/globals.css';
 import '../css/button.css';
 import '../css/loader.css';
 import '../css/style.css';
-import { $, createTemplate, setTitle, throwExcept, signOut, clearChildren } from './utils';
+import { $, createTemplate, setTitle, throwExcept, signOut, clearChildren, loadChonk } from './utils';
 import { eventHandle } from './events';
 import { initParticles } from './loadParticles';
 import firebase from 'firebase/app';
-import 'firebase/analytics';
 import 'firebase/auth';
 import 'firebase/database';
 
@@ -33,7 +32,6 @@ declare global {
 }
 window.customOptionsIncrement = 0;
 window.currentUserConfig = [0, 0, 0, 0, 0];
-let errorCount = 0;
 const customOptions = ['Eyes', 'Nose', 'Mouth', 'Shirt', 'Arms'];
 let hasAppBeenInitialized = false;
 let errorHasBeenThrown = false;
@@ -113,13 +111,13 @@ firebase.auth().onAuthStateChanged((user) => {
 });
 
 const initializeApp = () => {
-    alert(`[WARNING: THIS IS A DEV BUILD YOUR DATA MAY GET DELETED AND STUFF MAY NOT WORK!]
+    /* alert(`[WARNING: THIS IS A DEV BUILD YOUR DATA MAY GET DELETED AND STUFF MAY NOT WORK!]
 	(This message will be removed as soon as the app goes live.)
 	Changelog: 
 	1.0.1: Added support for logging out and improved character customization ui!
     1.0.2: Fixed flicker when typing into some input fields and fixed a bug where text could get smooshed
            whenever playing on mobile
-    `);
+    `); */
     $('mainLoader').classList.remove('loader--active');
     initParticles();
     if (new URLSearchParams(window.location.search).get('shareQuiz')) {
@@ -208,58 +206,28 @@ function userClick(link: string, disableObject?: string) {
 
 // make and play on button click functions here!
 function makeCode() {
-    const makeButton = $('makebtn');
-    const playButton = $('btn2');
-    const signOutButton = $('signOutbtn');
-    const title = $('homeText');
-    makeButton.disabled = true;
-    playButton.disabled = true;
+    $('makebtn').disabled = true;
+    $('btn2').disabled = true;
     clearChildren('makebtn');
-    createTemplate('svgLoader', makeButton.id);
-    // replace this with request to server and await callback or if 5 seconds passes undo
-    import('./make')
-        .then((obj) => {
-            errorCount = 0;
-            obj.initEvents();
-            title.classList.add('titleTransition');
-            makeButton.classList.add('btnTransitionA');
-            playButton.classList.add('btnTransitionA');
-            makeButton.disabled = true;
-            playButton.disabled = true;
-            signOutButton.classList.add('linkTransitionF');
-            $('charCustomize').classList.add('btnTransitionA');
-            setTimeout(() => {
-                setTitle('makeMenu');
-                $('title').style.top = '100px';
-                obj.addQuiz();
-            }, 300);
-        })
-        .catch((error) => {
-            errorCount++;
-            console.warn(`Failed to fetch chonk (${error})! Retrying...`);
-            if (errorCount < 100) {
-                setTimeout(() => {
-                    makeCode();
-                }, 2000);
-            } else {
-                throwExcept('BIG_CHONK4512');
-            }
-        });
+    createTemplate('svgLoader', 'makebtn');
+    loadChonk('make', (obj) => {
+        obj.initEvents();
+        $('title').classList.add('handleOutTransition');
+        setTimeout(() => {
+            $('title').classList.remove('handleOutTransition');
+            setTitle('makeMenu');
+            $('title').style.top = '100px';
+            obj.addQuiz();
+        }, 300);
+    });
 }
 
 function playCode() {
-    const makeButton = $('makebtn');
-    const playButton = $('btn2');
-    const signOutButton = $('signOutbtn');
-    const title = $('homeText');
-    title.classList.add('titleTransition');
-    makeButton.classList.add('btnTransitionA');
-    playButton.classList.add('btnTransitionA');
-    makeButton.disabled = true;
-    playButton.disabled = true;
-    signOutButton.classList.add('linkTransitionF');
-    $('charCustomize').classList.add('btnTransitionA');
-    setTimeout(function () {
+    $('makebtn').disabled = true;
+    $('btn2').disabled = true;
+    $('title').classList.add('handleOutTransition');
+    setTimeout(() => {
+        $('title').classList.remove('handleOutTransition');
         setTitle('playMenu');
         $('gameID').focus();
         $('title').style.height = '250px';
@@ -274,57 +242,39 @@ function JoinGame() {
     clearChildren('submitID');
     createTemplate('svgLoader', 'submitID');
     if ($('gameID').value == '2794') {
-        import('./play')
-            .then((obj) => {
-                errorCount = 0;
-                $('mainLoader').classList.add('loader--active');
-                obj.initEvents();
+        loadChonk('play', (obj) => {
+            $('mainLoader').classList.add('loader--active');
+            obj.initEvents();
+            setTimeout(() => {
+                $('loader-1').style.display = 'none';
+                $('gameStartScreenStudent').style.display = 'block';
                 setTimeout(() => {
-                    $('loader-1').style.display = 'none';
-                    $('gameStartScreenStudent').style.display = 'block';
-                    setTimeout(() => {
-                        $('mainLoader').classList.remove('loader--active');
-                    }, 1000);
+                    $('mainLoader').classList.remove('loader--active');
                 }, 1000);
-                setTimeout(() => {
-                    window.studentGameProcessor(window.quizStartTestCase);
-                }, 2000);
-            })
-            .catch((error) => {
-                errorCount++;
-                if (errorCount < 15) {
-                    setTimeout(() => {
-                        console.warn(`Failed to fetch chonk (${error})! Retrying...`);
-                        JoinGame();
-                    }, 2000);
-                } else {
-                    throwExcept('BIG_CHONK4569');
-                }
-            });
+            }, 1000);
+            setTimeout(() => {
+                window.studentGameProcessor(window.quizStartTestCase);
+            }, 2000);
+        });
     } else {
-        setTimeout(function () {
+        setTimeout(() => {
             $('errorActual').textContent = 'Invalid ID';
             $('gameID').disabled = false;
             $('submitID').disabled = false;
             $('errorMessageA').style.display = 'block';
-            setTimeout(function () {
+            $('playMenuBack').classList.remove('disabled');
+            setTimeout(() => {
                 $('errorMessageA').style.display = 'none';
             }, 1000);
-            let selects = document.getElementsByTagName('a');
-            for (let i = 0, il = selects.length; i < il; i++) {
-                selects[i].classList.remove('disabled');
-            }
             $('submitID').textContent = 'Join';
         }, 1000);
     }
 }
 
 export function goBack() {
-    $('codeText').classList.add('titleTransition');
-    $('gameID').classList.add('btnTransitionA');
-    $('submitID').classList.add('btnTransitionA');
-    $('playMenuBack').classList.add('linkTransitionF');
-    setTimeout(function () {
+    $('title').classList.add('handleOutTransition');
+    setTimeout(() => {
+        $('title').classList.remove('handleOutTransition');
         setTitle('homeScreen');
         $('title').style.height = '800px';
         $('title').style.top = '15%';
@@ -367,16 +317,3 @@ export function setCharImage(charID: string, currentUserConfig: number[]) {
     $(charID + 'Shirt').src = `img/shirt-${currentUserConfig[3]}.png`;
     $(charID + 'Arms').src = `img/arms-${currentUserConfig[4]}.png`;
 }
-
-window.addEventListener('error', (error) => {
-    firebase.analytics().logEvent('error', {
-        error,
-    });
-    if (error.hasOwnProperty('details')) {
-        throwExcept('GAPI_ERROR');
-    } else if (error.message.includes('Script error') || error.message.includes('TypeError')) {
-        throwExcept('MISTAKE');
-    } else {
-        console.log(error.message);
-    }
-});

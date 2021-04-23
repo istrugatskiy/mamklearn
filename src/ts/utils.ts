@@ -1,6 +1,7 @@
 // These are some helper functions used throughout the app!
 import firebase from 'firebase/app';
 let hasLoggedOut = false;
+let errorCount = 0;
 
 export const getID = (inputEvent: Event) => {
     var input = (inputEvent.target as HTMLElement).id;
@@ -161,6 +162,24 @@ export const signOut = () => {
 };
 
 export const mathLerp = (x: number, y: number, a: number) => x * (1 - a) + y * a;
+
+export const loadChonk = (chonkToLoad: string, callback: (returnedObject: any) => void) => {
+    import(`./${chonkToLoad}`)
+        .then((obj) => {
+            callback(obj);
+        })
+        .catch((error) => {
+            errorCount++;
+            if (errorCount < 15) {
+                setTimeout(() => {
+                    console.warn(`Failed to fetch chonk (${error})! Retrying...`);
+                    loadChonk(chonkToLoad, callback);
+                }, 2000);
+            } else {
+                throwExcept('BIG_CHONK4569');
+            }
+        });
+};
 
 // Demo of what the mamklearn codebase COULD be like, like I'll ever bother using classes
 export class AudioManager {

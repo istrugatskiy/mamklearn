@@ -1,4 +1,6 @@
-import { characterCount, getCaretCharacterOffsetWithin, setCaretPosition } from './utils';
+import firebase from 'firebase/app';
+import 'firebase/analytics';
+import { characterCount, getCaretCharacterOffsetWithin, setCaretPosition, throwExcept } from './utils';
 
 // Handles the majority of events.
 export const eventHandle = () => {
@@ -52,4 +54,17 @@ export const eventHandle = () => {
             characterCount(target, target.dataset!.maxlength as string);
         }
     });
+    window.addEventListener('error', (error) => {
+        firebase.analytics().logEvent('error', {
+            error,
+        });
+        if (error.hasOwnProperty('details')) {
+            throwExcept('GAPI_ERROR');
+        } else if (error.message.includes('Script error') || error.message.includes('TypeError')) {
+            throwExcept('MISTAKE');
+        } else {
+            console.log(error.message);
+        }
+    });
+
 };
