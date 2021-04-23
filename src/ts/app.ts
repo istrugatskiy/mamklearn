@@ -199,7 +199,7 @@ function userClick(link: string, disableObject?: string) {
     if (disableObject) {
         $(disableObject).disabled = true;
     }
-    setTimeout(function () {
+    setTimeout(() =>  {
         window.location.href = link;
     }, 1000);
 }

@@ -1,5 +1,5 @@
 // Contains code related to making quizzes
-import '../css/make.css'
+import '../css/make.css';
 import dragula from 'dragula';
 import { $, characterCount, deepEqual, createTemplate, setTitle, clearChildren, getID, AudioManager, mathClamp } from './utils';
 import { setCharImage } from './app';
@@ -179,16 +179,10 @@ function createQuiz() {
 
 function goBackMakeA() {
     window.customOptionsIncrement = 0;
-    document.querySelector('.backButtonC')!.disabled = true;
-    $('homeText2').classList.add('titleTransition');
-    if (Object.keys(quizList2).length > 0) {
-        for (let key in quizList2) {
-            $(key).classList.add('btnTransitionA');
-        }
-    }
-    document.querySelector('.createButtonA')!.classList.add('btnTransitionA');
-    document.querySelector('.backButtonC')!.classList.add('btnTransitionA');
+    $('backButtonC').disabled = true;
+    $('title').classList.add('handleOutTransition');
     setTimeout(() => {
+        $('title').classList.remove('handleOutTransition');
         clearChildren('title');
         setTitle('homeScreen');
         $('title').style.height = '800px';
@@ -229,7 +223,7 @@ function doneButtonA() {
         $('quizNameUpdate').disabled = false;
         $('addQuestionButton').disabled = false;
         reorderProper();
-        setTimeout(function () {
+        setTimeout(() =>  {
             ($('modal-popupB') as HTMLDivElement).removeAttribute('style');
             $('modal-popupB').style.visibility = 'none';
             $('modal-popupA').style.pointerEvents = 'all';
@@ -649,7 +643,7 @@ function deleteQuiz() {
     clearChildren('deleteQuizConfirm');
     $('deleteQuizConfirm').textContent = 'Delete';
     $('deleteQuizConfirm').style.backgroundColor = 'orange';
-    setTimeout(function () {
+    setTimeout(() =>  {
         $('manageQuizMenu').style.display = 'none';
         $('quizDeleteConfirm').style.display = 'block';
         $('manageQuizMenu').style.animation = 'modalPopin 0.3s';
@@ -664,7 +658,7 @@ function deleteQuizConfirm() {
     $('deleteQuizConfirm').style.backgroundColor = '';
     clearChildren('deleteQuizConfirm');
     createTemplate('svgLoader', 'deleteQuizConfirm');
-    setTimeout(function () {
+    setTimeout(() =>  {
         exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm');
     }, 1000);
 }
@@ -714,7 +708,7 @@ function editQuiz() {
         .on('dragend', function (el) {
             el.classList.remove('dragging');
             document.body.style.cursor = 'inherit';
-            setTimeout(function () {
+            setTimeout(() =>  {
                 reorderProper();
             }, 100);
         });
@@ -739,7 +733,7 @@ function editQuizForm() {
         $('editQuizMenu').style.animation = 'fadeOut 0.5s';
         window.scrollTo(0, 0);
         allowState2 = false;
-        setTimeout(function () {
+        setTimeout(() =>  {
             $('editQuizMenu').style.visibility = 'hidden';
             allowState2 = true;
         }, 500);
@@ -748,13 +742,13 @@ function editQuizForm() {
         quizList2[currentQuizEdit] = $('quizNameUpdate').value;
         clearChildren('saveQuizButton');
         createTemplate('svgLoader', 'saveQuizButton');
-        setTimeout(function () {
+        setTimeout(() =>  {
             exitModalPopupF(false);
         }, 1000);
-        setTimeout(function () {
+        setTimeout(() =>  {
             $('errorActual').textContent = 'Quiz Saved';
             $('errorMessageA').style.display = 'block';
-            setTimeout(function () {
+            setTimeout(() =>  {
                 $('errorMessageA').style.display = 'none';
             }, 1000);
         }, 1200);
@@ -764,7 +758,7 @@ function editQuizForm() {
 function shareQuiz() {
     checkOnce = false;
     $('manageQuizMenu').style.animation = 'modalPopout 0.3s';
-    setTimeout(function () {
+    setTimeout(() =>  {
         $('manageQuizMenu').style.display = 'none';
         $('shareQuizMenu').style.display = 'block';
         $('manageQuizMenu').style.animation = 'modalPopin 0.3s';
@@ -776,7 +770,7 @@ function copyShareLink() {
     navigator.clipboard.writeText($('coolTextArea').textContent!);
     $('errorActual').textContent = 'Link Copied';
     $('errorMessageA').style.display = 'block';
-    setTimeout(function () {
+    setTimeout(() =>  {
         $('errorMessageA').style.display = 'none';
     }, 1000);
 }
