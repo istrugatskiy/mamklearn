@@ -179,7 +179,7 @@ function createQuiz() {
 
 function goBackMakeA() {
     window.customOptionsIncrement = 0;
-    $('backButtonC').disabled = true;
+    document.querySelector('.backButtonC')!.disabled = true;
     $('title').classList.add('handleOutTransition');
     setTimeout(() => {
         $('title').classList.remove('handleOutTransition');

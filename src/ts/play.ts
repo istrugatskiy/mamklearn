@@ -10,7 +10,17 @@ window.anotherTestCase4 = '{ "gameEnd": true, "CharacterConfig1": [0,0,0,0,0], "
 let otherInterval: number;
 let timerInterval: number;
 let finishUpInterval: number;
-let gameStateStudent: any;
+let gameStateStudent = {
+    currentQuestion: 0,
+    totalQuestions: 0,
+    gameErrorState: false,
+    timeLeft: ,
+    currentQuestionData: {
+        question: "",
+        answers: [],
+        timeLimit: 0,
+    },
+};;
 const root = document.documentElement;
 let bottomBarOffset: number;
 let resettableTime: number;
