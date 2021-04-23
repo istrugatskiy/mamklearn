@@ -10,17 +10,20 @@ window.anotherTestCase4 = '{ "gameEnd": true, "CharacterConfig1": [0,0,0,0,0], "
 let otherInterval: number;
 let timerInterval: number;
 let finishUpInterval: number;
-let gameStateStudent = {
-    currentQuestion: 0,
-    totalQuestions: 0,
-    gameErrorState: false,
-    timeLeft: ,
+
+interface gameStateInterface {
+    currentQuestion: number;
+    totalQuestions: number;
+    gameErrorState: boolean;
+    timeLeft: boolean | number;
     currentQuestionData: {
-        question: "",
-        answers: [],
-        timeLimit: 0,
-    },
-};;
+        question: string;
+        answers: [];
+        timeLimit: number;
+    };
+}
+
+let gameStateStudent: gameStateInterface;
 const root = document.documentElement;
 let bottomBarOffset: number;
 let resettableTime: number;
@@ -201,7 +204,7 @@ function studentGameProcessor(input: string) {
         let init = gameStateStudent.timeLeft;
         finishUpInterval = window.setInterval(() => {
             let delta = (Date.now() - start) / 1000;
-            let internal = init - delta;
+            let internal = (init as number) - delta;
             if (internal < 0) {
                 internal = 0;
             }
@@ -215,7 +218,7 @@ function studentGameProcessor(input: string) {
                 $('gameFinishNotify').style.display = 'none';
                 $('gameFinishNotify').style.animation = 'flowFromTop 1s forwards';
             }, 300);
-        }, gameStateStudent.timeLeft * 1000);
+        }, (gameStateStudent.timeLeft as number) * 1000);
     } else if (inputInternal.hasOwnProperty('gameEnd')) {
         $('gameResults').style.display = 'block';
         setCharImage('firstPlace', inputInternal.CharacterConfig1);
@@ -315,7 +318,7 @@ function setQuestion() {
     } else {
         $('studentShortAnswer').style.display = 'none';
     }
-    if (gameStateStudent.currentQuestionData.timeLimit == false) {
+    if ((gameStateStudent.currentQuestionData.timeLimit as unknown) as boolean == false) {
         $('timeLeftCounter').style.display = 'none';
     } else {
         $('timeLeftCounter').style.display = 'block';
