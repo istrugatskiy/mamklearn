@@ -188,7 +188,9 @@ ul {
 	padding: 0;
 }
 .btnTransitionA, .handleOutTransition button, .handleOutTransition a, 
-.handleOutTransition #charCustomize, .handleOutTransition input {
+.handleOutTransition #charCustomize, .handleOutTransition input,
+.handleOutTransition .bottomBar, .handleOutTransition .pleaseLogin,
+.handleOutTransition #loginError1, .handleOutTransition .animateOnTransition {
 	transition: all 0.3s ease-out;
 	transform: scale(0);
 	visibility: hidden;

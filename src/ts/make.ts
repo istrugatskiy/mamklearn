@@ -18,7 +18,7 @@ interface questionObject {
 interface quizObject {
     quizID: string;
     quizName: string;
-    questionObjects: [questionObject];
+    questionObjects: questionObject[];
 }
 let quizObject2: { [key: string]: quizObject } = {};
 const quizObject = {

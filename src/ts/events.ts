@@ -18,7 +18,7 @@ export const eventHandle = () => {
         }
     });
     window.addEventListener('keydown', (event) => {
-        if (event.key == 'Enter') {
+        if (event.key == 'Enter' || event.key == 'Space') {
             const keys = Object.keys(window.keyboardIncludesEvents);
             const eventTarget = (event.target! as HTMLElement).id;
             for (var i = 0; i < keys.length; i++) {
@@ -39,19 +39,31 @@ export const eventHandle = () => {
     window.addEventListener('input', (event) => {
         if ((event.target! as HTMLElement).matches('[contenteditable]')) {
             const target = event.target! as HTMLElement;
-            target;
             let a69 = getCaretCharacterOffsetWithin(target);
             let a70 = String(target.textContent!.replace(/(\r\n|\r|\n)/, ''));
             const maxLength = (target.dataset!.maxlength as unknown) as number;
-            if (maxLength) {
-                target.textContent = a70.substring(0, maxLength);
-            }
-            try {
-                setCaretPosition(target, a69);
-            } catch {
-                setCaretPosition(target, target.textContent!.length);
+            target.textContent = a70;
+            if (maxLength < target.textContent!.length) {
+                target.textContent = target.dataset.revert as string;
+                try {
+                    setCaretPosition(target, a69 - 1);
+                } catch {
+                    setCaretPosition(target, target.textContent!.length);
+                }
+            } else {
+                try {
+                    setCaretPosition(target, a69);
+                } catch {
+                    setCaretPosition(target, target.textContent!.length);
+                }
             }
             characterCount(target, target.dataset!.maxlength as string);
+        }
+    });
+    window.addEventListener('beforeinput', (event) => {
+        const target = event.target! as HTMLElement;
+        if ((event.target! as HTMLElement).matches('[contenteditable]')) {
+            target.dataset.revert = target.textContent as string;
         }
     });
     window.addEventListener('error', (error) => {
@@ -66,5 +78,4 @@ export const eventHandle = () => {
             console.log(error.message);
         }
     });
-
 };

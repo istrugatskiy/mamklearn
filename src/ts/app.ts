@@ -183,10 +183,9 @@ const login = () => {
 };
 
 function completeLoginFlow() {
-    Array.from($('title').children).forEach((element) => {
-        element.classList.add('btnTransitionA');
-    });
+    $('title').classList.add('handleOutTransition');
     setTimeout(() => {
+        $('title').classList.remove('handleOutTransition');
         setTitle('homeScreen');
         $('title').style.top = '15%';
         $('title').style.height = '800px';
