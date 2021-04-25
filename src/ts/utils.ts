@@ -1,5 +1,6 @@
 // These are some helper functions used throughout the app!
-import firebase from 'firebase/app';
+import { logEvent, getAnalytics } from 'firebase/analytics';
+import { getAuth, signOut } from 'firebase/auth';
 let hasLoggedOut = false;
 let errorCount = 0;
 
@@ -106,7 +107,7 @@ export const setTitle = (templateID: string) => {
 export const throwExcept = (msg: string) => {
     // Prevents false positive errors
     if (hasLoggedOut) return;
-    firebase.analytics().logEvent('handled error', {
+    logEvent(getAnalytics(), 'handled error', {
         msg,
     });
     $('commError2').style.display = 'block';
@@ -151,13 +152,15 @@ export const setCaretPosition = (element: HTMLElement, offset: number) => {
     }
 };
 
-export const signOut = () => {
-    firebase
-        .auth()
-        .signOut()
+export const logOut = () => {
+    const auth = getAuth();
+    signOut(auth)
         .then(() => {
             hasLoggedOut = true;
             window.location.reload();
+        })
+        .catch((error) => {
+            throwExcept(`@logOut/catch:${error}`);
         });
 };
 

@@ -37,7 +37,7 @@
     "@types/dragula": "^3.7.0",
     "@types/firebase": "^3.2.1",
     "dragula": "^3.7.3",
-    "firebase": "^8.4.1",
+    "firebase": "^9.0.0-beta.1",
     "particles.js": "^2.0.0"
   }
 }

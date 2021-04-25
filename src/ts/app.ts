@@ -3,12 +3,10 @@ import '../css/globals.css';
 import '../css/button.css';
 import '../css/loader.css';
 import '../css/style.css';
-import { $, createTemplate, setTitle, throwExcept, signOut, clearChildren, loadChonk } from './utils';
+import { $, createTemplate, setTitle, logOut, clearChildren, loadChonk } from './utils';
 import { eventHandle } from './events';
 import { initParticles } from './loadParticles';
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/database';
+import { networkManager } from './networkEngine';
 
 interface eventList {
     [key: string]: (event: Event) => void;
@@ -33,82 +31,21 @@ declare global {
 window.customOptionsIncrement = 0;
 window.currentUserConfig = [0, 0, 0, 0, 0];
 const customOptions = ['Eyes', 'Nose', 'Mouth', 'Shirt', 'Arms'];
-let hasAppBeenInitialized = false;
-let errorHasBeenThrown = false;
 
 // Creates a console message that rickrolls you
 console.log('%cUse link to get quiz answers:https://bit.ly/31Apj2U', 'font-size: 32px;');
 
-// Configuration for firebase
-const firebaseConfig = {
-    apiKey: 'AIzaSyAFnj_KFkypyRhlBLceV7FIQwLBOk-13ek',
-    authDomain: 'mamklearn.com',
-    databaseURL: 'https://mamaroneck-learn-default-rtdb.firebaseio.com',
-    projectId: 'mamaroneck-learn',
-    storageBucket: 'mamaroneck-learn.appspot.com',
-    messagingSenderId: '917106980205',
-    appId: '1:917106980205:web:6d36bd431bbc3d91fa5664',
-    measurementId: 'G-G1J2MYS1LJ',
-};
-
-// Configures firebase authentication
-firebase.initializeApp(firebaseConfig);
-let provider = new firebase.auth.GoogleAuthProvider();
-firebase.auth().useDeviceLanguage();
-let userObject: firebase.database.Reference;
-
-const monitorUserState = () => {
-    userObject.on(
-        'value',
-        (snap) => {
-            if (!errorHasBeenThrown && firebase.auth().currentUser) {
-                if (snap.val()) {
-                    window.currentUserConfig = snap.val().charConfig;
-                    if ($('currentUserArms')) {
-                        setCharImage('currentUser', window.currentUserConfig);
-                    }
-                } else {
-                    userObject.set({
-                        charConfig: {
-                            0: 0,
-                            1: 0,
-                            2: 0,
-                            3: 0,
-                            4: 0,
-                        },
-                    });
-                }
-            }
-        },
-        (error) => {
-            throwExcept(error.message);
-            errorHasBeenThrown = true;
-        }
-    );
-};
-
 // If the user is logged in initiliaze appropriate code
-firebase.auth().onAuthStateChanged((user) => {
-    if (!hasAppBeenInitialized) {
-        initializeApp();
-        eventHandle();
-        hasAppBeenInitialized = true;
-    }
-    if (user) {
-        let error = $('loginError1');
-        let userDomainLocation = user!.email!.indexOf('@') + 1;
-        let userDomain = user!.email!.substring(userDomainLocation, user!.email!.length);
-        if (userDomain == 'student.mamkschools.org' || userDomain == 'mamkschools.org') {
-            completeLoginFlow();
-            userObject = firebase.database().ref().child('userProfiles').child(firebase.auth().currentUser!.uid);
-            monitorUserState();
-        } else {
-            firebase.auth().signOut();
-            error.style.display = 'block';
-            error.textContent = "Please use an account that ends in 'mamkschools.org' or 'student.mamkschools.org'";
-        }
-    }
-});
+networkManager.onReady = () => {
+    initializeApp();
+    eventHandle();
+};
+networkManager.onLoginSuccess = completeLoginFlow;
+networkManager.onLoginFail = () => {
+    const error = $('loginError1');
+    error.style.display = 'block';
+    error.textContent = "Please use an account that ends in 'mamkschools.org' or 'student.mamkschools.org'";
+};
 
 const initializeApp = () => {
     /* alert(`[WARNING: THIS IS A DEV BUILD YOUR DATA MAY GET DELETED AND STUFF MAY NOT WORK!]
@@ -135,7 +72,7 @@ const initializeApp = () => {
 window.clickEvents = {
     btn2: playCode,
     makebtn: makeCode,
-    signOutbtn: signOut,
+    signOutbtn: logOut,
     loginBtn: () => {
         login();
     },
@@ -174,12 +111,7 @@ window.submitEvents = {
 window.keyboardIncludesEvents = {};
 
 const login = () => {
-    firebase
-        .auth()
-        .signInWithPopup(provider)
-        .catch((error) => {
-            $('loginError1').textContent = `${error.code}: ${error.message}`;
-        });
+    networkManager.startLogin();
 };
 
 function completeLoginFlow() {
@@ -198,7 +130,7 @@ function userClick(link: string, disableObject?: string) {
     if (disableObject) {
         $(disableObject).disabled = true;
     }
-    setTimeout(() =>  {
+    setTimeout(() => {
         window.location.href = link;
     }, 1000);
 }
@@ -304,9 +236,7 @@ function updateImageState(data: boolean) {
         }
     }
     setCharImage('currentUser', window.currentUserConfig);
-    userObject.set({
-        charConfig: window.currentUserConfig,
-    });
+    networkManager.setCharImage(window.currentUserConfig);
 }
 
 export function setCharImage(charID: string, currentUserConfig: number[]) {
@@ -314,5 +244,5 @@ export function setCharImage(charID: string, currentUserConfig: number[]) {
     $(charID + 'Nose').src = `img/nose-${currentUserConfig[1]}.png`;
     $(charID + 'Mouth').src = `img/mouth-${currentUserConfig[2]}.png`;
     $(charID + 'Shirt').src = `img/shirt-${currentUserConfig[3]}.png`;
-    $(charID + 'Arms').src = `img/arms-${currentUserConfig[4]}.png`;
+    $(charID + 'Arms').src = `img/arms-${currentUserConfig[4]}.svg`;
 }

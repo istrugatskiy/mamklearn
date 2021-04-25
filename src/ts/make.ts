@@ -476,7 +476,7 @@ export function addQuiz() {
         for (let key in quizList2) {
             let internalObject = quizObject.cloneNode(true);
             (internalObject as HTMLElement).firstElementChild!.id = key;
-            ((internalObject as HTMLElement).firstElementChild!.firstElementChild! as HTMLImageElement).src = `img/qIcon-${(iconIterate % 4).toString()}.png`;
+            ((internalObject as HTMLElement).firstElementChild!.firstElementChild! as HTMLImageElement).src = `img/qIcon-${(iconIterate % 4).toString()}.svg`;
             (internalObject as HTMLElement).firstElementChild!.appendChild(document.createTextNode(quizList2[key]));
             renderableQuizObject.appendChild(internalObject);
             iconIterate++;

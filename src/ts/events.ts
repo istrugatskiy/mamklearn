@@ -1,5 +1,4 @@
-import firebase from 'firebase/app';
-import 'firebase/analytics';
+import { logEvent, getAnalytics } from 'firebase/analytics';
 import { characterCount, getCaretCharacterOffsetWithin, setCaretPosition, throwExcept } from './utils';
 
 // Handles the majority of events.
@@ -67,7 +66,7 @@ export const eventHandle = () => {
         }
     });
     window.addEventListener('error', (error) => {
-        firebase.analytics().logEvent('error', {
+        logEvent(getAnalytics(), 'error', {
             error,
         });
         if (error.hasOwnProperty('details')) {
