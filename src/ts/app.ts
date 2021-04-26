@@ -80,16 +80,19 @@ window.clickEvents = {
         updateImageState(true);
     },
     playMenuBack: goBack,
-    AboutLink: () => {
+    AboutLink: (event: Event) => {
+        event.preventDefault();
         userClick('about.html');
     },
     aboutWindowButton: () => {
         userClick('index.html', 'aboutWindowButton');
     },
-    PrivacyPolicyLink: () => {
+    PrivacyPolicyLink: (event: Event) => {
+        event.preventDefault();
         userClick('privacy.html');
     },
-    TermsOfServiceLink: () => {
+    TermsOfServiceLink: (event: Event) => {
+        event.preventDefault();
         userClick('tos.html');
     },
 };
@@ -142,7 +145,6 @@ function makeCode() {
             setTitle('makeMenu');
             $('title').style.top = '100px';
             networkManager.setClientQuizList = obj.quizSetter;
-            obj.addQuiz();
         }, 300);
     });
 }

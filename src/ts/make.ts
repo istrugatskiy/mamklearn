@@ -528,7 +528,7 @@ export function addQuiz(_quizList: { [key: string]: string } = quizList) {
 }
 
 function renderQuizList() {
-    if ($('makeDiv') && $('modal-bg').style.display !== 'block') {
+    if ($('makeDiv') && $('modal-bg').style.display != 'block') {
         setTitle('makeMenu');
         addQuiz();
     }
