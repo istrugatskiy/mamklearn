@@ -142,6 +142,7 @@ function makeCode() {
             setTitle('makeMenu');
             $('title').style.top = '100px';
             networkManager.setClientQuizList = obj.quizSetter;
+            obj.addQuiz();
         }, 300);
     });
 }

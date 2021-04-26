@@ -77,7 +77,6 @@ const monitorUserState = () => {
     onValue(quizList, (snap) => {
         newValue = {};
         if (!errorHasBeenThrown && auth.currentUser) {
-            console.log(snap.val());
             if(snap.val()) {
                 let newSnap = snap.val().filter((el: string) => {
                       return el != '';

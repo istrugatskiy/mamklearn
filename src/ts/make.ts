@@ -536,7 +536,6 @@ function renderQuizList() {
 
 export const quizSetter = (_quizList: { [key: string]: string }) => {
     quizList = _quizList;
-    console.log(_quizList);
     renderQuizList();
 };
 
@@ -683,7 +682,6 @@ function deleteQuiz() {
 
 function deleteQuizConfirm() {
     delete quizList[currentQuizEdit];
-    console.log('heck');
     networkManager.setQuizList(quizList);
     $('deleteQuizConfirm').disabled = true;
     $('backButtonDeleteConfirm').disabled = true;
