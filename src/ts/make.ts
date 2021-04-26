@@ -3,6 +3,7 @@ import '../css/make.css';
 import dragula from 'dragula';
 import { $, characterCount, deepEqual, createTemplate, setTitle, clearChildren, getID, AudioManager, mathClamp } from './utils';
 import { setCharImage } from './app';
+import { networkManager } from './networkEngine';
 
 let editState = false;
 interface answer {
@@ -33,9 +34,8 @@ let activeArea: number | null;
 let highestQuestion = 0;
 let tempQuiz: quizObject;
 let allowState2 = true;
-let quizList2: any = {};
+let quizList: { [key: string]: string } = {};
 let checkOnce = true;
-let quizIncrement = 0;
 let playerNumber = 0;
 let mainAudio: AudioManager;
 
@@ -184,8 +184,8 @@ function createQuiz() {
         $('createQuizMenu').style.display = 'block';
         $('modal-popupA').style.display = 'block';
         $('modal-popupA').classList.add('modal-popupActive');
-        if (Object.keys(quizList2).length > 0) {
-            for (let key in quizList2) {
+        if (Object.keys(quizList).length > 0) {
+            for (let key in quizList) {
                 $(key).classList.add('btnTransitionA');
             }
         }
@@ -210,14 +210,14 @@ function createNewQuiz() {
     checkOnce = false;
     let button = $('submitQuizID');
     $('QuizName').disabled = true;
-    const g = $('QuizName').value;
+    const quizName = $('QuizName').value;
     button.disabled = true;
     button.textContent = '';
     createTemplate('svgLoader', button.id);
     setTimeout(() => {
         checkOnce = true;
-        quizList2[`quizID_${quizIncrement}`] = g;
-        quizIncrement++;
+        quizList[`quizID_${Object.keys(quizList).length}`] = quizName;
+        networkManager.setQuizList(quizList);
         exitModalPopupTemplate('createQuizMenu');
     }, 1000);
 }
@@ -451,7 +451,7 @@ function exitModalPopupF(promptUser: boolean) {
             $('modal-popupA').style.display = 'none';
         }, 300);
         setTitle('makeMenu');
-        addQuiz();
+        addQuiz(quizList);
     }
 }
 
@@ -460,8 +460,8 @@ function addquestionToDOM() {
     createTemplate('templateQuestion', 'draggableDiv', '${highestQuestion}', highestQuestion);
 }
 
-export function addQuiz() {
-    if (Object.keys(quizList2).length > 0) {
+export function addQuiz(_quizList: { [key: string]: string } = quizList) {
+    if (Object.keys(_quizList).length > 0) {
         // Generates the button object using the DOM API
         let quizObject = document.createDocumentFragment();
         let button = document.createElement('button');
@@ -473,15 +473,17 @@ export function addQuiz() {
         quizObject.appendChild(button);
 
         let renderableQuizObject = document.createDocumentFragment();
-        for (let key in quizList2) {
+        for (let key in _quizList) {
             let internalObject = quizObject.cloneNode(true);
             (internalObject as HTMLElement).firstElementChild!.id = key;
             ((internalObject as HTMLElement).firstElementChild!.firstElementChild! as HTMLImageElement).src = `img/qIcon-${(iconIterate % 4).toString()}.svg`;
-            (internalObject as HTMLElement).firstElementChild!.appendChild(document.createTextNode(quizList2[key]));
+            (internalObject as HTMLElement).firstElementChild!.appendChild(document.createTextNode(_quizList[key]));
             renderableQuizObject.appendChild(internalObject);
             iconIterate++;
         }
         $('makeDiv').appendChild(renderableQuizObject);
+        // End DOM generation
+        // Imagine using React like some sort of loser and having this handled for you, or maybe even innerHTML, like that's a thing I could have used
         iconIterate = 0;
         document.querySelector('.backButtonC')!.remove();
         $('removeButton').remove();
@@ -505,7 +507,7 @@ export function addQuiz() {
                     $('submitQuizID').textContent = 'Create';
                     $('modal-bg').style.animation = 'fadeIn 0.5s';
                     $('modal-bg').style.display = 'block';
-                    $('quizNameTitleA').textContent = quizList2[eventTarget] + ':';
+                    $('quizNameTitleA').textContent = _quizList[eventTarget] + ':';
                     $('homeText2').classList.add('btnTransitionA');
                     $('manageQuizMenu').style.animation = 'modalPopin 0.3s';
                     $('manageQuizMenu').style.display = 'block';
@@ -513,8 +515,8 @@ export function addQuiz() {
                     $('modal-popupA').style.display = 'block';
                     $('modal-popupA').classList.add('modal-popupActive');
                     currentQuizEdit = eventTarget;
-                    if (Object.keys(quizList2).length > 0) {
-                        for (let key in quizList2) {
+                    if (Object.keys(_quizList).length > 0) {
+                        for (let key in _quizList) {
                             $(key).classList.add('btnTransitionA');
                         }
                     }
@@ -524,6 +526,19 @@ export function addQuiz() {
         $('makeDiv').style.paddingLeft = '30px';
     }
 }
+
+function renderQuizList() {
+    if ($('makeDiv') && $('modal-bg').style.display !== 'block') {
+        setTitle('makeMenu');
+        addQuiz();
+    }
+}
+
+export const quizSetter = (_quizList: { [key: string]: string }) => {
+    quizList = _quizList;
+    console.log(_quizList);
+    renderQuizList();
+};
 
 const questionErrorParse = (arrayToParse: number[], questionValueSingular: string, questionValuePlural: string) => {
     let output = 'Questions';
@@ -560,7 +575,7 @@ const exitModalPopupTemplate = (popupToKill: string, special?: string) => {
             }
         }, 300);
         setTitle('makeMenu');
-        addQuiz();
+        addQuiz(quizList);
     }
 };
 
@@ -667,15 +682,15 @@ function deleteQuiz() {
 }
 
 function deleteQuizConfirm() {
-    delete quizList2[currentQuizEdit];
+    delete quizList[currentQuizEdit];
+    console.log('heck');
+    networkManager.setQuizList(quizList);
     $('deleteQuizConfirm').disabled = true;
     $('backButtonDeleteConfirm').disabled = true;
     $('deleteQuizConfirm').style.backgroundColor = '';
     clearChildren('deleteQuizConfirm');
     createTemplate('svgLoader', 'deleteQuizConfirm');
-    setTimeout(() => {
-        exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm');
-    }, 1000);
+    exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm');
 }
 
 function editQuiz() {
@@ -684,7 +699,7 @@ function editQuiz() {
     $('manageQuizMenu').style.animation = 'modalPopout 0.3s';
     if (quizObject2[currentQuizEdit] === undefined) {
         quizObject2[currentQuizEdit] = JSON.parse(JSON.stringify(quizObject));
-        quizObject2[currentQuizEdit].quizName = quizList2[currentQuizEdit];
+        quizObject2[currentQuizEdit].quizName = quizList[currentQuizEdit];
         quizObject2[currentQuizEdit].quizID = currentQuizEdit;
     } else {
         quizObject2[currentQuizEdit].questionObjects.forEach((questionObject: any) => {
@@ -710,7 +725,7 @@ function editQuiz() {
         });
         reorderProper();
     }
-    $('quizNameUpdate').value = quizList2[currentQuizEdit];
+    $('quizNameUpdate').value = quizList[currentQuizEdit];
     drake = dragula([$('draggableDiv')], {
         moves: function (_el, _container, handle) {
             return handle!.classList.contains('draggableActual');
@@ -754,7 +769,8 @@ function editQuizForm() {
         }, 500);
     } else {
         quizObject2[currentQuizEdit] = tempQuiz;
-        quizList2[currentQuizEdit] = $('quizNameUpdate').value;
+        quizList[currentQuizEdit] = $('quizNameUpdate').value;
+        networkManager.setQuizList(quizList);
         clearChildren('saveQuizButton');
         createTemplate('svgLoader', 'saveQuizButton');
         setTimeout(() => {

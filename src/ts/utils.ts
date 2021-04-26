@@ -1,14 +1,13 @@
 // These are some helper functions used throughout the app!
-import { logEvent, getAnalytics } from 'firebase/analytics';
 import { getAuth, signOut } from 'firebase/auth';
 let hasLoggedOut = false;
 let errorCount = 0;
 
-export const getID = (inputEvent: Event) => {
-    var input = (inputEvent.target as HTMLElement).id;
-    var inputChars = Array.from(input);
-    var output = '';
-    for (var i = inputChars.length; i >= 0; i--) {
+export const getID = (inputEvent: Event | string) => {
+    let input = typeof inputEvent === 'string' || inputEvent instanceof String ? inputEvent : (inputEvent.target as HTMLElement).id;
+    let inputChars = Array.from(input);
+    let output = '';
+    for (let i = inputChars.length; i >= 0; i--) {
         if (!Number.isNaN(Number.parseInt(inputChars[i]))) {
             output = inputChars[i] + output;
         }
@@ -107,9 +106,6 @@ export const setTitle = (templateID: string) => {
 export const throwExcept = (msg: string) => {
     // Prevents false positive errors
     if (hasLoggedOut) return;
-    logEvent(getAnalytics(), 'handled error', {
-        msg,
-    });
     $('commError2').style.display = 'block';
     $('CommError').style.display = 'block';
     $('comError3').textContent = msg;

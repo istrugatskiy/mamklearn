@@ -48,13 +48,6 @@ networkManager.onLoginFail = () => {
 };
 
 const initializeApp = () => {
-    /* alert(`[WARNING: THIS IS A DEV BUILD YOUR DATA MAY GET DELETED AND STUFF MAY NOT WORK!]
-	(This message will be removed as soon as the app goes live.)
-	Changelog: 
-	1.0.1: Added support for logging out and improved character customization ui!
-    1.0.2: Fixed flicker when typing into some input fields and fixed a bug where text could get smooshed
-           whenever playing on mobile
-    `); */
     $('mainLoader').classList.remove('loader--active');
     initParticles();
     if (new URLSearchParams(window.location.search).get('shareQuiz')) {
@@ -148,7 +141,7 @@ function makeCode() {
             $('title').classList.remove('handleOutTransition');
             setTitle('makeMenu');
             $('title').style.top = '100px';
-            obj.addQuiz();
+            networkManager.setClientQuizList = obj.quizSetter;
         }, 300);
     });
 }
