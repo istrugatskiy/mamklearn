@@ -74,20 +74,6 @@ const monitorUserState = () => {
             errorHasBeenThrown = true;
         }
     );
-    onValue(quizList, (snap) => {
-        newValue = {};
-        if (!errorHasBeenThrown && auth.currentUser) {
-            if(snap.val()) {
-                let newSnap = snap.val().filter((el: string) => {
-                      return el != '';
-                });
-                newSnap.forEach((el: string, index: number) => {
-                    newValue[`quizID_${index}`] = el;
-                });
-            }
-            networkManager._setClientQuizList ? networkManager._setClientQuizList(newValue) : false;
-        }
-    });
 };
 
 export class networkManager {
@@ -113,10 +99,28 @@ export class networkManager {
             set(child(charConfig, `${index}`), newChar[index]);
         }
     }
+
     static setQuizList(newQuizList: { [key: string]: string }) {
         let entries = Object.values(newQuizList);
-        for(let index = 0; index <= 25; index++) {
+        for (let index = 0; index <= 25; index++) {
             set(child(quizList, `${index}`), entries[index] ? entries[index] : '');
-        };
+        }
+    }
+
+    static initQuizList() {
+        onValue(quizList, (snap) => {
+            newValue = {};
+            if (!errorHasBeenThrown && auth.currentUser) {
+                if (snap.val()) {
+                    let newSnap = snap.val().filter((el: string) => {
+                        return el != '';
+                    });
+                    newSnap.forEach((el: string, index: number) => {
+                        newValue[`quizID_${index}`] = el;
+                    });
+                }
+                networkManager._setClientQuizList ? networkManager._setClientQuizList(newValue) : false;
+            }
+        });
     }
 }

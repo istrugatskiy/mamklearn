@@ -144,6 +144,7 @@ function makeCode() {
             $('title').classList.remove('handleOutTransition');
             setTitle('makeMenu');
             $('title').style.top = '100px';
+            networkManager.initQuizList();
             networkManager.setClientQuizList = obj.quizSetter;
         }, 300);
     });
