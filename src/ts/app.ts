@@ -31,6 +31,7 @@ declare global {
 window.customOptionsIncrement = 0;
 window.currentUserConfig = [0, 0, 0, 0, 0];
 const customOptions = ['Eyes', 'Nose', 'Mouth', 'Shirt', 'Arms'];
+let alreadyInitialized = false;
 
 // Creates a console message that rickrolls you
 console.log('%cUse link to get quiz answers:https://bit.ly/31Apj2U', 'font-size: 32px;');
@@ -144,7 +145,8 @@ function makeCode() {
             $('title').classList.remove('handleOutTransition');
             setTitle('makeMenu');
             $('title').style.top = '100px';
-            networkManager.initQuizList();
+            !alreadyInitialized ? networkManager.initQuizList() : false;
+            alreadyInitialized = true;
             networkManager.setClientQuizList = obj.quizSetter;
         }, 300);
     });
