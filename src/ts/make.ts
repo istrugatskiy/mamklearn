@@ -756,6 +756,7 @@ function editQuizForm() {
     $('addQuestionButton').disabled = true;
     collapseAllArea();
     parseActiveQuiz();
+    console.log(JSON.stringify(tempQuiz, null, 4));
     if (!verifyQuiz()) {
         $('modal-popupB').style.display = 'block';
         $('editQuizMenu').style.animation = 'fadeOut 0.5s';
