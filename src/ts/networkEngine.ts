@@ -6,6 +6,22 @@ import { setCharImage } from './app';
 import { throwExcept } from './utils';
 import { $ } from './utils';
 
+interface answer {
+    answer: string | null;
+    correct: boolean;
+}
+interface questionObject {
+    questionName: string;
+    shortAnswer: boolean;
+    timeLimit: string | boolean;
+    Answers: [answer, answer, answer, answer];
+}
+interface quizObject {
+    quizID: string;
+    quizName: string;
+    questionObjects: questionObject[];
+}
+
 // Configuration for firebase
 const firebaseConfig = {
     apiKey: 'AIzaSyAFnj_KFkypyRhlBLceV7FIQwLBOk-13ek',
@@ -121,6 +137,15 @@ export class networkManager {
                 }
                 networkManager._setClientQuizList ? networkManager._setClientQuizList(newValue) : false;
             }
-        });
+        },
+        (error) => {
+            throwExcept(error.message);
+            errorHasBeenThrown = true;
+        }
+        );
+    }
+
+    static setQuiz(quizID: string, quizObject: quizObject) {
+        set(child(child(currentUser, 'quizData'), quizID), quizObject);
     }
 }

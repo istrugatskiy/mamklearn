@@ -770,6 +770,7 @@ function editQuizForm() {
             allowState2 = true;
         }, 500);
     } else {
+        networkManager.setQuiz(getID(tempQuiz.quizID), tempQuiz)
         quizObject2[currentQuizEdit] = tempQuiz;
         quizList[currentQuizEdit] = $('quizNameUpdate').value;
         networkManager.setQuizList(quizList);
