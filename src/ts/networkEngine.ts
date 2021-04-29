@@ -1,4 +1,4 @@
-import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, Unsubscribe } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, Reference, child, onValue, set, off } from 'firebase/database';
 import { getPerformance } from 'firebase/performance';
@@ -98,7 +98,7 @@ export class networkManager {
     static onInit: () => void;
     static onReady: () => void;
     static _setClientQuizList: (quizList: { [key: string]: string }) => void;
-    private static quizListener: Unsubscribe;
+    private static currentQuizObject: Reference; 
 
     static set setClientQuizList(newFunction: () => void) {
         this._setClientQuizList = newFunction;
@@ -125,7 +125,7 @@ export class networkManager {
     }
 
     static initQuizList() {
-        this.quizListener = onValue(quizList, (snap) => {
+        onValue(quizList, (snap) => {
             newValue = {};
             if (!errorHasBeenThrown && auth.currentUser) {
                 if (snap.val()) {
@@ -150,11 +150,14 @@ export class networkManager {
         set(child(child(currentUser, 'quizData'), quizID), quizObject);
     }
 
-    static handleCurrentQuiz(quizId: string) {
-        off(quizList, this.quizListener);
+    static handleCurrentQuiz(quizID: string) {
+        this.currentQuizObject = child(child(currentUser, 'quizData'), quizID);
+        onValue(this.currentQuizObject, (snap) => {
+            console.log(snap.val());
+        });
     }
 
     static unHandleCurrentQuiz() {
-        
+        off(this.currentQuizObject);
     }
 }
