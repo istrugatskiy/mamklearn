@@ -88,11 +88,11 @@ export const isObject = (object: object) => {
 
 // Creates object from template!
 // Uniqifies the id's if specified.
-export const createTemplate = (templateID: string, place: string, modifID: any = false, replace: any = false) => {
+export const createTemplate = (templateID: string, place: string, modifID: boolean | string | null = false, replace: boolean | number | null = false) => {
     let content = ($(templateID) as HTMLTemplateElement).content.cloneNode(true) as HTMLElement;
     if (modifID !== null) {
         content.querySelectorAll('[id]').forEach((element) => {
-            element.id = element.id.replace(modifID, replace);
+            element.id = element.id.replace(modifID.toString(), replace!.toString());
         });
     }
     $(place).appendChild(content);
@@ -116,7 +116,7 @@ export const setCaretPosition = (element: HTMLElement, offset: number) => {
     var sel = window.getSelection();
 
     //select appropriate node
-    var currentNode: any = null;
+    var currentNode: Node | null = null;
     var previousNode = null;
 
     for (var i = 0; i < element.childNodes.length; i++) {
@@ -132,10 +132,10 @@ export const setCaretPosition = (element: HTMLElement, offset: number) => {
 
         //calc offset in current node
         if (previousNode != null) {
-            offset -= previousNode.length;
+            offset -= ((previousNode as unknown) as NodeListOf<ChildNode>).length;
         }
         //check whether current node has enough length
-        if (offset <= currentNode.length) {
+        if (offset <= (currentNode as unknown as NodeListOf<ChildNode>).length) {
             break;
         }
     }

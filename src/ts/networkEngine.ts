@@ -124,7 +124,6 @@ export class networkManager {
     }
 
     static initQuizList() {
-        console.log('a');
         onValue(quizList, (snap) => {
             newValue = {};
             if (!errorHasBeenThrown && auth.currentUser) {
