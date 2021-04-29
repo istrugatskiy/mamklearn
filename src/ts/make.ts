@@ -1,7 +1,7 @@
 // Contains code related to making quizzes
 import '../css/make.css';
 import dragula from 'dragula';
-import { $, characterCount, deepEqual, createTemplate, setTitle, clearChildren, getID, AudioManager, mathClamp } from './utils';
+import { $, characterCount, deepEqual, createTemplate, setTitle, clearChildren, getID, AudioManager, mathClamp, download } from './utils';
 import { setCharImage } from './app';
 import { networkManager } from './networkEngine';
 
@@ -97,6 +97,10 @@ let clickListeners = {
     gameStartButtonTeacher: () => {
         startGameTeacher();
     },
+    exportQuizButton: () => {
+        parseActiveQuiz();
+        download(`${tempQuiz.quizName}-exported.json`, JSON.stringify(tempQuiz, null, 4));
+    }
 };
 
 let clickIncludesListeners = {
@@ -766,6 +770,7 @@ function editQuizForm() {
             allowState2 = true;
         }, 500);
     } else {
+        networkManager.setQuiz(getID(tempQuiz.quizID), tempQuiz)
         quizObject2[currentQuizEdit] = tempQuiz;
         quizList[currentQuizEdit] = $('quizNameUpdate').value;
         networkManager.setQuizList(quizList);
