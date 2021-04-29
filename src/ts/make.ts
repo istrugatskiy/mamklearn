@@ -371,7 +371,7 @@ const verifyQuiz = () => {
         let answerError0: number[] = [];
         let answerError1: number[] = [];
         let answerError2: number[] = [];
-        tempQuiz.questionObjects.forEach((question: any, index: number) => {
+        tempQuiz.questionObjects.forEach((question, index) => {
             index++;
             if (/^$/.test(question.questionName)) {
                 nullSpace01.push(index);
@@ -394,7 +394,7 @@ const verifyQuiz = () => {
                 }
             }
             if (typeof question.timeLimit != 'boolean') {
-                if (isNaN(question.timeLimit) || question.timeLimit < 5) {
+                if (isNaN(parseInt(question.timeLimit)) || parseInt(question.timeLimit) < 5) {
                     timeLimitViolation.push(index);
                 }
             }
@@ -704,7 +704,7 @@ function editQuiz() {
         quizObject2[currentQuizEdit].quizName = quizList[currentQuizEdit];
         quizObject2[currentQuizEdit].quizID = currentQuizEdit;
     } else {
-        quizObject2[currentQuizEdit].questionObjects.forEach((questionObject: any) => {
+        quizObject2[currentQuizEdit].questionObjects.forEach((questionObject) => {
             addquestionToDOM();
             let actualData = $(`draggableQuestion${highestQuestion}`).children[1].children;
             actualData[0].textContent = questionObject.questionName;
@@ -713,7 +713,7 @@ function editQuiz() {
             if (questionObject.shortAnswer) {
                 shortAnswerToggle(highestQuestion);
             }
-            actualData[4].children[0].children[0].checked = questionObject.timeLimit;
+            actualData[4].children[0].children[0].checked = questionObject.timeLimit as boolean;
             if (typeof questionObject.timeLimit != 'boolean') {
                 toggleTime(highestQuestion);
                 actualData[4].children[2].textContent = questionObject.timeLimit;
