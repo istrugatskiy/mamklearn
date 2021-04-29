@@ -1,6 +1,6 @@
-import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, Unsubscribe } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, Reference, child, onValue, set } from 'firebase/database';
+import { getDatabase, ref, Reference, child, onValue, set, off } from 'firebase/database';
 import { getPerformance } from 'firebase/performance';
 import { setCharImage } from './app';
 import { throwExcept } from './utils';
@@ -98,6 +98,7 @@ export class networkManager {
     static onInit: () => void;
     static onReady: () => void;
     static _setClientQuizList: (quizList: { [key: string]: string }) => void;
+    private static quizListener: Unsubscribe;
 
     static set setClientQuizList(newFunction: () => void) {
         this._setClientQuizList = newFunction;
@@ -124,7 +125,7 @@ export class networkManager {
     }
 
     static initQuizList() {
-        onValue(quizList, (snap) => {
+        this.quizListener = onValue(quizList, (snap) => {
             newValue = {};
             if (!errorHasBeenThrown && auth.currentUser) {
                 if (snap.val()) {
@@ -147,5 +148,13 @@ export class networkManager {
 
     static setQuiz(quizID: string, quizObject: quizObject) {
         set(child(child(currentUser, 'quizData'), quizID), quizObject);
+    }
+
+    static handleCurrentQuiz(quizId: string) {
+        off(quizList, this.quizListener);
+    }
+
+    static unHandleCurrentQuiz() {
+        
     }
 }
