@@ -6,21 +6,16 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-    entry: [
-        './src/ts/app.ts'
-    ],
+    entry: ['./src/ts/app.ts'],
     output: {
         filename: '[name].chonk.js',
-        path: path.resolve(__dirname, 'dist/')
+        path: path.resolve(__dirname, 'dist/'),
     },
     module: {
         rules: [
             {
                 test: /\.css$/i,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    'css-loader'
-                ]
+                use: [MiniCssExtractPlugin.loader, 'css-loader'],
             },
             {
                 test: /\.ts$/i,
@@ -29,7 +24,7 @@ module.exports = {
                     appendTsSuffixTo: [/\.vue$/],
                 },
             },
-        ]
+        ],
     },
     devtool: false,
     mode: 'development',
@@ -37,39 +32,35 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             filename: 'index.html',
-            template: './src/index.html'
+            template: './src/index.html',
         }),
         new HtmlWebpackPlugin({
             filename: 'about.html',
-            template: './src/about.html'
+            template: './src/about.html',
         }),
         new HtmlWebpackPlugin({
             filename: 'privacy.html',
-            template: './src/privacy.html'
+            template: './src/privacy.html',
         }),
         new HtmlWebpackPlugin({
             filename: 'tos.html',
-            template: './src/tos.html'
+            template: './src/tos.html',
         }),
         new CopyPlugin({
             patterns: [
-                { from: './src/img', to: './img'},
-                { from: './src/data', to: './data'},
-                { from: './src/404.html', to: './'}
-            ]
+                { from: './src/img', to: './img' },
+                { from: './src/data', to: './data' },
+                { from: './src/404.html', to: './' },
+            ],
         }),
         new MiniCssExtractPlugin(),
-        new CleanWebpackPlugin()
+        new CleanWebpackPlugin(),
     ],
     optimization: {
         minimize: false,
-        minimizer: [
-            `...`,
-            new CssMinimizerPlugin(),
-        ],
+        minimizer: [`...`, new CssMinimizerPlugin()],
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js']
+        extensions: ['.tsx', '.ts', '.js'],
     },
-
-}
+};
