@@ -813,6 +813,7 @@ function editQuizForm() {
 function shareQuiz() {
     checkOnce = false;
     $('manageQuizMenu').style.animation = 'modalPopout 0.3s';
+    $('coolTextArea').value = `mamklearn.com/?shareQuiz=${networkManager.authInstance.currentUser!.uid}-${currentQuizEdit.replace('quizID_', '')}`;
     setTimeout(() => {
         $('manageQuizMenu').style.display = 'none';
         $('shareQuizMenu').style.display = 'block';

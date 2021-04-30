@@ -100,6 +100,7 @@ export class networkManager {
     static _setClientQuizList: (quizList: { [key: string]: string }) => void;
     private static currentQuizObject: Reference;
     private static prevQuizList: { [key: string]: string } = {};
+    static authInstance = getAuth();
 
     static set setClientQuizList(newFunction: () => void) {
         this._setClientQuizList = newFunction;
