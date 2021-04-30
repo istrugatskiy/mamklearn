@@ -4,7 +4,7 @@ window.studentGameProcessor = studentGameProcessor;
 
 window.quizStartTestCase = ' {"gameStart": true, "totalQuestions": 5, "currentQuestion": "TTTTTTTHHTHHTHTHTHTTHTTTTTTTHTHHHHTHTTTTTHHTTHHTHTTTTTTHTTTHTTTHTHHHTTTTHTHTHHT HHTTHHHTHT", "choices": [ null ], "currentQuestionTime": 69, "questionID": 0 }';
 window.anotherTestCase = '{ "isQuestionCorrect": false, "nextQuestion": null, "choices": [ null ], "currentQuestionTime": 20 }';
-window.anotherTestCase2 = '{ "isQuestionCorrect": true, "nextQuestion": "heckDifferentQuestionTooLazyTooPutPercent", "choices": [ "Nabeel", "Nabeel2", "Nabeel3", "Nabeel4" ], "currentQuestionTime": 69 }';
+window.anotherTestCase2 = '{ "isQuestionCorrect": true, "nextQuestion": "heckDifferentQuestionTooLazyTooPutPercent", "choices": [ "a", "a2", "a3", "a4" ], "currentQuestionTime": 69 }';
 window.anotherTestCase3 = '{ "gameFinish": true, "timeTillEnd": 180}';
 window.anotherTestCase4 = '{ "gameEnd": true, "CharacterConfig1": [0,0,0,0,0], "CharacterConfig2": [9,9,9,9,9], "CharacterConfig3": [0,1,2,3,4], "userPlace": 12}';
 let otherInterval: number;

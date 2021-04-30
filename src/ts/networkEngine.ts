@@ -98,7 +98,8 @@ export class networkManager {
     static onInit: () => void;
     static onReady: () => void;
     static _setClientQuizList: (quizList: { [key: string]: string }) => void;
-    private static currentQuizObject: Reference; 
+    private static currentQuizObject: Reference;
+    private static prevQuizList: { [key: string]: string } = {};
 
     static set setClientQuizList(newFunction: () => void) {
         this._setClientQuizList = newFunction;
@@ -120,44 +121,48 @@ export class networkManager {
     static setQuizList(newQuizList: { [key: string]: string }) {
         let entries = Object.values(newQuizList);
         for (let index = 0; index <= 25; index++) {
-            set(child(quizList, `${index}`), entries[index] ? entries[index] : '');
+            // Reject nodes which are the same to decrease network load
+            if (entries[index] !== this.prevQuizList[index]) {
+                set(child(quizList, `${index}`), entries[index] ? entries[index] : '');
+            }
         }
     }
 
     static initQuizList() {
-        onValue(quizList, (snap) => {
-            newValue = {};
-            if (!errorHasBeenThrown && auth.currentUser) {
-                if (snap.val()) {
-                    let newSnap = snap.val().filter((el: string) => {
-                        return el != '';
-                    });
-                    newSnap.forEach((el: string, index: number) => {
-                        newValue[`quizID_${index}`] = el;
-                    });
+        onValue(
+            quizList,
+            (snap) => {
+                newValue = {};
+                this.prevQuizList = {};
+                if (!errorHasBeenThrown && auth.currentUser) {
+                    if (snap.val()) {
+                        this.prevQuizList = snap.val();
+                        let newSnap = snap.val().filter((el: string) => {
+                            return el != '';
+                        });
+                        newSnap.forEach((el: string, index: number) => {
+                            newValue[`quizID_${index}`] = el;
+                        });
+                    }
+                    networkManager._setClientQuizList ? networkManager._setClientQuizList(newValue) : false;
                 }
-                networkManager._setClientQuizList ? networkManager._setClientQuizList(newValue) : false;
+            },
+            (error) => {
+                throwExcept(error.message);
+                errorHasBeenThrown = true;
             }
-        },
-        (error) => {
-            throwExcept(error.message);
-            errorHasBeenThrown = true;
-        }
         );
     }
 
-    static setQuiz(quizID: string, quizObject: quizObject) {
+    static setQuiz(quizID: string, quizObject: quizObject | null) {
         set(child(child(currentUser, 'quizData'), quizID), quizObject);
     }
 
-    static handleCurrentQuiz(quizID: string) {
+    static handleCurrentQuiz(quizID: string, callback: (value: any) => void) {
         this.currentQuizObject = child(child(currentUser, 'quizData'), quizID);
         onValue(this.currentQuizObject, (snap) => {
-            console.log(snap.val());
+            callback(snap.val());
+            off(this.currentQuizObject);
         });
-    }
-
-    static unHandleCurrentQuiz() {
-        off(this.currentQuizObject);
     }
 }

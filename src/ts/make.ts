@@ -241,6 +241,7 @@ function doneButtonA() {
         $('backButtonEditQuiz').disabled = false;
         $('quizNameUpdate').disabled = false;
         $('addQuestionButton').disabled = false;
+        $('exportQuizButton').disabled = false;
         reorderProper();
         setTimeout(() => {
             ($('modal-popupB') as HTMLDivElement).removeAttribute('style');
@@ -443,6 +444,7 @@ function exitModalPopupF(promptUser: boolean) {
             $('backButtonEditQuiz').disabled = false;
             $('quizNameUpdate').disabled = false;
             $('addQuestionButton').disabled = false;
+            $('exportQuizButton').disabled = false;
             $('modal-popupA').style.pointerEvents = 'all';
             clearChildren('saveQuizButton');
             $('saveQuizButton').textContent = 'Save';
@@ -687,6 +689,7 @@ function deleteQuiz() {
 function deleteQuizConfirm() {
     delete quizList[currentQuizEdit];
     networkManager.setQuizList(quizList);
+    networkManager.setQuiz(getID(currentQuizEdit), null);
     $('deleteQuizConfirm').disabled = true;
     $('backButtonDeleteConfirm').disabled = true;
     $('deleteQuizConfirm').style.backgroundColor = '';
@@ -698,58 +701,69 @@ function deleteQuizConfirm() {
 function editQuiz() {
     checkOnce = false;
     editState = true;
-    $('manageQuizMenu').style.animation = 'modalPopout 0.3s';
-    if (quizObject2[currentQuizEdit] === undefined) {
-        quizObject2[currentQuizEdit] = JSON.parse(JSON.stringify(quizObject));
-        quizObject2[currentQuizEdit].quizName = quizList[currentQuizEdit];
-        quizObject2[currentQuizEdit].quizID = currentQuizEdit;
-    } else {
-        quizObject2[currentQuizEdit].questionObjects.forEach((questionObject) => {
-            addquestionToDOM();
-            let actualData = $(`draggableQuestion${highestQuestion}`).children[1].children;
-            actualData[0].textContent = questionObject.questionName;
-            characterCount(actualData[0], '90');
-            actualData[3].children[0].children[0].checked = questionObject.shortAnswer;
-            if (questionObject.shortAnswer) {
-                shortAnswerToggle(highestQuestion);
-            }
-            actualData[4].children[0].children[0].checked = questionObject.timeLimit as boolean;
-            if (typeof questionObject.timeLimit != 'boolean') {
-                toggleTime(highestQuestion);
-                actualData[4].children[2].textContent = questionObject.timeLimit;
-                characterCount(actualData[4].children[2], '3');
-            }
-            for (let i = 0; i < 4; i++) {
-                actualData[5].children[i].children[0].textContent = questionObject.Answers[i].answer;
-                characterCount(actualData[5].children[i].children[0], '50');
-                actualData[5].children[i].children[2].children[0].checked = questionObject.Answers[i].correct;
-            }
-        });
-        reorderProper();
-    }
-    $('quizNameUpdate').value = quizList[currentQuizEdit];
-    drake = dragula([$('draggableDiv')], {
-        moves: function (_el, _container, handle) {
-            return handle!.classList.contains('draggableActual');
-        },
-    })
-        .on('drag', function (el) {
-            el.classList.add('dragging');
-            collapseAllArea();
+    $('playQuiz').disabled = true;
+    $('shareQuiz').disabled = true;
+    $('editQuiz').disabled = true;
+    $('deleteQuiz').disabled = true;
+    networkManager.handleCurrentQuiz(getID(currentQuizEdit), (val) => {
+        $('manageQuizMenu').style.animation = 'modalPopout 0.3s';
+        if (val === undefined || val === null) {
+            quizObject2[currentQuizEdit] = JSON.parse(JSON.stringify(quizObject));
+            quizObject2[currentQuizEdit].quizName = quizList[currentQuizEdit];
+            quizObject2[currentQuizEdit].quizID = currentQuizEdit;
+        } else {
+            quizObject2[currentQuizEdit] = val;
+            quizObject2[currentQuizEdit].questionObjects.forEach((questionObject) => {
+                addquestionToDOM();
+                let actualData = $(`draggableQuestion${highestQuestion}`).children[1].children;
+                actualData[0].textContent = questionObject.questionName;
+                characterCount(actualData[0], '90');
+                actualData[3].children[0].children[0].checked = questionObject.shortAnswer;
+                if (questionObject.shortAnswer) {
+                    shortAnswerToggle(highestQuestion);
+                }
+                actualData[4].children[0].children[0].checked = questionObject.timeLimit as boolean;
+                if (typeof questionObject.timeLimit != 'boolean') {
+                    toggleTime(highestQuestion);
+                    actualData[4].children[2].textContent = questionObject.timeLimit;
+                    characterCount(actualData[4].children[2], '3');
+                }
+                for (let i = 0; i < 4; i++) {
+                    actualData[5].children[i].children[0].textContent = questionObject.Answers[i].answer;
+                    characterCount(actualData[5].children[i].children[0], '50');
+                    actualData[5].children[i].children[2].children[0].checked = questionObject.Answers[i].correct;
+                }
+            });
+            reorderProper();
+        }
+        $('quizNameUpdate').value = quizList[currentQuizEdit];
+        drake = dragula([$('draggableDiv')], {
+            moves: function (_el, _container, handle) {
+                return handle!.classList.contains('draggableActual');
+            },
         })
-        .on('dragend', function (el) {
-            el.classList.remove('dragging');
-            document.body.style.cursor = 'inherit';
-            setTimeout(() => {
-                reorderProper();
-            }, 100);
-        });
-    setTimeout(() => {
-        $('manageQuizMenu').style.display = 'none';
-        $('editQuizMenu').style.display = 'block';
-        $('manageQuizMenu').style.animation = 'modalPopin 0.3s';
-        $('editQuizMenu').style.animation = 'modalPopin 0.3s';
-    }, 300);
+            .on('drag', function (el) {
+                el.classList.add('dragging');
+                collapseAllArea();
+            })
+            .on('dragend', function (el) {
+                el.classList.remove('dragging');
+                document.body.style.cursor = 'inherit';
+                setTimeout(() => {
+                    reorderProper();
+                }, 100);
+            });
+        setTimeout(() => {
+            $('manageQuizMenu').style.display = 'none';
+            $('editQuizMenu').style.display = 'block';
+            $('manageQuizMenu').style.animation = 'modalPopin 0.3s';
+            $('editQuizMenu').style.animation = 'modalPopin 0.3s';
+            $('playQuiz').disabled = false;
+            $('shareQuiz').disabled = false;
+            $('editQuiz').disabled = false;
+            $('deleteQuiz').disabled = false;
+        }, 300);
+    });
 }
 
 function editQuizForm() {
@@ -758,6 +772,7 @@ function editQuizForm() {
     $('backButtonEditQuiz').disabled = true;
     $('quizNameUpdate').disabled = true;
     $('addQuestionButton').disabled = true;
+    $('exportQuizButton').disabled = true;
     collapseAllArea();
     parseActiveQuiz();
     if (!verifyQuiz()) {
@@ -770,7 +785,7 @@ function editQuizForm() {
             allowState2 = true;
         }, 500);
     } else {
-        networkManager.setQuiz(getID(tempQuiz.quizID), tempQuiz)
+        networkManager.setQuiz(getID(tempQuiz.quizID), tempQuiz);
         quizObject2[currentQuizEdit] = tempQuiz;
         quizList[currentQuizEdit] = $('quizNameUpdate').value;
         networkManager.setQuizList(quizList);
