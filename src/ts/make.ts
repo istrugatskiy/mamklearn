@@ -100,7 +100,7 @@ let clickListeners = {
     exportQuizButton: () => {
         parseActiveQuiz();
         download(`${tempQuiz.quizName}-exported.json`, JSON.stringify(tempQuiz, null, 4));
-    }
+    },
 };
 
 let clickIncludesListeners = {
@@ -190,7 +190,9 @@ function createQuiz() {
         $('modal-popupA').classList.add('modal-popupActive');
         if (Object.keys(quizList).length > 0) {
             for (let key in quizList) {
-                $(key).classList.add('btnTransitionA');
+                if(quizList[key]) {
+                    $(key).classList.add('btnTransitionA');
+                }
             }
         }
     }
@@ -457,7 +459,7 @@ function exitModalPopupF(promptUser: boolean) {
             $('modal-popupA').style.display = 'none';
         }, 300);
         setTitle('makeMenu');
-        addQuiz(quizList);
+        addQuiz();
     }
 }
 
@@ -480,12 +482,14 @@ export function addQuiz(_quizList: { [key: string]: string } = quizList) {
 
         let renderableQuizObject = document.createDocumentFragment();
         for (let key in _quizList) {
-            let internalObject = quizObject.cloneNode(true);
-            (internalObject as HTMLElement).firstElementChild!.id = key;
-            ((internalObject as HTMLElement).firstElementChild!.firstElementChild! as HTMLImageElement).src = `img/qIcon-${(iconIterate % 4).toString()}.svg`;
-            (internalObject as HTMLElement).firstElementChild!.appendChild(document.createTextNode(_quizList[key]));
-            renderableQuizObject.appendChild(internalObject);
-            iconIterate++;
+            if (_quizList[key]) {
+                let internalObject = quizObject.cloneNode(true);
+                (internalObject as HTMLElement).firstElementChild!.id = key;
+                ((internalObject as HTMLElement).firstElementChild!.firstElementChild! as HTMLImageElement).src = `img/qIcon-${(iconIterate % 4).toString()}.svg`;
+                (internalObject as HTMLElement).firstElementChild!.appendChild(document.createTextNode(_quizList[key]));
+                renderableQuizObject.appendChild(internalObject);
+                iconIterate++;
+            }
         }
         $('makeDiv').appendChild(renderableQuizObject);
         // End DOM generation
@@ -523,7 +527,9 @@ export function addQuiz(_quizList: { [key: string]: string } = quizList) {
                     currentQuizEdit = eventTarget;
                     if (Object.keys(_quizList).length > 0) {
                         for (let key in _quizList) {
-                            $(key).classList.add('btnTransitionA');
+                            if (_quizList[key]) {
+                                $(key).classList.add('btnTransitionA');
+                            }
                         }
                     }
                 }
@@ -687,6 +693,7 @@ function deleteQuiz() {
 }
 
 function deleteQuizConfirm() {
+    delete quizList[currentQuizEdit];
     networkManager.setQuizList(quizList[currentQuizEdit], currentQuizEdit.replace('quizID_', ''));
     networkManager.setQuiz(currentQuizEdit.replace('quizID_', ''), null);
     $('deleteQuizConfirm').disabled = true;

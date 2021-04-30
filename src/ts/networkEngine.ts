@@ -1,6 +1,6 @@
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, Reference, child, onValue, set, off, push } from 'firebase/database';
+import { getDatabase, ref, Reference, child, onValue, set, off, push, remove } from 'firebase/database';
 import { getPerformance } from 'firebase/performance';
 import { setCharImage } from './app';
 import { throwExcept } from './utils';
@@ -119,11 +119,15 @@ export class networkManager {
     }
 
     static setQuizList(changedQuiz: string, changedQuizId: string = '') {
-        if(changedQuizId == '') {
-            push(quizList, changedQuiz ? changedQuiz : '');
+        if (changedQuiz !== null && changedQuiz !== undefined) {
+            if (changedQuizId == '') {
+                push(quizList, changedQuiz);
+            } else {
+                set(child(quizList, `${changedQuizId}`), changedQuiz);
+            }
         }
         else {
-            set(child(quizList, `${changedQuizId}`), changedQuiz ? changedQuiz : '');
+            remove(child(quizList, `${changedQuizId}`));
         }
     }
 
@@ -136,12 +140,12 @@ export class networkManager {
                 if (!errorHasBeenThrown && auth.currentUser) {
                     if (snap.val()) {
                         this.prevQuizList = snap.val();
-                        let newSnap = Object.keys(snap.val()).filter((el: string) => {
-                            return el != '';
-                        });
+                        let newSnap = Object.keys(snap.val());
                         const values = Object.values(snap.val());
                         newSnap.forEach((el: string, index: number) => {
-                            newValue[`quizID_${el}`] = values[index] as string;
+                            if (values[index]) {
+                                newValue[`quizID_${el}`] = values[index] as string;
+                            }
                         });
                     }
                     networkManager._setClientQuizList ? networkManager._setClientQuizList(newValue) : false;
