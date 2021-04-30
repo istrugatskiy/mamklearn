@@ -118,13 +118,12 @@ export class networkManager {
         }
     }
 
-    static setQuizList(newQuizList: { [key: string]: string }) {
-        let entries = Object.values(newQuizList);
-        for (let index = 0; index <= 25; index++) {
-            // Reject nodes which are the same to decrease network load
-            if (entries[index] !== this.prevQuizList[index]) {
-                set(child(quizList, `${index}`), entries[index] ? entries[index] : '');
-            }
+    static setQuizList(changedQuiz: string, changedQuizId: string = '') {
+        if(changedQuizId == '') {
+            push(quizList, changedQuiz ? changedQuiz : '');
+        }
+        else {
+            set(child(quizList, `${changedQuizId}`), changedQuiz ? changedQuiz : '');
         }
     }
 
@@ -156,11 +155,10 @@ export class networkManager {
     }
 
     static setQuiz(quizID: string, quizObject: quizObject | null) {
-        if(this.prevQuizList[quizID]) {
+        if (this.prevQuizList[quizID] !== null) {
             set(child(child(currentUser, 'quizData'), quizID), quizObject);
             return quizID;
-        }
-        else {
+        } else {
             return push(child(currentUser, 'quizData'), quizObject);
         }
     }

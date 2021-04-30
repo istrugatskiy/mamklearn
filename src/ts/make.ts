@@ -221,7 +221,7 @@ function createNewQuiz() {
     setTimeout(() => {
         checkOnce = true;
         quizList[`quizID_${Object.keys(quizList).length}`] = quizName;
-        networkManager.setQuizList(quizList);
+        networkManager.setQuizList(quizName);
         exitModalPopupTemplate('createQuizMenu');
     }, 1000);
 }
@@ -687,8 +687,7 @@ function deleteQuiz() {
 }
 
 function deleteQuizConfirm() {
-    delete quizList[currentQuizEdit];
-    networkManager.setQuizList(quizList);
+    networkManager.setQuizList(quizList[currentQuizEdit], currentQuizEdit.replace('quizID_', ''));
     networkManager.setQuiz(currentQuizEdit.replace('quizID_', ''), null);
     $('deleteQuizConfirm').disabled = true;
     $('backButtonDeleteConfirm').disabled = true;
@@ -788,7 +787,7 @@ function editQuizForm() {
         networkManager.setQuiz(tempQuiz.quizID.replace('quizID_', ''), tempQuiz);
         quizObject2[currentQuizEdit] = tempQuiz;
         quizList[currentQuizEdit] = $('quizNameUpdate').value;
-        networkManager.setQuizList(quizList);
+        networkManager.setQuizList(quizList[currentQuizEdit], currentQuizEdit.replace('quizID_', ''));
         clearChildren('saveQuizButton');
         createTemplate('svgLoader', 'saveQuizButton');
         setTimeout(() => {
