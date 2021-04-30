@@ -689,7 +689,7 @@ function deleteQuiz() {
 function deleteQuizConfirm() {
     delete quizList[currentQuizEdit];
     networkManager.setQuizList(quizList);
-    networkManager.setQuiz(getID(currentQuizEdit), null);
+    networkManager.setQuiz(currentQuizEdit.replace('quizID_', ''), null);
     $('deleteQuizConfirm').disabled = true;
     $('backButtonDeleteConfirm').disabled = true;
     $('deleteQuizConfirm').style.backgroundColor = '';
@@ -705,7 +705,7 @@ function editQuiz() {
     $('shareQuiz').disabled = true;
     $('editQuiz').disabled = true;
     $('deleteQuiz').disabled = true;
-    networkManager.handleCurrentQuiz(getID(currentQuizEdit), (val) => {
+    networkManager.handleCurrentQuiz(currentQuizEdit.replace('quizID_', ''), (val) => {
         $('manageQuizMenu').style.animation = 'modalPopout 0.3s';
         if (val === undefined || val === null) {
             quizObject2[currentQuizEdit] = JSON.parse(JSON.stringify(quizObject));
@@ -785,7 +785,7 @@ function editQuizForm() {
             allowState2 = true;
         }, 500);
     } else {
-        networkManager.setQuiz(getID(tempQuiz.quizID), tempQuiz);
+        networkManager.setQuiz(tempQuiz.quizID.replace('quizID_', ''), tempQuiz);
         quizObject2[currentQuizEdit] = tempQuiz;
         quizList[currentQuizEdit] = $('quizNameUpdate').value;
         networkManager.setQuizList(quizList);
