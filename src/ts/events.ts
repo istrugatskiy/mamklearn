@@ -16,7 +16,8 @@ export const eventHandle = () => {
         }
     });
     window.addEventListener('keydown', (event) => {
-        if (event.key == 'Enter' || event.key == 'Space') {
+        if (event.key == 'Enter' || event.key == ' ') {
+            event.code
             const keys = Object.keys(window.keyboardIncludesEvents);
             const eventTarget = (event.target! as HTMLElement).id;
             for (var i = 0; i < keys.length; i++) {
@@ -65,10 +66,8 @@ export const eventHandle = () => {
         }
     });
     window.addEventListener('error', (error) => {
-        if (error.hasOwnProperty('details')) {
-            throwExcept('GAPI_ERROR');
-        } else if (error.message.includes('Script error') || error.message.includes('TypeError')) {
-            throwExcept('MISTAKE');
+        if (error.message.includes('Script error') || error.message.includes('TypeError')) {
+            throwExcept('@ScriptErrorHandler: ' + error.message);
         } else {
             console.log(error.message);
         }

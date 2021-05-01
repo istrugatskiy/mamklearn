@@ -156,7 +156,7 @@ export const logOut = () => {
             window.location.reload();
         })
         .catch((error) => {
-            throwExcept(`@logOut/catch:${error}`);
+            throwExcept(`@LogOut: ${error}`);
         });
 };
 
@@ -175,7 +175,7 @@ export const loadChonk = (chonkToLoad: string, callback: (returnedObject: any) =
                     loadChonk(chonkToLoad, callback);
                 }, 2000);
             } else {
-                throwExcept('BIG_CHONK4569');
+                throwExcept(`@LoadChonk: ${error}`);
             }
         });
 };

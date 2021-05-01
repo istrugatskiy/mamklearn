@@ -474,8 +474,8 @@ ul {
 	padding-top: 16px;
 	padding-bottom: 16px;
 }
-.textAreaConfig[placeholder]:empty:before {
-	content: attr(placeholder);
+.textAreaConfig[data-placeholder]:empty:before {
+	content: attr(data-placeholder);
 	color: #555;
 }
 @keyframes fadein {

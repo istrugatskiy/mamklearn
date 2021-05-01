@@ -110,6 +110,10 @@
 	transform-origin: 50% 50%;
 	transform-style: preserve-3d;
 	transition: transform 0.14s ease;
+	pointer-events: all;
+}
+.toggleButton * {
+	pointer-events: none;
 }
 .toggleButton:active {
 	transform: rotateX(30deg);

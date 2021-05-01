@@ -83,6 +83,9 @@ let clickListeners = {
         exitModalPopupTemplate('manageQuizMenu');
     },
     backButtonShareQuiz: () => {
+        $('actuallyShareQuiz').classList.remove('btnTransitionA');
+        $('actuallyShareQuiz').style.display = 'inline-block';
+        $('whenActuallyShared').style.display = 'none';
         exitModalPopupTemplate('shareQuizMenu', 'shareQuizMenu');
     },
     createButtonA: () => {
@@ -101,6 +104,9 @@ let clickListeners = {
         parseActiveQuiz();
         download(`${tempQuiz.quizName}-exported.json`, JSON.stringify(tempQuiz, null, 4));
     },
+    actuallyShareQuiz: () => {
+        actuallyShareQuiz();
+    }
 };
 
 let clickIncludesListeners = {
@@ -119,6 +125,13 @@ let clickIncludesListeners = {
     studentCharacterImage: (event: Event) => {
         kickPlayer(getID(event));
     },
+    quizID_: (event: Event) => {
+        quizButtonOnClick(event);
+    },
+    isCorrectQuestion: (event: Event) => {
+        const target = (event.target! as HTMLElement).id;
+        $(`actualIsCorrectQuestion${getID(target)}`).checked = !$(`actualIsCorrectQuestion${getID(target)}`).checked;
+    },
 };
 
 let submitListeners = {
@@ -135,18 +148,14 @@ let keyboardIncludesListeners = {
         deleteQuestion(getID(event));
     },
     keyboardNavAnswer: (event: Event) => {
-        const eventTarget = (event.target! as HTMLElement).id;
         shortAnswerToggle(getID(event));
-        $(eventTarget).previousElementSibling!.firstElementChild!.checked = !$(eventTarget).previousElementSibling!.firstElementChild!.checked;
     },
     keyboardNavTime: (event: Event) => {
         toggleTime(getID(event));
-        const eventTarget = (event.target! as HTMLElement).id;
-        $(eventTarget).previousElementSibling!.firstElementChild!.checked = !$(eventTarget).previousElementSibling!.firstElementChild!.checked;
     },
     isCorrectQuestion: (event: Event) => {
-        const eventTarget = (event.target! as HTMLElement).id;
-        $(eventTarget).children[0].checked = !$(eventTarget).children[0].checked;
+        const target = (event.target! as HTMLElement).id;
+        $(`actualIsCorrectQuestion${getID(target)}`).checked = !$(`actualIsCorrectQuestion${getID(target)}`).checked;
     },
     studentCharacterImage: (event: Event) => {
         kickPlayer(getID(event));
@@ -190,7 +199,7 @@ function createQuiz() {
         $('modal-popupA').classList.add('modal-popupActive');
         if (Object.keys(quizList).length > 0) {
             for (let key in quizList) {
-                if(quizList[key]) {
+                if (quizList[key]) {
                     $(key).classList.add('btnTransitionA');
                 }
             }
@@ -220,18 +229,27 @@ function createNewQuiz() {
     button.disabled = true;
     button.textContent = '';
     createTemplate('svgLoader', button.id);
-    setTimeout(() => {
-        checkOnce = true;
-        quizList[`quizID_${Object.keys(quizList).length}`] = quizName;
-        networkManager.setQuizList(quizName);
-        exitModalPopupTemplate('createQuizMenu');
-    }, 1000);
+    quizList[`quizID_${Object.keys(quizList).length}`] = quizName;
+    networkManager.setQuizList(quizName, () => {
+        setTimeout(() => {
+            checkOnce = true;
+            exitModalPopupTemplate('createQuizMenu');
+        }, 300);
+    });
 }
 
 function addQuestion() {
     addquestionToDOM();
     reorderProper();
     $(`collapseSubArea${highestQuestion}`).focus();
+}
+
+function actuallyShareQuiz() {
+    $('actuallyShareQuiz').classList.add('btnTransitionA');
+    setTimeout(() => {
+        $('actuallyShareQuiz').style.display = 'none';
+        $('whenActuallyShared').style.display = 'block';
+    }, 300);
 }
 
 function doneButtonA() {
@@ -311,12 +329,14 @@ function reorderProper() {
 }
 
 function shortAnswerToggle(endMe: string | number) {
+    $(`actualShortAnswerToggle${endMe}`).checked = !$(`actualShortAnswerToggle${endMe}`).checked;
     $(`answerContainerObject${endMe}`).classList.toggle('shortAnswerEditorStyles');
     $(`collapsableContent${endMe}`).classList.toggle('noSpaceEditor');
 }
 
 function toggleTime(order: string | number) {
     $(`Question${order}Time`).classList.toggle('displayTimeLimit');
+    $(`actualToggleTime${order}`).checked = !$(`actualToggleTime${order}`).checked;
 }
 
 function parseActiveQuiz() {
@@ -468,8 +488,8 @@ function addquestionToDOM() {
     createTemplate('templateQuestion', 'draggableDiv', '${highestQuestion}', highestQuestion);
 }
 
-export function addQuiz(_quizList: { [key: string]: string } = quizList) {
-    if (Object.keys(_quizList).length > 0) {
+export function addQuiz() {
+    if (Object.keys(quizList).length > 0) {
         // Generates the button object using the DOM API
         let quizObject = document.createDocumentFragment();
         let button = document.createElement('button');
@@ -481,12 +501,13 @@ export function addQuiz(_quizList: { [key: string]: string } = quizList) {
         quizObject.appendChild(button);
 
         let renderableQuizObject = document.createDocumentFragment();
-        for (let key in _quizList) {
-            if (_quizList[key]) {
+        for (let key in quizList) {
+            if (quizList[key]) {
                 let internalObject = quizObject.cloneNode(true);
                 (internalObject as HTMLElement).firstElementChild!.id = key;
                 ((internalObject as HTMLElement).firstElementChild!.firstElementChild! as HTMLImageElement).src = `img/qIcon-${(iconIterate % 4).toString()}.svg`;
-                (internalObject as HTMLElement).firstElementChild!.appendChild(document.createTextNode(_quizList[key]));
+                ((internalObject as HTMLElement).firstElementChild!.firstElementChild! as HTMLImageElement).alt = 'quiz icon';
+                (internalObject as HTMLElement).firstElementChild!.appendChild(document.createTextNode(quizList[key]));
                 renderableQuizObject.appendChild(internalObject);
                 iconIterate++;
             }
@@ -500,42 +521,41 @@ export function addQuiz(_quizList: { [key: string]: string } = quizList) {
         createTemplate('makeDivCreateQuizButton', 'makeDiv');
         createTemplate('makeDivBackButton', 'makeDiv');
         $('makeDiv').style.textAlign = 'center';
-        document.querySelectorAll('.quizActionButton').forEach((item) => {
-            item.addEventListener('click', (event) => {
-                const eventTarget = (event.target! as HTMLElement).id;
-                if (checkOnce) {
-                    document.querySelector('.createButtonA')!.disabled = true;
-                    window.clickEvents['modal-bg'] = () => {
-                        exitModalPopupTemplate('manageQuizMenu');
-                    };
-                    $('QuizName').disabled = false;
-                    $('submitQuizID').disabled = false;
-                    $('QuizName').value = '';
-                    document.querySelector('.createButtonA')!.classList.add('btnTransitionA');
-                    document.querySelector('.backButtonC')!.disabled = true;
-                    document.querySelector('.backButtonC')!.classList.add('btnTransitionA');
-                    $('submitQuizID').textContent = 'Create';
-                    $('modal-bg').style.animation = 'fadeIn 0.5s';
-                    $('modal-bg').style.display = 'block';
-                    $('quizNameTitleA').textContent = _quizList[eventTarget] + ':';
-                    $('homeText2').classList.add('btnTransitionA');
-                    $('manageQuizMenu').style.animation = 'modalPopin 0.3s';
-                    $('manageQuizMenu').style.display = 'block';
-                    $('createQuizMenu').style.display = 'none';
-                    $('modal-popupA').style.display = 'block';
-                    $('modal-popupA').classList.add('modal-popupActive');
-                    currentQuizEdit = eventTarget;
-                    if (Object.keys(_quizList).length > 0) {
-                        for (let key in _quizList) {
-                            if (_quizList[key]) {
-                                $(key).classList.add('btnTransitionA');
-                            }
-                        }
-                    }
-                }
-            });
-        });
         $('makeDiv').style.paddingLeft = '30px';
+    }
+}
+
+function quizButtonOnClick(event: Event) {
+    const eventTarget = (event.target! as HTMLElement).id;
+    if (checkOnce) {
+        document.querySelector('.createButtonA')!.disabled = true;
+        window.clickEvents['modal-bg'] = () => {
+            exitModalPopupTemplate('manageQuizMenu');
+        };
+        $('QuizName').disabled = false;
+        $('submitQuizID').disabled = false;
+        $('QuizName').value = '';
+        document.querySelector('.createButtonA')!.classList.add('btnTransitionA');
+        document.querySelector('.backButtonC')!.disabled = true;
+        document.querySelector('.backButtonC')!.classList.add('btnTransitionA');
+        $('submitQuizID').textContent = 'Create';
+        $('modal-bg').style.animation = 'fadeIn 0.5s';
+        $('modal-bg').style.display = 'block';
+        $('quizNameTitleA').textContent = quizList[eventTarget] + ':';
+        $('homeText2').classList.add('btnTransitionA');
+        $('manageQuizMenu').style.animation = 'modalPopin 0.3s';
+        $('manageQuizMenu').style.display = 'block';
+        $('createQuizMenu').style.display = 'none';
+        $('modal-popupA').style.display = 'block';
+        $('modal-popupA').classList.add('modal-popupActive');
+        currentQuizEdit = eventTarget;
+        if (Object.keys(quizList).length > 0) {
+            for (let key in quizList) {
+                if (quizList[key]) {
+                    $(key).classList.add('btnTransitionA');
+                }
+            }
+        }
     }
 }
 
@@ -586,7 +606,7 @@ const exitModalPopupTemplate = (popupToKill: string, special?: string) => {
             }
         }, 300);
         setTitle('makeMenu');
-        addQuiz(quizList);
+        addQuiz();
     }
 };
 
@@ -694,14 +714,15 @@ function deleteQuiz() {
 
 function deleteQuizConfirm() {
     delete quizList[currentQuizEdit];
-    networkManager.setQuizList(quizList[currentQuizEdit], currentQuizEdit.replace('quizID_', ''));
-    networkManager.setQuiz(currentQuizEdit.replace('quizID_', ''), null);
+    networkManager.setQuizList(quizList[currentQuizEdit], () => {}, currentQuizEdit.replace('quizID_', ''));
+    networkManager.setQuiz(currentQuizEdit.replace('quizID_', ''), null, () => {
+        exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm');
+    });
     $('deleteQuizConfirm').disabled = true;
     $('backButtonDeleteConfirm').disabled = true;
     $('deleteQuizConfirm').style.backgroundColor = '';
     clearChildren('deleteQuizConfirm');
     createTemplate('svgLoader', 'deleteQuizConfirm');
-    exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm');
 }
 
 function editQuiz() {
@@ -724,11 +745,9 @@ function editQuiz() {
                 let actualData = $(`draggableQuestion${highestQuestion}`).children[1].children;
                 actualData[0].textContent = questionObject.questionName;
                 characterCount(actualData[0], '90');
-                actualData[3].children[0].children[0].checked = questionObject.shortAnswer;
                 if (questionObject.shortAnswer) {
                     shortAnswerToggle(highestQuestion);
                 }
-                actualData[4].children[0].children[0].checked = questionObject.timeLimit as boolean;
                 if (typeof questionObject.timeLimit != 'boolean') {
                     toggleTime(highestQuestion);
                     actualData[4].children[2].textContent = questionObject.timeLimit;
@@ -791,29 +810,30 @@ function editQuizForm() {
             allowState2 = true;
         }, 500);
     } else {
-        networkManager.setQuiz(tempQuiz.quizID.replace('quizID_', ''), tempQuiz);
         quizObject2[currentQuizEdit] = tempQuiz;
         quizList[currentQuizEdit] = $('quizNameUpdate').value;
-        networkManager.setQuizList(quizList[currentQuizEdit], currentQuizEdit.replace('quizID_', ''));
+        networkManager.setQuizList(quizList[currentQuizEdit], () => {}, currentQuizEdit.replace('quizID_', ''));
+        networkManager.setQuiz(tempQuiz.quizID.replace('quizID_', ''), tempQuiz, () => {
+            setTimeout(() => {
+                exitModalPopupF(false);
+                setTimeout(() => {
+                    $('errorActual').textContent = 'Quiz Saved';
+                    $('errorMessageA').style.display = 'block';
+                    setTimeout(() => {
+                        $('errorMessageA').style.display = 'none';
+                    }, 1000);
+                }, 200);
+            }, 500);
+        });
         clearChildren('saveQuizButton');
         createTemplate('svgLoader', 'saveQuizButton');
-        setTimeout(() => {
-            exitModalPopupF(false);
-        }, 1000);
-        setTimeout(() => {
-            $('errorActual').textContent = 'Quiz Saved';
-            $('errorMessageA').style.display = 'block';
-            setTimeout(() => {
-                $('errorMessageA').style.display = 'none';
-            }, 1000);
-        }, 1200);
     }
 }
 
 function shareQuiz() {
     checkOnce = false;
     $('manageQuizMenu').style.animation = 'modalPopout 0.3s';
-    $('coolTextArea').value = `mamklearn.com/?shareQuiz=${networkManager.authInstance.currentUser!.uid}-${currentQuizEdit.replace('quizID_', '')}`;
+    $('coolTextArea').value = `mamklearn.com/?shareQuiz=${networkManager.authInstance.currentUser!.uid}_${currentQuizEdit.replace('quizID_', '')}`;
     setTimeout(() => {
         $('manageQuizMenu').style.display = 'none';
         $('shareQuizMenu').style.display = 'block';

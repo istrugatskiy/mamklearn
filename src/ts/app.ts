@@ -31,7 +31,6 @@ declare global {
 window.customOptionsIncrement = 0;
 window.currentUserConfig = [0, 0, 0, 0, 0];
 const customOptions = ['Eyes', 'Nose', 'Mouth', 'Shirt', 'Arms'];
-let alreadyInitialized = false;
 
 // Creates a console message that rickrolls you
 console.log('%cUse link to get quiz answers:https://bit.ly/31Apj2U', 'font-size: 32px;');
@@ -51,15 +50,16 @@ networkManager.onLoginFail = () => {
 const initializeApp = () => {
     $('mainLoader').classList.remove('loader--active');
     initParticles();
-    if (new URLSearchParams(window.location.search).get('shareQuiz')) {
-        setTimeout(() => {
+    const data = new URLSearchParams(window.location.search).get('shareQuiz');
+    if (data) {
+        networkManager.getSharedQuiz(data, () => {
             $('errorActual').textContent = 'Quiz Copied';
             $('errorMessageA').style.display = 'block';
             setTimeout(() => {
                 $('errorMessageA').style.display = 'none';
-                window.history.pushState(null, 'mamkLearn', 'index.html');
+                window.history.pushState(null, 'mamkLearn', '');
             }, 1000);
-        }, 500);
+        });
     }
 };
 
@@ -140,15 +140,15 @@ function makeCode() {
     createTemplate('svgLoader', 'makebtn');
     loadChonk('make', (obj) => {
         obj.initEvents();
-        $('title').classList.add('handleOutTransition');
-        setTimeout(() => {
-            $('title').classList.remove('handleOutTransition');
-            setTitle('makeMenu');
-            $('title').style.top = '100px';
-            !alreadyInitialized ? networkManager.initQuizList() : false;
-            alreadyInitialized = true;
-            networkManager.setClientQuizList = obj.quizSetter;
-        }, 300);
+        networkManager.initQuizList(() => {
+            $('title').classList.add('handleOutTransition');
+            setTimeout(() => {
+                $('title').classList.remove('handleOutTransition');
+                setTitle('makeMenu');
+                networkManager.setClientQuizList = obj.quizSetter;
+                $('title').style.top = '100px';
+            }, 300);
+        });
     });
 }
 

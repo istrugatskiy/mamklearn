@@ -102,7 +102,7 @@ function studentGameProcessor(input: string) {
             }, 1000);
         }
     } else if (inputInternal.hasOwnProperty('error')) {
-        throwExcept(inputInternal.error);
+        throwExcept(`@playQuiz: ${inputInternal.error}`);
         gameStateStudent.gameErrorState = inputInternal.gameErrorState;
     } else if (inputInternal.hasOwnProperty('kickPlayer')) {
         kickPlayer(true);

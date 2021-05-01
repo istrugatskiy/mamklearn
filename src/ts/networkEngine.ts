@@ -86,7 +86,7 @@ const monitorUserState = () => {
             }
         },
         (error) => {
-            throwExcept(error.message);
+            throwExcept(`@MonitorUserState: ${error.message}`);
             errorHasBeenThrown = true;
         }
     );
@@ -101,6 +101,7 @@ export class networkManager {
     private static currentQuizObject: Reference;
     private static prevQuizList: { [key: string]: string } = {};
     static authInstance = getAuth();
+    static hasBeenInitialized = false;
 
     static set setClientQuizList(newFunction: () => void) {
         this._setClientQuizList = newFunction;
@@ -119,12 +120,16 @@ export class networkManager {
         }
     }
 
-    static setQuizList(changedQuiz: string, changedQuizId: string = '') {
+    static setQuizList(changedQuiz: string, callback: () => void, changedQuizId: string = '') {
         if (changedQuiz !== null && changedQuiz !== undefined) {
             if (changedQuizId == '') {
-                push(quizList, changedQuiz);
+                push(quizList, changedQuiz).then(() => {
+                    callback();
+                });
             } else {
-                set(child(quizList, `${changedQuizId}`), changedQuiz);
+                set(child(quizList, `${changedQuizId}`), changedQuiz).then(() => {
+                    callback();
+                });
             }
         }
         else {
@@ -132,13 +137,20 @@ export class networkManager {
         }
     }
 
-    static initQuizList() {
+    static initQuizList(callback: () => void) {
+        if(this.hasBeenInitialized) {
+            callback();
+        }
         onValue(
             quizList,
             (snap) => {
                 newValue = {};
                 this.prevQuizList = {};
                 if (!errorHasBeenThrown && auth.currentUser) {
+                    if(!this.hasBeenInitialized) {
+                        callback();
+                        this.hasBeenInitialized = true;
+                    }
                     if (snap.val()) {
                         this.prevQuizList = snap.val();
                         let newSnap = Object.keys(snap.val());
@@ -153,15 +165,17 @@ export class networkManager {
                 }
             },
             (error) => {
-                throwExcept(error.message);
+                throwExcept(`@InitQuizList: ${error.message}`);
                 errorHasBeenThrown = true;
             }
         );
     }
 
-    static setQuiz(quizID: string, quizObject: quizObject | null) {
+    static setQuiz(quizID: string, quizObject: quizObject | null, callback: () => void) {
         if (this.prevQuizList[quizID] !== null) {
-            set(child(child(currentUser, 'quizData'), quizID), quizObject);
+            set(child(child(currentUser, 'quizData'), quizID), quizObject).then(() => {
+                callback();
+            });
             return quizID;
         } else {
             return push(child(currentUser, 'quizData'), quizObject);
@@ -174,5 +188,25 @@ export class networkManager {
             callback(snap.val());
             off(this.currentQuizObject);
         });
+    }
+
+    static getSharedQuiz(shareLink: string, callback: () => void) {
+        const shareUser = shareLink.split('_')[0];
+        const actualQuiz = shareLink.split('_')[1];
+        onValue(ref(database, `sharedQuizzes/${shareUser}/${actualQuiz}`), (snap) => {
+            if(snap.val()) {
+                console.log(snap.val());
+                callback();
+            }
+            else {
+                throwExcept('@GetSharedQuiz: quiz does not exist');
+            }
+        }, (error) => {
+            throwExcept(`@GetSharedQuiz: ${error.message}`);
+        });
+    }
+
+    static shareQuiz(quizId: string, quizObject: quizObject) {
+        console.log(quizId + quizObject);
     }
 }
