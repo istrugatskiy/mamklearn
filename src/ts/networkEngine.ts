@@ -19,6 +19,7 @@ interface questionObject {
 interface quizObject {
     quizID: string;
     quizName: string;
+    isShared: boolean;
     questionObjects: questionObject[];
 }
 
@@ -99,7 +100,6 @@ export class networkManager {
     static onReady: () => void;
     static _setClientQuizList: (quizList: { [key: string]: string }) => void;
     private static currentQuizObject: Reference;
-    private static prevQuizList: { [key: string]: string } = {};
     static authInstance = getAuth();
     static hasBeenInitialized = false;
 
@@ -131,28 +131,25 @@ export class networkManager {
                     callback();
                 });
             }
-        }
-        else {
+        } else {
             remove(child(quizList, `${changedQuizId}`));
         }
     }
 
     static initQuizList(callback: () => void) {
-        if(this.hasBeenInitialized) {
+        if (this.hasBeenInitialized) {
             callback();
         }
         onValue(
             quizList,
             (snap) => {
                 newValue = {};
-                this.prevQuizList = {};
                 if (!errorHasBeenThrown && auth.currentUser) {
-                    if(!this.hasBeenInitialized) {
+                    if (!this.hasBeenInitialized) {
                         callback();
                         this.hasBeenInitialized = true;
                     }
                     if (snap.val()) {
-                        this.prevQuizList = snap.val();
                         let newSnap = Object.keys(snap.val());
                         const values = Object.values(snap.val());
                         newSnap.forEach((el: string, index: number) => {
@@ -172,41 +169,50 @@ export class networkManager {
     }
 
     static setQuiz(quizID: string, quizObject: quizObject | null, callback: () => void) {
-        if (this.prevQuizList[quizID] !== null) {
-            set(child(child(currentUser, 'quizData'), quizID), quizObject).then(() => {
-                callback();
-            });
-            return quizID;
-        } else {
-            return push(child(currentUser, 'quizData'), quizObject);
-        }
+        set(child(child(currentUser, 'quizData'), quizID), quizObject).then(() => {
+            callback();
+        });
     }
 
     static handleCurrentQuiz(quizID: string, callback: (value: any) => void) {
         this.currentQuizObject = child(child(currentUser, 'quizData'), quizID);
         onValue(this.currentQuizObject, (snap) => {
-            callback(snap.val());
             off(this.currentQuizObject);
+            callback(snap.val());
+            if (snap.val()) {
+                if (snap.val().isShared) {
+                    this.shareQuiz(snap.val().quizID.replace('quizID_'), snap.val(), () => {});
+                }
+            }
         });
     }
 
     static getSharedQuiz(shareLink: string, callback: () => void) {
         const shareUser = shareLink.split('_')[0];
         const actualQuiz = shareLink.split('_')[1];
-        onValue(ref(database, `sharedQuizzes/${shareUser}/${actualQuiz}`), (snap) => {
-            if(snap.val()) {
-                console.log(snap.val());
-                callback();
+        onValue(
+            ref(database, `sharedQuizzes/${shareUser}/${actualQuiz}`),
+            (snap) => {
+                if (snap.val()) {
+                    console.log(snap.val());
+                    push(child(currentUser, 'quizList'), snap.val().quizName).then((object) => {
+                        this.handleCurrentQuiz(object.key!, callback);
+                    });
+                } else {
+                    throwExcept('@GetSharedQuiz: quiz does not exist');
+                }
+            },
+            (error) => {
+                throwExcept(`@GetSharedQuiz: ${error.message}`);
             }
-            else {
-                throwExcept('@GetSharedQuiz: quiz does not exist');
-            }
-        }, (error) => {
-            throwExcept(`@GetSharedQuiz: ${error.message}`);
-        });
+        );
     }
 
-    static shareQuiz(quizId: string, quizObject: quizObject) {
-        console.log(quizId + quizObject);
+    static shareQuiz(quizId: string, quizObject: quizObject, callback: () => void) {
+        push(ref(database, `sharedQuizzes/${this.authInstance.currentUser!.uid}/${quizId}`), quizObject).then(() => {
+            set(child(child(child(currentUser, 'quizData'), quizId), 'isShared'), true).then(() => {
+                callback();
+            });
+        });
     }
 }

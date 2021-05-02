@@ -11,6 +11,9 @@ import { networkManager } from './networkEngine';
 interface eventList {
     [key: string]: (event: Event) => void;
 }
+interface keyboardEventList {
+    [key: string]: (event: KeyboardEvent) => void;
+}
 
 declare global {
     interface Window {
@@ -18,7 +21,7 @@ declare global {
         customOptionsIncrement: number;
         clickEvents: eventList;
         clickIncludesEvents: eventList;
-        keyboardIncludesEvents: eventList;
+        keyboardIncludesEvents: keyboardEventList;
         submitEvents: eventList;
         studentGameProcessor: (inputConfig: string) => void;
         quizStartTestCase: string;

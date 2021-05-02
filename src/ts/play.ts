@@ -44,8 +44,10 @@ let clickIncludesListeners = {
 };
 
 let keyboardIncludesListeners = {
-    studentShortAnswerText: () => {
-        submitShortAnswer();
+    studentShortAnswerText: (event: KeyboardEvent) => {
+        if(event.key == 'Enter') {
+            submitShortAnswer();
+        }
     },
 };
 

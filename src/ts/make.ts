@@ -19,12 +19,14 @@ interface questionObject {
 interface quizObject {
     quizID: string;
     quizName: string;
+    isShared: boolean;
     questionObjects: questionObject[];
 }
 let quizObject2: { [key: string]: quizObject } = {};
 const quizObject = {
     quizID: '',
     quizName: '',
+    isShared: false,
     questionObjects: [],
 };
 let drake: dragula.Drake;
@@ -83,10 +85,7 @@ let clickListeners = {
         exitModalPopupTemplate('manageQuizMenu');
     },
     backButtonShareQuiz: () => {
-        $('actuallyShareQuiz').classList.remove('btnTransitionA');
-        $('actuallyShareQuiz').style.display = 'inline-block';
-        $('whenActuallyShared').style.display = 'none';
-        exitModalPopupTemplate('shareQuizMenu', 'shareQuizMenu');
+        backButtonShareQuiz();
     },
     createButtonA: () => {
         createQuiz();
@@ -106,7 +105,7 @@ let clickListeners = {
     },
     actuallyShareQuiz: () => {
         actuallyShareQuiz();
-    }
+    },
 };
 
 let clickIncludesListeners = {
@@ -238,18 +237,17 @@ function createNewQuiz() {
     });
 }
 
+function backButtonShareQuiz() {
+    $('actuallyShareQuiz').classList.remove('btnTransitionA');
+    $('actuallyShareQuiz').style.display = 'inline-block';
+    $('whenActuallyShared').style.display = 'none';
+    exitModalPopupTemplate('shareQuizMenu', 'shareQuizMenu');
+}
+
 function addQuestion() {
     addquestionToDOM();
     reorderProper();
     $(`collapseSubArea${highestQuestion}`).focus();
-}
-
-function actuallyShareQuiz() {
-    $('actuallyShareQuiz').classList.add('btnTransitionA');
-    setTimeout(() => {
-        $('actuallyShareQuiz').style.display = 'none';
-        $('whenActuallyShared').style.display = 'block';
-    }, 300);
 }
 
 function doneButtonA() {
@@ -343,6 +341,7 @@ function parseActiveQuiz() {
     tempQuiz = JSON.parse(JSON.stringify(quizObject));
     tempQuiz.quizName = $('quizNameUpdate').value;
     tempQuiz.quizID = currentQuizEdit;
+    tempQuiz.isShared = quizObject2[currentQuizEdit].isShared;
     if ($('draggableDiv').firstElementChild) {
         let quizDoc = Array.from($('draggableDiv').children);
         quizDoc.forEach((object) => {
@@ -377,12 +376,12 @@ function parseActiveQuiz() {
     }
 }
 
-//verify that question field is filled; done
-//verify that we have any questions at all; done
-//verify that no field goes over it's character limit; done
-//verify that time limit is at least 5 or more; done
-//verify that at least one possible choice is correct; done
-//verify that at least two answer fields are filled out; done
+// Verify that question field is filled; done
+// Verify that we have any questions at all; done
+// Verify that no field goes over it's character limit; done
+// Verify that time limit is at least 5 or more; done
+// Verify that at least one possible choice is correct; done
+// Verify that at least two answer fields are filled out; done
 const verifyQuiz = () => {
     let quizParseError = [];
     let finalResult = document.createDocumentFragment();
@@ -831,6 +830,19 @@ function editQuizForm() {
 }
 
 function shareQuiz() {
+    networkManager.handleCurrentQuiz(currentQuizEdit.replace('quizID_', ''), (value) => {
+        if (value == null) {
+            $('coolTextArea').value = 'An empty quiz cannot be shared!';
+            $('actuallyShareQuiz').style.display = 'none';
+            $('whenActuallyShared').style.display = 'block';
+        } else {
+            quizObject2[currentQuizEdit] = value;
+            console.log(value);
+            if (quizObject2[currentQuizEdit].isShared) {
+                actuallyShareQuiz();
+            }
+        }
+    });
     checkOnce = false;
     $('manageQuizMenu').style.animation = 'modalPopout 0.3s';
     $('coolTextArea').value = `mamklearn.com/?shareQuiz=${networkManager.authInstance.currentUser!.uid}_${currentQuizEdit.replace('quizID_', '')}`;
@@ -840,6 +852,22 @@ function shareQuiz() {
         $('manageQuizMenu').style.animation = 'modalPopin 0.3s';
         $('shareQuizMenu').style.animation = 'modalPopin 0.3s';
     }, 300);
+}
+
+function actuallyShareQuiz() {
+    if (!quizObject2[currentQuizEdit].isShared) {
+        $('actuallyShareQuiz').classList.add('btnTransitionA');
+        networkManager.shareQuiz(currentQuizEdit.replace('quizID_', ''), quizObject2[currentQuizEdit], () => {
+            setTimeout(() => {
+                $('actuallyShareQuiz').style.display = 'none';
+                $('whenActuallyShared').style.display = 'block';
+                quizObject2[currentQuizEdit].isShared = true;
+            }, 300);
+        });
+    } else {
+        $('actuallyShareQuiz').style.display = 'none';
+        $('whenActuallyShared').style.display = 'block';
+    }
 }
 
 function copyShareLink() {
