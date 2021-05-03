@@ -170,9 +170,12 @@ export class networkManager {
 
     static setQuiz(quizID: string, quizObject: quizObject | null, callback: () => void) {
         set(child(child(currentUser, 'quizData'), quizID), quizObject).then(() => {
-            callback();
-            if (quizObject!.isShared) {
-                this.shareQuiz(quizID.replace('quizID_', ''), quizObject!, () => {});
+            if (!quizObject || quizObject.isShared) {
+                set(ref(database, `sharedQuizzes/${this.authInstance.currentUser!.uid}/${quizID.replace('quizID_', '')}`), quizObject).then(() => {
+                    callback();
+                });
+            } else {
+                callback();
             }
         });
     }
@@ -185,9 +188,7 @@ export class networkManager {
         });
     }
 
-    static getSharedQuiz(shareLink: string, callback: () => void) {
-        const shareUser = shareLink.split('_')[0];
-        const actualQuiz = shareLink.split('_')[1];
+    static getSharedQuiz(shareUser: string, actualQuiz: string, callback: () => void) {
         const reference = ref(database, `sharedQuizzes/${shareUser}/${actualQuiz}`);
         onValue(
             reference,
@@ -197,7 +198,7 @@ export class networkManager {
                         const newQuizObject: quizObject = snap.val();
                         newQuizObject.isShared = false;
                         this.setQuiz(object.key!, newQuizObject, () => {
-                            this.handleCurrentQuiz(object.key!, callback);
+                            callback();
                         });
                         off(reference);
                     });

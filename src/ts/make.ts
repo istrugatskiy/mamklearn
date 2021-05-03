@@ -831,7 +831,9 @@ function editQuizForm() {
 }
 
 function shareQuiz() {
+    $('actuallyShareQuiz').disabled = true;
     networkManager.handleCurrentQuiz(currentQuizEdit.replace('quizID_', ''), (value) => {
+        $('actuallyShareQuiz').disabled = false;
         if (value == null) {
             $('coolTextArea').value = 'An empty quiz cannot be shared!';
             $('actuallyShareQuiz').style.display = 'none';
@@ -855,13 +857,14 @@ function shareQuiz() {
 
 function actuallyShareQuiz() {
     if (!quizObject2[currentQuizEdit].isShared) {
+        $('actuallyShareQuiz').disabled = false;
         $('actuallyShareQuiz').classList.add('btnTransitionA');
     } else {
         $('actuallyShareQuiz').style.display = 'none';
         $('whenActuallyShared').style.display = 'block';
     }
     networkManager.shareQuiz(currentQuizEdit.replace('quizID_', ''), quizObject2[currentQuizEdit], (obj) => {
-        $('coolTextArea').value = `mamklearn.com/?shareQuiz=${networkManager.authInstance.currentUser!.uid}_${obj}`;
+        $('coolTextArea').value = `mamklearn.com/?shareUser=${networkManager.authInstance.currentUser!.uid}&shareQuiz=${obj}`;
         setTimeout(() => {
             $('actuallyShareQuiz').style.display = 'none';
             $('whenActuallyShared').style.display = 'block';

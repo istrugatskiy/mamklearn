@@ -53,9 +53,11 @@ networkManager.onLoginFail = () => {
 const initializeApp = () => {
     $('mainLoader').classList.remove('loader--active');
     initParticles();
-    const data = new URLSearchParams(window.location.search).get('shareQuiz');
-    if (data) {
-        networkManager.getSharedQuiz(data, () => {
+    const search = new URLSearchParams(window.location.search);
+    const data = search.get('shareUser');
+    const otherData = search.get('shareQuiz');
+    if (data && otherData) {
+        networkManager.getSharedQuiz(data, otherData, () => {
             $('errorActual').textContent = 'Quiz Copied';
             $('errorMessageA').style.display = 'block';
             setTimeout(() => {
