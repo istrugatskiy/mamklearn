@@ -341,6 +341,7 @@ function parseActiveQuiz() {
     tempQuiz = JSON.parse(JSON.stringify(quizObject));
     tempQuiz.quizName = $('quizNameUpdate').value;
     tempQuiz.quizID = currentQuizEdit;
+    quizObject2[currentQuizEdit].quizID = currentQuizEdit;
     tempQuiz.isShared = quizObject2[currentQuizEdit].isShared;
     if ($('draggableDiv').firstElementChild) {
         let quizDoc = Array.from($('draggableDiv').children);

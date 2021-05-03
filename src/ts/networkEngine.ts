@@ -182,11 +182,6 @@ export class networkManager {
         onValue(this.currentQuizObject, (snap) => {
             off(this.currentQuizObject);
             callback(snap.val());
-            if (snap.val()) {
-                if (snap.val().isShared) {
-                    console.log(snap.val().quizID.replace('quizID_', ''));
-                }
-            }
         });
     }
 
@@ -198,7 +193,6 @@ export class networkManager {
             reference,
             (snap) => {
                 if (snap.val()) {
-                    console.log(snap.val());
                     push(child(currentUser, 'quizList'), snap.val().quizName).then((object) => {
                         const newQuizObject: quizObject = snap.val();
                         newQuizObject.isShared = false;
@@ -218,7 +212,6 @@ export class networkManager {
     }
 
     static shareQuiz(quizId: string, quizObject: quizObject, callback: (obj: string) => void) {
-        console.log(ref(database, `sharedQuizzes/${this.authInstance.currentUser!.uid}/${quizId}`).toString());
         set(ref(database, `sharedQuizzes/${this.authInstance.currentUser!.uid}/${quizId}`), quizObject).then(() => {
             set(child(child(child(currentUser, 'quizData'), quizId), 'isShared'), true).then(() => {
                 callback(quizId);
