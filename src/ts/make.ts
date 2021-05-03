@@ -104,7 +104,7 @@ let clickListeners = {
         download(`${tempQuiz.quizName}-exported.json`, JSON.stringify(tempQuiz, null, 4));
     },
     actuallyShareQuiz: () => {
-        actuallyShareQuiz();
+        actuallyShareQuiz(false);
     },
 };
 
@@ -839,13 +839,12 @@ function shareQuiz() {
             quizObject2[currentQuizEdit] = value;
             console.log(value);
             if (quizObject2[currentQuizEdit].isShared) {
-                actuallyShareQuiz();
+                actuallyShareQuiz(true);
             }
         }
     });
     checkOnce = false;
     $('manageQuizMenu').style.animation = 'modalPopout 0.3s';
-    $('coolTextArea').value = `mamklearn.com/?shareQuiz=${networkManager.authInstance.currentUser!.uid}_${currentQuizEdit.replace('quizID_', '')}`;
     setTimeout(() => {
         $('manageQuizMenu').style.display = 'none';
         $('shareQuizMenu').style.display = 'block';
@@ -854,16 +853,22 @@ function shareQuiz() {
     }, 300);
 }
 
-function actuallyShareQuiz() {
+function actuallyShareQuiz(caller: boolean) {
     if (!quizObject2[currentQuizEdit].isShared) {
         $('actuallyShareQuiz').classList.add('btnTransitionA');
-        networkManager.shareQuiz(currentQuizEdit.replace('quizID_', ''), quizObject2[currentQuizEdit], () => {
-            setTimeout(() => {
-                $('actuallyShareQuiz').style.display = 'none';
-                $('whenActuallyShared').style.display = 'block';
-                quizObject2[currentQuizEdit].isShared = true;
-            }, 300);
-        });
+        networkManager.shareQuiz(
+            currentQuizEdit.replace('quizID_', ''),
+            quizObject2[currentQuizEdit],
+            (obj) => {
+                $('coolTextArea').value = `mamklearn.com/?shareQuiz=${networkManager.authInstance.currentUser!.uid}_${obj}`;
+                setTimeout(() => {
+                    $('actuallyShareQuiz').style.display = 'none';
+                    $('whenActuallyShared').style.display = 'block';
+                    quizObject2[currentQuizEdit].isShared = true;
+                }, 300);
+            },
+            caller
+        );
     } else {
         $('actuallyShareQuiz').style.display = 'none';
         $('whenActuallyShared').style.display = 'block';

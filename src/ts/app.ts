@@ -60,7 +60,7 @@ const initializeApp = () => {
             $('errorMessageA').style.display = 'block';
             setTimeout(() => {
                 $('errorMessageA').style.display = 'none';
-                window.history.pushState(null, 'mamkLearn', '');
+                window.history.pushState(null, 'mamkLearn', '/');
             }, 1000);
         });
     }
