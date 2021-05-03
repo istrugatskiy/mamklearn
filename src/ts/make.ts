@@ -104,7 +104,7 @@ let clickListeners = {
         download(`${tempQuiz.quizName}-exported.json`, JSON.stringify(tempQuiz, null, 4));
     },
     actuallyShareQuiz: () => {
-        actuallyShareQuiz(false);
+        actuallyShareQuiz();
     },
 };
 
@@ -837,9 +837,8 @@ function shareQuiz() {
             $('whenActuallyShared').style.display = 'block';
         } else {
             quizObject2[currentQuizEdit] = value;
-            console.log(value);
             if (quizObject2[currentQuizEdit].isShared) {
-                actuallyShareQuiz(true);
+                actuallyShareQuiz();
             }
         }
     });
@@ -853,26 +852,21 @@ function shareQuiz() {
     }, 300);
 }
 
-function actuallyShareQuiz(caller: boolean) {
+function actuallyShareQuiz() {
     if (!quizObject2[currentQuizEdit].isShared) {
         $('actuallyShareQuiz').classList.add('btnTransitionA');
-        networkManager.shareQuiz(
-            currentQuizEdit.replace('quizID_', ''),
-            quizObject2[currentQuizEdit],
-            (obj) => {
-                $('coolTextArea').value = `mamklearn.com/?shareQuiz=${networkManager.authInstance.currentUser!.uid}_${obj}`;
-                setTimeout(() => {
-                    $('actuallyShareQuiz').style.display = 'none';
-                    $('whenActuallyShared').style.display = 'block';
-                    quizObject2[currentQuizEdit].isShared = true;
-                }, 300);
-            },
-            caller
-        );
     } else {
         $('actuallyShareQuiz').style.display = 'none';
         $('whenActuallyShared').style.display = 'block';
     }
+    networkManager.shareQuiz(currentQuizEdit.replace('quizID_', ''), quizObject2[currentQuizEdit], (obj) => {
+        $('coolTextArea').value = `mamklearn.com/?shareQuiz=${networkManager.authInstance.currentUser!.uid}_${obj}`;
+        setTimeout(() => {
+            $('actuallyShareQuiz').style.display = 'none';
+            $('whenActuallyShared').style.display = 'block';
+            quizObject2[currentQuizEdit].isShared = true;
+        }, 300);
+    });
 }
 
 function copyShareLink() {

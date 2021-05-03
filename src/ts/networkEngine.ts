@@ -171,7 +171,9 @@ export class networkManager {
     static setQuiz(quizID: string, quizObject: quizObject | null, callback: () => void) {
         set(child(child(currentUser, 'quizData'), quizID), quizObject).then(() => {
             callback();
-            this.shareQuiz(quizID.replace('quizID_', ''), quizObject!, () => {}, true);
+            if (quizObject!.isShared) {
+                this.shareQuiz(quizID.replace('quizID_', ''), quizObject!, () => {});
+            }
         });
     }
 
@@ -182,7 +184,7 @@ export class networkManager {
             callback(snap.val());
             if (snap.val()) {
                 if (snap.val().isShared) {
-                    console.log(snap.val().quizID.replace('quizID_'));
+                    console.log(snap.val().quizID.replace('quizID_', ''));
                 }
             }
         });
@@ -198,7 +200,11 @@ export class networkManager {
                 if (snap.val()) {
                     console.log(snap.val());
                     push(child(currentUser, 'quizList'), snap.val().quizName).then((object) => {
-                        this.handleCurrentQuiz(object.key!, callback);
+                        const newQuizObject: quizObject = snap.val();
+                        newQuizObject.isShared = false;
+                        this.setQuiz(object.key!, newQuizObject, () => {
+                            this.handleCurrentQuiz(object.key!, callback);
+                        });
                         off(reference);
                     });
                 } else {
@@ -211,20 +217,12 @@ export class networkManager {
         );
     }
 
-    static shareQuiz(quizId: string, quizObject: quizObject, callback: (obj: string) => void, hasBeenShared: boolean) {
-        if (!hasBeenShared) {
-            push(ref(database, `sharedQuizzes/${this.authInstance.currentUser!.uid}`), quizObject).then((object) => {
-                set(child(child(child(currentUser, 'quizData'), quizId), 'isShared'), true).then(() => {
-                    callback(object.key!);
-                });
+    static shareQuiz(quizId: string, quizObject: quizObject, callback: (obj: string) => void) {
+        console.log(ref(database, `sharedQuizzes/${this.authInstance.currentUser!.uid}/${quizId}`).toString());
+        set(ref(database, `sharedQuizzes/${this.authInstance.currentUser!.uid}/${quizId}`), quizObject).then(() => {
+            set(child(child(child(currentUser, 'quizData'), quizId), 'isShared'), true).then(() => {
+                callback(quizId);
             });
-        } else {
-            console.log(ref(database, `sharedQuizzes/${this.authInstance.currentUser!.uid}/${quizId}`).toString());
-            set(ref(database, `sharedQuizzes/${this.authInstance.currentUser!.uid}/${quizId}`), quizObject).then(() => {
-                set(child(child(child(currentUser, 'quizData'), quizId), 'isShared'), true).then(() => {
-                    callback(quizId);
-                });
-            });
-        }
+        });
     }
 }
