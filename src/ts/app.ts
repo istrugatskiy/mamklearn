@@ -57,7 +57,7 @@ const initializeApp = () => {
     const search = new URLSearchParams(window.location.search);
     const data = search.get('shareUser');
     const otherData = search.get('shareQuiz');
-    if (data && otherData && networkManager.authInstance) {
+    if (data && otherData && networkManager.authInstance.currentUser) {
         networkManager.getSharedQuiz(data, otherData, () => {
             $('errorActual').textContent = 'Quiz Copied';
             $('errorMessageA').style.display = 'block';
@@ -68,7 +68,7 @@ const initializeApp = () => {
         });
     } else if (data && otherData) {
         prevRejected = true;
-        $('loginInstructionsText').textContent = 'Please login to copy the quiz.';
+        $('loginInstructionsText').textContent = 'Please login with your mamkschools.org account to copy the quiz.';
     }
 };
 
