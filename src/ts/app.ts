@@ -33,6 +33,7 @@ declare global {
 }
 window.customOptionsIncrement = 0;
 window.currentUserConfig = [0, 0, 0, 0, 0];
+let prevRejected = false;
 const customOptions = ['Eyes', 'Nose', 'Mouth', 'Shirt', 'Arms'];
 
 // Creates a console message that rickrolls you
@@ -56,7 +57,7 @@ const initializeApp = () => {
     const search = new URLSearchParams(window.location.search);
     const data = search.get('shareUser');
     const otherData = search.get('shareQuiz');
-    if (data && otherData) {
+    if (data && otherData && networkManager.authInstance) {
         networkManager.getSharedQuiz(data, otherData, () => {
             $('errorActual').textContent = 'Quiz Copied';
             $('errorMessageA').style.display = 'block';
@@ -65,6 +66,9 @@ const initializeApp = () => {
                 window.history.pushState(null, 'mamkLearn', '/');
             }, 1000);
         });
+    } else if (data && otherData) {
+        prevRejected = true;
+        $('loginInstructionsText').textContent = 'Please login to copy the quiz.';
     }
 };
 
@@ -117,6 +121,19 @@ const login = () => {
 };
 
 function completeLoginFlow() {
+    if (prevRejected) {
+        const search = new URLSearchParams(window.location.search);
+        const data = search.get('shareUser');
+        const otherData = search.get('shareQuiz');
+        networkManager.getSharedQuiz(data!, otherData!, () => {
+            $('errorActual').textContent = 'Quiz Copied';
+            $('errorMessageA').style.display = 'block';
+            setTimeout(() => {
+                $('errorMessageA').style.display = 'none';
+                window.history.pushState(null, 'mamkLearn', '/');
+            }, 1000);
+        });
+    }
     $('title').classList.add('handleOutTransition');
     setTimeout(() => {
         $('title').classList.remove('handleOutTransition');

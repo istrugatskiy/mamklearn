@@ -874,7 +874,7 @@ function actuallyShareQuiz() {
 }
 
 function copyShareLink() {
-    navigator.clipboard.writeText($('coolTextArea').textContent!);
+    navigator.clipboard.writeText($('coolTextArea').value!);
     $('errorActual').textContent = 'Link Copied';
     $('errorMessageA').style.display = 'block';
     setTimeout(() => {
