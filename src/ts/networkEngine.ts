@@ -1,7 +1,6 @@
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, Reference, child, onValue, set, off, push, remove } from 'firebase/database';
-import { getPerformance } from 'firebase/performance';
 import { setCharImage } from './app';
 import { throwExcept } from './utils';
 import { $ } from './utils';
@@ -41,7 +40,6 @@ const auth = getAuth(firebaseApp);
 let provider = new GoogleAuthProvider();
 auth.useDeviceLanguage();
 const database = getDatabase();
-getPerformance();
 let charConfig: Reference;
 let currentUser: Reference;
 let quizList: Reference;
