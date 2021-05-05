@@ -51,6 +51,16 @@ networkManager.onLoginFail = () => {
     error.textContent = "Please use an account that ends in 'mamkschools.org' or 'student.mamkschools.org'";
 };
 
+const onShareQuiz = () => {
+    $('errorActual').textContent = 'Quiz Copied';
+    $('errorMessageA').style.display = 'block';
+    setTimeout(() => {
+        makeCode();
+        $('errorMessageA').style.display = 'none';
+        window.history.pushState(null, 'mamkLearn', '/');
+    }, 1000);
+};
+
 const initializeApp = () => {
     $('mainLoader').classList.remove('loader--active');
     initParticles();
@@ -58,14 +68,7 @@ const initializeApp = () => {
     const data = search.get('shareUser');
     const otherData = search.get('shareQuiz');
     if (data && otherData && networkManager.authInstance.currentUser) {
-        networkManager.getSharedQuiz(data, otherData, () => {
-            $('errorActual').textContent = 'Quiz Copied';
-            $('errorMessageA').style.display = 'block';
-            setTimeout(() => {
-                $('errorMessageA').style.display = 'none';
-                window.history.pushState(null, 'mamkLearn', '/');
-            }, 1000);
-        });
+        networkManager.getSharedQuiz(data, otherData, onShareQuiz);
     } else if (data && otherData) {
         prevRejected = true;
         $('loginInstructionsText').textContent = 'Please login with your mamkschools.org account to copy the quiz.';
@@ -121,21 +124,14 @@ const login = () => {
 };
 
 function completeLoginFlow() {
-    if (prevRejected) {
-        const search = new URLSearchParams(window.location.search);
-        const data = search.get('shareUser');
-        const otherData = search.get('shareQuiz');
-        networkManager.getSharedQuiz(data!, otherData!, () => {
-            $('errorActual').textContent = 'Quiz Copied';
-            $('errorMessageA').style.display = 'block';
-            setTimeout(() => {
-                $('errorMessageA').style.display = 'none';
-                window.history.pushState(null, 'mamkLearn', '/');
-            }, 1000);
-        });
-    }
     $('title').classList.add('handleOutTransition');
     setTimeout(() => {
+        if (prevRejected) {
+            const search = new URLSearchParams(window.location.search);
+            const data = search.get('shareUser');
+            const otherData = search.get('shareQuiz');
+            networkManager.getSharedQuiz(data!, otherData!, onShareQuiz);
+        }
         $('title').classList.remove('handleOutTransition');
         setTitle('homeScreen');
         $('title').style.top = '15%';
