@@ -24,7 +24,6 @@ Then run
 ```
 git clone https://github.com/istrugatskiy/mamklearn.git
 ```
-Then install node from their site.
 Then in the installed directory run:
 ```
 npm install
