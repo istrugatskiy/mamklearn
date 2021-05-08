@@ -10,16 +10,35 @@ export const initGame = functions.https.onCall(async (data, context) => {
         if (snap.val() === true) {
             return {
                 message: 'You are already in a game.',
+                code: 400,
             };
         } else {
+            // This works on the basis of a namespace like so, 12345/123
+            // The system only listens to children of 12345/123
+            // This decreases performance strain on firebase as well as decreasing the chance of collisions
+            const returnValue = await admin
+                .database()
+                .ref(`currentGames/${Math.round(Math.random() * 99999)}`)
+                .transaction((currentValue) => {
+                    const list = Object.keys(currentValue);
+                    let list2 = new Array();
+                    for (let i = 0; i < 999; i++) {
+                        if (!list.includes(`${i}`)) {
+                            list2.push(i);
+                        }
+                    }
+                    const rand = list2[Math.floor(Math.random() * list2.length)];
+                    currentValue[rand] = `actualGames/${context.auth!.uid}/`;
+                    return currentValue;
+                });
             return {
-                message: 2763,
+                message: returnValue,
             };
         }
     } else {
         return {
             message: 'nice try lol',
-            code: '401',
+            code: 401,
         };
     }
 });
