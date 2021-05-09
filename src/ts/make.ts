@@ -618,14 +618,15 @@ function playQuiz() {
     });
     exitModalPopupTemplate('manageQuizMenu');
     $('title').style.display = 'none';
-    setTimeout(() => {
+    networkManager.startGame((value) => {
+        $('gameCodeTeacher').textContent = `Game Code: ${value.message}`;
         $('title').style.display = 'none';
         mainAudio.play('mainTheme', true);
         for (let index = 0; index < 9; index++) {
             renderPlayer();
         }
         $('teacherPlayScreen').style.display = 'block';
-    }, 1000);
+    });
 }
 
 function renderPlayer() {

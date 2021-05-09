@@ -23,6 +23,7 @@ module.exports = {
                 options: {
                     appendTsSuffixTo: [/\.vue$/],
                 },
+                exclude: /functions/
             },
         ],
     },

@@ -1,6 +1,7 @@
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, Reference, child, onValue, set, off, push, remove } from 'firebase/database';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 import { setCharImage } from './app';
 import { throwExcept } from './utils';
 import { $ } from './utils';
@@ -21,6 +22,10 @@ interface quizObject {
     isShared: boolean;
     questionObjects: questionObject[];
 }
+interface functionObject {
+    message: string | number;
+    code: number;
+}
 
 // Configuration for firebase
 const firebaseConfig = {
@@ -40,6 +45,8 @@ const auth = getAuth(firebaseApp);
 let provider = new GoogleAuthProvider();
 auth.useDeviceLanguage();
 const database = getDatabase();
+const functions = getFunctions();
+const initGame = httpsCallable(functions, 'initGame');
 let charConfig: Reference;
 let currentUser: Reference;
 let quizList: Reference;
@@ -79,7 +86,7 @@ const monitorUserState = () => {
                     }
                 } else {
                     for (let index = 0; index < 5; index++) {
-                        set(child(charConfig, `${index}`), 0);
+                        set(child(charConfig, index.toString()), 0);
                     }
                 }
             }
@@ -114,7 +121,7 @@ export class networkManager {
 
     static setCharImage(newChar: number[]) {
         for (let index = 0; index < 5; index++) {
-            set(child(charConfig, `${index}`), newChar[index]);
+            set(child(charConfig, index.toString()), newChar[index]);
         }
     }
 
@@ -125,12 +132,12 @@ export class networkManager {
                     callback();
                 });
             } else {
-                set(child(quizList, `${changedQuizId}`), changedQuiz).then(() => {
+                set(child(quizList, changedQuizId.toString()), changedQuiz).then(() => {
                     callback();
                 });
             }
         } else {
-            remove(child(quizList, `${changedQuizId}`));
+            remove(child(quizList, changedQuizId.toString()));
         }
     }
 
@@ -216,5 +223,20 @@ export class networkManager {
                 callback(quizId);
             });
         });
+    }
+
+    static startGame(callback: (value: functionObject) => void) {
+        initGame()
+            .then((value) => {
+                const val = value.data as functionObject;
+                if (val.code == 200) {
+                    callback(val);
+                } else {
+                    throwExcept(`@StartGame: ${val.code}: ${val.message}`);
+                }
+            })
+            .catch((error) => {
+                throwExcept(`@StartGame: ${error}`);
+            });
     }
 }
