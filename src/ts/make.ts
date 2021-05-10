@@ -619,7 +619,7 @@ function playQuiz() {
     exitModalPopupTemplate('manageQuizMenu');
     $('title').style.display = 'none';
     networkManager.startGame((value) => {
-        $('gameCodeTeacher').textContent = `Game Code: ${value.message}`;
+        $('gameCodeTeacher').textContent = `Game Code: ${value.message.toString().slice(0, 5)}-${value.message.toString().slice(5)}`;
         $('title').style.display = 'none';
         mainAudio.play('mainTheme', true);
         for (let index = 0; index < 9; index++) {
