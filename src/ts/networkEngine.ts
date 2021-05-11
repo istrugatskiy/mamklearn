@@ -96,6 +96,12 @@ const monitorUserState = () => {
             errorHasBeenThrown = true;
         }
     );
+    onValue(child(currentUser, 'currentGameState/'), (snap) => {
+        if (snap.val() && snap.val().isInGame) {
+            $('title').style.display = 'none';
+            $('rejoinGame').style.display = 'block';
+        }
+    });
 };
 
 export class networkManager {

@@ -110,7 +110,7 @@ let clickListeners = {
 
 let clickIncludesListeners = {
     collapseSubArea: (event: Event) => {
-        collapseSubArea((getID(event) as unknown) as number);
+        collapseSubArea(getID(event) as unknown as number);
     },
     deleteQuestion: (event: Event) => {
         deleteQuestion(getID(event));
@@ -610,7 +610,7 @@ const exitModalPopupTemplate = (popupToKill: string, special?: string) => {
     }
 };
 
-function playQuiz() {
+export function playQuiz() {
     mainAudio = new AudioManager({
         mainTheme: 'data/MainTheme.mp3',
         playTheme: 'data/MusicOfTheShavedBears.mp3',

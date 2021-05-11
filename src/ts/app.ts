@@ -108,6 +108,14 @@ window.clickEvents = {
         event.preventDefault();
         userClick('tos.html');
     },
+    rejoinGameConfirm: () => {
+        makeCode(true);
+        $('rejoinGame').classList.add('handleOutTransition');
+        setTimeout(() => {
+            $('rejoinGame').style.display = 'none';
+            $('rejoinGame').classList.remove('handleOutTransition');
+        }, 300);
+    },
 };
 
 // These are the events that include the text in the elements id.
@@ -151,13 +159,16 @@ function userClick(link: string, disableObject?: string) {
 }
 
 // make and play on button click functions here!
-function makeCode() {
+function makeCode(isInGame: boolean | Event = false) {
     $('makebtn').disabled = true;
     $('btn2').disabled = true;
     clearChildren('makebtn');
     createTemplate('svgLoader', 'makebtn');
     loadChonk('make', (obj) => {
         obj.initEvents();
+        if (isInGame === true) {
+            obj.playQuiz();
+        }
         networkManager.initQuizList(() => {
             $('title').classList.add('handleOutTransition');
             setTimeout(() => {

@@ -590,6 +590,10 @@ ul {
 	min-height: 20%;
 	word-break: break-word;
 }
+.modal-popup {
+	position: absolute;
+	display: none;
+}
 @media screen and (max-width: 60em) {
 	.studentAnswersFlex {
 		flex-flow: column;
@@ -952,4 +956,26 @@ ul {
 }
 .initTitle {
 	margin-bottom: 0;
+}
+#shouldRejoin {
+	left: 50%;
+	position: absolute;
+	text-align: center;
+	animation: modalPopin 0.5s;
+	animation-timing-function: cubic-bezier(0.280, 0.840, 0.420, 1);
+	height: 100%;
+	top: 15%;
+	transform: translate(-50%, -15%);
+	font-size: xx-large;
+	display: none;
+}
+@keyframes modalPopin {
+	from {
+		transform: translate(-50%, 100%);
+		opacity: 0;
+	}
+	to {
+		transform: translate(-50%, -15%);
+		opacity: 1;
+	}
 }
