@@ -4,10 +4,12 @@ import * as admin from 'firebase-admin';
 admin.initializeApp();
 
 // Handles game initialization for teacher play screen
-export const initGame = functions.https.onCall(async (data, context) => {
+export const initGame = functions.runWith({ maxInstances: 3 }).https.onCall(async (data, context) => {
     if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
         const user = admin.database().ref(`userProfiles/${context.auth.token.uid}/`);
         const gameState = user.child('currentGameState/isInGame/');
+        const isTeacher = user.child('currentGameState/isTeacher/');
+        const gameCode = user.child('currentGameState/code');
         const snap = await gameState.once('value');
         if (snap.val() === true) {
             return {
@@ -20,7 +22,9 @@ export const initGame = functions.https.onCall(async (data, context) => {
             // This decreases performance strain on firebase as well as decreasing the chance of collisions
             let failSafeCheck = false;
             let returnValue: string = '';
-            const firstRand = Math.round(Math.random() * 99999);
+            const firstRand = Math.round(Math.random() * 99999)
+                .toString()
+                .padStart(5, '0');
             await admin
                 .database()
                 .ref(`currentGames/${firstRand}`)
@@ -30,7 +34,7 @@ export const initGame = functions.https.onCall(async (data, context) => {
                         let list2 = new Array();
                         for (let i = 0; i < 999; i++) {
                             if (!list.includes(i.toString())) {
-                                list2.push(i);
+                                list2.push(i.toString().padStart(3, '0'));
                             }
                         }
                         if (list2.length == 0) {
@@ -40,7 +44,7 @@ export const initGame = functions.https.onCall(async (data, context) => {
                             failSafeCheck = false;
                         }
                         const rand = list2[Math.floor(Math.random() * list2.length)];
-                        returnValue = firstRand + rand;
+                        returnValue = firstRand.toString() + rand;
                         currentValue[rand] = `actualGames/${context.auth!.uid}/`;
                     } else {
                         currentValue = {};
@@ -52,6 +56,8 @@ export const initGame = functions.https.onCall(async (data, context) => {
                 });
             if (!failSafeCheck) {
                 await gameState.set(true);
+                await isTeacher.set(true);
+                await gameCode.set(returnValue);
                 return {
                     message: returnValue,
                     code: 200,
