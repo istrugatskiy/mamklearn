@@ -107,7 +107,7 @@
         <div class="modal-popup" id="modal-popupA">
             <div id="modal-bg" style="position: fixed; display: none; min-width: 100%; min-height: 100%; text-align: center"></div>
             <div id="createQuizMenu">
-                <h1 style="font-family: 'Chelsea Market', cursive; color: white">Quiz Name:</h1>
+                <h1 class="h1Header">Quiz Name:</h1>
                 <form id="quizCreateForm" name="quizCreateForm">
                     <input autocomplete="off" class="titleTransitionBack formInput button" id="QuizName" maxlength="15" name="QuizName" placeholder="Quiz Name" required="" title="Quiz Name" type="text" /><br />
                     <br />
@@ -123,7 +123,7 @@
                 </div>
             </div>
             <div id="manageQuizMenu">
-                <h1 id="quizNameTitleA" style="font-family: 'Chelsea Market', cursive; color: white; word-break: break-all"></h1>
+                <h1 id="quizNameTitleA" style="word-break: break-all" class="h1Header"></h1>
                 <button class="button titleTransitionBack" id="playQuiz" style="min-width: 400px">Play</button>
                 <br />
                 <br />
@@ -143,14 +143,14 @@
                 </div>
             </div>
             <div id="quizDeleteConfirm" style="display: none">
-                <h1 id="quizNameTitleB" style="font-family: 'Chelsea Market', cursive; color: white">Delete Quiz?</h1>
-                <p style="font-size: x-large; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: white">The following action cannot be undone!</p>
+                <h1 id="quizNameTitleB" class="h1Header">Delete Quiz?</h1>
+                <p class="p1Header">The following action cannot be undone!</p>
                 <button class="button titleTransitionBack" id="deleteQuizConfirm" style="min-width: 400px; background-color: orange">Delete</button><br />
                 <br />
                 <button class="button titleTransitionBack" id="backButtonDeleteConfirm">Back</button>
             </div>
             <div id="editQuizMenu" style="display: none">
-                <h1 style="font-family: 'Chelsea Market', cursive; color: white">Quiz Name:</h1>
+                <h1 class="h1Header">Quiz Name:</h1>
                 <form id="editQuizForm" name="editQuizForm">
                     <input autocomplete="off" class="titleTransitionBack formInput button" id="quizNameUpdate" maxlength="15" name="QuizNameUpdate" placeholder="Quiz Name" required="" title="Quiz Name" type="text" />
                     <div id="draggableDiv" style="margin-top: 110px"></div>
@@ -164,7 +164,7 @@
             </div>
             <div id="shareQuizMenu" style="display: none">
                 <h1 style="font-family: 'Chelsea Market', cursive; color: white">Shareable Link:</h1>
-                <p style="font-size: x-large; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: white">
+                <p class="p1Header">
                     This link will create a copy of this quiz.<br />
                     Note: the link cannot be revoked!
                 </p>
@@ -188,8 +188,8 @@
         <div class="modal-popup" style="display: none; min-width: 100%; min-height: 100%" id="rejoinGame">
             <div id="modal-bg2" style="position: fixed; min-width: 100%; min-height: 100%; text-align: center"></div>
             <div id="shouldRejoin" style="display: block">
-                <h1 style="font-family: 'Chelsea Market', cursive; color: white" class="titleTransitionBack">Rejoin Quiz?</h1>
-                <p style="font-size: x-large; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: white" class="titleTransitionBack">You were previously part of a game do you want to rejoin it?</p>
+                <h1 class="titleTransitionBack h1Header" id="rejoinQuizHeader">Rejoin Quiz?</h1>
+                <p class="titleTransitionBack p1Header">You were previously part of a game do you want to rejoin it?</p>
                 <button class="button titleTransitionBack" id="rejoinGameConfirm" style="min-width: 400px">Rejoin</button><br />
                 <br />
                 <button class="button titleTransitionBack" id="quitGameConfirm">Leave</button>
@@ -326,7 +326,7 @@
         <p class="notifyTop" id="gameFinishNotify">The game will end in ${seconds}s</p>
         <template id="templateQuestion">
             <div style="margin-top: -50px; position: relative" class="draggable titleTransitionBack" id="draggableQuestion${highestQuestion}">
-                <h3 style="font-family: 'Chelsea Market', cursive; color: white; text-align: left">
+                <h3 style="text-align: left" class="h1Header">
                     <span class="draggableActual">
                         <svg class="draggableActual" xmlns="http://www.w3.org/2000/svg" height="24" style="transform: scale(2)" viewbox="0 0 24 24" width="24">
                             <path class="draggableActual" d="M0 0h24v24H0V0z" fill="none" />

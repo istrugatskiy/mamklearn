@@ -29,6 +29,7 @@ declare global {
         anotherTestCase2: string;
         anotherTestCase3: string;
         anotherTestCase4: string;
+        currentGameState: { isInGame: boolean; code: number; isTeacher: boolean };
     }
 }
 window.customOptionsIncrement = 0;

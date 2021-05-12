@@ -25,6 +25,15 @@
 	transition: all 0.1s;
 	box-shadow: none;
 }
+.h1Header {
+	font-family: 'Chelsea Market', cursive;
+	color: white;
+}
+.p1Header {
+	font-size: x-large; 
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+	color: white;
+}
 .labelForCheck:focus:focus:not(:focus-visible), .weirdButton2:focus:focus:not(:focus-visible), .middle2:focus:focus:not(:focus-visible) {
 	transition: all 0.1s;
 	box-shadow: none;
@@ -190,7 +199,8 @@ ul {
 .btnTransitionA, .handleOutTransition button, .handleOutTransition a, 
 .handleOutTransition #charCustomize, .handleOutTransition input,
 .handleOutTransition .bottomBar, .handleOutTransition .pleaseLogin,
-.handleOutTransition #loginError1, .handleOutTransition .animateOnTransition {
+.handleOutTransition #loginError1, .handleOutTransition .animateOnTransition,
+.handleOutTransition .p1Header {
 	transition: all 0.3s ease-out;
 	transform: scale(0);
 	visibility: hidden;

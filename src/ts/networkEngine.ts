@@ -239,18 +239,26 @@ export class networkManager {
     }
 
     static startGame(callback: (value: functionObject) => void) {
-        initGame()
-            .then((value) => {
-                const val = value.data as functionObject;
-                if (val.code == 200 || val.code == 300) {
-                    callback(val);
-                    alreadyInGame = true;
-                } else {
-                    throwExcept(`@StartGame: ${val.code}: ${val.message}`);
-                }
-            })
-            .catch((error) => {
-                throwExcept(`@StartGame: ${error}`);
+        if (!window.currentGameState) {
+            initGame()
+                .then((value) => {
+                    const val = value.data as functionObject;
+                    if (val.code == 200 || val.code == 300) {
+                        callback(val);
+                        alreadyInGame = true;
+                    } else {
+                        throwExcept(`@StartGame: ${val.code}: ${val.message}`);
+                    }
+                })
+                .catch((error) => {
+                    throwExcept(`@StartGame: ${error}`);
+                });
+        } else {
+            alreadyInGame = true;
+            callback({
+                code: 300,
+                message: window.currentGameState.code,
             });
+        }
     }
 }
