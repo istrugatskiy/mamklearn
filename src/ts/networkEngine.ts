@@ -53,6 +53,7 @@ let quizList: Reference;
 let newValue: { [key: string]: string } = {};
 let errorHasBeenThrown = false;
 let hasInitialized = false;
+let alreadyInGame = false;
 
 const listener = onAuthStateChanged(auth, (user) => {
     if (!hasInitialized) {
@@ -97,9 +98,15 @@ const monitorUserState = () => {
         }
     );
     onValue(child(currentUser, 'currentGameState/'), (snap) => {
-        if (snap.val() && snap.val().isInGame) {
-            $('title').style.display = 'none';
-            $('rejoinGame').style.display = 'block';
+        if (!alreadyInGame) {
+            if (snap.val() && snap.val().isInGame) {
+                $('title').style.display = 'none';
+                $('rejoinGame').style.display = 'block';
+            } else {
+                $('title').style.display = 'block';
+                $('rejoinGame').style.display = 'none';
+            }
+        } else {
         }
     });
 };
@@ -235,8 +242,9 @@ export class networkManager {
         initGame()
             .then((value) => {
                 const val = value.data as functionObject;
-                if (val.code == 200) {
+                if (val.code == 200 || val.code == 300) {
                     callback(val);
+                    alreadyInGame = true;
                 } else {
                     throwExcept(`@StartGame: ${val.code}: ${val.message}`);
                 }

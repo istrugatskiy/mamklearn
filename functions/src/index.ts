@@ -12,9 +12,10 @@ export const initGame = functions.runWith({ maxInstances: 3 }).https.onCall(asyn
         const gameCode = user.child('currentGameState/code');
         const snap = await gameState.once('value');
         if (snap.val() === true) {
+            const code = await gameCode.once('value');
             return {
-                message: 'You are already in a game (try reloading the page, your client may have fallen out of sync with the server).',
-                code: 400,
+                message: code.val(),
+                code: 300,
             };
         } else {
             // This works on the basis of a namespace like so, 12345/123
