@@ -622,13 +622,11 @@ export function playQuiz() {
         $('gameCodeTeacher').textContent = `Game Code: ${value.message.toString().slice(0, 5)}-${value.message.toString().slice(5)}`;
         $('title').style.display = 'none';
         mainAudio.play('mainTheme', true);
-        for (let index = 0; index < 9; index++) {
-            renderPlayer();
-        }
         $('teacherPlayScreen').style.display = 'block';
     });
 }
 
+// @ts-ignore
 function renderPlayer() {
     playerNumber++;
     mainAudio.setVolume('mainTheme', mathClamp(0.6 + (playerNumber / 5) * 0.1, 0.6, 1), true);

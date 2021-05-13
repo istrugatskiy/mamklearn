@@ -98,6 +98,7 @@ const monitorUserState = () => {
         }
     );
     onValue(child(currentUser, 'currentGameState/'), (snap) => {
+        window.currentGameState = snap.val();
         if (!alreadyInGame) {
             if (snap.val() && snap.val().isInGame) {
                 $('title').style.display = 'none';
