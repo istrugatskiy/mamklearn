@@ -132,7 +132,7 @@ export const setCaretPosition = (element: HTMLElement, offset: number) => {
 
         //calc offset in current node
         if (previousNode != null) {
-            offset -= ((previousNode as unknown) as NodeListOf<ChildNode>).length;
+            offset -= (previousNode as unknown as NodeListOf<ChildNode>).length;
         }
         //check whether current node has enough length
         if (offset <= (currentNode as unknown as NodeListOf<ChildNode>).length) {
@@ -168,6 +168,8 @@ export const loadChonk = (chonkToLoad: string, callback: (returnedObject: any) =
             callback(obj);
         })
         .catch((error) => {
+            const err = error as TypeError;
+            console.log(err.stack);
             errorCount++;
             if (errorCount < 15) {
                 setTimeout(() => {
@@ -270,4 +272,4 @@ export const download = (filename: string, text: string) => {
     } else {
         pom.click();
     }
-}
+};

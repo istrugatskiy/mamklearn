@@ -105,6 +105,12 @@ export const leaveGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
                     .ref(`currentGames/${snap.val().code.slice(0, 5)}/${snap.val().code.slice(5)}`)
                     .set(null);
                 await admin.database().ref(`actualGames/${context.auth!.uid}/`).set(null);
+            } else {
+                const location = await admin
+                    .database()
+                    .ref(`currentGames/${snap.val().code.slice(0, 5)}/${snap.val().code.slice(5)}`)
+                    .once('value');
+                await admin.database().ref(`${location}players/${context.auth!.uid}`).set(null);
             }
             await admin.database().ref(`userProfiles/${context.auth!.uid}/currentGameState/`).set(null);
         } else {

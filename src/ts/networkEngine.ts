@@ -47,6 +47,7 @@ auth.useDeviceLanguage();
 const database = getDatabase();
 const functions = getFunctions();
 const initGame = httpsCallable(functions, 'initGame');
+const leaveGame = httpsCallable(functions, 'leaveGame');
 let charConfig: Reference;
 let currentUser: Reference;
 let quizList: Reference;
@@ -107,7 +108,6 @@ const monitorUserState = () => {
                 $('title').style.display = 'block';
                 $('rejoinGame').style.display = 'none';
             }
-        } else {
         }
     });
 };
@@ -239,14 +239,14 @@ export class networkManager {
         });
     }
 
-    static startGame(callback: (value: functionObject) => void) {
+    static startGame(callback: (value: functionObject) => void, data: string) {
         if (!window.currentGameState) {
-            initGame()
+            alreadyInGame = true;
+            initGame(data)
                 .then((value) => {
                     const val = value.data as functionObject;
                     if (val.code == 200 || val.code == 300) {
                         callback(val);
-                        alreadyInGame = true;
                     } else {
                         throwExcept(`@StartGame: ${val.code}: ${val.message}`);
                     }
@@ -261,5 +261,16 @@ export class networkManager {
                 message: window.currentGameState.code,
             });
         }
+    }
+
+    static leaveGame(callback: () => void) {
+        leaveGame().then((value) => {
+            const val = value.data as functionObject;
+            if (val.code == 200) {
+                callback();
+            } else {
+                throwExcept(`@LeaveGame: ${val.code}: ${val.message}`);
+            }
+        });
     }
 }

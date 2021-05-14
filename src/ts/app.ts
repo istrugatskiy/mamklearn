@@ -117,6 +117,20 @@ window.clickEvents = {
             $('rejoinGame').classList.remove('handleOutTransition');
         }, 300);
     },
+    quitGameConfirm: () => {
+        $('quitGameConfirm').disabled = true;
+        $('rejoinGameConfirm').disabled = true;
+        networkManager.leaveGame(() => {
+            $('rejoinGame').classList.add('handleOutTransition');
+            setTimeout(() => {
+                $('quitGameConfirm').disabled = false;
+                $('rejoinGameConfirm').disabled = false;
+                $('title').style.display = 'block';
+                $('rejoinGame').style.display = 'none';
+                $('rejoinGame').classList.remove('handleOutTransition');
+            }, 300);
+        });
+    },
 };
 
 // These are the events that include the text in the elements id.
