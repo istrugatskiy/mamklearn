@@ -525,6 +525,21 @@ export function addQuiz() {
     }
 }
 
+networkManager.quitQuizTeacher = () => {
+    $('errorActual').textContent = 'Game Has Ended';
+    $('errorMessageA').style.display = 'block';
+    setTimeout(() => {
+        $('loader-1').style.display = 'none';
+        $('errorMessageA').style.display = 'none';
+    }, 1000);
+    $('teacherPlayScreen').style.display = 'none';
+    $('teacherCountdown').style.display = 'none';
+    mainAudio.clearAll();
+    $('liveLeaderboards').style.display = 'none';
+    $('title').style.display = 'block';
+    goBackMakeA();
+};
+
 function quizButtonOnClick(event: Event) {
     const eventTarget = (event.target! as HTMLElement).id;
     if (checkOnce) {
@@ -538,17 +553,21 @@ function quizButtonOnClick(event: Event) {
         document.querySelector('.createButtonA')!.classList.add('btnTransitionA');
         document.querySelector('.backButtonC')!.disabled = true;
         document.querySelector('.backButtonC')!.classList.add('btnTransitionA');
-        $('submitQuizID').textContent = 'Create';
-        $('modal-bg').style.animation = 'fadeIn 0.5s';
-        $('modal-bg').style.display = 'block';
-        $('quizNameTitleA').textContent = quizList[eventTarget] + ':';
-        $('homeText2').classList.add('btnTransitionA');
-        $('manageQuizMenu').style.animation = 'modalPopin 0.3s';
-        $('manageQuizMenu').style.display = 'block';
-        $('createQuizMenu').style.display = 'none';
-        $('modal-popupA').style.display = 'block';
-        $('modal-popupA').classList.add('modal-popupActive');
         currentQuizEdit = eventTarget;
+        networkManager.handleCurrentQuiz(currentQuizEdit.replace('quizID_', ''), (val) => {
+            $('playQuiz').disabled = val === null;
+            $('shareQuiz').disabled = val === null;
+            $('submitQuizID').textContent = 'Create';
+            $('modal-bg').style.animation = 'fadeIn 0.5s';
+            $('modal-bg').style.display = 'block';
+            $('quizNameTitleA').textContent = quizList[eventTarget] + ':';
+            $('homeText2').classList.add('btnTransitionA');
+            $('manageQuizMenu').style.animation = 'modalPopin 0.3s';
+            $('manageQuizMenu').style.display = 'block';
+            $('createQuizMenu').style.display = 'none';
+            $('modal-popupA').style.display = 'block';
+            $('modal-popupA').classList.add('modal-popupActive');
+        });
         if (Object.keys(quizList).length > 0) {
             for (let key in quizList) {
                 if (quizList[key]) {

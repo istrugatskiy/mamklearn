@@ -120,16 +120,7 @@ window.clickEvents = {
     quitGameConfirm: () => {
         $('quitGameConfirm').disabled = true;
         $('rejoinGameConfirm').disabled = true;
-        networkManager.leaveGame(() => {
-            $('rejoinGame').classList.add('handleOutTransition');
-            setTimeout(() => {
-                $('quitGameConfirm').disabled = false;
-                $('rejoinGameConfirm').disabled = false;
-                $('title').style.display = 'block';
-                $('rejoinGame').style.display = 'none';
-                $('rejoinGame').classList.remove('handleOutTransition');
-            }, 300);
-        });
+        networkManager.leaveGame(() => {});
     },
 };
 
@@ -215,23 +206,17 @@ function JoinGame() {
     $('playMenuBack').classList.add('disabled');
     clearChildren('submitID');
     createTemplate('svgLoader', 'submitID');
-    if ($('gameID').value == '2794') {
-        loadChonk('play', (obj) => {
-            $('mainLoader').classList.add('loader--active');
-            obj.initEvents();
-            setTimeout(() => {
-                $('loader-1').style.display = 'none';
-                $('gameStartScreenStudent').style.display = 'block';
+    networkManager.joinGameStudent($('gameID').value, (exists) => {
+        if (exists) {
+            loadChonk('play', (obj) => {
+                $('mainLoader').classList.add('loader--active');
+                obj.initEvents();
                 setTimeout(() => {
-                    $('mainLoader').classList.remove('loader--active');
+                    $('loader-1').style.display = 'none';
+                    $('gameStartScreenStudent').style.display = 'block';
                 }, 1000);
-            }, 1000);
-            setTimeout(() => {
-                window.studentGameProcessor(window.quizStartTestCase);
-            }, 2000);
-        });
-    } else {
-        setTimeout(() => {
+            });
+        } else {
             $('errorActual').textContent = 'Invalid ID';
             $('gameID').disabled = false;
             $('submitID').disabled = false;
@@ -241,8 +226,8 @@ function JoinGame() {
                 $('errorMessageA').style.display = 'none';
             }, 1000);
             $('submitID').textContent = 'Join';
-        }, 1000);
-    }
+        }
+    });
 }
 
 export function goBack() {

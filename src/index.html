@@ -492,7 +492,7 @@
         <template id="playMenu">
             <h1 class="titleTransitionBack" id="codeText">Game Code:</h1>
             <form id="joinQuizForm" name="joinQuizForm">
-                <input autocomplete="off" class="titleTransitionBack formInput button" id="gameID" maxlength="9" name="gameID" pattern="^[0-9]*$" placeholder="Game Code" required="" title="valid game ID" type="text" />
+                <input autocomplete="off" class="titleTransitionBack formInput button" id="gameID" minlength="9" maxlength="9" name="gameID" pattern="^[0-9-]*$" placeholder="Game Code" required="" title="valid game ID" type="text" />
                 <br />
                 <br />
                 <button class="button titleTransitionBack" id="submitID" type="submit">Join</button>

@@ -1,6 +1,6 @@
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, Reference, child, onValue, set, off, push, remove } from 'firebase/database';
+import { getDatabase, ref, Reference, child, onValue, set, push, remove } from 'firebase/database';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { setCharImage } from './app';
 import { throwExcept } from './utils';
@@ -102,12 +102,23 @@ const monitorUserState = () => {
         window.currentGameState = snap.val();
         if (!alreadyInGame) {
             if (snap.val() && snap.val().isInGame) {
-                $('title').style.display = 'none';
-                $('rejoinGame').style.display = 'block';
+                if ($('modal-bg').style.display !== 'block') {
+                    $('title').style.display = 'none';
+                    $('rejoinGame').style.display = 'block';
+                }
             } else {
-                $('title').style.display = 'block';
-                $('rejoinGame').style.display = 'none';
+                $('rejoinGame').classList.add('handleOutTransition');
+                setTimeout(() => {
+                    $('quitGameConfirm').disabled = false;
+                    $('rejoinGameConfirm').disabled = false;
+                    $('title').style.display = 'block';
+                    $('rejoinGame').style.display = 'none';
+                    $('rejoinGame').classList.remove('handleOutTransition');
+                }, 300);
             }
+        } else if (!snap.val()) {
+            alreadyInGame = false;
+            networkManager.quitQuizTeacher ? networkManager.quitQuizTeacher() : null;
         }
     });
 };
@@ -117,6 +128,7 @@ export class networkManager {
     static onLoginFail: () => void;
     static onInit: () => void;
     static onReady: () => void;
+    static quitQuizTeacher: () => void;
     static _setClientQuizList: (quizList: { [key: string]: string }) => void;
     private static currentQuizObject: Reference;
     static authInstance = getAuth();
@@ -201,15 +213,15 @@ export class networkManager {
 
     static handleCurrentQuiz(quizID: string, callback: (value: any) => void) {
         this.currentQuizObject = child(child(currentUser, 'quizData'), quizID);
-        onValue(this.currentQuizObject, (snap) => {
-            off(this.currentQuizObject);
+        const unsub = onValue(this.currentQuizObject, (snap) => {
             callback(snap.val());
+            unsub();
         });
     }
 
     static getSharedQuiz(shareUser: string, actualQuiz: string, callback: () => void) {
         const reference = ref(database, `sharedQuizzes/${shareUser}/${actualQuiz}`);
-        onValue(
+        const unsub = onValue(
             reference,
             (snap) => {
                 if (snap.val()) {
@@ -219,7 +231,7 @@ export class networkManager {
                         this.setQuiz(object.key!, newQuizObject, () => {
                             callback();
                         });
-                        off(reference);
+                        unsub();
                     });
                 } else {
                     throwExcept('@GetSharedQuiz: quiz does not exist');
@@ -271,6 +283,13 @@ export class networkManager {
             } else {
                 throwExcept(`@LeaveGame: ${val.code}: ${val.message}`);
             }
+        });
+    }
+
+    static joinGameStudent(userInput: string, callback: (exists: boolean) => void) {
+        const unsub = onValue(ref(database, `currentGames/${userInput.toString().slice(0, 5)}/${userInput.toString().slice(6)}`), (snap) => {
+            callback(!!snap.val());
+            unsub();
         });
     }
 }
