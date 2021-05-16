@@ -48,6 +48,7 @@ const database = getDatabase();
 const functions = getFunctions();
 const initGame = httpsCallable(functions, 'initGame');
 const leaveGame = httpsCallable(functions, 'leaveGame');
+const joinGameStudent = httpsCallable(functions, 'joinGameStudent');
 let charConfig: Reference;
 let currentUser: Reference;
 let quizList: Reference;
@@ -288,7 +289,23 @@ export class networkManager {
 
     static joinGameStudent(userInput: string, callback: (exists: boolean) => void) {
         const unsub = onValue(ref(database, `currentGames/${userInput.toString().slice(0, 5)}/${userInput.toString().slice(6)}`), (snap) => {
-            callback(!!snap.val());
+            if (!!snap.val()) {
+                alreadyInGame = true;
+                joinGameStudent(userInput)
+                    .then((value) => {
+                        const val = value.data as functionObject;
+                        if (val.code == 200) {
+                            callback(true);
+                        } else {
+                            throwExcept(`@JoinGameStudent: ${val.code}: ${val.message}`);
+                        }
+                    })
+                    .catch((error) => {
+                        throwExcept(`@JoinGameStudent: ${error}`);
+                    });
+            } else {
+                callback(false);
+            }
             unsub();
         });
     }

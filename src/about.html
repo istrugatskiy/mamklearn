@@ -1,144 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>About</title>
-    <meta content="mamkLearn" name="description">
-    <meta content="mamkLearn" name="author">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <link href="data:;base64,iVBORw0KGgo=" rel="icon">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Chelsea+Market&display=swap" rel="stylesheet">
-</head>
-<body>
-    <div id="particles-js"></div>
-    <script async defer src="https://apis.google.com/js/platform.js">
-    </script>
-    <script>
-        function isIE() {
+    <head>
+        <meta charset="utf-8" />
+        <title>About</title>
+        <meta content="mamkLearn" name="description" />
+        <meta content="mamkLearn" name="author" />
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
+        <link href="data:;base64,iVBORw0KGgo=" rel="icon" />
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Chelsea+Market&display=swap" rel="stylesheet" />
+    </head>
+    <body>
+        <div id="particles-js"></div>
+        <script async defer src="https://apis.google.com/js/platform.js"></script>
+        <script>
             ua = navigator.userAgent;
-            /* MSIE used to detect old browsers and Trident used to newer ones*/
-            var is_ie = ua.indexOf("MSIE ") > -1 || ua.indexOf("Trident/") > -1;
-            return is_ie;
-        }
-
-        if (isIE()) {
-            document.location.href = "https://support.microsoft.com/en-us/office/the-website-you-were-trying-to-reach-doesn-t-work-with-internet-explorer-8f5fc675-cd47-414c-9535-12821ddfc554?ui=en-us&rs=en-us&ad=us";
-        }
-    </script>
-    <noscript>
-    <style>
-        .aboutContainer {
-            display: none;
-        }
-        #particles-js {
-            display: none;
-        }
-        .backdrop-filter {
-            display: none;
-        }
-        .title {
-            display: none;
-        }
-        .Container {
-            display: none;
-        }
-        .loader {
-          display: none;
-        }
-    </style>
-    <p style="color: black;">An error has occurred: JavaScript is disabled or not supported by your browser</p></noscript>
-    <div class="loader loader--active" id="mainLoader">
-        <div class="loader__icon">
-            <svg enable-background="new 0 0 40 40" height="40px" id="loader-1" version="1.1" viewbox="0 0 40 40" width="40px" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px">
-            <path d="M20.201,5.169c-8.254,0-14.946,6.692-14.946,14.946c0,8.255,6.692,14.946,14.946,14.946s14.946-6.691,14.946-14.946C35.146,11.861,28.455,5.169,20.201,5.169z M20.201,31.749c-6.425,0-11.634-5.208-11.634-11.634c0-6.425,5.209-11.634,11.634-11.634c6.425,0,11.633,5.209,11.633,11.634C31.834,26.541,26.626,31.749,20.201,31.749z" fill="#ffffff" opacity="1"></path>
-            <path d="M26.013,10.047l1.654-2.866c-2.198-1.272-4.743-2.012-7.466-2.012h0v3.312h0C22.32,8.481,24.301,9.057,26.013,10.047z" fill="#000"></path></svg>
+            if (-1 < ua.indexOf('MSIE ') || -1 < ua.indexOf('Trident/'))
+                document.location.href = 'https://support.microsoft.com/en-us/office/the-website-you-were-trying-to-reach-doesn-t-work-with-internet-explorer-8f5fc675-cd47-414c-9535-12821ddfc554?ui=en-us&rs=en-us&ad=us';
+        </script>
+        <noscript>
+            <style>
+                .aboutContainer {
+                    display: none;
+                }
+                #particles-js {
+                    display: none;
+                }
+                .backdrop-filter {
+                    display: none;
+                }
+                .title {
+                    display: none;
+                }
+                .Container {
+                    display: none;
+                }
+                .loader {
+                    display: none;
+                }
+            </style>
+            <p style="color: black">An error has occurred: JavaScript is disabled or not supported by your browser</p></noscript
+        >
+        <div class="loader loader--active" id="mainLoader">
+            <div class="loader__icon">
+                <svg enable-background="new 0 0 40 40" height="40px" id="loader-1" version="1.1" viewbox="0 0 40 40" width="40px" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px">
+                    <path
+                        d="M20.201,5.169c-8.254,0-14.946,6.692-14.946,14.946c0,8.255,6.692,14.946,14.946,14.946s14.946-6.691,14.946-14.946C35.146,11.861,28.455,5.169,20.201,5.169z M20.201,31.749c-6.425,0-11.634-5.208-11.634-11.634c0-6.425,5.209-11.634,11.634-11.634c6.425,0,11.633,5.209,11.633,11.634C31.834,26.541,26.626,31.749,20.201,31.749z"
+                        fill="#ffffff"
+                        opacity="1"
+                    ></path>
+                    <path d="M26.013,10.047l1.654-2.866c-2.198-1.272-4.743-2.012-7.466-2.012h0v3.312h0C22.32,8.481,24.301,9.057,26.013,10.047z" fill="#000"></path>
+                </svg>
+            </div>
+            <div class="loader__tile"></div>
+            <div class="loader__tile"></div>
+            <div class="loader__tile"></div>
+            <div class="loader__tile"></div>
+            <div class="loader__tile"></div>
+            <div class="loader__tile"></div>
         </div>
-        <div class="loader__tile"></div>
-        <div class="loader__tile"></div>
-        <div class="loader__tile"></div>
-        <div class="loader__tile"></div>
-        <div class="loader__tile"></div>
-        <div class="loader__tile"></div>
-    </div>
-    <div class="aboutContainer">
-        <h1 class="importHeader">Information</h1>
-        <p class="parastandard">Mamklearn is a quiz/learning app which puts security, ease of use, fun, and animation first.
-            Our app uses sign in with google to ensure that students sign in with their school accounts.
-            Mamklearn allows students and teachers to create their own player avatar, so that they can express themselves without usernames.
-            Mamklearn is also designed with ease of use and animation in mind. The app has been tested with a wide variety of users with varying computer skill levels.
-            As well as this, almost everything has an animation, something we are extremely proud of.
-        </p>
-        <p class="parastandard" style="text-align: center;">Made with love by Ilya Strugatskiy</p>
-        <h1 class="importHeader">Software Licenses</h1>
-        <h2>particles.js</h2>
-        <p class="parastandard" style="text-align: center;">
-            <a class="middle2" href="https://github.com/VincentGarreau/particles.js/blob/master/LICENSE.md" target="_blank">View License</a>
-        </p>
-        <h2>Tiles Page Transition</h2>
-        <p class="parastandard" style="font-size: large;">
-Copyright (c) 2020 by Milan Ricoul (https://codepen.io/firestar300/pen/zLKZVZ)
-<br>
-<br>
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-<br>
-<br>
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-<br>    
-<br>                  
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
-THE SOFTWARE. 
-        </p>
-        <h2>Toggle Button Animation</h2>
-        <p class="parastandard" style="font-size: large;">
-Copyright (c) 2020 by Aaron Iker (https://codepen.io/aaroniker/pen/rZPeYQ)
-<br>
-<br>
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-<br>
-<br>
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-<br>
-<br>
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
-        </p>           
-        <h2>Dragula.js</h2>
-        <p class="parastandard" style="text-align: center;">
-            <a class="middle2" href="https://github.com/bevacqua/dragula/blob/master/license" target="_blank">View License</a>
-        </p>
-        <h2>Webpack</h2>
-        <p class="parastandard" style="text-align: center;">
-            <a class="middle2" href="https://github.com/webpack/webpack/blob/master/LICENSE" target="_blank">View License</a>
-        </p>
-        <h2>Google Material Icons</h2>
-        <p class="parastandard" style="text-align: center;">
-            <a class="middle2" href="https://www.apache.org/licenses/LICENSE-2.0.html" target="_blank">View License</a>
-        </p>
-        <div id="backButton">
-            <button class="button" id="aboutWindowButton">Back</button>
+        <div class="aboutContainer">
+            <h1 class="importHeader">Information</h1>
+            <p class="parastandard">
+                Mamklearn is a quiz/learning app which puts security, ease of use, fun, and animation first. Our app uses sign in with google to ensure that students sign in with their school accounts. Mamklearn allows students and teachers to create
+                their own player avatar, so that they can express themselves without usernames. Mamklearn is also designed with ease of use and animation in mind. The app has been tested with a wide variety of users with varying computer skill
+                levels. As well as this, almost everything has an animation, something we are extremely proud of.
+            </p>
+            <p class="parastandard" style="text-align: center">Made with love by Ilya Strugatskiy</p>
+            <h1 class="importHeader">Software Licenses</h1>
+            <h2>particles.js</h2>
+            <p class="parastandard" style="text-align: center">
+                <a class="middle2" href="https://github.com/VincentGarreau/particles.js/blob/master/LICENSE.md" target="_blank">View License</a>
+            </p>
+            <h2>Tiles Page Transition</h2>
+            <p class="parastandard" style="font-size: large">
+                Copyright (c) 2020 by Milan Ricoul (https://codepen.io/firestar300/pen/zLKZVZ)
+                <br />
+                <br />
+                Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to
+                use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+                <br />
+                <br />
+                The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+                <br />
+                <br />
+                THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+                COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+            </p>
+            <h2>Toggle Button Animation</h2>
+            <p class="parastandard" style="font-size: large">
+                Copyright (c) 2020 by Aaron Iker (https://codepen.io/aaroniker/pen/rZPeYQ)
+                <br />
+                <br />
+                Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to
+                use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+                <br />
+                <br />
+                The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+                <br />
+                <br />
+                THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+                COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+            </p>
+            <h2>Dragula.js</h2>
+            <p class="parastandard" style="text-align: center">
+                <a class="middle2" href="https://github.com/bevacqua/dragula/blob/master/license" target="_blank">View License</a>
+            </p>
+            <h2>Webpack</h2>
+            <p class="parastandard" style="text-align: center">
+                <a class="middle2" href="https://github.com/webpack/webpack/blob/master/LICENSE" target="_blank">View License</a>
+            </p>
+            <h2>Google Material Icons</h2>
+            <p class="parastandard" style="text-align: center">
+                <a class="middle2" href="https://www.apache.org/licenses/LICENSE-2.0.html" target="_blank">View License</a>
+            </p>
+            <div id="backButton">
+                <button class="button" id="aboutWindowButton">Back</button>
+            </div>
         </div>
-    </div>
-</body>
+    </body>
 </html>

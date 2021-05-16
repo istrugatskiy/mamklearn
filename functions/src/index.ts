@@ -110,7 +110,7 @@ export const leaveGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
                     .database()
                     .ref(`currentGames/${snap.val().code.slice(0, 5)}/${snap.val().code.slice(5)}`)
                     .once('value');
-                await admin.database().ref(`${location}players/${context.auth!.uid}`).set(null);
+                await admin.database().ref(`${location.val()}players/${context.auth!.uid}`).set(null);
             }
             await admin.database().ref(`userProfiles/${context.auth!.uid}/currentGameState/`).set(null);
         } else {
@@ -123,6 +123,53 @@ export const leaveGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
             message: 'ok',
             code: 200,
         };
+    } else {
+        return {
+            message: 'Authentication check failed (maybe log out and log back in).',
+            code: 401,
+        };
+    }
+});
+
+export const joinGameStudent = functions.runWith({ maxInstances: 3 }).https.onCall(async (data, context) => {
+    if (typeof data !== 'string' || data.length !== 9 || !data.match(/^[0-9-]*$/)) {
+        return {
+            message: 'Malformed request sent from the client. You may be running an old version (try clearing your cache).',
+            code: 400,
+        };
+    } else if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
+        const user = admin.database().ref(`userProfiles/${context.auth.token.uid}`);
+        const gameState = user.child('currentGameState/isInGame');
+        const gameCode = user.child('currentGameState/code');
+        const gameLocation = admin.database().ref(`currentGames/${data.slice(0, 5)}/${data.slice(6)}`);
+        const snap = await gameState.once('value');
+        if (snap.val() === true) {
+            const code = await gameCode.once('value');
+            return {
+                message: code.val(),
+                code: 300,
+            };
+        } else {
+            const gameVal = await gameLocation.once('value');
+            if (gameVal.val()) {
+                const charConfig = await user.child('charConfig').once('value');
+                await admin.database().ref(`${gameVal.val()}players/${context.auth!.uid}`).set({
+                    playerName: context.auth.token.name,
+                    playerConfig: charConfig.val(),
+                });
+                await gameState.set(true);
+                await gameCode.set(data.slice(0, 5) + data.slice(6));
+                return {
+                    message: 'ok',
+                    code: 200,
+                };
+            } else {
+                return {
+                    message: 'Game does not exist.',
+                    code: 404,
+                };
+            }
+        }
     } else {
         return {
             message: 'Authentication check failed (maybe log out and log back in).',
