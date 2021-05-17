@@ -136,6 +136,7 @@ export class networkManager {
     private static currentQuizObject: Reference;
     static authInstance = getAuth();
     static hasBeenInitialized = false;
+    private static characterDataObject: { [key: string]: {playerName: string, playerConfig: number[]} };
 
     static set setClientQuizList(newFunction: () => void) {
         this._setClientQuizList = newFunction;
@@ -313,6 +314,8 @@ export class networkManager {
     }
 
     static studentHandler(appendStudent: (newStudent: { name: string; studentID: string }) => void, removeStudent: (studentToRemove: string) => void) {
-        this.removeStudentHandler = onChildAdded(ref(database, `actualGames/${auth.currentUser!.uid}/players/`), (snap) => {});
+        this.removeStudentHandler = onChildAdded(ref(database, `actualGames/${auth.currentUser!.uid}/players/`), (snap) => {
+            if ()
+        });
     }
 }
