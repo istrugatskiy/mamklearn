@@ -100,6 +100,12 @@ export const leaveGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
         const snap = await gameState.once('value');
         if (snap.val() && snap.val().isInGame) {
             if (snap.val().isTeacher) {
+                const students = await admin.database().ref(`actualGames/${context.auth.token.uid}/players/`).once('value');
+                if (students.val()) {
+                    Object.keys(students.val()).forEach(async (student) => {
+                        await admin.database().ref(``).set(null);
+                    });
+                }
                 await admin
                     .database()
                     .ref(`currentGames/${snap.val().code.slice(0, 5)}/${snap.val().code.slice(5)}`)

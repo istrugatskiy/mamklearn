@@ -1,6 +1,6 @@
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, Reference, child, onValue, set, push, remove } from 'firebase/database';
+import { getDatabase, ref, Reference, child, onValue, set, push, remove, enableLogging } from 'firebase/database';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { setCharImage } from './app';
 import { throwExcept } from './utils';
@@ -56,6 +56,7 @@ let newValue: { [key: string]: string } = {};
 let errorHasBeenThrown = false;
 let hasInitialized = false;
 let alreadyInGame = false;
+enableLogging(true);
 
 const listener = onAuthStateChanged(auth, (user) => {
     if (!hasInitialized) {
