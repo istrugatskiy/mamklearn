@@ -103,7 +103,7 @@ export const leaveGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
                 const students = await admin.database().ref(`actualGames/${context.auth.token.uid}/players/`).once('value');
                 if (students.val()) {
                     Object.keys(students.val()).forEach(async (student) => {
-                        await admin.database().ref(``).set(null);
+                        await admin.database().ref(`userProfiles/${student}/currentGameState`).set(null);
                     });
                 }
                 await admin
