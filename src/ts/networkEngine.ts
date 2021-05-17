@@ -1,6 +1,6 @@
-import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, Unsubscribe } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, Reference, child, onValue, set, push, remove, enableLogging } from 'firebase/database';
+import { getDatabase, ref, Reference, child, onValue, set, push, remove, enableLogging, onChildAdded, onChildRemoved } from 'firebase/database';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { setCharImage } from './app';
 import { throwExcept } from './utils';
@@ -131,6 +131,7 @@ export class networkManager {
     static onInit: () => void;
     static onReady: () => void;
     static quitQuizTeacher: () => void;
+    static removeStudentHandler: Unsubscribe;
     static _setClientQuizList: (quizList: { [key: string]: string }) => void;
     private static currentQuizObject: Reference;
     static authInstance = getAuth();
@@ -309,5 +310,9 @@ export class networkManager {
             }
             unsub();
         });
+    }
+
+    static studentHandler(appendStudent: (newStudent: { name: string; studentID: string }) => void, removeStudent: (studentToRemove: string) => void) {
+        this.removeStudentHandler = onChildAdded(ref(database, `actualGames/${auth.currentUser!.uid}/players/`), (snap) => {});
     }
 }
