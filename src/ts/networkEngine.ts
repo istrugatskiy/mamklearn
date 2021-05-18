@@ -1,6 +1,6 @@
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, Unsubscribe } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, Reference, child, onValue, set, push, remove, enableLogging, onChildAdded, onChildRemoved } from 'firebase/database';
+import { getDatabase, ref, Reference, child, onValue, set, push, remove, enableLogging } from 'firebase/database';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { setCharImage } from './app';
 import { throwExcept } from './utils';
@@ -136,7 +136,7 @@ export class networkManager {
     private static currentQuizObject: Reference;
     static authInstance = getAuth();
     static hasBeenInitialized = false;
-    private static characterDataObject: { [key: string]: {playerName: string, playerConfig: number[]} };
+    private static characterDataObject: { [key: string]: { playerName: string; playerConfig: number[] } };
 
     static set setClientQuizList(newFunction: () => void) {
         this._setClientQuizList = newFunction;
@@ -314,8 +314,14 @@ export class networkManager {
     }
 
     static studentHandler(appendStudent: (newStudent: { name: string; studentID: string }) => void, removeStudent: (studentToRemove: string) => void) {
-        this.removeStudentHandler = onChildAdded(ref(database, `actualGames/${auth.currentUser!.uid}/players/`), (snap) => {
-            if ()
+        this.removeStudentHandler = onValue(ref(database, `actualGames/${auth.currentUser!.uid}/players/`), (snap) => {
+            let newList: { [key: string]: { playerName: string; playerConfig: number[] } } = {};
+            let removeList: { [key: string]: { playerName: string; playerConfig: number[] } } = {};
+            const values = Object.values(snap.val());
+            Object.keys(snap.val()).forEach((student, index) => {
+                if (this.characterDataObject[student] == values[index]) {
+                }
+            });
         });
     }
 }
