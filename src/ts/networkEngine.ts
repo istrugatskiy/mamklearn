@@ -315,11 +315,12 @@ export class networkManager {
 
     static studentHandler(appendStudent: (newStudent: { name: string; studentID: string }) => void, removeStudent: (studentToRemove: string) => void) {
         this.removeStudentHandler = onValue(ref(database, `actualGames/${auth.currentUser!.uid}/players/`), (snap) => {
-            let newList: { [key: string]: { playerName: string; playerConfig: number[] } } = {};
-            let removeList: { [key: string]: { playerName: string; playerConfig: number[] } } = {};
             const values = Object.values(snap.val());
             Object.keys(snap.val()).forEach((student, index) => {
-                if (this.characterDataObject[student] == values[index]) {
+                if (this.characterDataObject[student] !== values[index]) {
+                    appendStudent();
+                } else {
+                    removeStudent();
                 }
             });
         });
