@@ -643,6 +643,7 @@ export function playQuiz() {
             $('title').style.display = 'none';
             mainAudio.play('mainTheme', true);
             $('teacherPlayScreen').style.display = 'block';
+            networkManager.studentHandler(() => {});
         },
         currentQuizEdit ? currentQuizEdit.replace('quizID_', '') : ''
     );

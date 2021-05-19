@@ -1,6 +1,6 @@
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, Unsubscribe } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, Reference, child, onValue, set, push, remove, enableLogging } from 'firebase/database';
+import { getDatabase, ref, Reference, child, onValue, set, push, remove, enableLogging, onChildAdded, onChildRemoved } from 'firebase/database';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { setCharImage } from './app';
 import { throwExcept } from './utils';
@@ -132,11 +132,12 @@ export class networkManager {
     static onReady: () => void;
     static quitQuizTeacher: () => void;
     static removeStudentHandler: Unsubscribe;
+    static otherStudentHandler: Unsubscribe;
     static _setClientQuizList: (quizList: { [key: string]: string }) => void;
     private static currentQuizObject: Reference;
     static authInstance = getAuth();
     static hasBeenInitialized = false;
-    private static characterDataObject: { [key: string]: { playerName: string; playerConfig: number[] } };
+    private static alreadyAware: { [key: string]: { playerName: string; playerConfig: number[] } };
 
     static set setClientQuizList(newFunction: () => void) {
         this._setClientQuizList = newFunction;
@@ -313,16 +314,19 @@ export class networkManager {
         });
     }
 
-    static studentHandler(appendStudent: (newStudent: { name: string; studentID: string }) => void, removeStudent: (studentToRemove: string) => void) {
-        this.removeStudentHandler = onValue(ref(database, `actualGames/${auth.currentUser!.uid}/players/`), (snap) => {
-            const values = Object.values(snap.val());
-            Object.keys(snap.val()).forEach((student, index) => {
-                if (this.characterDataObject[student] !== values[index]) {
-                    appendStudent();
-                } else {
-                    removeStudent();
-                }
-            });
+    static studentHandler(appendStudent: (newStudent: { playerName: string; playerConfig: number[] }, studentID: string) => void, removeStudent: (studentToRemove: string) => void) {
+        this.removeStudentHandler = onChildAdded(ref(database, `actualGames/${auth.currentUser!.uid}/players/`), (snap) => {
+            if (this.alreadyAware[snap.key!]) {
+                appendStudent(snap.val(), snap.key!);
+            }
+            this.alreadyAware[snap.key!] = snap.val();
+        });
+
+        this.otherStudentHandler = onChildRemoved(ref(database, `actualGames/${auth.currentUser!.uid}/players/`), (snap) => {
+            if (this.alreadyAware[snap.key!] !== snap.val()) {
+                removeStudent(snap.key!);
+            }
+            this.alreadyAware[snap.key!] = snap.val();
         });
     }
 }
