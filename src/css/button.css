@@ -40,7 +40,7 @@
 	.button:hover, .button:active, .button:focus, .button:disabled {
 		background-color: rgb(28, 37, 102) !important;
 	}
-	#charCustomize:focus {
+	#charCustomize:focus, #charCustomize:focus-within {
 		background-color: white !important;
 	}
 }

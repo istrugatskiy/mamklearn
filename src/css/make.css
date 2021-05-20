@@ -478,6 +478,11 @@
 	text-align: center;
 	margin: 100px;
 }
+@media screen and (max-width: 1000px) {
+	#characterPeopleDiv {
+		margin: 10px;
+	}
+}
 .studentPlayer {
 	position: absolute;
 	width: 300px;
@@ -511,7 +516,8 @@
 	display: inline-block;
 	height: 420px;
 	margin-bottom: 25px;
-	margin-left: 20px;
+	margin-left: 10px;
+	margin-right: 10px;
 }
 @keyframes hideme {
 	0% {

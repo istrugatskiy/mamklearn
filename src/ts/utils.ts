@@ -115,31 +115,31 @@ export const setCaretPosition = (element: HTMLElement, offset: number) => {
     let range = document.createRange();
     let sel = window.getSelection();
 
-    //select appropriate node
+    // Select appropriate node
     let currentNode: Node | null = null;
     let previousNode = null;
 
     for (let i = 0; i < element.childNodes.length; i++) {
-        //save previous node
+        // Save previous node
         previousNode = currentNode;
 
-        //get current node
+        // Get current node
         currentNode = element.childNodes[i];
-        //if we get span or something else then we should get child node
+        // If we get span or something else then we should get child node
         while (currentNode.childNodes.length > 0) {
             currentNode = currentNode.childNodes[0];
         }
 
-        //calc offset in current node
+        // Calc offset in current node
         if (previousNode != null) {
             offset -= (previousNode as unknown as NodeListOf<ChildNode>).length;
         }
-        //check whether current node has enough length
+        // Check whether current node has enough length
         if (offset <= (currentNode as unknown as NodeListOf<ChildNode>).length) {
             break;
         }
     }
-    //move caret to specified offset
+    // Move caret to specified offset
     if (currentNode != null) {
         range.setStart(currentNode, offset);
         range.collapse(true);
