@@ -1,6 +1,6 @@
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, Unsubscribe } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, Reference, child, onValue, set, push, remove, enableLogging, onChildAdded, onChildRemoved } from 'firebase/database';
+import { getDatabase, ref, Reference, child, onValue, set, push, remove, onChildAdded, onChildRemoved } from 'firebase/database';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { setCharImage } from './app';
 import { throwExcept } from './utils';
@@ -56,7 +56,6 @@ let newValue: { [key: string]: string } = {};
 let errorHasBeenThrown = false;
 let hasInitialized = false;
 let alreadyInGame = false;
-enableLogging(true);
 
 const listener = onAuthStateChanged(auth, (user) => {
     if (!hasInitialized) {
@@ -295,18 +294,22 @@ export class networkManager {
         const unsub = onValue(ref(database, `currentGames/${userInput.toString().slice(0, 5)}/${userInput.toString().slice(6)}`), (snap) => {
             if (!!snap.val()) {
                 alreadyInGame = true;
-                joinGameStudent(userInput)
-                    .then((value) => {
-                        const val = value.data as functionObject;
-                        if (val.code == 200) {
-                            callback(true);
-                        } else {
-                            throwExcept(`@JoinGameStudent: ${val.code}: ${val.message}`);
-                        }
-                    })
-                    .catch((error) => {
-                        throwExcept(`@JoinGameStudent: ${error}`);
-                    });
+                if (window.currentGameState.isInGame) {
+                    callback(true);
+                } else {
+                    joinGameStudent(userInput)
+                        .then((value) => {
+                            const val = value.data as functionObject;
+                            if (val.code == 200) {
+                                callback(true);
+                            } else {
+                                throwExcept(`@JoinGameStudent: ${val.code}: ${val.message}`);
+                            }
+                        })
+                        .catch((error) => {
+                            throwExcept(`@JoinGameStudent: ${error}`);
+                        });
+                }
             } else {
                 callback(false);
             }
@@ -315,8 +318,9 @@ export class networkManager {
     }
 
     static studentHandler(appendStudent: (newStudent: { playerName: string; playerConfig: number[] }, studentID: string) => void, removeStudent: (studentToRemove: string) => void) {
+        this.alreadyAware = {};
         this.removeStudentHandler = onChildAdded(ref(database, `actualGames/${auth.currentUser!.uid}/players/`), (snap) => {
-            if (this.alreadyAware[snap.key!]) {
+            if (this.alreadyAware[snap.key!] !== null) {
                 appendStudent(snap.val(), snap.key!);
             }
             this.alreadyAware[snap.key!] = snap.val();

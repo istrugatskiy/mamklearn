@@ -110,7 +110,16 @@ window.clickEvents = {
         userClick('tos.html');
     },
     rejoinGameConfirm: () => {
-        makeCode(true);
+        if (window.currentGameState.isTeacher) {
+            makeCode(true);
+        } else {
+            $('title').style.display = 'block';
+            playCode();
+            setTimeout(() => {
+                $('gameID').value = `${window.currentGameState.code.toString().slice(0, 5)}-${window.currentGameState.code.toString().slice(5)}`;
+                JoinGame();
+            }, 300);
+        }
         $('rejoinGame').classList.add('handleOutTransition');
         setTimeout(() => {
             $('rejoinGame').style.display = 'none';
@@ -206,6 +215,10 @@ function JoinGame() {
     $('playMenuBack').classList.add('disabled');
     clearChildren('submitID');
     createTemplate('svgLoader', 'submitID');
+    joinGameStudent();
+}
+
+function joinGameStudent() {
     networkManager.joinGameStudent($('gameID').value, (exists) => {
         if (exists) {
             loadChonk('play', (obj) => {

@@ -122,7 +122,7 @@ let clickIncludesListeners = {
         toggleTime(getID(event));
     },
     studentCharacterImage: (event: Event) => {
-        kickPlayer(getID(event));
+        kickPlayer((event.target as HTMLElement).id.replace('studentCharacterImage_', ''));
     },
     quizID_: (event: Event) => {
         quizButtonOnClick(event);
@@ -637,6 +637,7 @@ export function playQuiz() {
     });
     exitModalPopupTemplate('manageQuizMenu');
     $('title').style.display = 'none';
+    playerNumber = 0;
     networkManager.startGame(
         (value) => {
             $('gameCodeTeacher').textContent = `Game Code: ${value.message.toString().slice(0, 5)}-${value.message.toString().slice(5)}`;
@@ -658,12 +659,15 @@ export function playQuiz() {
 
 function renderPlayer(playerName: string, playerConfig: number[], playerID: string) {
     playerNumber++;
-    $('playerName').textContent = playerName;
-    $('playerName').id = `playerName_${playerID}`;
     mainAudio.setVolume('mainTheme', mathClamp(0.6 + (playerNumber / 5) * 0.1, 0.6, 1), true);
     createTemplate('playerForTeacherScreen', 'characterPeopleDiv');
+    $('playerName').textContent = playerName;
+    $('playerName').id = `playerName_${playerID}`;
+    setCharImage('inGamePlayer', playerConfig);
+    Array.from($('characterPeopleDiv').lastElementChild!.firstElementChild!.children[1].children).forEach((el) => {
+        el.id = '';
+    });
     $('characterPeopleDiv').lastElementChild!.firstElementChild!.id = `studentCharacterImage_${playerID}`;
-    setCharImage('player', playerConfig);
 }
 
 function kickPlayer(eventId: string) {
@@ -678,6 +682,8 @@ function kickPlayer(eventId: string) {
 }
 
 function startGameTeacher() {
+    networkManager.removeStudentHandler();
+    networkManager.otherStudentHandler();
     $('gameStartButtonTeacher').disabled = true;
     const people = Array.from($('characterPeopleDiv').children);
     people.forEach((object) => {
