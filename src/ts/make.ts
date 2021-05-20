@@ -643,18 +643,27 @@ export function playQuiz() {
             $('title').style.display = 'none';
             mainAudio.play('mainTheme', true);
             $('teacherPlayScreen').style.display = 'block';
-            networkManager.studentHandler(() => {});
+            networkManager.studentHandler(
+                (internal, playerID) => {
+                    renderPlayer(internal.playerName, internal.playerConfig, playerID);
+                },
+                (playerID) => {
+                    kickPlayer(playerID);
+                }
+            );
         },
         currentQuizEdit ? currentQuizEdit.replace('quizID_', '') : ''
     );
 }
 
-// @ts-ignore
-function renderPlayer() {
+function renderPlayer(playerName: string, playerConfig: number[], playerID: string) {
     playerNumber++;
+    $('playerName').textContent = playerName;
+    $('playerName').id = `playerName_${playerID}`;
     mainAudio.setVolume('mainTheme', mathClamp(0.6 + (playerNumber / 5) * 0.1, 0.6, 1), true);
     createTemplate('playerForTeacherScreen', 'characterPeopleDiv');
-    $('characterPeopleDiv').lastElementChild!.firstElementChild!.id = `studentCharacterImage_${playerNumber}`;
+    $('characterPeopleDiv').lastElementChild!.firstElementChild!.id = `studentCharacterImage_${playerID}`;
+    setCharImage('player', playerConfig);
 }
 
 function kickPlayer(eventId: string) {

@@ -21,7 +21,7 @@ export const $ = (a: string): HTMLElement => {
 
 // Thanks stackoverflow lol
 export const ordinalSuffix = (i: number) => {
-    var j = i % 10,
+    let j = i % 10,
         k = i % 100;
     if (j == 1 && k != 11) {
         return 'st';
@@ -44,13 +44,13 @@ export const mathClamp = (num: number, min: number, max: number) => {
 };
 
 export const getCaretCharacterOffsetWithin = (element: HTMLElement) => {
-    var caretOffset = 0;
+    let caretOffset = 0;
     const doc = element.ownerDocument;
     const win = doc.defaultView!;
     const sel = win.getSelection();
     if (sel!.rangeCount > 0) {
-        var range = win.getSelection()!.getRangeAt(0);
-        var preCaretRange = range.cloneRange();
+        let range = win.getSelection()!.getRangeAt(0);
+        let preCaretRange = range.cloneRange();
         preCaretRange.selectNodeContents(element);
         preCaretRange.setEnd(range.endContainer, range.endOffset);
         caretOffset = preCaretRange.toString().length;
@@ -112,14 +112,14 @@ export const throwExcept = (msg: string) => {
 };
 
 export const setCaretPosition = (element: HTMLElement, offset: number) => {
-    var range = document.createRange();
-    var sel = window.getSelection();
+    let range = document.createRange();
+    let sel = window.getSelection();
 
     //select appropriate node
-    var currentNode: Node | null = null;
-    var previousNode = null;
+    let currentNode: Node | null = null;
+    let previousNode = null;
 
-    for (var i = 0; i < element.childNodes.length; i++) {
+    for (let i = 0; i < element.childNodes.length; i++) {
         //save previous node
         previousNode = currentNode;
 
@@ -261,15 +261,8 @@ export class AudioManager {
 }
 
 export const download = (filename: string, text: string) => {
-    var pom = document.createElement('a');
+    let pom = document.createElement('a');
     pom.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(text));
     pom.setAttribute('download', filename);
-
-    if (document.createEvent) {
-        var event = document.createEvent('MouseEvents');
-        event.initEvent('click', true, true);
-        pom.dispatchEvent(event);
-    } else {
-        pom.click();
-    }
+    pom.click();
 };
