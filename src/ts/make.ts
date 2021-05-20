@@ -122,7 +122,13 @@ let clickIncludesListeners = {
         toggleTime(getID(event));
     },
     studentCharacterImage: (event: Event) => {
-        kickPlayer((event.target as HTMLElement).id.replace('studentCharacterImage_', ''));
+        const studentID = (event.target as HTMLElement).id.replace('studentCharacterImage_', '');
+        (event.target as HTMLElement).disabled = true;
+        (event.target as HTMLElement).tabIndex = -1;
+        (event.target as HTMLElement).style.pointerEvents = 'none';
+        networkManager.kickPlayer(studentID, () => {
+            kickPlayer(studentID);
+        });
     },
     quizID_: (event: Event) => {
         quizButtonOnClick(event);
@@ -640,6 +646,7 @@ export function playQuiz() {
     playerNumber = 0;
     networkManager.startGame(
         (value) => {
+            $('gameStartButtonTeacher').disabled = true;
             $('gameCodeTeacher').textContent = `Game Code: ${value.message.toString().slice(0, 5)}-${value.message.toString().slice(5)}`;
             $('title').style.display = 'none';
             mainAudio.play('mainTheme', true);
@@ -659,6 +666,7 @@ export function playQuiz() {
 
 function renderPlayer(playerName: string, playerConfig: number[], playerID: string) {
     playerNumber++;
+    $('gameStartButtonTeacher').disabled = playerNumber > 0;
     mainAudio.setVolume('mainTheme', mathClamp(0.6 + (playerNumber / 5) * 0.1, 0.6, 1), true);
     createTemplate('playerForTeacherScreen', 'characterPeopleDiv');
     $('playerName').textContent = playerName;
@@ -672,6 +680,7 @@ function renderPlayer(playerName: string, playerConfig: number[], playerID: stri
 
 function kickPlayer(eventId: string) {
     playerNumber--;
+    $('gameStartButtonTeacher').disabled = playerNumber > 0;
     mainAudio.setVolume('mainTheme', mathClamp(0.6 + (playerNumber / 5) * 0.1, 0.6, 1), true);
     const el = $(`studentCharacterImage_${eventId}`);
     el.disabled = true;

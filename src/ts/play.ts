@@ -1,5 +1,6 @@
 import { $, mathClamp, throwExcept, getID, ordinalSuffix, clearChildren } from './utils';
 import { setCharImage, goBack } from './app';
+import { networkManager } from './networkEngine';
 window.studentGameProcessor = studentGameProcessor;
 
 window.quizStartTestCase = ' {"gameStart": true, "totalQuestions": 5, "currentQuestion": "TTTTTTTHHTHHTHTHTHTTHTTTTTTTHTHHHHTHTTTTTHHTTHHTHTTTTTTHTTTHTTTHTHHHTTTTHTHTHHT HHTTHHHTHT", "choices": [ null ], "currentQuestionTime": 69, "questionID": 0 }';
@@ -45,7 +46,7 @@ let clickIncludesListeners = {
 
 let keyboardIncludesListeners = {
     studentShortAnswerText: (event: KeyboardEvent) => {
-        if(event.key == 'Enter') {
+        if (event.key == 'Enter') {
             submitShortAnswer();
         }
     },
@@ -249,6 +250,10 @@ function studentGameProcessor(input: string) {
     }
 }
 
+networkManager.quitQuizStudent = () => {
+    kickPlayer(true);
+};
+
 function kickPlayer(special: boolean = false, specialText: string = 'Kicked From Game') {
     if (special) {
         $('errorActual').textContent = specialText;
@@ -330,7 +335,7 @@ function setQuestion() {
     } else {
         $('studentShortAnswer').style.display = 'none';
     }
-    if (((gameStateStudent.currentQuestionData.timeLimit as unknown) as boolean) == false) {
+    if ((gameStateStudent.currentQuestionData.timeLimit as unknown as boolean) == false) {
         $('timeLeftCounter').style.display = 'none';
     } else {
         $('timeLeftCounter').style.display = 'block';

@@ -46,9 +46,12 @@ let provider = new GoogleAuthProvider();
 auth.useDeviceLanguage();
 const database = getDatabase();
 const functions = getFunctions();
+/* Cloud Functions */
 const initGame = httpsCallable(functions, 'initGame');
 const leaveGame = httpsCallable(functions, 'leaveGame');
 const joinGameStudent = httpsCallable(functions, 'joinGameStudent');
+const kickPlayer = httpsCallable(functions, 'kickPlayer');
+/* Cloud Functions */
 let charConfig: Reference;
 let currentUser: Reference;
 let quizList: Reference;
@@ -100,7 +103,6 @@ const monitorUserState = () => {
         }
     );
     onValue(child(currentUser, 'currentGameState/'), (snap) => {
-        window.currentGameState = snap.val();
         if (!alreadyInGame) {
             if (snap.val() && snap.val().isInGame) {
                 if ($('modal-bg').style.display !== 'block') {
@@ -119,8 +121,13 @@ const monitorUserState = () => {
             }
         } else if (!snap.val()) {
             alreadyInGame = false;
-            networkManager.quitQuizTeacher ? networkManager.quitQuizTeacher() : null;
+            if (window.currentGameState.isTeacher) {
+                networkManager.quitQuizTeacher ? networkManager.quitQuizTeacher() : null;
+            } else {
+                networkManager.quitQuizStudent ? networkManager.quitQuizStudent() : null;
+            }
         }
+        window.currentGameState = snap.val();
     });
 };
 
@@ -132,6 +139,7 @@ export class networkManager {
     static quitQuizTeacher: () => void;
     static removeStudentHandler: Unsubscribe;
     static otherStudentHandler: Unsubscribe;
+    static quitQuizStudent: () => void;
     static _setClientQuizList: (quizList: { [key: string]: string }) => void;
     private static currentQuizObject: Reference;
     static authInstance = getAuth();
@@ -268,7 +276,10 @@ export class networkManager {
                     }
                 })
                 .catch((error) => {
-                    throwExcept(`@StartGame: ${error}`);
+                    setTimeout(() => {
+                        this.startGame(callback, data);
+                        console.warn(error);
+                    }, 4000);
                 });
         } else {
             alreadyInGame = true;
@@ -280,21 +291,28 @@ export class networkManager {
     }
 
     static leaveGame(callback: () => void) {
-        leaveGame().then((value) => {
-            const val = value.data as functionObject;
-            if (val.code == 200) {
-                callback();
-            } else {
-                throwExcept(`@LeaveGame: ${val.code}: ${val.message}`);
-            }
-        });
+        leaveGame()
+            .then((value) => {
+                const val = value.data as functionObject;
+                if (val.code == 200) {
+                    callback();
+                } else {
+                    throwExcept(`@LeaveGame: ${val.code}: ${val.message}`);
+                }
+            })
+            .catch((error) => {
+                setTimeout(() => {
+                    this.leaveGame(callback);
+                    console.warn(error);
+                }, 4000);
+            });
     }
 
     static joinGameStudent(userInput: string, callback: (exists: boolean) => void) {
         const unsub = onValue(ref(database, `currentGames/${userInput.toString().slice(0, 5)}/${userInput.toString().slice(6)}`), (snap) => {
             if (!!snap.val()) {
                 alreadyInGame = true;
-                if (window.currentGameState.isInGame) {
+                if (window.currentGameState && window.currentGameState.isInGame) {
                     callback(true);
                 } else {
                     joinGameStudent(userInput)
@@ -307,7 +325,10 @@ export class networkManager {
                             }
                         })
                         .catch((error) => {
-                            throwExcept(`@JoinGameStudent: ${error}`);
+                            setTimeout(() => {
+                                this.joinGameStudent(userInput, callback);
+                                console.warn(error);
+                            }, 4000);
                         });
                 }
             } else {
@@ -332,5 +353,23 @@ export class networkManager {
             }
             this.alreadyAware[snap.key!] = snap.val();
         });
+    }
+
+    static kickPlayer(playerToKick: string, callback: () => void) {
+        kickPlayer(playerToKick)
+            .then((response) => {
+                const data = response.data as functionObject;
+                if (data.code == 200) {
+                    callback();
+                } else {
+                    throwExcept(`@KickPlayer: ${data.code}: ${data.message}`);
+                }
+            })
+            .catch((error) => {
+                setTimeout(() => {
+                    this.kickPlayer(playerToKick, callback);
+                    console.warn(error);
+                }, 4000);
+            });
     }
 }

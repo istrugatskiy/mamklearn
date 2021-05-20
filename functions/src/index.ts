@@ -183,3 +183,32 @@ export const joinGameStudent = functions.runWith({ maxInstances: 3 }).https.onCa
         };
     }
 });
+
+export const kickPlayer = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
+    if (typeof data !== 'string') {
+        return {
+            message: 'Malformed request sent from the client. You may be running an old version (try clearing your cache).',
+            code: 400,
+        };
+    } else if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
+        const currentValue = await admin.database().ref(`actualGames/${context.auth.uid}/players/${data}`).once('value');
+        if (currentValue.val()) {
+            await admin.database().ref(`actualGames/${context.auth.uid}/players/${data}`).set(null);
+            await admin.database().ref(`userProfiles/${data}/currentGameState`).set(null);
+            return {
+                message: 'ok',
+                code: 200,
+            };
+        } else {
+            return {
+                message: 'User not found (your client may have fallen out of sync with the server)',
+                code: 500,
+            };
+        }
+    } else {
+        return {
+            message: 'Authentication check failed (maybe log out and log back in).',
+            code: 401,
+        };
+    }
+});
