@@ -137,7 +137,7 @@ export const leaveGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
     }
 });
 
-export const joinGameStudent = functions.runWith({ maxInstances: 3 }).https.onCall(async (data, context) => {
+export const joinGameStudent = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
     if (typeof data !== 'string' || data.length !== 9 || !data.match(/^[0-9-]*$/)) {
         return {
             message: 'Malformed request sent from the client. You may be running an old version (try clearing your cache).',
@@ -212,3 +212,5 @@ export const kickPlayer = functions.runWith({ maxInstances: 1 }).https.onCall(as
         };
     }
 });
+
+export const actuallyStartGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {});
