@@ -201,7 +201,7 @@ export const kickPlayer = functions.runWith({ maxInstances: 1 }).https.onCall(as
             };
         } else {
             return {
-                message: 'User not found (your client may have fallen out of sync with the server)',
+                message: 'User not found (your client may have fallen out of sync with the server).',
                 code: 500,
             };
         }
@@ -213,4 +213,27 @@ export const kickPlayer = functions.runWith({ maxInstances: 1 }).https.onCall(as
     }
 });
 
-export const actuallyStartGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {});
+export const actuallyStartGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
+    if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
+        const ref = admin.database().ref;
+        const game = (await ref(`actualGames/${context.auth.uid}/players`).once('value')).val();
+        if (game && Object.keys(game).length > 0) {
+            await ref(`actualGames/${context.auth.uid}/globalData/isGameLive`).set(true);
+
+            return {
+                message: 'ok',
+                code: 200,
+            };
+        } else {
+            return {
+                message: 'Game does not exist or there are no players (your client may have fallen out of sync with the server)',
+                code: 500,
+            };
+        }
+    } else {
+        return {
+            message: 'Authentication check failed (maybe log out and log back in).',
+            code: 401,
+        };
+    }
+});
