@@ -219,7 +219,7 @@ function JoinGame() {
 }
 
 function joinGameStudent() {
-    networkManager.joinGameStudent($('gameID').value, (exists) => {
+    networkManager.joinGameStudent($('gameID').value, (exists, message) => {
         if (exists) {
             loadChonk('play', (obj) => {
                 $('mainLoader').classList.add('loader--active');
@@ -230,7 +230,7 @@ function joinGameStudent() {
                 }, 1000);
             });
         } else {
-            $('errorActual').textContent = 'Invalid ID';
+            $('errorActual').textContent = message;
             $('gameID').disabled = false;
             $('submitID').disabled = false;
             $('errorMessageA').style.display = 'block';

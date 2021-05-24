@@ -51,6 +51,8 @@ const initGame = httpsCallable(functions, 'initGame');
 const leaveGame = httpsCallable(functions, 'leaveGame');
 const joinGameStudent = httpsCallable(functions, 'joinGameStudent');
 const kickPlayer = httpsCallable(functions, 'kickPlayer');
+const timeSync = httpsCallable(functions, 'timeSync');
+const startGame = httpsCallable(functions, 'startGame');
 /* Cloud Functions */
 let charConfig: Reference;
 let currentUser: Reference;
@@ -308,18 +310,20 @@ export class networkManager {
             });
     }
 
-    static joinGameStudent(userInput: string, callback: (exists: boolean) => void) {
+    static joinGameStudent(userInput: string, callback: (exists: boolean, message: string) => void) {
         const unsub = onValue(ref(database, `currentGames/${userInput.toString().slice(0, 5)}/${userInput.toString().slice(6)}`), (snap) => {
             if (!!snap.val()) {
                 alreadyInGame = true;
                 if (window.currentGameState && window.currentGameState.isInGame) {
-                    callback(true);
+                    callback(true, '');
                 } else {
                     joinGameStudent(userInput)
                         .then((value) => {
                             const val = value.data as functionObject;
                             if (val.code == 200) {
-                                callback(true);
+                                callback(true, '');
+                            } else if (val.code == 302) {
+                                callback(false, 'Game Already Started');
                             } else {
                                 throwExcept(`@JoinGameStudent: ${val.code}: ${val.message}`);
                             }
@@ -332,7 +336,7 @@ export class networkManager {
                         });
                 }
             } else {
-                callback(false);
+                callback(false, 'Invalid ID');
             }
             unsub();
         });
@@ -355,19 +359,39 @@ export class networkManager {
         });
     }
 
-    static kickPlayer(playerToKick: string, callback: () => void) {
+    static kickPlayer(playerToKick: string) {
         kickPlayer(playerToKick)
             .then((response) => {
                 const data = response.data as functionObject;
-                if (data.code == 200) {
-                    callback();
-                } else {
+                if (data.code !== 200) {
                     throwExcept(`@KickPlayer: ${data.code}: ${data.message}`);
                 }
             })
             .catch((error) => {
                 setTimeout(() => {
-                    this.kickPlayer(playerToKick, callback);
+                    this.kickPlayer(playerToKick);
+                    console.warn(error);
+                }, 4000);
+            });
+    }
+
+    static async getTime() {
+        return ((await timeSync()).data as functionObject).message as number;
+    }
+
+    static actuallyStartGame(callback: () => void) {
+        startGame()
+            .then((response) => {
+                const data = response.data as functionObject;
+                if (data.code !== 200) {
+                    throwExcept(`@ActuallyStartGame: ${data.code}: ${data.message}`);
+                } else {
+                    callback();
+                }
+            })
+            .catch((error) => {
+                setTimeout(() => {
+                    this.actuallyStartGame(callback);
                     console.warn(error);
                 }, 4000);
             });

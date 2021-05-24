@@ -3,6 +3,17 @@ import * as admin from 'firebase-admin';
 
 admin.initializeApp();
 
+interface questionObject {
+    questionName: string;
+    shortAnswer: boolean;
+    timeLimit: string | boolean;
+    Answers: [answer, answer, answer, answer];
+}
+interface answer {
+    answer: string | null;
+    correct: boolean;
+}
+
 // Handles game initialization for teacher play screen
 export const initGame = functions.runWith({ maxInstances: 3 }).https.onCall(async (data, context) => {
     if (data && (typeof data === 'string' || data instanceof String)) {
@@ -158,6 +169,12 @@ export const joinGameStudent = functions.runWith({ maxInstances: 1 }).https.onCa
         } else {
             const gameVal = await gameLocation.once('value');
             if (gameVal.val()) {
+                if ((await admin.database().ref(`${gameVal.val()}globalState/isRunning`).once('value')).val() === true) {
+                    return {
+                        message: 'Cannot join a game that is already in progress.',
+                        code: 302,
+                    };
+                }
                 const charConfig = await user.child('charConfig').once('value');
                 await admin.database().ref(`${gameVal.val()}players/${context.auth!.uid}`).set({
                     playerName: context.auth.token.name,
@@ -230,6 +247,78 @@ export const actuallyStartGame = functions.runWith({ maxInstances: 1 }).https.on
                 code: 500,
             };
         }
+    } else {
+        return {
+            message: 'Authentication check failed (maybe log out and log back in).',
+            code: 401,
+        };
+    }
+});
+
+export const startGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
+    if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
+        const ref = admin.database().ref;
+        const playerList = (await ref(`actualGames/${context.auth.uid}/players`).once('value')).val();
+        if (playerList !== null) {
+            const allQuestions = (await ref(`actualGames/${context.auth.uid}/quiz/questionObjects/`).once('value')).val() as questionObject[];
+            if (!allQuestions || !Array.isArray(allQuestions)) {
+                return {
+                    mesage: 'Quiz is malformed.',
+                    code: 500,
+                };
+            }
+            const firstQuestion = allQuestions[0];
+            if (!firstQuestion || typeof firstQuestion.questionName !== 'string') {
+                return {
+                    mesage: 'Quiz is malformed.',
+                    code: 500,
+                };
+            }
+            await ref(`actualGames/${context.auth.uid}/globalState/isRunning`).set(true);
+            await ref(`actualGames/${context.auth.uid}/globalState/totalQuestions`).set(allQuestions.length);
+            let safeAnswers: string[] = [];
+            firstQuestion.Answers.forEach((answer) => {
+                safeAnswers.push(answer.answer!);
+            });
+            const values = Object.values(playerList);
+            const playerObject = {
+                questionName: firstQuestion.questionName,
+                answers: firstQuestion.shortAnswer ? [] : safeAnswers,
+                startTime: firstQuestion.timeLimit ? Date.now() : -1,
+                endTime: firstQuestion.timeLimit ? Date.now() + Number.parseInt(firstQuestion.timeLimit.toString()) * 1000 : -1,
+            };
+            Object.keys(playerList).forEach(async (playerID, index) => {
+                await ref(`actualGames/${context.auth!.uid}/${playerID}/currentQuestion`).set(playerObject);
+                await ref(`actualGames/${context.auth!.uid}/${playerID}/currentQuestion`).set(1);
+                await ref(`actualGames/${context.auth!.uid}/leaderboards/${playerID}`).set({
+                    currentQuestion: 1,
+                    playerName: (values[index] as { playerName: string; playerConfig: number[] }).playerName,
+                });
+            });
+            return {
+                message: 'ok',
+                code: 200,
+            };
+        } else {
+            return {
+                message: 'Game not found (your client may have fallen out of sync with the server)',
+                code: 500,
+            };
+        }
+    } else {
+        return {
+            message: 'Authentication check failed (maybe log out and log back in).',
+            code: 401,
+        };
+    }
+});
+
+export const timeSync = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
+    if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
+        return {
+            message: Date.now(),
+            code: 200,
+        };
     } else {
         return {
             message: 'Authentication check failed (maybe log out and log back in).',
