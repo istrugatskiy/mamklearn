@@ -701,20 +701,22 @@ function startGameTeacher() {
         object.disabled = true;
         object.classList.add('btnTransitionA');
     });
-    setTimeout(() => {
-        mainAudio.setVolume('mainTheme', 0);
-        clearChildren('characterPeopleDiv');
-        $('gameStartButtonTeacher').classList.add('btnTransitionA');
-        $('gameCodeTeacher').classList.add('btnTransitionA');
-        doCountdown();
-    }, 300);
-    setTimeout(() => {
-        mainAudio.play('playTheme', true, 0);
-        mainAudio.setVolume('playTheme', 1);
-    }, 3000);
-    setTimeout(() => {
-        $('liveLeaderboards').style.display = 'block';
-    }, 5000);
+    networkManager.actuallyStartGame(() => {
+        setTimeout(() => {
+            mainAudio.setVolume('mainTheme', 0);
+            clearChildren('characterPeopleDiv');
+            $('gameStartButtonTeacher').classList.add('btnTransitionA');
+            $('gameCodeTeacher').classList.add('btnTransitionA');
+            doCountdown();
+        }, 300);
+        setTimeout(() => {
+            mainAudio.play('playTheme', true, 0);
+            mainAudio.setVolume('playTheme', 1);
+        }, 3000);
+        setTimeout(() => {
+            $('liveLeaderboards').style.display = 'block';
+        }, 5000);
+    });
 }
 
 function doCountdown() {

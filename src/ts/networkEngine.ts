@@ -396,4 +396,14 @@ export class networkManager {
                 }, 4000);
             });
     }
+
+    static handleGameState(location: string, callback: (isRunning: boolean) => void) {
+        onValue(
+            ref(database, `${location}globalState`),
+            (snap) => {
+                callback(snap.val());
+            },
+            { onlyOnce: true }
+        );
+    }
 }

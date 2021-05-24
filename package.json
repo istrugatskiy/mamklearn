@@ -39,6 +39,8 @@
     "@types/firebase": "^3.2.1",
     "dragula": "^3.7.3",
     "firebase": "^9.0.0-beta.2",
-    "particles.js": "^2.0.0"
+    "firebase-functions": "^3.14.1",
+    "particles.js": "^2.0.0",
+    "semver": "^7.3.5"
   }
 }

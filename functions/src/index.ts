@@ -230,37 +230,11 @@ export const kickPlayer = functions.runWith({ maxInstances: 1 }).https.onCall(as
     }
 });
 
-export const actuallyStartGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
-    if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
-        const ref = admin.database().ref;
-        const game = (await ref(`actualGames/${context.auth.uid}/players`).once('value')).val();
-        if (game && Object.keys(game).length > 0) {
-            await ref(`actualGames/${context.auth.uid}/globalData/isGameLive`).set(true);
-
-            return {
-                message: 'ok',
-                code: 200,
-            };
-        } else {
-            return {
-                message: 'Game does not exist or there are no players (your client may have fallen out of sync with the server)',
-                code: 500,
-            };
-        }
-    } else {
-        return {
-            message: 'Authentication check failed (maybe log out and log back in).',
-            code: 401,
-        };
-    }
-});
-
 export const startGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
     if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
-        const ref = admin.database().ref;
-        const playerList = (await ref(`actualGames/${context.auth.uid}/players`).once('value')).val();
+        const playerList = (await admin.database().ref(`actualGames/${context.auth.uid}/players`).once('value')).val();
         if (playerList !== null) {
-            const allQuestions = (await ref(`actualGames/${context.auth.uid}/quiz/questionObjects/`).once('value')).val() as questionObject[];
+            const allQuestions = (await admin.database().ref(`actualGames/${context.auth.uid}/quiz/questionObjects/`).once('value')).val() as questionObject[];
             if (!allQuestions || !Array.isArray(allQuestions)) {
                 return {
                     mesage: 'Quiz is malformed.',
@@ -274,8 +248,13 @@ export const startGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
                     code: 500,
                 };
             }
-            await ref(`actualGames/${context.auth.uid}/globalState/isRunning`).set(true);
-            await ref(`actualGames/${context.auth.uid}/globalState/totalQuestions`).set(allQuestions.length);
+            if ((await (await admin.database().ref(`actualGames/${context.auth.uid}/globalState/isRunning`).once('value')).val()) === true) {
+                return {
+                    message: 'Game has already started (your client may have fallen out of sync with the server).',
+                };
+            }
+            await admin.database().ref(`actualGames/${context.auth.uid}/globalState/isRunning`).set(true);
+            await admin.database().ref(`actualGames/${context.auth.uid}/globalState/totalQuestions`).set(allQuestions.length);
             let safeAnswers: string[] = [];
             firstQuestion.Answers.forEach((answer) => {
                 safeAnswers.push(answer.answer!);
@@ -288,12 +267,15 @@ export const startGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
                 endTime: firstQuestion.timeLimit ? Date.now() + Number.parseInt(firstQuestion.timeLimit.toString()) * 1000 : -1,
             };
             Object.keys(playerList).forEach(async (playerID, index) => {
-                await ref(`actualGames/${context.auth!.uid}/${playerID}/currentQuestion`).set(playerObject);
-                await ref(`actualGames/${context.auth!.uid}/${playerID}/currentQuestion`).set(1);
-                await ref(`actualGames/${context.auth!.uid}/leaderboards/${playerID}`).set({
-                    currentQuestion: 1,
-                    playerName: (values[index] as { playerName: string; playerConfig: number[] }).playerName,
-                });
+                await admin.database().ref(`actualGames/${context.auth!.uid}/players/${playerID}/currentQuestion`).set(playerObject);
+                await admin.database().ref(`actualGames/${context.auth!.uid}/players/${playerID}/currentQuestionNumber`).set(1);
+                await admin
+                    .database()
+                    .ref(`actualGames/${context.auth!.uid}/leaderboards/${playerID}`)
+                    .set({
+                        currentQuestion: 1,
+                        playerName: (values[index] as { playerName: string; playerConfig: number[] }).playerName,
+                    });
             });
             return {
                 message: 'ok',
