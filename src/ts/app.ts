@@ -182,7 +182,14 @@ function makeCode(isInGame: boolean | Event = false) {
     loadChonk('make', (obj) => {
         obj.initEvents();
         if (isInGame === true) {
-            obj.playQuiz();
+            networkManager.handleGameState(`actualGames/${networkManager.authInstance.currentUser!.uid}/`, (snap) => {
+                if (snap && snap.isRunning) {
+                    obj.startGameTeacher();
+                } else {
+                    obj.playQuiz();
+                }
+                networkManager.unsubHandler();
+            });
         }
         networkManager.initQuizList(() => {
             $('title').classList.add('handleOutTransition');

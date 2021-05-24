@@ -40,6 +40,7 @@ let quizList: { [key: string]: string } = {};
 let checkOnce = true;
 let playerNumber = 0;
 let mainAudio: AudioManager;
+let clearableTimeout: number;
 
 let clickListeners = {
     deleteQuizConfirm: () => {
@@ -534,12 +535,14 @@ export function addQuiz() {
 }
 
 networkManager.quitQuizTeacher = () => {
+    clearTimeout(clearableTimeout);
     $('errorActual').textContent = 'Game Has Ended';
     $('errorMessageA').style.display = 'block';
     setTimeout(() => {
         $('loader-1').style.display = 'none';
         $('errorMessageA').style.display = 'none';
     }, 1000);
+    $('liveLeaderboards').style.display = 'none';
     $('teacherPlayScreen').style.display = 'none';
     $('teacherCountdown').style.display = 'none';
     mainAudio.clearAll();
@@ -643,6 +646,8 @@ export function playQuiz() {
         playTheme: 'data/MusicOfTheShavedBears.mp3',
         loadingTheme: 'data/AmbientSpace.mp3',
     });
+    $('gameStartButtonTeacher').classList.remove('btnTransitionA');
+    $('gameCodeTeacher').classList.remove('btnTransitionA');
     exitModalPopupTemplate('manageQuizMenu');
     $('title').style.display = 'none';
     playerNumber = 0;
@@ -652,6 +657,7 @@ export function playQuiz() {
             $('gameCodeTeacher').textContent = `Game Code: ${value.message.toString().slice(0, 5)}-${value.message.toString().slice(5)}`;
             $('title').style.display = 'none';
             mainAudio.play('mainTheme', true);
+            mainAudio.setVolume('mainTheme', 0.6);
             $('teacherPlayScreen').style.display = 'block';
             networkManager.studentHandler(
                 (internal, playerID) => {
@@ -692,18 +698,35 @@ function kickPlayer(eventId: string) {
     }, 300);
 }
 
-function startGameTeacher() {
-    networkManager.removeStudentHandler();
-    networkManager.otherStudentHandler();
+export function startGameTeacher() {
+    networkManager.removeStudentHandler ? networkManager.removeStudentHandler() : null;
+    networkManager.otherStudentHandler ? networkManager.otherStudentHandler() : null;
     $('gameStartButtonTeacher').disabled = true;
     const people = Array.from($('characterPeopleDiv').children);
     people.forEach((object) => {
         object.disabled = true;
         object.classList.add('btnTransitionA');
     });
-    networkManager.actuallyStartGame(() => {
+    if (networkManager.removeStudentHandler === null || networkManager.removeStudentHandler === undefined) {
+        mainAudio = new AudioManager({
+            mainTheme: 'data/MainTheme.mp3',
+            playTheme: 'data/MusicOfTheShavedBears.mp3',
+            loadingTheme: 'data/AmbientSpace.mp3',
+        });
+        $('teacherPlayScreen').style.display = 'block';
+        $('gameStartButtonTeacher').style.display = 'none';
+        $('gameCodeTeacher').style.display = 'none';
+        completeProcess();
+    } else {
+        networkManager.actuallyStartGame(() => {
+            completeProcess();
+            setTimeout(() => {
+                mainAudio.setVolume('mainTheme', 0);
+            }, 300);
+        });
+    }
+    function completeProcess() {
         setTimeout(() => {
-            mainAudio.setVolume('mainTheme', 0);
             clearChildren('characterPeopleDiv');
             $('gameStartButtonTeacher').classList.add('btnTransitionA');
             $('gameCodeTeacher').classList.add('btnTransitionA');
@@ -713,10 +736,10 @@ function startGameTeacher() {
             mainAudio.play('playTheme', true, 0);
             mainAudio.setVolume('playTheme', 1);
         }, 3000);
-        setTimeout(() => {
+        clearableTimeout = window.setTimeout(() => {
             $('liveLeaderboards').style.display = 'block';
         }, 5000);
-    });
+    }
 }
 
 function doCountdown() {

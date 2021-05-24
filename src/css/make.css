@@ -585,3 +585,8 @@
 		opacity: 1;
 	}
 }
+#gameCodeTeacher {
+	-webkit-user-select: text; /* Safari */
+  	-ms-user-select: text; /* IE 10 and IE 11 */
+  	user-select: text;
+}

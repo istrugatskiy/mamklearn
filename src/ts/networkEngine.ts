@@ -142,6 +142,7 @@ export class networkManager {
     static removeStudentHandler: Unsubscribe;
     static otherStudentHandler: Unsubscribe;
     static quitQuizStudent: () => void;
+    static unsubHandler: Unsubscribe;
     static _setClientQuizList: (quizList: { [key: string]: string }) => void;
     private static currentQuizObject: Reference;
     static authInstance = getAuth();
@@ -397,13 +398,9 @@ export class networkManager {
             });
     }
 
-    static handleGameState(location: string, callback: (isRunning: boolean) => void) {
-        onValue(
-            ref(database, `${location}globalState`),
-            (snap) => {
-                callback(snap.val());
-            },
-            { onlyOnce: true }
-        );
+    static handleGameState(location: string, callback: (state: { isRunning: boolean }) => void) {
+        this.unsubHandler = onValue(ref(database, `${location}globalState`), (snap) => {
+            callback(snap.val());
+        });
     }
 }
