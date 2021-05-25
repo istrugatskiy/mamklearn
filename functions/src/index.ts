@@ -55,7 +55,8 @@ export const initGame = functions.runWith({ maxInstances: 3 }).https.onCall(asyn
                             let list2 = new Array();
                             for (let i = 0; i < 999; i++) {
                                 if (!list.includes(i.toString())) {
-                                    list2.push(i.toString().padStart(3, '0'));
+                                    const temp = i.toString().padStart(3, '0');
+                                    list2.push(temp);
                                 }
                             }
                             if (list2.length == 0) {
@@ -69,7 +70,9 @@ export const initGame = functions.runWith({ maxInstances: 3 }).https.onCall(asyn
                             currentValue[rand] = `actualGames/${context.auth!.uid}/`;
                         } else {
                             currentValue = {};
-                            const rand = Math.round(Math.random() * 999);
+                            const rand = Math.round(Math.random() * 999)
+                                .toString()
+                                .padStart(3, '0');
                             currentValue[rand] = `actualGames/${context.auth!.uid}/`;
                             returnValue = firstRand.toString() + rand;
                         }

@@ -257,6 +257,7 @@ export class AudioManager {
             audioClip.pause();
         });
         this.currentlyPlaying = [];
+        this.audioObjects = {};
     }
 }
 

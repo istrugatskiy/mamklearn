@@ -98,7 +98,7 @@ let clickListeners = {
         exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm');
     },
     gameStartButtonTeacher: () => {
-        startGameTeacher();
+        startGameTeacher(false);
     },
     exportQuizButton: () => {
         parseActiveQuiz();
@@ -535,9 +535,16 @@ export function addQuiz() {
 }
 
 networkManager.quitQuizTeacher = () => {
+    $('liveLeaderboards').style.display = 'none';
     clearTimeout(clearableTimeout);
     $('errorActual').textContent = 'Game Has Ended';
     $('errorMessageA').style.display = 'block';
+    clearChildren('characterPeopleDiv');
+    $('gameStartButtonTeacher').classList.add('btnTransitionA');
+    $('gameCodeTeacher').classList.add('btnTransitionA');
+    networkManager.removeStudentHandler ? networkManager.removeStudentHandler() : null;
+    networkManager.otherStudentHandler ? networkManager.otherStudentHandler() : null;
+    networkManager.unsubHandler();
     setTimeout(() => {
         $('loader-1').style.display = 'none';
         $('errorMessageA').style.display = 'none';
@@ -698,7 +705,7 @@ function kickPlayer(eventId: string) {
     }, 300);
 }
 
-export function startGameTeacher() {
+export function startGameTeacher(shouldHandle: boolean) {
     networkManager.removeStudentHandler ? networkManager.removeStudentHandler() : null;
     networkManager.otherStudentHandler ? networkManager.otherStudentHandler() : null;
     $('gameStartButtonTeacher').disabled = true;
@@ -707,7 +714,7 @@ export function startGameTeacher() {
         object.disabled = true;
         object.classList.add('btnTransitionA');
     });
-    if (networkManager.removeStudentHandler === null || networkManager.removeStudentHandler === undefined) {
+    if (networkManager.removeStudentHandler === null || networkManager.removeStudentHandler === undefined || shouldHandle) {
         mainAudio = new AudioManager({
             mainTheme: 'data/MainTheme.mp3',
             playTheme: 'data/MusicOfTheShavedBears.mp3',

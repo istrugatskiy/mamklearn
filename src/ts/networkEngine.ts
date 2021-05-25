@@ -143,6 +143,7 @@ export class networkManager {
     static otherStudentHandler: Unsubscribe;
     static quitQuizStudent: () => void;
     static unsubHandler: Unsubscribe;
+    static leaderboardHandler: Unsubscribe;
     static _setClientQuizList: (quizList: { [key: string]: string }) => void;
     private static currentQuizObject: Reference;
     static authInstance = getAuth();
@@ -401,6 +402,20 @@ export class networkManager {
     static handleGameState(location: string, callback: (state: { isRunning: boolean }) => void) {
         this.unsubHandler = onValue(ref(database, `${location}globalState`), (snap) => {
             callback(snap.val());
+        });
+    }
+
+    static trackLeaderboards(createInitialList: (playerData: { [key: string]: { playerID: string; playerName: string } }) => void, changePlayer: (location: number, newPerson: string) => void, removePlayer: (playerID: string) => void) {
+        let firstTime = true;
+        this.leaderboardHandler = onValue(ref(database, `actualGames/${this.authInstance.currentUser!.uid}/leaderboards`), (snap) => {
+            if (firstTime) {
+                createInitialList(snap.val());
+            } else {
+                // TODO: Actually finish this.
+                changePlayer(snap.val().location, snap.val().playerName);
+                removePlayer(snap.val());
+            }
+            firstTime = false;
         });
     }
 }
