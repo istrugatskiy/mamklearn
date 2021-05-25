@@ -408,13 +408,20 @@ export class networkManager {
     static trackLeaderboards(createInitialList: (playerData: { [key: string]: { playerID: string; playerName: string } }) => void, changePlayer: (location: number, newPerson: string) => void, removePlayer: (playerID: string) => void) {
         let firstTime = true;
         this.leaderboardHandler = onValue(ref(database, `actualGames/${this.authInstance.currentUser!.uid}/leaderboards`), (snap) => {
+            if (!snap.val()) {
+                this.leaveGame(() => {});
+                this.leaderboardHandler();
+                return;
+            }
             if (firstTime) {
                 createInitialList(snap.val());
             } else {
-                // TODO: Actually finish this.
-                changePlayer(snap.val().location, snap.val().playerName);
-                removePlayer(snap.val());
+                // Runs diffing algorithm to determine which ones are removed and added
+                const keys = Object.keys(snap.val());
+                const value = Object.values(snap.val());
+                keys.forEach((key) => {});
             }
+
             firstTime = false;
         });
     }
