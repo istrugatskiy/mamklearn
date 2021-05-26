@@ -17,7 +17,7 @@ export const eventHandle = () => {
     });
     window.addEventListener('keydown', (event) => {
         if (event.key == 'Enter' || event.key == ' ') {
-            event.code
+            event.code;
             const keys = Object.keys(window.keyboardIncludesEvents);
             const eventTarget = (event.target! as HTMLElement).id;
             for (var i = 0; i < keys.length; i++) {
@@ -40,7 +40,7 @@ export const eventHandle = () => {
             const target = event.target! as HTMLElement;
             let a69 = getCaretCharacterOffsetWithin(target);
             let a70 = String(target.textContent!.replace(/(\r\n|\r|\n)/, ''));
-            const maxLength = (target.dataset!.maxlength as unknown) as number;
+            const maxLength = target.dataset!.maxlength as unknown as number;
             target.textContent = a70;
             if (maxLength < target.textContent!.length) {
                 target.textContent = target.dataset.revert as string;
@@ -66,10 +66,7 @@ export const eventHandle = () => {
         }
     });
     window.addEventListener('error', (error) => {
-        if (error.message.includes('Script error') || error.message.includes('TypeError')) {
-            throwExcept('@ScriptErrorHandler: ' + error.message);
-        } else {
-            console.log(error.message);
-        }
+        throwExcept('@ScriptErrorHandler: ' + error.message);
+        console.log(error.message);
     });
 };
