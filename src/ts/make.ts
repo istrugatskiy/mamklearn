@@ -544,7 +544,8 @@ networkManager.quitQuizTeacher = () => {
     $('gameCodeTeacher').classList.add('btnTransitionA');
     networkManager.removeStudentHandler ? networkManager.removeStudentHandler() : null;
     networkManager.otherStudentHandler ? networkManager.otherStudentHandler() : null;
-    networkManager.unsubHandler();
+    networkManager.unsubHandler ? networkManager.unsubHandler() : null;
+    networkManager.leaderboardHandler ? networkManager.leaderboardHandler() : null;
     setTimeout(() => {
         $('loader-1').style.display = 'none';
         $('errorMessageA').style.display = 'none';

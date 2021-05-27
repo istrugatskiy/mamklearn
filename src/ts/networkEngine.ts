@@ -405,7 +405,7 @@ export class networkManager {
         });
     }
 
-    static trackLeaderboards(createInitialList: (playerData: { [key: string]: { playerID: string; playerName: string } }) => void, changePlayer: (location: number, newPerson: string) => void, removePlayer: (playerID: string) => void) {
+    static trackLeaderboards(createInitialList: (playerData: { [key: string]: { playerID: string; playerName: string } }) => void) {
         let firstTime = true;
         this.leaderboardHandler = onValue(ref(database, `actualGames/${this.authInstance.currentUser!.uid}/leaderboards`), (snap) => {
             if (!snap.val()) {
@@ -416,10 +416,7 @@ export class networkManager {
             if (firstTime) {
                 createInitialList(snap.val());
             } else {
-                // Runs diffing algorithm to determine which ones are removed and added
-                const keys = Object.keys(snap.val());
-                const value = Object.values(snap.val());
-                keys.forEach((key) => {});
+                console.log('todo implement');
             }
 
             firstTime = false;
