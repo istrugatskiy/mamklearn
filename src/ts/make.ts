@@ -751,7 +751,10 @@ export function startGameTeacher(shouldHandle: boolean) {
                 $('playerContainer').appendChild(fragment);
             },
             (id) => {
-                $(`playerList_${id}`);
+                $(`playerList_${id}`).classList.add('btnTransitionA');
+                setTimeout(() => {
+                    $(`playerList_${id}`).remove();
+                }, 300);
             }
         );
         setTimeout(() => {

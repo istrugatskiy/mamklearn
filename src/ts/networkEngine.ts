@@ -411,6 +411,7 @@ export class networkManager {
         this.prevLeaderboardValues = {};
         this.leaderboardHandler = onValue(ref(database, `actualGames/${this.authInstance.currentUser!.uid}/leaderboards`), (snap) => {
             if (!snap.val()) {
+                console.log(`Value is ${snap.val()}`);
                 this.leaveGame(() => {});
                 this.leaderboardHandler();
                 return;
@@ -423,7 +424,7 @@ export class networkManager {
                     if (!snap.val()[key]) {
                         removePlayer(key);
                     } else if (snap.val()[key] !== value) {
-                        console.log('temp42');
+                        console.log('temp43');
                     }
                 }
             }
