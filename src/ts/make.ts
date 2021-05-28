@@ -530,7 +530,6 @@ export function addQuiz() {
         createTemplate('makeDivCreateQuizButton', 'makeDiv');
         createTemplate('makeDivBackButton', 'makeDiv');
         $('makeDiv').style.textAlign = 'center';
-        $('makeDiv').style.paddingLeft = '30px';
     }
 }
 
@@ -728,12 +727,33 @@ export function startGameTeacher(shouldHandle: boolean) {
     } else {
         networkManager.actuallyStartGame(() => {
             completeProcess();
-            setTimeout(() => {
-                mainAudio.setVolume('mainTheme', 0);
-            }, 300);
+            mainAudio.setVolume('mainTheme', 0);
         });
     }
     function completeProcess() {
+        networkManager.trackLeaderboards(
+            (data) => {
+                const fragment = document.createDocumentFragment();
+                const templateElement = document.createElement('div');
+                templateElement.classList.add('button', 'inGamePlayerButton', 'buttonLikeTitle');
+                templateElement.appendChild(document.createElement('b'));
+                let index = 1;
+                for (const [key, value] of Object.entries(data)) {
+                    const clone = templateElement.cloneNode(true) as HTMLElement;
+                    clone.id = `playerList_${key}`;
+                    clone.firstElementChild!.textContent = `${index.toString()}. `;
+                    clone.style = `--c: ${index}`;
+                    clone.appendChild(document.createTextNode(` ${value.playerName}`));
+                    fragment.appendChild(clone);
+                    index++;
+                }
+                clearChildren('playerContainer');
+                $('playerContainer').appendChild(fragment);
+            },
+            (id) => {
+                $(`playerList_${id}`);
+            }
+        );
         setTimeout(() => {
             clearChildren('characterPeopleDiv');
             $('gameStartButtonTeacher').classList.add('btnTransitionA');

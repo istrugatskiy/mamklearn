@@ -148,6 +148,7 @@ export class networkManager {
     private static currentQuizObject: Reference;
     static authInstance = getAuth();
     static hasBeenInitialized = false;
+    private static prevLeaderboardValues: { [key: string]: { playerID: string; playerName: string } };
     private static alreadyAware: { [key: string]: { playerName: string; playerConfig: number[] } };
 
     static set setClientQuizList(newFunction: () => void) {
@@ -405,8 +406,9 @@ export class networkManager {
         });
     }
 
-    static trackLeaderboards(createInitialList: (playerData: { [key: string]: { playerID: string; playerName: string } }) => void) {
+    static trackLeaderboards(createInitialList: (playerData: { [key: string]: { playerID: string; playerName: string } }) => void, removePlayer: (playerID: string) => void) {
         let firstTime = true;
+        this.prevLeaderboardValues = {};
         this.leaderboardHandler = onValue(ref(database, `actualGames/${this.authInstance.currentUser!.uid}/leaderboards`), (snap) => {
             if (!snap.val()) {
                 this.leaveGame(() => {});
@@ -416,9 +418,16 @@ export class networkManager {
             if (firstTime) {
                 createInitialList(snap.val());
             } else {
-                console.log('todo implement');
+                console.log('temp32');
+                for (const [key, value] of Object.entries(this.prevLeaderboardValues)) {
+                    if (!snap.val()[key]) {
+                        removePlayer(key);
+                    } else if (snap.val()[key] !== value) {
+                        console.log('temp42');
+                    }
+                }
             }
-
+            this.prevLeaderboardValues = snap.val();
             firstTime = false;
         });
     }
