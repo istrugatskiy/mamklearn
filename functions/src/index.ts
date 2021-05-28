@@ -131,6 +131,7 @@ export const leaveGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
                     .ref(`currentGames/${snap.val().code.slice(0, 5)}/${snap.val().code.slice(5)}`)
                     .once('value');
                 await admin.database().ref(`${location.val()}players/${context.auth!.uid}`).set(null);
+                await admin.database().ref(`${location.val()}leaderboards/${context.auth!.uid}`);
             }
             await admin.database().ref(`userProfiles/${context.auth!.uid}/currentGameState/`).set(null);
         } else {
