@@ -41,6 +41,7 @@ let checkOnce = true;
 let playerNumber = 0;
 let mainAudio: AudioManager;
 let clearableTimeout: number;
+let clearableTimeout2: number;
 
 let clickListeners = {
     deleteQuizConfirm: () => {
@@ -536,6 +537,7 @@ export function addQuiz() {
 networkManager.quitQuizTeacher = () => {
     $('liveLeaderboards').style.display = 'none';
     clearTimeout(clearableTimeout);
+    clearTimeout(clearableTimeout2);
     $('errorActual').textContent = 'Game Has Ended';
     $('errorMessageA').style.display = 'block';
     clearChildren('characterPeopleDiv');
@@ -763,7 +765,7 @@ export function startGameTeacher(shouldHandle: boolean) {
             $('gameCodeTeacher').classList.add('btnTransitionA');
             doCountdown();
         }, 300);
-        setTimeout(() => {
+        clearableTimeout2 = window.setTimeout(() => {
             mainAudio.play('playTheme', true, 0);
             mainAudio.setVolume('playTheme', 1);
         }, 3000);

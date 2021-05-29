@@ -410,13 +410,15 @@ export class networkManager {
         let firstTime = true;
         this.prevLeaderboardValues = {};
         this.leaderboardHandler = onValue(ref(database, `actualGames/${this.authInstance.currentUser!.uid}/leaderboards`), (snap) => {
+            console.log(`Value is ${snap.val()}`);
             if (!snap.val()) {
-                console.log(`Value is ${snap.val()}`);
+                console.log('not snapval');
                 this.leaveGame(() => {});
                 this.leaderboardHandler();
                 return;
             }
             if (firstTime) {
+                console.log('first time');
                 createInitialList(snap.val());
             } else {
                 console.log('temp32');
