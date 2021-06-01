@@ -759,10 +759,10 @@ export function startGameTeacher(shouldHandle: boolean) {
                 }, 300);
             }
         );
+        $('gameStartButtonTeacher').classList.add('btnTransitionA');
+        $('gameCodeTeacher').classList.add('btnTransitionA');
         setTimeout(() => {
             clearChildren('characterPeopleDiv');
-            $('gameStartButtonTeacher').classList.add('btnTransitionA');
-            $('gameCodeTeacher').classList.add('btnTransitionA');
             doCountdown();
         }, 300);
         clearableTimeout2 = window.setTimeout(() => {

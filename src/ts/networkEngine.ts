@@ -280,10 +280,9 @@ export class networkManager {
                         throwExcept(`@StartGame: ${val.code}: ${val.message}`);
                     }
                 })
-                .catch((error) => {
+                .catch(() => {
                     setTimeout(() => {
                         this.startGame(callback, data);
-                        console.warn(error);
                     }, 4000);
                 });
         } else {
@@ -305,10 +304,9 @@ export class networkManager {
                     throwExcept(`@LeaveGame: ${val.code}: ${val.message}`);
                 }
             })
-            .catch((error) => {
+            .catch(() => {
                 setTimeout(() => {
                     this.leaveGame(callback);
-                    console.warn(error);
                 }, 4000);
             });
     }
@@ -331,10 +329,9 @@ export class networkManager {
                                 throwExcept(`@JoinGameStudent: ${val.code}: ${val.message}`);
                             }
                         })
-                        .catch((error) => {
+                        .catch(() => {
                             setTimeout(() => {
                                 this.joinGameStudent(userInput, callback);
-                                console.warn(error);
                             }, 4000);
                         });
                 }
@@ -370,10 +367,9 @@ export class networkManager {
                     throwExcept(`@KickPlayer: ${data.code}: ${data.message}`);
                 }
             })
-            .catch((error) => {
+            .catch(() => {
                 setTimeout(() => {
                     this.kickPlayer(playerToKick);
-                    console.warn(error);
                 }, 4000);
             });
     }
@@ -392,10 +388,9 @@ export class networkManager {
                     callback();
                 }
             })
-            .catch((error) => {
+            .catch(() => {
                 setTimeout(() => {
                     this.actuallyStartGame(callback);
-                    console.warn(error);
                 }, 4000);
             });
     }
@@ -410,18 +405,14 @@ export class networkManager {
         let firstTime = true;
         this.prevLeaderboardValues = {};
         this.leaderboardHandler = onValue(ref(database, `actualGames/${this.authInstance.currentUser!.uid}/leaderboards`), (snap) => {
-            console.log(`Value is ${snap.val()}`);
             if (!snap.val()) {
-                console.log('not snapval');
-                this.leaveGame(() => {});
+                this.quitQuizTeacher();
                 this.leaderboardHandler();
                 return;
             }
             if (firstTime) {
-                console.log('first time');
                 createInitialList(snap.val());
             } else {
-                console.log('temp32');
                 for (const [key, value] of Object.entries(this.prevLeaderboardValues)) {
                     if (!snap.val()[key]) {
                         removePlayer(key);

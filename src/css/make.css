@@ -144,7 +144,9 @@
 	bottom: -3px;
 	z-index: 1;
 	stroke-dashoffset: 124.6;
-	stroke-dasharray: 0 162.6 133 29.6;
+	/* CSS minimizer has seizure tring to compile this */
+	/* For now fixed by adding .0 to 133 */
+	stroke-dasharray: 0 162.6 133.0 29.6;
 	transition: all 0.4s ease 0s;
 }
 .toggleButton input+div:before, .toggleButton input+div:after {
