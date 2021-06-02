@@ -551,9 +551,6 @@ networkManager.quitQuizTeacher = () => {
         $('loader-1').style.display = 'none';
         $('errorMessageA').style.display = 'none';
     }, 1000);
-    $('liveLeaderboards').style.display = 'none';
-    $('teacherPlayScreen').style.display = 'none';
-    $('teacherCountdown').style.display = 'none';
     mainAudio.clearAll();
     $('liveLeaderboards').style.display = 'none';
     $('title').style.display = 'block';

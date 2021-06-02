@@ -406,6 +406,7 @@ export class networkManager {
         this.prevLeaderboardValues = {};
         this.leaderboardHandler = onValue(ref(database, `actualGames/${this.authInstance.currentUser!.uid}/leaderboards`), (snap) => {
             if (!snap.val()) {
+                console.log('Nobody is in the quiz...');
                 this.quitQuizTeacher();
                 this.leaderboardHandler();
                 return;

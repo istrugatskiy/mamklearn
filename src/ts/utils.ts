@@ -198,6 +198,7 @@ export class AudioManager {
 
     play(name: string, shouldLoop: boolean = false, volume: number = 1) {
         if (this.audioObjects[name]) {
+            console.trace(name);
             let newAudio = new Audio(this.audioObjects[name].source);
             newAudio.loop = shouldLoop;
             newAudio.volume = volume;
@@ -210,6 +211,7 @@ export class AudioManager {
 
     setVolume(name: string, newVolume: number, noInterpolate: boolean = false) {
         if (this.audioObjects[name].index !== null) {
+            console.trace(name);
             const currentAudio = this.currentlyPlaying[this.audioObjects[name].index!];
             let distance = 0;
             let initVolume = currentAudio.volume;

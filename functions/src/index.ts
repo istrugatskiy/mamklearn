@@ -132,6 +132,15 @@ export const leaveGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
                     .once('value');
                 await admin.database().ref(`${location.val()}players/${context.auth!.uid}`).set(null);
                 await admin.database().ref(`${location.val()}leaderboards/${context.auth!.uid}`).remove();
+                functions.logger.log((await admin.database().ref(`${location.val()}leaderboards/`).once('value')).val());
+                if (!(await admin.database().ref(`${location.val()}leaderboards/`).once('value')).val()) {
+                    await admin
+                        .database()
+                        .ref(`currentGames/${snap.val().code.slice(0, 5)}/${snap.val().code.slice(5)}`)
+                        .set(null);
+                    await admin.database().ref(`actualGames/${location.val()}`).set(null);
+                    await admin.database().ref(`userProfiles/${location.val()}/currentGameState/`).set(null);
+                }
             }
             await admin.database().ref(`userProfiles/${context.auth!.uid}/currentGameState/`).set(null);
         } else {
