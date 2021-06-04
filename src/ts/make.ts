@@ -740,17 +740,16 @@ export function startGameTeacher(shouldHandle: boolean) {
                 const templateElement = document.createElement('div');
                 templateElement.classList.add('button', 'inGamePlayerButton', 'buttonLikeTitle');
                 templateElement.appendChild(document.createElement('b'));
-                let index = 1;
-                for (const [key, value] of Object.entries(data)) {
+                data.forEach((value, index) => {
                     console.log(data);
                     const clone = templateElement.cloneNode(true) as HTMLElement;
-                    clone.id = `playerList_${key}`;
-                    clone.firstElementChild!.textContent = `${index.toString()}. `;
+                    clone.id = `playerList_${value.key}`;
+                    clone.firstElementChild!.textContent = `${(index + 1).toString()}. `;
                     clone.style = `--c: ${index}`;
                     clone.appendChild(document.createTextNode(` ${value.playerName}`));
                     fragment.appendChild(clone);
                     index++;
-                }
+                });
                 clearChildren('playerContainer');
                 $('playerContainer').appendChild(fragment);
             },

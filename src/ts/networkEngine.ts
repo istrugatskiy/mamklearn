@@ -401,7 +401,7 @@ export class networkManager {
         });
     }
 
-    static trackLeaderboards(createInitialList: (playerData: { [key: string]: { currentQuestion: number; playerName: string } }) => void, removePlayer: (playerID: string) => void) {
+    static trackLeaderboards(createInitialList: (playerData: { key: string; currentQuestion: number; playerName: string }[]) => void, removePlayer: (playerID: string) => void) {
         let firstTime = true;
         this.prevLeaderboardValues = {};
         this.leaderboardHandler = onValue(ref(database, `actualGames/${this.authInstance.currentUser!.uid}/leaderboards`), (snap) => {
@@ -411,22 +411,12 @@ export class networkManager {
                 return;
             }
             if (firstTime) {
-                let sortedList = {};
-                let temp = snap.val();
-                Object.values(temp).sort((a, b) => {
-                    const firstEl = a as { currentQuestion: number; playerName: string };
-                    const secondEl = b as { currentQuestion: number; playerName: string };
-                    return firstEl.currentQuestion - secondEl.currentQuestion;
-                });
-                Object.keys(snap.val()).forEach((key) => {
-                    sortedList[key] = temp;
-                });
-                createInitialList(sortedList);
+                const temp = sortArray(snap.val());
+                createInitialList(temp);
             } else {
-                for (const [key, value] of Object.entries(this.prevLeaderboardValues)) {
+                for (const [key] of Object.entries(this.prevLeaderboardValues)) {
                     if (!snap.val()[key]) {
                         removePlayer(key);
-                    } else if (snap.val()[key] !== value) {
                     }
                 }
             }
@@ -434,4 +424,20 @@ export class networkManager {
             firstTime = false;
         });
     }
+}
+
+function sortArray(input: { [key: string]: { currentQuestion: number; playerName: string } }) {
+    let tempArray: { key: string; currentQuestion: number; playerName: string }[] = [];
+    for (const [key, value] of Object.entries(input)) {
+        tempArray.push({
+            key: key,
+            currentQuestion: value.currentQuestion,
+            playerName: value.playerName,
+        });
+    }
+    return tempArray.sort((a, b) => {
+        const firstEl = a as { currentQuestion: number; playerName: string };
+        const secondEl = b as { currentQuestion: number; playerName: string };
+        return secondEl.currentQuestion - firstEl.currentQuestion;
+    });
 }
