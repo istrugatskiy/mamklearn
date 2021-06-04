@@ -36,6 +36,7 @@ window.customOptionsIncrement = 0;
 window.currentUserConfig = [0, 0, 0, 0, 0];
 let prevRejected = false;
 const customOptions = ['Eyes', 'Nose', 'Mouth', 'Shirt', 'Arms'];
+let makeObj: typeof import('./make');
 
 // Creates a console message that rickrolls you
 console.log('%cUse link to get quiz answers:https://bit.ly/31Apj2U', 'font-size: 32px;');
@@ -111,7 +112,17 @@ window.clickEvents = {
     },
     rejoinGameConfirm: () => {
         if (window.currentGameState.isTeacher) {
-            makeCode(true);
+            // Handles differently based on your location
+            if ($('makebtn')) {
+                makeCode(true);
+            } else if ($('gameID')) {
+                goBack();
+                setTimeout(() => {
+                    makeCode(true);
+                }, 600);
+            } else {
+                handleGameState(makeObj);
+            }
         } else {
             $('title').style.display = 'block';
             playCode();
@@ -179,28 +190,34 @@ function makeCode(isInGame: boolean | Event = false) {
     $('btn2').disabled = true;
     clearChildren('makebtn');
     createTemplate('svgLoader', 'makebtn');
-    loadChonk('make', (obj) => {
+    loadChonk('make', (obj: typeof import('./make')) => {
         obj.initEvents();
         if (isInGame === true) {
-            let alreadyRun: boolean = false;
-            networkManager.handleGameState(`actualGames/${networkManager.authInstance.currentUser!.uid}/`, (snap) => {
-                if (snap && snap.isRunning) {
-                    obj.startGameTeacher(true);
-                } else if (!alreadyRun) {
-                    obj.playQuiz();
-                }
-                alreadyRun = true;
-            });
+            handleGameState(obj);
+            makeObj = obj;
         }
         networkManager.initQuizList(() => {
             $('title').classList.add('handleOutTransition');
             setTimeout(() => {
                 $('title').classList.remove('handleOutTransition');
                 setTitle('makeMenu');
-                networkManager.setClientQuizList = obj.quizSetter;
+                networkManager.setClientQuizList = obj.quizSetter as () => void;
                 $('title').style.top = '100px';
             }, 300);
         });
+    });
+}
+
+function handleGameState(obj: typeof import('./make')) {
+    let alreadyRun: boolean = false;
+    networkManager.handleGameState(`actualGames/${networkManager.authInstance.currentUser!.uid}/`, (snap) => {
+        if (snap && snap.isRunning) {
+            obj.startGameTeacher(true);
+            networkManager.unsubHandler();
+        } else if (!alreadyRun) {
+            obj.playQuiz();
+        }
+        alreadyRun = true;
     });
 }
 
@@ -229,7 +246,7 @@ function JoinGame() {
 function joinGameStudent() {
     networkManager.joinGameStudent($('gameID').value, (exists, message) => {
         if (exists) {
-            loadChonk('play', (obj) => {
+            loadChonk('play', (obj: typeof import('./play')) => {
                 $('mainLoader').classList.add('loader--active');
                 obj.initEvents();
                 setTimeout(() => {

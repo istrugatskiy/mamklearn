@@ -543,6 +543,7 @@ networkManager.quitQuizTeacher = () => {
     clearChildren('characterPeopleDiv');
     $('gameStartButtonTeacher').classList.add('btnTransitionA');
     $('gameCodeTeacher').classList.add('btnTransitionA');
+    $('teacherCountdown').style.display = 'none';
     networkManager.removeStudentHandler ? networkManager.removeStudentHandler() : null;
     networkManager.otherStudentHandler ? networkManager.otherStudentHandler() : null;
     networkManager.unsubHandler ? networkManager.unsubHandler() : null;
@@ -654,6 +655,8 @@ export function playQuiz() {
     });
     $('gameStartButtonTeacher').classList.remove('btnTransitionA');
     $('gameCodeTeacher').classList.remove('btnTransitionA');
+    $('gameCodeTeacher').style.display = '';
+    $('gameStartButtonTeacher').style.display = '';
     exitModalPopupTemplate('manageQuizMenu');
     $('title').style.display = 'none';
     playerNumber = 0;
@@ -714,6 +717,7 @@ export function startGameTeacher(shouldHandle: boolean) {
         object.classList.add('btnTransitionA');
     });
     if (networkManager.removeStudentHandler === null || networkManager.removeStudentHandler === undefined || shouldHandle) {
+        !mainAudio || mainAudio.clearAll();
         mainAudio = new AudioManager({
             mainTheme: 'data/MainTheme.mp3',
             playTheme: 'data/MusicOfTheShavedBears.mp3',
@@ -738,6 +742,7 @@ export function startGameTeacher(shouldHandle: boolean) {
                 templateElement.appendChild(document.createElement('b'));
                 let index = 1;
                 for (const [key, value] of Object.entries(data)) {
+                    console.log(data);
                     const clone = templateElement.cloneNode(true) as HTMLElement;
                     clone.id = `playerList_${key}`;
                     clone.firstElementChild!.textContent = `${index.toString()}. `;
@@ -750,9 +755,13 @@ export function startGameTeacher(shouldHandle: boolean) {
                 $('playerContainer').appendChild(fragment);
             },
             (id) => {
-                $(`playerList_${id}`).classList.add('btnTransitionA');
+                $(`playerList_${id}`).style.maxWidth = '600px';
+                $(`playerList_${id}`).classList.remove('inGamePlayerButton');
                 setTimeout(() => {
-                    $(`playerList_${id}`).remove();
+                    $(`playerList_${id}`).classList.add('btnTransitionA');
+                    setTimeout(() => {
+                        $(`playerList_${id}`).remove();
+                    }, 300);
                 }, 300);
             }
         );

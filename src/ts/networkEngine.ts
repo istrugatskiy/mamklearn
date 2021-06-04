@@ -401,24 +401,32 @@ export class networkManager {
         });
     }
 
-    static trackLeaderboards(createInitialList: (playerData: { [key: string]: { playerID: string; playerName: string } }) => void, removePlayer: (playerID: string) => void) {
+    static trackLeaderboards(createInitialList: (playerData: { [key: string]: { currentQuestion: number; playerName: string } }) => void, removePlayer: (playerID: string) => void) {
         let firstTime = true;
         this.prevLeaderboardValues = {};
         this.leaderboardHandler = onValue(ref(database, `actualGames/${this.authInstance.currentUser!.uid}/leaderboards`), (snap) => {
             if (!snap.val()) {
-                console.log('Nobody is in the quiz...');
                 this.quitQuizTeacher();
                 this.leaderboardHandler();
                 return;
             }
             if (firstTime) {
-                createInitialList(snap.val());
+                let sortedList = {};
+                let temp = snap.val();
+                Object.values(temp).sort((a, b) => {
+                    const firstEl = a as { currentQuestion: number; playerName: string };
+                    const secondEl = b as { currentQuestion: number; playerName: string };
+                    return firstEl.currentQuestion - secondEl.currentQuestion;
+                });
+                Object.keys(snap.val()).forEach((key) => {
+                    sortedList[key] = temp;
+                });
+                createInitialList(sortedList);
             } else {
                 for (const [key, value] of Object.entries(this.prevLeaderboardValues)) {
                     if (!snap.val()[key]) {
                         removePlayer(key);
                     } else if (snap.val()[key] !== value) {
-                        console.log('temp43');
                     }
                 }
             }

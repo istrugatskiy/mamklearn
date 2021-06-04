@@ -138,8 +138,11 @@ export const leaveGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
                         .database()
                         .ref(`currentGames/${snap.val().code.slice(0, 5)}/${snap.val().code.slice(5)}`)
                         .set(null);
-                    await admin.database().ref(`actualGames/${location.val()}`).set(null);
-                    await admin.database().ref(`userProfiles/${location.val()}/currentGameState/`).set(null);
+                    await admin.database().ref(location.val()).set(null);
+                    await admin
+                        .database()
+                        .ref(`userProfiles/${(location.val() as string).replace('actualGames/', '')}currentGameState/`)
+                        .set(null);
                 }
             }
             await admin.database().ref(`userProfiles/${context.auth!.uid}/currentGameState/`).set(null);
@@ -266,8 +269,6 @@ export const startGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
                     message: 'Game has already started (your client may have fallen out of sync with the server).',
                 };
             }
-            await admin.database().ref(`actualGames/${context.auth.uid}/globalState/isRunning`).set(true);
-            await admin.database().ref(`actualGames/${context.auth.uid}/globalState/totalQuestions`).set(allQuestions.length);
             let safeAnswers: string[] = [];
             firstQuestion.Answers.forEach((answer) => {
                 safeAnswers.push(answer.answer!);
@@ -290,6 +291,8 @@ export const startGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
                         playerName: (values[index] as { playerName: string; playerConfig: number[] }).playerName,
                     });
             });
+            await admin.database().ref(`actualGames/${context.auth.uid}/globalState/isRunning`).set(true);
+            await admin.database().ref(`actualGames/${context.auth.uid}/globalState/totalQuestions`).set(allQuestions.length);
             return {
                 message: 'ok',
                 code: 200,
