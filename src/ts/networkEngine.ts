@@ -401,7 +401,11 @@ export class networkManager {
         });
     }
 
-    static trackLeaderboards(createInitialList: (playerData: { key: string; currentQuestion: number; playerName: string }[]) => void, removePlayer: (playerID: string) => void) {
+    static trackLeaderboards(
+        createInitialList: (playerData: { key: string; currentQuestion: number; playerName: string }[]) => void,
+        removePlayer: (playerID: string) => void,
+        updateList: (playerData: { key: string; currentQuestion: number; playerName: string }[]) => void
+    ) {
         let firstTime = true;
         this.prevLeaderboardValues = {};
         this.leaderboardHandler = onValue(ref(database, `actualGames/${this.authInstance.currentUser!.uid}/leaderboards`), (snap) => {
@@ -411,13 +415,21 @@ export class networkManager {
                 return;
             }
             if (firstTime) {
-                const temp = sortArray(snap.val());
-                createInitialList(temp);
+                createInitialList(sortArray(snap.val()));
             } else {
-                for (const [key] of Object.entries(this.prevLeaderboardValues)) {
+                let check = false;
+                Object.keys(this.prevLeaderboardValues).forEach((key) => {
                     if (!snap.val()[key]) {
                         removePlayer(key);
+                        check = true;
                     }
+                });
+                if (check) {
+                    setTimeout(() => {
+                        updateList(sortArray(snap.val()));
+                    }, 1000);
+                } else {
+                    updateList(sortArray(snap.val()));
                 }
             }
             this.prevLeaderboardValues = snap.val();
