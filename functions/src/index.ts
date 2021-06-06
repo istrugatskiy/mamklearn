@@ -15,7 +15,7 @@ interface answer {
 }
 
 // Handles game initialization for teacher play screen
-export const initGame = functions.runWith({ maxInstances: 3 }).https.onCall(async (data, context) => {
+export const initGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
     if (data && (typeof data === 'string' || data instanceof String)) {
         if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
             const user = admin.database().ref(`userProfiles/${context.auth.token.uid}/`);

@@ -26,6 +26,12 @@ interface functionObject {
     message: string | number;
     code: number;
 }
+interface studentQuestion {
+    questionName: string;
+    answers: string[];
+    startTime: number;
+    endTime: number;
+}
 
 // Configuration for firebase
 const firebaseConfig = {
@@ -145,10 +151,11 @@ export class networkManager {
     static unsubHandler: Unsubscribe;
     static leaderboardHandler: Unsubscribe;
     static _setClientQuizList: (quizList: { [key: string]: string }) => void;
+    static studentPlayListener: Unsubscribe;
     private static currentQuizObject: Reference;
     static authInstance = getAuth();
     static hasBeenInitialized = false;
-    private static prevLeaderboardValues: { [key: string]: { playerID: string; playerName: string } };
+    private static prevLeaderboardValues: { [key: string]: { currentQuestion: number; playerName: string } };
     private static alreadyAware: { [key: string]: { playerName: string; playerConfig: number[] } };
 
     static set setClientQuizList(newFunction: () => void) {
@@ -314,6 +321,7 @@ export class networkManager {
     static joinGameStudent(userInput: string, callback: (exists: boolean, message: string) => void) {
         const unsub = onValue(ref(database, `currentGames/${userInput.toString().slice(0, 5)}/${userInput.toString().slice(6)}`), (snap) => {
             if (!!snap.val()) {
+                window.currentGameState.location = snap.val();
                 alreadyInGame = true;
                 if (window.currentGameState && window.currentGameState.isInGame) {
                     callback(true, '');
@@ -395,7 +403,7 @@ export class networkManager {
             });
     }
 
-    static handleGameState(location: string, callback: (state: { isRunning: boolean }) => void) {
+    static handleGameState(location: string, callback: (state: { isRunning: boolean; totalQuestions: number }) => void) {
         this.unsubHandler = onValue(ref(database, `${location}globalState`), (snap) => {
             callback(snap.val());
         });
@@ -433,6 +441,14 @@ export class networkManager {
                 }
             }
             this.prevLeaderboardValues = snap.val();
+            firstTime = false;
+        });
+    }
+
+    static studentListener(initialRender: (currentQuestion: number, questionObject: studentQuestion) => void, secondRender: (currentQuestion: number, questionObject: studentQuestion) => void) {
+        let firstTime = true;
+        this.studentPlayListener = onValue(ref(database, `${window.currentGameState.location}players/${auth.currentUser!.uid}/`), (snap) => {
+            firstTime ? initialRender(snap.val().currentQuestionNumber, snap.val().currentQuestion) : secondRender(snap.val().currentQuestionNumber, snap.val().currentQuestion);
             firstTime = false;
         });
     }

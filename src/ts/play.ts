@@ -1,32 +1,15 @@
-import { $, mathClamp, throwExcept, getID, ordinalSuffix, clearChildren } from './utils';
+import { $, mathClamp, getID, ordinalSuffix, clearChildren } from './utils';
 import { setCharImage, goBack } from './app';
 import { networkManager } from './networkEngine';
-window.studentGameProcessor = studentGameProcessor;
 
-window.quizStartTestCase = ' {"gameStart": true, "totalQuestions": 5, "currentQuestion": "TTTTTTTHHTHHTHTHTHTTHTTTTTTTHTHHHHTHTTTTTHHTTHHTHTTTTTTHTTTHTTTHTHHHTTTTHTHTHHT HHTTHHHTHT", "choices": [ null ], "currentQuestionTime": 69, "questionID": 0 }';
-window.anotherTestCase = '{ "isQuestionCorrect": false, "nextQuestion": null, "choices": [ null ], "currentQuestionTime": 20 }';
-window.anotherTestCase2 = '{ "isQuestionCorrect": true, "nextQuestion": "heckDifferentQuestionTooLazyTooPutPercent", "choices": [ "a", "a2", "a3", "a4" ], "currentQuestionTime": 69 }';
-window.anotherTestCase3 = '{ "gameFinish": true, "timeTillEnd": 180}';
-window.anotherTestCase4 = '{ "gameEnd": true, "CharacterConfig1": [0,0,0,0,0], "CharacterConfig2": [9,9,9,9,9], "CharacterConfig3": [0,1,2,3,4], "userPlace": 12}';
+const root = document.documentElement;
 let otherInterval: number;
 let timerInterval: number;
 let finishUpInterval: number;
-
-interface gameStateInterface {
-    currentQuestion: number;
-    totalQuestions: number;
-    gameErrorState: boolean;
-    timeLeft: boolean | number;
-    currentQuestionData: {
-        question: string;
-        answers: [];
-        timeLimit: number;
-    };
-}
-
-let gameStateStudent: gameStateInterface;
-const root = document.documentElement;
 let bottomBarOffset: number;
+let currentQuestion: number;
+let totalQuestions: number;
+let isGameLive: boolean;
 let resettableTime: number;
 let resettableTime2: number;
 let resettableTime3: number;
@@ -58,29 +41,20 @@ export const initEvents = () => {
     window.keyboardIncludesEvents = { ...window.keyboardIncludesEvents, ...keyboardIncludesListeners };
 };
 
-function studentGameProcessor(input: string) {
-    let inputInternal = JSON.parse(input);
-    if (inputInternal.hasOwnProperty('gameStart')) {
-        kickPlayer();
-        if (inputInternal.gameStart == true) {
+export const initQuestionHandler = (questionAmount: number) => {
+    networkManager.studentListener(
+        (questionNumber, question) => {
+            currentQuestion = questionNumber;
+            totalQuestions = questionAmount;
+            isGameLive = true;
+            kickPlayer();
             clearInterval(timerInterval);
             clearInterval(finishUpInterval);
             clearInterval(otherInterval);
             setCharImage('player', window.currentUserConfig);
             bottomBarOffset = 15;
-            gameStateStudent = {
-                currentQuestion: inputInternal.questionID,
-                totalQuestions: inputInternal.totalQuestions,
-                gameErrorState: false,
-                timeLeft: false,
-                currentQuestionData: {
-                    question: inputInternal.currentQuestion,
-                    answers: inputInternal.choices,
-                    timeLimit: inputInternal.currentQuestionTime,
-                },
-            };
             let studentRaceBoxNumbers = document.createDocumentFragment();
-            for (let i = 1; i <= gameStateStudent.totalQuestions; i++) {
+            for (let i = 1; i <= totalQuestions; i++) {
                 let node = document.createElement('th');
                 node.textContent = i.toString();
                 studentRaceBoxNumbers.appendChild(node);
@@ -103,17 +77,19 @@ function studentGameProcessor(input: string) {
                 $('loader-1').style.display = 'none';
                 $('errorMessageA').style.display = 'none';
             }, 1000);
+        },
+        (questionNumber) => {
+            currentQuestion = questionNumber;
         }
-    } else if (inputInternal.hasOwnProperty('error')) {
-        throwExcept(`@playQuiz: ${inputInternal.error}`);
-        gameStateStudent.gameErrorState = inputInternal.gameErrorState;
-    } else if (inputInternal.hasOwnProperty('kickPlayer')) {
-        kickPlayer(true);
-    } else if (inputInternal.hasOwnProperty('isQuestionCorrect')) {
+    );
+};
+
+function studentGameProcessor(input: string) {
+    let inputInternal = JSON.parse(input);
+    if (inputInternal.hasOwnProperty('isQuestionCorrect')) {
         clearInterval(timerInterval);
         clearInterval(otherInterval);
-        if (inputInternal.isQuestionCorrect && gameStateStudent.currentQuestion < gameStateStudent.totalQuestions - 1) {
-            gameStateStudent.currentQuestion++;
+        if (inputInternal.isQuestionCorrect && currentQuestion < totalQuestions - 1) {
             gameStateStudent.currentQuestionData.question = inputInternal.nextQuestion;
             gameStateStudent.currentQuestionData.answers = inputInternal.choices;
             gameStateStudent.currentQuestionData.timeLimit = inputInternal.currentQuestionTime;
@@ -263,6 +239,8 @@ function kickPlayer(special: boolean = false, specialText: string = 'Kicked From
             $('errorMessageA').style.display = 'none';
         }, 1000);
         $('gameStartScreenStudent').style.display = 'none';
+        !networkManager.studentPlayListener || networkManager.studentPlayListener();
+        isGameLive = false;
         goBack();
     }
     clearInterval(timerInterval);
@@ -294,23 +272,12 @@ function kickPlayer(special: boolean = false, specialText: string = 'Kicked From
     $('title').style.display = 'block';
     $('gameFinishNotify').style.display = 'none';
     clearInterval(finishUpInterval);
-    gameStateStudent = {
-        currentQuestion: 0,
-        totalQuestions: 0,
-        gameErrorState: false,
-        timeLeft: false,
-        currentQuestionData: {
-            question: '',
-            answers: [],
-            timeLimit: 0,
-        },
-    };
 }
 
 function setQuestion() {
-    if (!gameStateStudent) return;
+    if (!isGameLive) return;
     else {
-        updateStudentLocation(gameStateStudent.currentQuestion);
+        updateStudentLocation(currentQuestion);
     }
     $('studentAnswersFlex').style.display = 'flex';
     $('titleButtonStudent').firstElementChild!.textContent = decodeURI(gameStateStudent.currentQuestionData.question);
@@ -392,9 +359,9 @@ function submitShortAnswer() {
 }
 
 window.addEventListener('resize', () => {
-    if (gameStateStudent) {
+    if (isGameLive) {
         bottomBarOffset = 15;
-        for (let i = 0; i <= gameStateStudent.currentQuestion; i++) {
+        for (let i = 0; i <= currentQuestion; i++) {
             updateStudentLocation(i);
         }
     }

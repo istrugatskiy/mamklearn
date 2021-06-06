@@ -262,7 +262,7 @@ export class AudioManager {
 }
 
 export const download = (filename: string, text: string) => {
-    let pom = document.createElement('a');
+    const pom = document.createElement('a');
     pom.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(text));
     pom.setAttribute('download', filename);
     pom.click();
