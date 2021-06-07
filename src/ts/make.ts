@@ -741,7 +741,6 @@ export function startGameTeacher(shouldHandle: boolean) {
                 templateElement.classList.add('button', 'inGamePlayerButton', 'buttonLikeTitle');
                 templateElement.appendChild(document.createElement('b'));
                 data.forEach((value, index) => {
-                    console.log(data);
                     const clone = templateElement.cloneNode(true) as HTMLElement;
                     clone.id = `playerList_${value.key}`;
                     clone.firstElementChild!.textContent = `${(index + 1).toString()}. `;
@@ -755,6 +754,7 @@ export function startGameTeacher(shouldHandle: boolean) {
             },
             (id) => {
                 $(`playerList_${id}`).style.maxWidth = '600px';
+                $(`playerList_${id}`).style.transition = '';
                 $(`playerList_${id}`).classList.remove('inGamePlayerButton');
                 setTimeout(() => {
                     $(`playerList_${id}`).classList.add('btnTransitionA');
@@ -762,6 +762,35 @@ export function startGameTeacher(shouldHandle: boolean) {
                         $(`playerList_${id}`).remove();
                     }, 300);
                 }, 300);
+            },
+            (data) => {
+                data.forEach((value, index) => {
+                    const container = $('playerContainer');
+                    const currentChild = container.children![index];
+                    if (currentChild.id.replace('playerList_', '') !== value.key) {
+                        if ($(`playerList_${value.key}`).style.maxWidth == '600px') {
+                            doMagic();
+                        } else {
+                            $(`playerList_${value.key}`).style.maxWidth = '600px';
+                            $(`playerList_${value.key}`).classList.remove('inGamePlayerButton');
+                            setTimeout(() => {
+                                doMagic();
+                            }, 300);
+                        }
+
+                        function doMagic() {
+                            currentChild.style.transition = 'color 0.3s';
+                            currentChild.style.color = '#fff';
+                            setTimeout(() => {
+                                currentChild.style.color = '#000';
+                                currentChild.lastChild!.remove();
+                                currentChild.appendChild(document.createTextNode(` ${value.playerName}`));
+                                currentChild.id = `playerList_${value.key}`;
+                                currentChild.style.opacity = 1;
+                            }, 300);
+                        }
+                    }
+                });
             }
         );
         $('gameStartButtonTeacher').classList.add('btnTransitionA');

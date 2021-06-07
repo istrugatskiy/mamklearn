@@ -109,6 +109,7 @@ export const throwExcept = (msg: string) => {
     $('commError2').style.display = 'block';
     $('CommError').style.display = 'block';
     $('comError3').textContent = msg;
+    console.trace(msg);
 };
 
 export const setCaretPosition = (element: HTMLElement, offset: number) => {
@@ -262,7 +263,7 @@ export class AudioManager {
 }
 
 export const download = (filename: string, text: string) => {
-    let pom = document.createElement('a');
+    const pom = document.createElement('a');
     pom.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(text));
     pom.setAttribute('download', filename);
     pom.click();

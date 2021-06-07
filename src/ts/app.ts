@@ -23,13 +23,7 @@ declare global {
         clickIncludesEvents: eventList;
         keyboardIncludesEvents: keyboardEventList;
         submitEvents: eventList;
-        studentGameProcessor: (inputConfig: string) => void;
-        quizStartTestCase: string;
-        anotherTestCase: string;
-        anotherTestCase2: string;
-        anotherTestCase3: string;
-        anotherTestCase4: string;
-        currentGameState: { isInGame: boolean; code: number; isTeacher: boolean };
+        currentGameState: { isInGame: boolean; code: number; isTeacher: boolean; location: string };
     }
 }
 window.customOptionsIncrement = 0;
@@ -252,6 +246,14 @@ function joinGameStudent() {
                 setTimeout(() => {
                     $('loader-1').style.display = 'none';
                     $('gameStartScreenStudent').style.display = 'block';
+                    networkManager.handleGameState(window.currentGameState.location, (val) => {
+                        if (val && val.isRunning) {
+                            networkManager.unsubHandler();
+                            setTimeout(() => {
+                                obj.initQuestionHandler(val.totalQuestions);
+                            }, 4100);
+                        }
+                    });
                 }, 1000);
             });
         } else {

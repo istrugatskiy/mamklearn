@@ -15,7 +15,7 @@ interface answer {
 }
 
 // Handles game initialization for teacher play screen
-export const initGame = functions.runWith({ maxInstances: 3 }).https.onCall(async (data, context) => {
+export const initGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
     if (data && (typeof data === 'string' || data instanceof String)) {
         if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
             const user = admin.database().ref(`userProfiles/${context.auth.token.uid}/`);
@@ -292,8 +292,8 @@ export const startGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
                         playerName: (values[index] as { playerName: string; playerConfig: number[] }).playerName,
                     });
             });
-            await admin.database().ref(`actualGames/${context.auth.uid}/globalState/isRunning`).set(true);
             await admin.database().ref(`actualGames/${context.auth.uid}/globalState/totalQuestions`).set(allQuestions.length);
+            await admin.database().ref(`actualGames/${context.auth.uid}/globalState/isRunning`).set(true);
             return {
                 message: 'ok',
                 code: 200,

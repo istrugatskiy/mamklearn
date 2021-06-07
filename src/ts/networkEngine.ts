@@ -26,6 +26,12 @@ interface functionObject {
     message: string | number;
     code: number;
 }
+interface studentQuestion {
+    questionName: string;
+    answers: string[];
+    startTime: number;
+    endTime: number;
+}
 
 // Configuration for firebase
 const firebaseConfig = {
@@ -129,7 +135,11 @@ const monitorUserState = () => {
                 networkManager.quitQuizStudent ? networkManager.quitQuizStudent() : null;
             }
         }
+        const temp = window.currentGameState ? window.currentGameState.location : '';
         window.currentGameState = snap.val();
+        if (window.currentGameState) {
+            window.currentGameState.location = temp;
+        }
     });
 };
 
@@ -145,10 +155,11 @@ export class networkManager {
     static unsubHandler: Unsubscribe;
     static leaderboardHandler: Unsubscribe;
     static _setClientQuizList: (quizList: { [key: string]: string }) => void;
+    static studentPlayListener: Unsubscribe;
     private static currentQuizObject: Reference;
     static authInstance = getAuth();
     static hasBeenInitialized = false;
-    private static prevLeaderboardValues: { [key: string]: { playerID: string; playerName: string } };
+    private static prevLeaderboardValues: { [key: string]: { currentQuestion: number; playerName: string } };
     private static alreadyAware: { [key: string]: { playerName: string; playerConfig: number[] } };
 
     static set setClientQuizList(newFunction: () => void) {
@@ -228,7 +239,7 @@ export class networkManager {
         });
     }
 
-    static handleCurrentQuiz(quizID: string, callback: (value: any) => void) {
+    static handleCurrentQuiz(quizID: string, callback: (value: quizObject) => void) {
         this.currentQuizObject = child(child(currentUser, 'quizData'), quizID);
         const unsub = onValue(this.currentQuizObject, (snap) => {
             callback(snap.val());
@@ -314,6 +325,13 @@ export class networkManager {
     static joinGameStudent(userInput: string, callback: (exists: boolean, message: string) => void) {
         const unsub = onValue(ref(database, `currentGames/${userInput.toString().slice(0, 5)}/${userInput.toString().slice(6)}`), (snap) => {
             if (!!snap.val()) {
+                console.log(snap.val());
+                if (window.currentGameState) {
+                    window.currentGameState.location = snap.val();
+                } else {
+                    window.currentGameState = {} as { isInGame: boolean; code: number; isTeacher: boolean; location: string };
+                    window.currentGameState.location = snap.val();
+                }
                 alreadyInGame = true;
                 if (window.currentGameState && window.currentGameState.isInGame) {
                     callback(true, '');
@@ -395,13 +413,17 @@ export class networkManager {
             });
     }
 
-    static handleGameState(location: string, callback: (state: { isRunning: boolean }) => void) {
+    static handleGameState(location: string, callback: (state: { isRunning: boolean; totalQuestions: number }) => void) {
         this.unsubHandler = onValue(ref(database, `${location}globalState`), (snap) => {
             callback(snap.val());
         });
     }
 
-    static trackLeaderboards(createInitialList: (playerData: { key: string; currentQuestion: number; playerName: string }[]) => void, removePlayer: (playerID: string) => void) {
+    static trackLeaderboards(
+        createInitialList: (playerData: { key: string; currentQuestion: number; playerName: string }[]) => void,
+        removePlayer: (playerID: string) => void,
+        updateList: (playerData: { key: string; currentQuestion: number; playerName: string }[]) => void
+    ) {
         let firstTime = true;
         this.prevLeaderboardValues = {};
         this.leaderboardHandler = onValue(ref(database, `actualGames/${this.authInstance.currentUser!.uid}/leaderboards`), (snap) => {
@@ -411,16 +433,32 @@ export class networkManager {
                 return;
             }
             if (firstTime) {
-                const temp = sortArray(snap.val());
-                createInitialList(temp);
+                createInitialList(sortArray(snap.val()));
             } else {
-                for (const [key] of Object.entries(this.prevLeaderboardValues)) {
+                let check = false;
+                Object.keys(this.prevLeaderboardValues).forEach((key) => {
                     if (!snap.val()[key]) {
                         removePlayer(key);
+                        check = true;
                     }
+                });
+                if (check) {
+                    setTimeout(() => {
+                        updateList(sortArray(snap.val()));
+                    }, 1000);
+                } else {
+                    updateList(sortArray(snap.val()));
                 }
             }
             this.prevLeaderboardValues = snap.val();
+            firstTime = false;
+        });
+    }
+
+    static studentListener(initialRender: (currentQuestion: number, questionObject: studentQuestion) => void, secondRender: (currentQuestion: number, questionObject: studentQuestion) => void) {
+        let firstTime = true;
+        this.studentPlayListener = onValue(ref(database, `${window.currentGameState.location}players/${auth.currentUser!.uid}/`), (snap) => {
+            firstTime ? initialRender(snap.val().currentQuestionNumber, snap.val().currentQuestion) : secondRender(snap.val().currentQuestionNumber, snap.val().currentQuestion);
             firstTime = false;
         });
     }
