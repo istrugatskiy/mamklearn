@@ -291,8 +291,8 @@ export const startGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
                         playerName: (values[index] as { playerName: string; playerConfig: number[] }).playerName,
                     });
             });
-            await admin.database().ref(`actualGames/${context.auth.uid}/globalState/isRunning`).set(true);
             await admin.database().ref(`actualGames/${context.auth.uid}/globalState/totalQuestions`).set(allQuestions.length);
+            await admin.database().ref(`actualGames/${context.auth.uid}/globalState/isRunning`).set(true);
             return {
                 message: 'ok',
                 code: 200,

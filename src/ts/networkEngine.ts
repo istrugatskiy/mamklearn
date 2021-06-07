@@ -135,7 +135,11 @@ const monitorUserState = () => {
                 networkManager.quitQuizStudent ? networkManager.quitQuizStudent() : null;
             }
         }
+        const temp = window.currentGameState ? window.currentGameState.location : '';
         window.currentGameState = snap.val();
+        if (window.currentGameState) {
+            window.currentGameState.location = temp;
+        }
     });
 };
 
@@ -235,7 +239,7 @@ export class networkManager {
         });
     }
 
-    static handleCurrentQuiz(quizID: string, callback: (value: any) => void) {
+    static handleCurrentQuiz(quizID: string, callback: (value: quizObject) => void) {
         this.currentQuizObject = child(child(currentUser, 'quizData'), quizID);
         const unsub = onValue(this.currentQuizObject, (snap) => {
             callback(snap.val());
@@ -321,7 +325,13 @@ export class networkManager {
     static joinGameStudent(userInput: string, callback: (exists: boolean, message: string) => void) {
         const unsub = onValue(ref(database, `currentGames/${userInput.toString().slice(0, 5)}/${userInput.toString().slice(6)}`), (snap) => {
             if (!!snap.val()) {
-                window.currentGameState.location = snap.val();
+                console.log(snap.val());
+                if (window.currentGameState) {
+                    window.currentGameState.location = snap.val();
+                } else {
+                    window.currentGameState = {} as { isInGame: boolean; code: number; isTeacher: boolean; location: string };
+                    window.currentGameState.location = snap.val();
+                }
                 alreadyInGame = true;
                 if (window.currentGameState && window.currentGameState.isInGame) {
                     callback(true, '');

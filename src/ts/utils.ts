@@ -109,6 +109,7 @@ export const throwExcept = (msg: string) => {
     $('commError2').style.display = 'block';
     $('CommError').style.display = 'block';
     $('comError3').textContent = msg;
+    console.trace(msg);
 };
 
 export const setCaretPosition = (element: HTMLElement, offset: number) => {

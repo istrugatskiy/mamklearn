@@ -247,7 +247,12 @@ function joinGameStudent() {
                     $('loader-1').style.display = 'none';
                     $('gameStartScreenStudent').style.display = 'block';
                     networkManager.handleGameState(window.currentGameState.location, (val) => {
-                        obj.initQuestionHandler(val.totalQuestions);
+                        if (val && val.isRunning) {
+                            networkManager.unsubHandler();
+                            setTimeout(() => {
+                                obj.initQuestionHandler(val.totalQuestions);
+                            }, 4100);
+                        }
                     });
                 }, 1000);
             });
