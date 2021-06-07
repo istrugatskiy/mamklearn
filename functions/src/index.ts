@@ -267,6 +267,7 @@ export const startGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
             if ((await (await admin.database().ref(`actualGames/${context.auth.uid}/globalState/isRunning`).once('value')).val()) === true) {
                 return {
                     message: 'Game has already started (your client may have fallen out of sync with the server).',
+                    code: 500,
                 };
             }
             let safeAnswers: string[] = [];
@@ -315,6 +316,20 @@ export const timeSync = functions.runWith({ maxInstances: 1 }).https.onCall(asyn
     if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
         return {
             message: Date.now(),
+            code: 200,
+        };
+    } else {
+        return {
+            message: 'Authentication check failed (maybe log out and log back in).',
+            code: 401,
+        };
+    }
+});
+
+export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
+    if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
+        return {
+            message: 'correct',
             code: 200,
         };
     } else {
