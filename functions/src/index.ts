@@ -328,10 +328,25 @@ export const timeSync = functions.runWith({ maxInstances: 1 }).https.onCall(asyn
 
 export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
     if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
-        return {
-            message: 'correct',
-            code: 200,
-        };
+        if (data && (typeof data === 'string' || typeof data === 'number')) {
+            const isInGame = await admin.database().ref(`userProfiles/${context.auth.uid}/currentGameState`).once('value');
+            if (!isInGame.val()) {
+                return {
+                    message: 'User is not in a game',
+                    code: 500,
+                };
+            }
+            let isCorrect = false;
+            return {
+                message: isCorrect ? 'correct' : 'incorrect',
+                code: 200,
+            };
+        } else {
+            return {
+                message: 'Malformed request sent from the client. You may be running an old version (try clearing your cache).',
+                code: 400,
+            };
+        }
     } else {
         return {
             message: 'Authentication check failed (maybe log out and log back in).',
