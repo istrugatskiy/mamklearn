@@ -337,22 +337,34 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
                 };
             }
             let isCorrect = false;
+            let timePenalty = 0;
             const location = await admin
                 .database()
                 .ref(`currentGames/${userState.val().code.slice(0, 5)}/${userState.val().code.slice(5)}`)
                 .once('value');
             const currentQuestion = await admin.database().ref(`${location.val()}players/${context.auth!.uid}/currentQuestionNumber`).once('value');
-            const questionData = await admin
-                .database()
-                .ref(`${location.val()}quiz/questionObjects/${currentQuestion.val() - 1}`)
-                .once('value');
+            const questionData = (
+                await admin
+                    .database()
+                    .ref(`${location.val()}quiz/questionObjects/${currentQuestion.val() - 1}`)
+                    .once('value')
+            ).val() as questionObject;
             if (questionData) {
+                if (questionData.shortAnswer) {
+                } else {
+                    if (questionData.Answers[data as number].correct) {
+                        isCorrect = true;
+                    } else {
+                        timePenalty = 10;
+                    }
+                }
             } else {
                 isCorrect = true;
                 await admin.database().ref(`${location.val()}globalState/gameEnd`).set(Date.now());
             }
             return {
                 message: isCorrect ? 'correct' : 'incorrect',
+                timePenalty: timePenalty,
                 code: 200,
             };
         } else {
