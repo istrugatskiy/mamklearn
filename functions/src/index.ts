@@ -329,14 +329,28 @@ export const timeSync = functions.runWith({ maxInstances: 1 }).https.onCall(asyn
 export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
     if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
         if (data && (typeof data === 'string' || typeof data === 'number')) {
-            const isInGame = await admin.database().ref(`userProfiles/${context.auth.uid}/currentGameState`).once('value');
-            if (!isInGame.val()) {
+            const userState = await admin.database().ref(`userProfiles/${context.auth.uid}/currentGameState`).once('value');
+            if (!userState.val().isInGame || userState.val().isTeacher) {
                 return {
                     message: 'User is not in a game',
                     code: 500,
                 };
             }
             let isCorrect = false;
+            const location = await admin
+                .database()
+                .ref(`currentGames/${userState.val().code.slice(0, 5)}/${userState.val().code.slice(5)}`)
+                .once('value');
+            const currentQuestion = await admin.database().ref(`${location.val()}players/${context.auth!.uid}/currentQuestionNumber`).once('value');
+            const questionData = await admin
+                .database()
+                .ref(`${location.val()}quiz/questionObjects/${currentQuestion.val() - 1}`)
+                .once('value');
+            if (questionData) {
+            } else {
+                isCorrect = true;
+                await admin.database().ref(`${location.val()}globalState/gameEnd`).set(Date.now());
+            }
             return {
                 message: isCorrect ? 'correct' : 'incorrect',
                 code: 200,
