@@ -362,6 +362,13 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
                 isCorrect = true;
                 await admin.database().ref(`${location.val()}globalState/gameEnd`).set(Date.now());
             }
+            if (timePenalty) {
+                await admin.database().ref(`${location.val()}players/${context.auth.uid}/timePenaltyStart`).set(Date.now());
+                await admin
+                    .database()
+                    .ref(`${location.val()}players/${context.auth.uid}/timePenaltyLength`)
+                    .set(Date.now() + timePenalty * 1000);
+            }
             return {
                 message: isCorrect ? 'correct' : 'incorrect',
                 timePenalty: timePenalty,
