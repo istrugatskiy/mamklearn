@@ -205,7 +205,7 @@ function makeCode(isInGame: boolean | Event = false) {
 function handleGameState(obj: typeof import('./make')) {
     let alreadyRun: boolean = false;
     networkManager.handleGameState(`actualGames/${networkManager.authInstance.currentUser!.uid}/`, (snap) => {
-        if (snap && snap.isRunning) {
+        if (snap && snap.isRunning && !networkManager.isMain) {
             obj.startGameTeacher(true);
             networkManager.unsubHandler();
         } else if (!alreadyRun) {

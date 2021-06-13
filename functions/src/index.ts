@@ -132,8 +132,7 @@ export const leaveGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
                     .once('value');
                 await admin.database().ref(`${location.val()}players/${context.auth!.uid}`).set(null);
                 await admin.database().ref(`${location.val()}leaderboards/${context.auth!.uid}`).remove();
-                functions.logger.log((await admin.database().ref(`${location.val()}leaderboards/`).once('value')).val());
-                if (!(await admin.database().ref(`${location.val()}leaderboards/`).once('value')).val()) {
+                if (!(await admin.database().ref(`${location.val()}leaderboards/`).once('value')).val() && snap.val().isRunning) {
                     await admin
                         .database()
                         .ref(`currentGames/${snap.val().code.slice(0, 5)}/${snap.val().code.slice(5)}`)
@@ -349,6 +348,16 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
                     .ref(`${location.val()}quiz/questionObjects/${currentQuestion.val() - 1}`)
                     .once('value')
             ).val() as questionObject;
+            const timePenaltyEnd = await admin
+                .database()
+                .ref(`${location.val()}players/${context.auth.uid}/timePenaltyEnd`)
+                .set(Date.now() + timePenalty * 1000);
+            if (timePenaltyEnd < Date.now()) {
+                return {
+                    message: 'Time penalty still in effect',
+                    code: 500,
+                };
+            }
             if (questionData) {
                 if (questionData.shortAnswer) {
                 } else {
@@ -363,10 +372,13 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
                 await admin.database().ref(`${location.val()}globalState/gameEnd`).set(Date.now());
             }
             if (timePenalty) {
+                if ((await admin.database().ref(`${location.val()}players/${context.auth.uid}/startTime`).once('value')).val() !== -1) {
+                    await admin.database().ref(`${location.val()}players/${context.auth.uid}/startTime`);
+                }
                 await admin.database().ref(`${location.val()}players/${context.auth.uid}/timePenaltyStart`).set(Date.now());
                 await admin
                     .database()
-                    .ref(`${location.val()}players/${context.auth.uid}/timePenaltyLength`)
+                    .ref(`${location.val()}players/${context.auth.uid}/timePenaltyEnd`)
                     .set(Date.now() + timePenalty * 1000);
             }
             return {

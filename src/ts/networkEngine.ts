@@ -156,6 +156,7 @@ export class networkManager {
     static leaderboardHandler: Unsubscribe;
     static _setClientQuizList: (quizList: { [key: string]: string }) => void;
     static studentPlayListener: Unsubscribe;
+    static isMain: boolean = false;
     private static currentQuizObject: Reference;
     static authInstance = getAuth();
     static hasBeenInitialized = false;
@@ -325,7 +326,6 @@ export class networkManager {
     static joinGameStudent(userInput: string, callback: (exists: boolean, message: string) => void) {
         const unsub = onValue(ref(database, `currentGames/${userInput.toString().slice(0, 5)}/${userInput.toString().slice(6)}`), (snap) => {
             if (!!snap.val()) {
-                console.log(snap.val());
                 if (window.currentGameState) {
                     window.currentGameState.location = snap.val();
                 } else {
@@ -397,6 +397,7 @@ export class networkManager {
     }
 
     static actuallyStartGame(callback: () => void) {
+        this.isMain = true;
         startGame()
             .then((response) => {
                 const data = response.data as functionObject;
@@ -405,6 +406,7 @@ export class networkManager {
                 } else {
                     callback();
                 }
+                this.isMain = false;
             })
             .catch(() => {
                 setTimeout(() => {

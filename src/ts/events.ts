@@ -67,6 +67,5 @@ export const eventHandle = () => {
     });
     window.addEventListener('error', (error) => {
         throwExcept('@ScriptErrorHandler: ' + error.message);
-        console.log(error.message);
     });
 };

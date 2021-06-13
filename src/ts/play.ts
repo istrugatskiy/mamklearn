@@ -68,7 +68,6 @@ export const initQuestionHandler = (questionAmount: number) => {
                     });
             }
             timeHandler();
-            console.log(questionAmount);
             currentQuestion = questionNumber;
             totalQuestions = questionAmount;
             isGameLive = true;
@@ -97,7 +96,6 @@ export const initQuestionHandler = (questionAmount: number) => {
             $('mainLoader').classList.remove('loader--active');
             $('title').style.display = 'none';
             $('studentPlayScreen').style.display = 'block';
-            console.log(question);
             setQuestion(question);
             setTimeout(() => {
                 $('loader-1').style.display = 'none';

@@ -169,8 +169,6 @@ export const loadChonk = (chonkToLoad: string, callback: (returnedObject: any) =
             callback(obj);
         })
         .catch((error) => {
-            const err = error as TypeError;
-            console.log(err.stack);
             errorCount++;
             if (errorCount < 15) {
                 setTimeout(() => {
