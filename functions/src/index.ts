@@ -372,8 +372,14 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
                 await admin.database().ref(`${location.val()}globalState/gameEnd`).set(Date.now());
             }
             if (timePenalty) {
-                if ((await admin.database().ref(`${location.val()}players/${context.auth.uid}/startTime`).once('value')).val() !== -1) {
-                    await admin.database().ref(`${location.val()}players/${context.auth.uid}/startTime`);
+                const startVal = await admin.database().ref(`${location.val()}players/${context.auth.uid}/startTime`).once('value');
+                const endVal = await admin.database().ref(`${location.val()}players/${context.auth.uid}/endTime`).once('value');
+                if (startVal.val() !== -1) {
+                    const difference = endVal.val() - startVal.val();
+                    await admin
+                        .database()
+                        .ref(`${location.val()}players/${context.auth.uid}/startTime`)
+                        .set(difference + timePenalty * 1000 + Date.now());
                 }
                 await admin.database().ref(`${location.val()}players/${context.auth.uid}/timePenaltyStart`).set(Date.now());
                 await admin
