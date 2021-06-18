@@ -17,7 +17,6 @@ export const eventHandle = () => {
     });
     window.addEventListener('keydown', (event) => {
         if (event.key == 'Enter' || event.key == ' ') {
-            event.code;
             const keys = Object.keys(window.keyboardIncludesEvents);
             const eventTarget = (event.target! as HTMLElement).id;
             for (var i = 0; i < keys.length; i++) {
@@ -38,25 +37,16 @@ export const eventHandle = () => {
     window.addEventListener('input', (event) => {
         if ((event.target! as HTMLElement).matches('[contenteditable]')) {
             const target = event.target! as HTMLElement;
-            let a69 = getCaretCharacterOffsetWithin(target);
-            let a70 = String(target.textContent!.replace(/(\r\n|\r|\n)/, ''));
-            const maxLength = target.dataset!.maxlength as unknown as number;
-            target.textContent = a70;
+            let characterOffset = getCaretCharacterOffsetWithin(target);
+            const maxLength = Number.parseInt(target.dataset.maxlength!);
+            target.textContent = String(target.textContent!.replace(/(\r\n|\r|\n)/, ''));
             if (maxLength < target.textContent!.length) {
                 target.textContent = target.dataset.revert as string;
-                try {
-                    setCaretPosition(target, a69 - 1);
-                } catch {
-                    setCaretPosition(target, target.textContent!.length);
-                }
+                setCaretPosition(target, characterOffset - 1);
             } else {
-                try {
-                    setCaretPosition(target, a69);
-                } catch {
-                    setCaretPosition(target, target.textContent!.length);
-                }
+                setCaretPosition(target, characterOffset);
             }
-            characterCount(target, target.dataset!.maxlength as string);
+            characterCount(target, target.dataset.maxlength as string);
         }
     });
     window.addEventListener('beforeinput', (event) => {

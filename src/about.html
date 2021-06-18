@@ -12,7 +12,6 @@
     </head>
     <body>
         <div id="particles-js"></div>
-        <script async defer src="https://apis.google.com/js/platform.js"></script>
         <script>
             ua = navigator.userAgent;
             if (-1 < ua.indexOf('MSIE ') || -1 < ua.indexOf('Trident/'))
@@ -20,22 +19,12 @@
         </script>
         <noscript>
             <style>
-                .aboutContainer {
-                    display: none;
-                }
-                #particles-js {
-                    display: none;
-                }
-                .backdrop-filter {
-                    display: none;
-                }
+                #particles-js,
+                .Container,
+                .aboutContainer,
+                .backdrop-filter,
+                .loader,
                 .title {
-                    display: none;
-                }
-                .Container {
-                    display: none;
-                }
-                .loader {
                     display: none;
                 }
             </style>

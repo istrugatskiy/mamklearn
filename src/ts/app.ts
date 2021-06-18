@@ -94,7 +94,7 @@ window.clickEvents = {
         userClick('about.html');
     },
     aboutWindowButton: () => {
-        userClick('index.html', 'aboutWindowButton');
+        userClick('/', 'aboutWindowButton');
     },
     PrivacyPolicyLink: (event: Event) => {
         event.preventDefault();

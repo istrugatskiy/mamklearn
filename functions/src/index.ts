@@ -18,7 +18,8 @@ interface answer {
 export const initGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
     if (data && (typeof data === 'string' || data instanceof String)) {
         if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
-            const user = admin.database().ref(`userProfiles/${context.auth.token.uid}/`);
+            const db = admin.database();
+            const user = db.ref(`userProfiles/${context.auth.token.uid}/`);
             const gameState = user.child('currentGameState/isInGame/');
             const isTeacher = user.child('currentGameState/isTeacher/');
             const gameCode = user.child('currentGameState/code');
@@ -40,44 +41,41 @@ export const initGame = functions.runWith({ maxInstances: 1 }).https.onCall(asyn
                 // This works on the basis of a namespace like so, 12345/123
                 // The system only listens to children of 12345/123
                 // This decreases performance strain on firebase as well as decreasing the chance of collisions
-                await admin.database().ref(`actualGames/${context.auth!.uid}/quiz`).set(otherSnap.val());
+                await db.ref(`actualGames/${context.auth!.uid}/quiz`).set(otherSnap.val());
                 let failSafeCheck = false;
                 let returnValue: string = '';
                 const firstRand = Math.round(Math.random() * 99999)
                     .toString()
                     .padStart(5, '0');
-                await admin
-                    .database()
-                    .ref(`currentGames/${firstRand}`)
-                    .transaction((currentValue) => {
-                        if (currentValue) {
-                            const list = Object.keys(currentValue);
-                            let list2 = new Array();
-                            for (let i = 0; i < 999; i++) {
-                                if (!list.includes(i.toString())) {
-                                    const temp = i.toString().padStart(3, '0');
-                                    list2.push(temp);
-                                }
+                await db.ref(`currentGames/${firstRand}`).transaction((currentValue) => {
+                    if (currentValue) {
+                        const list = Object.keys(currentValue);
+                        let list2 = new Array();
+                        for (let i = 0; i < 999; i++) {
+                            if (!list.includes(i.toString())) {
+                                const temp = i.toString().padStart(3, '0');
+                                list2.push(temp);
                             }
-                            if (list2.length == 0) {
-                                failSafeCheck = true;
-                                return currentValue;
-                            } else {
-                                failSafeCheck = false;
-                            }
-                            const rand = list2[Math.floor(Math.random() * list2.length)];
-                            returnValue = firstRand.toString() + rand;
-                            currentValue[rand] = `actualGames/${context.auth!.uid}/`;
-                        } else {
-                            currentValue = {};
-                            const rand = Math.round(Math.random() * 999)
-                                .toString()
-                                .padStart(3, '0');
-                            currentValue[rand] = `actualGames/${context.auth!.uid}/`;
-                            returnValue = firstRand.toString() + rand;
                         }
-                        return currentValue;
-                    });
+                        if (list2.length == 0) {
+                            failSafeCheck = true;
+                            return currentValue;
+                        } else {
+                            failSafeCheck = false;
+                        }
+                        const rand = list2[Math.floor(Math.random() * list2.length)];
+                        returnValue = firstRand.toString() + rand;
+                        currentValue[rand] = `actualGames/${context.auth!.uid}/`;
+                    } else {
+                        currentValue = {};
+                        const rand = Math.round(Math.random() * 999)
+                            .toString()
+                            .padStart(3, '0');
+                        currentValue[rand] = `actualGames/${context.auth!.uid}/`;
+                        returnValue = firstRand.toString() + rand;
+                    }
+                    return currentValue;
+                });
                 if (!failSafeCheck) {
                     await gameState.set(true);
                     await isTeacher.set(true);
@@ -109,42 +107,32 @@ export const initGame = functions.runWith({ maxInstances: 1 }).https.onCall(asyn
 
 export const leaveGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
     if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
-        const user = admin.database().ref(`userProfiles/${context.auth.token.uid}/`);
+        const db = admin.database();
+        const user = db.ref(`userProfiles/${context.auth.token.uid}/`);
         const gameState = user.child('currentGameState/');
         const snap = await gameState.once('value');
         if (snap.val() && snap.val().isInGame) {
             if (snap.val().isTeacher) {
-                const students = await admin.database().ref(`actualGames/${context.auth.token.uid}/players/`).once('value');
+                const students = await db.ref(`actualGames/${context.auth.token.uid}/players/`).once('value');
                 if (students.val()) {
                     Object.keys(students.val()).forEach(async (student) => {
-                        await admin.database().ref(`userProfiles/${student}/currentGameState`).set(null);
+                        await db.ref(`userProfiles/${student}/currentGameState`).set(null);
                     });
                 }
-                await admin
-                    .database()
-                    .ref(`currentGames/${snap.val().code.slice(0, 5)}/${snap.val().code.slice(5)}`)
-                    .set(null);
-                await admin.database().ref(`actualGames/${context.auth!.uid}/`).set(null);
+                await db.ref(`currentGames/${snap.val().code.slice(0, 5)}/${snap.val().code.slice(5)}`).set(null);
+                await db.ref(`actualGames/${context.auth!.uid}/`).set(null);
             } else {
-                const location = await admin
-                    .database()
-                    .ref(`currentGames/${snap.val().code.slice(0, 5)}/${snap.val().code.slice(5)}`)
-                    .once('value');
-                await admin.database().ref(`${location.val()}players/${context.auth!.uid}`).set(null);
-                await admin.database().ref(`${location.val()}leaderboards/${context.auth!.uid}`).remove();
-                if (!(await admin.database().ref(`${location.val()}leaderboards/`).once('value')).val() && snap.val().isRunning) {
-                    await admin
-                        .database()
-                        .ref(`currentGames/${snap.val().code.slice(0, 5)}/${snap.val().code.slice(5)}`)
-                        .set(null);
-                    await admin.database().ref(location.val()).set(null);
-                    await admin
-                        .database()
-                        .ref(`userProfiles/${(location.val() as string).replace('actualGames/', '')}currentGameState/`)
-                        .set(null);
+                const location = await db.ref(`currentGames/${snap.val().code.slice(0, 5)}/${snap.val().code.slice(5)}`).once('value');
+                await db.ref(`${location.val()}players/${context.auth!.uid}`).set(null);
+                await db.ref(`${location.val()}leaderboards/${context.auth!.uid}`).remove();
+                const otherSnap = (await db.ref(`${location.val()}globalState/isRunning`).once('value')).val();
+                if (!(await db.ref(`${location.val()}leaderboards/`).once('value')).val() && otherSnap) {
+                    await db.ref(`currentGames/${snap.val().code.slice(0, 5)}/${snap.val().code.slice(5)}`).set(null);
+                    await db.ref(location.val()).set(null);
+                    await db.ref(`userProfiles/${(location.val() as string).replace('actualGames/', '')}currentGameState/`).set(null);
                 }
             }
-            await admin.database().ref(`userProfiles/${context.auth!.uid}/currentGameState/`).set(null);
+            await db.ref(`userProfiles/${context.auth!.uid}/currentGameState/`).set(null);
         } else {
             return {
                 message: 'Client and server out of sync (try reloading the page).',
@@ -170,10 +158,11 @@ export const joinGameStudent = functions.runWith({ maxInstances: 1 }).https.onCa
             code: 400,
         };
     } else if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
-        const user = admin.database().ref(`userProfiles/${context.auth.token.uid}`);
+        const db = admin.database();
+        const user = db.ref(`userProfiles/${context.auth.token.uid}`);
         const gameState = user.child('currentGameState/isInGame');
         const gameCode = user.child('currentGameState/code');
-        const gameLocation = admin.database().ref(`currentGames/${data.slice(0, 5)}/${data.slice(6)}`);
+        const gameLocation = db.ref(`currentGames/${data.slice(0, 5)}/${data.slice(6)}`);
         const snap = await gameState.once('value');
         if (snap.val() === true) {
             const code = await gameCode.once('value');
@@ -184,14 +173,14 @@ export const joinGameStudent = functions.runWith({ maxInstances: 1 }).https.onCa
         } else {
             const gameVal = await gameLocation.once('value');
             if (gameVal.val()) {
-                if ((await admin.database().ref(`${gameVal.val()}globalState/isRunning`).once('value')).val() === true) {
+                if ((await db.ref(`${gameVal.val()}globalState/isRunning`).once('value')).val() === true) {
                     return {
                         message: 'Cannot join a game that is already in progress.',
                         code: 302,
                     };
                 }
                 const charConfig = await user.child('charConfig').once('value');
-                await admin.database().ref(`${gameVal.val()}players/${context.auth!.uid}`).set({
+                await db.ref(`${gameVal.val()}players/${context.auth!.uid}`).set({
                     playerName: context.auth.token.name,
                     playerConfig: charConfig.val(),
                 });
@@ -223,10 +212,11 @@ export const kickPlayer = functions.runWith({ maxInstances: 1 }).https.onCall(as
             code: 400,
         };
     } else if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
-        const currentValue = await admin.database().ref(`actualGames/${context.auth.uid}/players/${data}`).once('value');
+        const db = admin.database();
+        const currentValue = await db.ref(`actualGames/${context.auth.uid}/players/${data}`).once('value');
         if (currentValue.val()) {
-            await admin.database().ref(`actualGames/${context.auth.uid}/players/${data}`).set(null);
-            await admin.database().ref(`userProfiles/${data}/currentGameState`).set(null);
+            await db.ref(`actualGames/${context.auth.uid}/players/${data}`).set(null);
+            await db.ref(`userProfiles/${data}/currentGameState`).set(null);
             return {
                 message: 'ok',
                 code: 200,
@@ -247,9 +237,10 @@ export const kickPlayer = functions.runWith({ maxInstances: 1 }).https.onCall(as
 
 export const startGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
     if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
-        const playerList = (await admin.database().ref(`actualGames/${context.auth.uid}/players`).once('value')).val();
+        const db = admin.database();
+        const playerList = (await db.ref(`actualGames/${context.auth.uid}/players`).once('value')).val();
         if (playerList !== null) {
-            const allQuestions = (await admin.database().ref(`actualGames/${context.auth.uid}/quiz/questionObjects/`).once('value')).val() as questionObject[];
+            const allQuestions = (await db.ref(`actualGames/${context.auth.uid}/quiz/questionObjects/`).once('value')).val() as questionObject[];
             if (!allQuestions || !Array.isArray(allQuestions)) {
                 return {
                     mesage: 'Quiz is malformed.',
@@ -263,7 +254,7 @@ export const startGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
                     code: 500,
                 };
             }
-            if ((await (await admin.database().ref(`actualGames/${context.auth.uid}/globalState/isRunning`).once('value')).val()) === true) {
+            if ((await db.ref(`actualGames/${context.auth.uid}/globalState/isRunning`).once('value')).val() === true) {
                 return {
                     message: 'Game has already started (your client may have fallen out of sync with the server).',
                     code: 500,
@@ -281,18 +272,15 @@ export const startGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
                 endTime: firstQuestion.timeLimit ? Date.now() + Number.parseInt(firstQuestion.timeLimit.toString()) * 1000 : -1,
             };
             Object.keys(playerList).forEach(async (playerID, index) => {
-                await admin.database().ref(`actualGames/${context.auth!.uid}/players/${playerID}/currentQuestion`).set(playerObject);
-                await admin.database().ref(`actualGames/${context.auth!.uid}/players/${playerID}/currentQuestionNumber`).set(1);
-                await admin
-                    .database()
-                    .ref(`actualGames/${context.auth!.uid}/leaderboards/${playerID}`)
-                    .set({
-                        currentQuestion: 1,
-                        playerName: (values[index] as { playerName: string; playerConfig: number[] }).playerName,
-                    });
+                await db.ref(`actualGames/${context.auth!.uid}/players/${playerID}/currentQuestion`).set(playerObject);
+                await db.ref(`actualGames/${context.auth!.uid}/players/${playerID}/currentQuestionNumber`).set(1);
+                await db.ref(`actualGames/${context.auth!.uid}/leaderboards/${playerID}`).set({
+                    currentQuestion: 1,
+                    playerName: (values[index] as { playerName: string; playerConfig: number[] }).playerName,
+                });
             });
-            await admin.database().ref(`actualGames/${context.auth.uid}/globalState/totalQuestions`).set(allQuestions.length);
-            await admin.database().ref(`actualGames/${context.auth.uid}/globalState/isRunning`).set(true);
+            await db.ref(`actualGames/${context.auth.uid}/globalState/totalQuestions`).set(allQuestions.length);
+            await db.ref(`actualGames/${context.auth.uid}/globalState/isRunning`).set(true);
             return {
                 message: 'ok',
                 code: 200,
@@ -327,8 +315,9 @@ export const timeSync = functions.runWith({ maxInstances: 1 }).https.onCall(asyn
 
 export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
     if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
-        if (data && (typeof data === 'string' || typeof data === 'number')) {
-            const userState = await admin.database().ref(`userProfiles/${context.auth.uid}/currentGameState`).once('value');
+        if (typeof data === 'string' || typeof data === 'number') {
+            const db = admin.database();
+            const userState = await db.ref(`userProfiles/${context.auth.uid}/currentGameState`).once('value');
             if (!userState.val().isInGame || userState.val().isTeacher) {
                 return {
                     message: 'User is not in a game',
@@ -337,22 +326,11 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
             }
             let isCorrect = false;
             let timePenalty = 0;
-            const location = await admin
-                .database()
-                .ref(`currentGames/${userState.val().code.slice(0, 5)}/${userState.val().code.slice(5)}`)
-                .once('value');
-            const currentQuestion = await admin.database().ref(`${location.val()}players/${context.auth!.uid}/currentQuestionNumber`).once('value');
-            const questionData = (
-                await admin
-                    .database()
-                    .ref(`${location.val()}quiz/questionObjects/${currentQuestion.val() - 1}`)
-                    .once('value')
-            ).val() as questionObject;
-            const timePenaltyEnd = await admin
-                .database()
-                .ref(`${location.val()}players/${context.auth.uid}/timePenaltyEnd`)
-                .set(Date.now() + timePenalty * 1000);
-            if (timePenaltyEnd < Date.now()) {
+            const location = await db.ref(`currentGames/${userState.val().code.slice(0, 5)}/${userState.val().code.slice(5)}`).once('value');
+            const currentQuestion = await db.ref(`${location.val()}players/${context.auth!.uid}/currentQuestionNumber`).once('value');
+            const questionData = (await db.ref(`${location.val()}quiz/questionObjects/${currentQuestion.val() - 1}`).once('value')).val() as questionObject;
+            const timePenaltyEnd = await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyEnd`).once('value');
+            if (timePenaltyEnd.val() > Date.now() - 2000) {
                 return {
                     message: 'Time penalty still in effect',
                     code: 500,
@@ -360,6 +338,7 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
             }
             if (questionData) {
                 if (questionData.shortAnswer) {
+                    isCorrect = true;
                 } else {
                     if (questionData.Answers[data as number].correct) {
                         isCorrect = true;
@@ -369,23 +348,37 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
                 }
             } else {
                 isCorrect = true;
-                await admin.database().ref(`${location.val()}globalState/gameEnd`).set(Date.now());
+                await db.ref(`${location.val()}globalState/gameEnd`).set(Date.now());
             }
-            if (timePenalty) {
-                const startVal = await admin.database().ref(`${location.val()}players/${context.auth.uid}/startTime`).once('value');
-                const endVal = await admin.database().ref(`${location.val()}players/${context.auth.uid}/endTime`).once('value');
+            const startVal = await db.ref(`${location.val()}players/${context.auth.uid}/startTime`).once('value');
+            const endVal = await db.ref(`${location.val()}players/${context.auth.uid}/endTime`).once('value');
+            if (Date.now() + 5000 > endVal.val()) {
+                timePenalty += Math.floor((Date.now() - endVal.val()) / 2 / 1000);
+            }
+            if (timePenalty > 0) {
                 if (startVal.val() !== -1) {
                     const difference = endVal.val() - startVal.val();
-                    await admin
-                        .database()
-                        .ref(`${location.val()}players/${context.auth.uid}/startTime`)
-                        .set(difference + timePenalty * 1000 + Date.now());
+                    await db.ref(`${location.val()}players/${context.auth.uid}/startTime`).set(timePenalty * 1000 + Date.now());
+                    await db.ref(`${location.val()}players/${context.auth.uid}/endTime`).set(difference + timePenalty * 1000 + Date.now());
                 }
-                await admin.database().ref(`${location.val()}players/${context.auth.uid}/timePenaltyStart`).set(Date.now());
-                await admin
-                    .database()
-                    .ref(`${location.val()}players/${context.auth.uid}/timePenaltyEnd`)
-                    .set(Date.now() + timePenalty * 1000);
+                await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyStart`).set(Date.now());
+                await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyEnd`).set(Date.now() + timePenalty * 1000);
+            }
+            if (isCorrect) {
+                const nextQuestion = (await db.ref(`${location.val()}quiz/questionObjects/${currentQuestion.val()}`).once('value')).val() as questionObject;
+                let safeAnswers: string[] = [];
+                nextQuestion.Answers.forEach((answer) => {
+                    safeAnswers.push(answer.answer!);
+                });
+                const playerObject = {
+                    questionName: nextQuestion.questionName,
+                    answers: nextQuestion.shortAnswer ? [] : safeAnswers,
+                    startTime: nextQuestion.timeLimit ? Date.now() : -1,
+                    endTime: nextQuestion.timeLimit ? Date.now() + Number.parseInt(nextQuestion.timeLimit.toString()) * 1000 : -1,
+                };
+                await db.ref(`${location.val()}leaderboards/${context.auth.uid}/currentQuestion`).set(currentQuestion.val() + 1);
+                await db.ref(`${location.val()}players/${context.auth.uid}/currentQuestion`).set(playerObject);
+                await db.ref(`${location.val()}players/${context.auth.uid}/currentQuestionNumber`).set(currentQuestion.val() + 1);
             }
             return {
                 message: isCorrect ? 'correct' : 'incorrect',

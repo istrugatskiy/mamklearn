@@ -106,7 +106,7 @@ export const initQuestionHandler = (questionAmount: number) => {
             currentQuestion = questionNumber;
             clearInterval(timerInterval);
             clearInterval(otherInterval);
-            if (questionNumber < totalQuestions - 1) {
+            if (questionNumber < totalQuestions) {
                 Array.from($('studentAnswersFlex').children).forEach((object) => {
                     object.classList.add('transitionQuestionB');
                     setTimeout(() => {
@@ -360,7 +360,7 @@ function updateStudentLocation(studentLocation: number) {
 }
 
 function answerQuestion(answer: string) {
-    console.log(answer);
+    networkManager.submitQuestion(answer);
 }
 
 function submitMultipleChoice(event: string) {

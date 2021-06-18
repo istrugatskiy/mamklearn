@@ -59,6 +59,7 @@ const joinGameStudent = httpsCallable(functions, 'joinGameStudent');
 const kickPlayer = httpsCallable(functions, 'kickPlayer');
 const timeSync = httpsCallable(functions, 'timeSync');
 const startGame = httpsCallable(functions, 'startGame');
+const submitQuestion = httpsCallable(functions, 'submitQuestion');
 /* Cloud Functions */
 let charConfig: Reference;
 let currentUser: Reference;
@@ -69,6 +70,10 @@ let hasInitialized = false;
 let alreadyInGame = false;
 
 const listener = onAuthStateChanged(auth, (user) => {
+    if (window.location.pathname !== '/index.html' && window.location.pathname !== '/') {
+        networkManager.onReady();
+        return;
+    }
     if (!hasInitialized) {
         networkManager.onReady();
         hasInitialized = true;
@@ -89,6 +94,7 @@ const listener = onAuthStateChanged(auth, (user) => {
 });
 
 const monitorUserState = () => {
+    if (window.location.pathname !== '/index.html' && window.location.pathname !== '/') return;
     onValue(
         charConfig,
         (snap) => {
@@ -459,10 +465,37 @@ export class networkManager {
 
     static studentListener(initialRender: (currentQuestion: number, questionObject: studentQuestion) => void, secondRender: (currentQuestion: number, questionObject: studentQuestion) => void) {
         let firstTime = true;
+        let prevQuestion: questionObject;
         this.studentPlayListener = onValue(ref(database, `${window.currentGameState.location}players/${auth.currentUser!.uid}/`), (snap) => {
-            firstTime ? initialRender(snap.val().currentQuestionNumber, snap.val().currentQuestion) : secondRender(snap.val().currentQuestionNumber, snap.val().currentQuestion);
+            // This looks like minified code lol
+            if (firstTime) {
+                initialRender(snap.val().currentQuestionNumber, snap.val().currentQuestion);
+            } else {
+                if (prevQuestion != snap.val().currentQuestionNumber) {
+                    secondRender(snap.val().currentQuestionNumber, snap.val().currentQuestion);
+                }
+                prevQuestion = snap.val().currentQuestion;
+            }
             firstTime = false;
         });
+    }
+
+    static submitQuestion(input: number | string) {
+        input = !Number.isNaN(input) ? Number.parseInt(input.toString()) - 1 : input;
+        console.log(input);
+        submitQuestion(input)
+            .then((response) => {
+                const data = response.data as functionObject;
+                console.log(data);
+                if (data.code !== 200) {
+                    throwExcept(`@SubmitQuestion: ${data.code}: ${data.message}`);
+                }
+            })
+            .catch(() => {
+                setTimeout(() => {
+                    this.submitQuestion(input);
+                }, 4000);
+            });
     }
 }
 
