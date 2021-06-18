@@ -106,7 +106,7 @@ export const initQuestionHandler = (questionAmount: number) => {
             currentQuestion = questionNumber;
             clearInterval(timerInterval);
             clearInterval(otherInterval);
-            if (questionNumber < totalQuestions) {
+            if (questionNumber <= totalQuestions) {
                 Array.from($('studentAnswersFlex').children).forEach((object) => {
                     object.classList.add('transitionQuestionB');
                     setTimeout(() => {

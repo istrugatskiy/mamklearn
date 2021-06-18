@@ -379,6 +379,7 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
                 await db.ref(`${location.val()}leaderboards/${context.auth.uid}/currentQuestion`).set(currentQuestion.val() + 1);
                 await db.ref(`${location.val()}players/${context.auth.uid}/currentQuestion`).set(playerObject);
                 await db.ref(`${location.val()}players/${context.auth.uid}/currentQuestionNumber`).set(currentQuestion.val() + 1);
+                await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyEnd`).set(0);
             }
             return {
                 message: isCorrect ? 'correct' : 'incorrect',
