@@ -59,7 +59,6 @@ export const initQuestionHandler = (questionAmount: number) => {
                     .getTime()
                     .then((serverTime) => {
                         timerOffset = Date.now() - serverTime;
-                        console.log(timerOffset);
                     })
                     .catch(() => {
                         setTimeout(() => {
@@ -334,7 +333,7 @@ function setQuestion(question: studentQuestion) {
     if (question.startTime == -1) {
         $('timeLeftCounter').style.display = 'none';
     } else {
-        const timeLimit = (question.endTime - question.startTime) / 1000;
+        const timeLimit = (question.endTime - getCurrentDate()) / 1000;
         $('timeLeftCounter').style.display = 'block';
         $('timeLeftCounter').textContent = `(Time Left: ${timeLimit}s)`;
         let start = Date.now();
@@ -397,3 +396,7 @@ window.addEventListener('resize', () => {
         }
     }
 });
+
+function getCurrentDate() {
+    return Date.now() + timerOffset;
+}
