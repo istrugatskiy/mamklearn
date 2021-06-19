@@ -481,8 +481,7 @@ export class networkManager {
     }
 
     static submitQuestion(input: number | string) {
-        input = !Number.isNaN(input) ? Number.parseInt(input.toString()) - 1 : input;
-        console.log(input);
+        input = Number.isInteger(input) ? Number.parseInt(input.toString()) - 1 : input;
         submitQuestion(input)
             .then((response) => {
                 const data = response.data as functionObject;

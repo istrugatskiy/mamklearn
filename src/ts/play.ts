@@ -93,6 +93,11 @@ export const initQuestionHandler = (questionAmount: number) => {
                 $('gameStartScreenStudent').style.display = 'none';
                 $('gameStartScreenStudent').style.animation = '';
             }, 500);
+            if (questionNumber > totalQuestions) {
+                updateStudentLocation(currentQuestion);
+                $('errorMessageB').style.display = 'block';
+                return;
+            }
             $('mainLoader').classList.remove('loader--active');
             $('title').style.display = 'none';
             $('studentPlayScreen').style.display = 'block';
@@ -307,7 +312,7 @@ function setQuestion(question: studentQuestion) {
     $('titleButtonStudent').firstElementChild!.textContent = question.questionName;
     let options = $('studentAnswersFlex').children;
     for (let i = 0; i < 4; i++) {
-        if (!question.answers[i]) {
+        if (!question.answers || !question.answers[i]) {
             options[i].style.display = 'none';
         } else {
             options[i].disabled = false;
@@ -315,7 +320,7 @@ function setQuestion(question: studentQuestion) {
             options[i].firstElementChild!.textContent = question.answers[i];
         }
     }
-    if (question.answers.join('').length == 0) {
+    if (!question.answers || question.answers.join('').length == 0) {
         $('resettableCharLimited').textContent = '0/180';
         $('studentAnswersFlex').style.display = 'none';
         $('studentShortAnswer').style.display = 'block';

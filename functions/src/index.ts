@@ -352,8 +352,11 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
             }
             const startVal = await db.ref(`${location.val()}players/${context.auth.uid}/startTime`).once('value');
             const endVal = await db.ref(`${location.val()}players/${context.auth.uid}/endTime`).once('value');
-            if (Date.now() + 5000 > endVal.val()) {
+            functions.logger.log(`endTime: ${endVal.val()}`);
+            if (Date.now() - 5000 > endVal.val() && endVal.val()) {
                 timePenalty += Math.floor((Date.now() - endVal.val()) / 2 / 1000);
+                functions.logger.log(`timePenalty: ${timePenalty}`);
+                functions.logger.log(`addedValue: ${Math.floor((Date.now() - endVal.val()) / 2 / 1000)}`);
             }
             if (timePenalty > 0) {
                 if (startVal.val() !== -1) {
@@ -364,8 +367,8 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
                 await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyStart`).set(Date.now());
                 await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyEnd`).set(Date.now() + timePenalty * 1000);
             }
-            if (isCorrect) {
-                const nextQuestion = (await db.ref(`${location.val()}quiz/questionObjects/${currentQuestion.val()}`).once('value')).val() as questionObject;
+            const nextQuestion = (await db.ref(`${location.val()}quiz/questionObjects/${currentQuestion.val()}`).once('value')).val() as questionObject;
+            if (isCorrect && nextQuestion) {
                 let safeAnswers: string[] = [];
                 nextQuestion.Answers.forEach((answer) => {
                     safeAnswers.push(answer.answer!);
@@ -379,7 +382,13 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
                 await db.ref(`${location.val()}leaderboards/${context.auth.uid}/currentQuestion`).set(currentQuestion.val() + 1);
                 await db.ref(`${location.val()}players/${context.auth.uid}/currentQuestion`).set(playerObject);
                 await db.ref(`${location.val()}players/${context.auth.uid}/currentQuestionNumber`).set(currentQuestion.val() + 1);
-                await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyEnd`).set(0);
+                await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyEnd`).set(null);
+                await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyStart`).set(null);
+            } else if (isCorrect && !nextQuestion) {
+                await db.ref(`${location.val()}leaderboards/${context.auth.uid}/currentQuestion`).set(currentQuestion.val() + 1);
+                await db.ref(`${location.val()}players/${context.auth.uid}/currentQuestionNumber`).set(currentQuestion.val() + 1);
+                await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyStart`).set(null);
+                await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyEnd`).set(null);
             }
             return {
                 message: isCorrect ? 'correct' : 'incorrect',
