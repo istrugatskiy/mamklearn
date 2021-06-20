@@ -463,7 +463,11 @@ export class networkManager {
         });
     }
 
-    static studentListener(initialRender: (currentQuestion: number, questionObject: studentQuestion) => void, secondRender: (currentQuestion: number, questionObject: studentQuestion) => void) {
+    static studentListener(
+        initialRender: (currentQuestion: number, questionObject: studentQuestion) => void,
+        secondRender: (currentQuestion: number, questionObject: studentQuestion) => void,
+        validationFailed: (questionObject: studentQuestion, endTime: number) => void
+    ) {
         let firstTime = true;
         let prevQuestion: questionObject;
         this.studentPlayListener = onValue(ref(database, `${window.currentGameState.location}players/${auth.currentUser!.uid}/`), (snap) => {
@@ -476,12 +480,16 @@ export class networkManager {
                 }
                 prevQuestion = snap.val().currentQuestion;
             }
+            if (snap.val().timePenaltyEnd > Date.now()) {
+                validationFailed(snap.val().currentQuestion, snap.val().timePenaltyEnd);
+            }
             firstTime = false;
         });
     }
 
     static submitQuestion(input: number | string) {
-        input = Number.isInteger(input) ? Number.parseInt(input.toString()) - 1 : input;
+        input = !isNaN(input as number) ? Number.parseInt(input.toString()) - 1 : input;
+        console.log(input);
         submitQuestion(input)
             .then((response) => {
                 const data = response.data as functionObject;
@@ -492,7 +500,7 @@ export class networkManager {
             })
             .catch(() => {
                 setTimeout(() => {
-                    this.submitQuestion(input);
+                    this.submitQuestion(!isNaN(input as number) ? Number.parseInt(input.toString()) + 1 : input);
                 }, 4000);
             });
     }

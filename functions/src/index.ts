@@ -19,7 +19,7 @@ export const initGame = functions.runWith({ maxInstances: 1 }).https.onCall(asyn
     if (data && (typeof data === 'string' || data instanceof String)) {
         if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
             const db = admin.database();
-            const user = db.ref(`userProfiles/${context.auth.token.uid}/`);
+            const user = db.ref(`userProfiles/${context.auth.uid}/`);
             const gameState = user.child('currentGameState/isInGame/');
             const isTeacher = user.child('currentGameState/isTeacher/');
             const gameCode = user.child('currentGameState/code');
@@ -108,12 +108,12 @@ export const initGame = functions.runWith({ maxInstances: 1 }).https.onCall(asyn
 export const leaveGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
     if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
         const db = admin.database();
-        const user = db.ref(`userProfiles/${context.auth.token.uid}/`);
+        const user = db.ref(`userProfiles/${context.auth.uid}/`);
         const gameState = user.child('currentGameState/');
         const snap = await gameState.once('value');
         if (snap.val() && snap.val().isInGame) {
             if (snap.val().isTeacher) {
-                const students = await db.ref(`actualGames/${context.auth.token.uid}/players/`).once('value');
+                const students = await db.ref(`actualGames/${context.auth.uid}/players/`).once('value');
                 if (students.val()) {
                     Object.keys(students.val()).forEach(async (student) => {
                         await db.ref(`userProfiles/${student}/currentGameState`).set(null);
@@ -159,7 +159,7 @@ export const joinGameStudent = functions.runWith({ maxInstances: 1 }).https.onCa
         };
     } else if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
         const db = admin.database();
-        const user = db.ref(`userProfiles/${context.auth.token.uid}`);
+        const user = db.ref(`userProfiles/${context.auth.uid}`);
         const gameState = user.child('currentGameState/isInGame');
         const gameCode = user.child('currentGameState/code');
         const gameLocation = db.ref(`currentGames/${data.slice(0, 5)}/${data.slice(6)}`);
@@ -335,12 +335,15 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
                     message: 'Time penalty still in effect',
                     code: 500,
                 };
+            } else {
+                await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyStart`).set(null);
+                await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyEnd`).set(null);
             }
             if (questionData) {
                 if (questionData.shortAnswer) {
                     isCorrect = true;
                 } else {
-                    if (questionData.Answers[data as number].correct) {
+                    if (Number.isInteger(data) && questionData.Answers[data as number] && questionData.Answers[data as number].correct) {
                         isCorrect = true;
                     } else {
                         timePenalty = 10;
@@ -352,11 +355,8 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
             }
             const startVal = await db.ref(`${location.val()}players/${context.auth.uid}/startTime`).once('value');
             const endVal = await db.ref(`${location.val()}players/${context.auth.uid}/endTime`).once('value');
-            functions.logger.log(`endTime: ${endVal.val()}`);
-            if (Date.now() - 5000 > endVal.val() && endVal.val()) {
+            if (Date.now() - 5000 > endVal.val() && endVal.val() && endVal.val() != -1) {
                 timePenalty += Math.floor((Date.now() - endVal.val()) / 2 / 1000);
-                functions.logger.log(`timePenalty: ${timePenalty}`);
-                functions.logger.log(`addedValue: ${Math.floor((Date.now() - endVal.val()) / 2 / 1000)}`);
             }
             if (timePenalty > 0) {
                 if (startVal.val() !== -1) {

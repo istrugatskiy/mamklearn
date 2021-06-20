@@ -9,8 +9,6 @@ interface studentQuestion {
     endTime: number;
 }
 
-const timeToWait = 10;
-
 const root = document.documentElement;
 let otherInterval: number;
 let timerInterval: number;
@@ -141,6 +139,10 @@ export const initQuestionHandler = (questionAmount: number) => {
                 updateStudentLocation(currentQuestion);
                 $('errorMessageB').style.display = 'block';
             }
+        },
+        (question, endTime) => {
+            console.log('temp42');
+            questionValidationFailed(question, endTime);
         }
     );
 };
@@ -149,11 +151,12 @@ networkManager.quitQuizStudent = () => {
     kickPlayer(true);
 };
 
-// @ts-ignore
-function questionValidationFailed(question: studentQuestion) {
+function questionValidationFailed(question: studentQuestion, endTime: number) {
     clearInterval(timerInterval);
     clearInterval(otherInterval);
     let start = Date.now();
+    const timeToWait = (endTime - getCurrentDate()) / 1000;
+    console.log(timeToWait);
     otherInterval = window.setInterval(() => {
         let delta = (Date.now() - start) / 1000;
         let internal = timeToWait - delta;
@@ -337,7 +340,6 @@ function setQuestion(question: studentQuestion) {
         $('timeLeftCounter').style.display = 'block';
         $('timeLeftCounter').textContent = `(Time Left: ${timeLimit}s)`;
         let start = Date.now();
-
         timerInterval = window.setInterval(() => {
             let delta = (Date.now() - start) / 1000;
             const timeLeft = timeLimit - delta;
