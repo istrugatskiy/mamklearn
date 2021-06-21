@@ -469,19 +469,20 @@ export class networkManager {
         validationFailed: (questionObject: studentQuestion, endTime: number) => void
     ) {
         let firstTime = true;
-        let prevQuestion: questionObject;
         this.studentPlayListener = onValue(ref(database, `${window.currentGameState.location}players/${auth.currentUser!.uid}/`), (snap) => {
-            // This looks like minified code lol
+            const val = snap.val();
             if (firstTime) {
-                initialRender(snap.val().currentQuestionNumber, snap.val().currentQuestion);
+                initialRender(val.currentQuestionNumber, val.currentQuestion);
             } else {
-                if (prevQuestion != snap.val().currentQuestionNumber) {
-                    secondRender(snap.val().currentQuestionNumber, snap.val().currentQuestion);
+                if (val.currentQuestionNumber) {
+                    secondRender(val.currentQuestionNumber, val.currentQuestion);
+                    console.log(`called: ${new Date()}`);
+                } else if (val.timePenaltyEnd > Date.now()) {
+                    console.log(val.currentQuestion);
+                    console.log(val.timePenaltyEnd);
+                    console.log('-----------------------------------------------------');
+                    validationFailed(val.currentQuestion, val.timePenaltyEnd);
                 }
-                prevQuestion = snap.val().currentQuestion;
-            }
-            if (snap.val().timePenaltyEnd > Date.now()) {
-                validationFailed(snap.val().currentQuestion, snap.val().timePenaltyEnd);
             }
             firstTime = false;
         });

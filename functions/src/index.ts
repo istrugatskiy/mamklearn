@@ -361,8 +361,8 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
             if (timePenalty > 0) {
                 if (startVal.val() !== -1) {
                     const difference = endVal.val() - startVal.val();
-                    await db.ref(`${location.val()}players/${context.auth.uid}/startTime`).set(timePenalty * 1000 + Date.now());
-                    await db.ref(`${location.val()}players/${context.auth.uid}/endTime`).set(difference + timePenalty * 1000 + Date.now());
+                    await db.ref(`${location.val()}players/${context.auth.uid}/currentQuestion/startTime`).set(timePenalty * 1000 + Date.now());
+                    await db.ref(`${location.val()}players/${context.auth.uid}/currentQuestion/endTime`).set(difference + timePenalty * 1000 + Date.now());
                 }
                 await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyStart`).set(Date.now());
                 await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyEnd`).set(Date.now() + timePenalty * 1000);

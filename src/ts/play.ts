@@ -141,7 +141,6 @@ export const initQuestionHandler = (questionAmount: number) => {
             }
         },
         (question, endTime) => {
-            console.log('temp42');
             questionValidationFailed(question, endTime);
         }
     );
@@ -156,7 +155,6 @@ function questionValidationFailed(question: studentQuestion, endTime: number) {
     clearInterval(otherInterval);
     let start = Date.now();
     const timeToWait = (endTime - getCurrentDate()) / 1000;
-    console.log(timeToWait);
     otherInterval = window.setInterval(() => {
         let delta = (Date.now() - start) / 1000;
         let internal = timeToWait - delta;
