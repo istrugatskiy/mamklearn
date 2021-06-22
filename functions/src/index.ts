@@ -13,6 +13,20 @@ interface answer {
     answer: string | null;
     correct: boolean;
 }
+interface studentQuestion {
+    questionName: string;
+    answers: string[];
+    startTime: number;
+    endTime: number;
+}
+interface tempSubmitQuestion {
+    timePenaltyEnd: number | null;
+    timePenaltyStart: number | null;
+    playerConfig: [number, number, number, number, number];
+    playerName: string;
+    currentQuestion: studentQuestion;
+    currentQuestionNumber: number;
+}
 
 // Handles game initialization for teacher play screen
 export const initGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
@@ -327,17 +341,16 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
             let isCorrect = false;
             let timePenalty = 0;
             const location = await db.ref(`currentGames/${userState.val().code.slice(0, 5)}/${userState.val().code.slice(5)}`).once('value');
-            const currentQuestion = await db.ref(`${location.val()}players/${context.auth!.uid}/currentQuestionNumber`).once('value');
-            const questionData = (await db.ref(`${location.val()}quiz/questionObjects/${currentQuestion.val() - 1}`).once('value')).val() as questionObject;
-            const timePenaltyEnd = await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyEnd`).once('value');
-            if (timePenaltyEnd.val() > Date.now() - 2000) {
+            let playerObject: tempSubmitQuestion = (await db.ref(`${location.val()}players/${context.auth!.uid}`).once('value')).val();
+            const questionData = (await db.ref(`${location.val()}quiz/questionObjects/${playerObject.currentQuestionNumber - 1}`).once('value')).val() as questionObject;
+            if (playerObject.timePenaltyEnd && playerObject.timePenaltyEnd > Date.now() - 2000) {
                 return {
                     message: 'Time penalty still in effect',
                     code: 500,
                 };
             } else {
-                await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyStart`).set(null);
-                await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyEnd`).set(null);
+                playerObject.timePenaltyEnd = null;
+                playerObject.timePenaltyStart = null;
             }
             if (questionData) {
                 if (questionData.shortAnswer) {
@@ -353,43 +366,45 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
                 isCorrect = true;
                 await db.ref(`${location.val()}globalState/gameEnd`).set(Date.now());
             }
-            const startVal = await db.ref(`${location.val()}players/${context.auth.uid}/startTime`).once('value');
-            const endVal = await db.ref(`${location.val()}players/${context.auth.uid}/endTime`).once('value');
-            if (Date.now() - 5000 > endVal.val() && endVal.val() && endVal.val() != -1) {
-                timePenalty += Math.floor((Date.now() - endVal.val()) / 2 / 1000);
+            const startVal = playerObject.currentQuestion.startTime;
+            const endVal = playerObject.currentQuestion.endTime;
+            if (Date.now() - 5000 > endVal && endVal && endVal != -1) {
+                timePenalty += Math.floor((Date.now() - endVal) / 2 / 1000);
             }
-            if (timePenalty > 0) {
-                if (startVal.val() !== -1) {
-                    const difference = endVal.val() - startVal.val();
-                    await db.ref(`${location.val()}players/${context.auth.uid}/currentQuestion/startTime`).set(timePenalty * 1000 + Date.now());
-                    await db.ref(`${location.val()}players/${context.auth.uid}/currentQuestion/endTime`).set(difference + timePenalty * 1000 + Date.now());
-                }
-                await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyStart`).set(Date.now());
-                await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyEnd`).set(Date.now() + timePenalty * 1000);
-            }
-            const nextQuestion = (await db.ref(`${location.val()}quiz/questionObjects/${currentQuestion.val()}`).once('value')).val() as questionObject;
+            const nextQuestion = (await db.ref(`${location.val()}quiz/questionObjects/${playerObject.currentQuestionNumber}`).once('value')).val() as questionObject;
             if (isCorrect && nextQuestion) {
                 let safeAnswers: string[] = [];
                 nextQuestion.Answers.forEach((answer) => {
                     safeAnswers.push(answer.answer!);
                 });
-                const playerObject = {
+                const question = {
                     questionName: nextQuestion.questionName,
                     answers: nextQuestion.shortAnswer ? [] : safeAnswers,
                     startTime: nextQuestion.timeLimit ? Date.now() : -1,
                     endTime: nextQuestion.timeLimit ? Date.now() + Number.parseInt(nextQuestion.timeLimit.toString()) * 1000 : -1,
                 };
-                await db.ref(`${location.val()}leaderboards/${context.auth.uid}/currentQuestion`).set(currentQuestion.val() + 1);
-                await db.ref(`${location.val()}players/${context.auth.uid}/currentQuestion`).set(playerObject);
-                await db.ref(`${location.val()}players/${context.auth.uid}/currentQuestionNumber`).set(currentQuestion.val() + 1);
-                await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyEnd`).set(null);
-                await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyStart`).set(null);
+                await db.ref(`${location.val()}leaderboards/${context.auth.uid}/currentQuestion`).set(playerObject.currentQuestionNumber + 1);
+                playerObject.currentQuestion = question;
+                playerObject.currentQuestionNumber++;
+                playerObject.timePenaltyEnd = null;
+                playerObject.timePenaltyStart = null;
             } else if (isCorrect && !nextQuestion) {
-                await db.ref(`${location.val()}leaderboards/${context.auth.uid}/currentQuestion`).set(currentQuestion.val() + 1);
-                await db.ref(`${location.val()}players/${context.auth.uid}/currentQuestionNumber`).set(currentQuestion.val() + 1);
-                await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyStart`).set(null);
-                await db.ref(`${location.val()}players/${context.auth.uid}/timePenaltyEnd`).set(null);
+                playerObject.currentQuestionNumber++;
+                playerObject.timePenaltyEnd = null;
+                playerObject.timePenaltyStart = null;
             }
+            if (timePenalty > 0) {
+                if (startVal !== -1 && !isCorrect) {
+                    const difference = endVal - startVal;
+                    playerObject.currentQuestion.startTime = timePenalty * 1000 + Date.now();
+                    playerObject.currentQuestion.endTime = difference + timePenalty * 1000 + Date.now();
+                } else if (startVal !== -1) {
+                    // Handle check if question has timelimit
+                }
+                playerObject.timePenaltyStart = Date.now();
+                playerObject.timePenaltyEnd = Date.now() + timePenalty * 1000;
+            }
+            await db.ref(`${location.val()}players/${context.auth!.uid}`).set(playerObject);
             return {
                 message: isCorrect ? 'correct' : 'incorrect',
                 timePenalty: timePenalty,

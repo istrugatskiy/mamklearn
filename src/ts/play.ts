@@ -51,7 +51,7 @@ export const initEvents = () => {
 
 export const initQuestionHandler = (questionAmount: number) => {
     networkManager.studentListener(
-        (questionNumber, question) => {
+        (questionNumber, question, isCorrect) => {
             function timeHandler() {
                 networkManager
                     .getTime()
@@ -68,10 +68,12 @@ export const initQuestionHandler = (questionAmount: number) => {
             currentQuestion = questionNumber;
             totalQuestions = questionAmount;
             isGameLive = true;
-            kickPlayer();
-            clearInterval(timerInterval);
-            clearInterval(finishUpInterval);
-            clearInterval(otherInterval);
+            if (isCorrect) {
+                kickPlayer();
+                clearInterval(timerInterval);
+                clearInterval(finishUpInterval);
+                clearInterval(otherInterval);
+            }
             setCharImage('player', window.currentUserConfig);
             bottomBarOffset = 15;
             let studentRaceBoxNumbers = document.createDocumentFragment();
@@ -90,7 +92,7 @@ export const initQuestionHandler = (questionAmount: number) => {
                 $('gameStartScreenStudent').style.display = 'none';
                 $('gameStartScreenStudent').style.animation = '';
             }, 500);
-            if (questionNumber > totalQuestions) {
+            if (questionNumber > totalQuestions && isCorrect) {
                 updateStudentLocation(currentQuestion);
                 $('errorMessageB').style.display = 'block';
                 return;

@@ -68,6 +68,7 @@ let newValue: { [key: string]: string } = {};
 let errorHasBeenThrown = false;
 let hasInitialized = false;
 let alreadyInGame = false;
+let timerOffset = 0;
 
 const listener = onAuthStateChanged(auth, (user) => {
     if (window.location.pathname !== '/index.html' && window.location.pathname !== '/') {
@@ -464,25 +465,26 @@ export class networkManager {
     }
 
     static studentListener(
-        initialRender: (currentQuestion: number, questionObject: studentQuestion) => void,
+        initialRender: (currentQuestion: number, questionObject: studentQuestion, isCorrect: boolean) => void,
         secondRender: (currentQuestion: number, questionObject: studentQuestion) => void,
         validationFailed: (questionObject: studentQuestion, endTime: number) => void
     ) {
         let firstTime = true;
         this.studentPlayListener = onValue(ref(database, `${window.currentGameState.location}players/${auth.currentUser!.uid}/`), (snap) => {
             const val = snap.val();
-            if (firstTime) {
-                initialRender(val.currentQuestionNumber, val.currentQuestion);
-            } else {
-                if (val.currentQuestionNumber) {
-                    secondRender(val.currentQuestionNumber, val.currentQuestion);
-                    console.log(`called: ${new Date()}`);
-                } else if (val.timePenaltyEnd > Date.now()) {
-                    console.log(val.currentQuestion);
-                    console.log(val.timePenaltyEnd);
-                    console.log('-----------------------------------------------------');
-                    validationFailed(val.currentQuestion, val.timePenaltyEnd);
-                }
+            if (val.timePenaltyEnd > getCurrentDate()) {
+                console.log(val.currentQuestion);
+                console.log(val.timePenaltyEnd);
+                console.log('-----------------------------------------------------');
+                validationFailed(val.currentQuestion, val.timePenaltyEnd);
+                if (firstTime) initialRender(val.currentQuestionNumber, val.currentQuestion, false);
+                firstTime = false;
+            } else if (firstTime) {
+                timeHandler();
+                initialRender(val.currentQuestionNumber, val.currentQuestion, true);
+            } else if (val.currentQuestionNumber) {
+                secondRender(val.currentQuestionNumber, val.currentQuestion);
+                console.log(`called: ${new Date()}`);
             }
             firstTime = false;
         });
@@ -521,4 +523,21 @@ function sortArray(input: { [key: string]: { currentQuestion: number; playerName
         const secondEl = b as { currentQuestion: number; playerName: string };
         return secondEl.currentQuestion - firstEl.currentQuestion;
     });
+}
+
+function timeHandler() {
+    networkManager
+        .getTime()
+        .then((serverTime) => {
+            timerOffset = Date.now() - serverTime;
+        })
+        .catch(() => {
+            setTimeout(() => {
+                timeHandler();
+            }, 4000);
+        });
+}
+
+function getCurrentDate() {
+    return Date.now() + timerOffset;
 }
