@@ -473,9 +473,6 @@ export class networkManager {
         this.studentPlayListener = onValue(ref(database, `${window.currentGameState.location}players/${auth.currentUser!.uid}/`), (snap) => {
             const val = snap.val();
             if (val.timePenaltyEnd > getCurrentDate()) {
-                console.log(val.currentQuestion);
-                console.log(val.timePenaltyEnd);
-                console.log('-----------------------------------------------------');
                 validationFailed(val.currentQuestion, val.timePenaltyEnd);
                 if (firstTime) initialRender(val.currentQuestionNumber, val.currentQuestion, false);
                 firstTime = false;
@@ -484,7 +481,6 @@ export class networkManager {
                 initialRender(val.currentQuestionNumber, val.currentQuestion, true);
             } else if (val.currentQuestionNumber) {
                 secondRender(val.currentQuestionNumber, val.currentQuestion);
-                console.log(`called: ${new Date()}`);
             }
             firstTime = false;
         });
@@ -492,11 +488,9 @@ export class networkManager {
 
     static submitQuestion(input: number | string) {
         input = !isNaN(input as number) ? Number.parseInt(input.toString()) - 1 : input;
-        console.log(input);
         submitQuestion(input)
             .then((response) => {
                 const data = response.data as functionObject;
-                console.log(data);
                 if (data.code !== 200) {
                     throwExcept(`@SubmitQuestion: ${data.code}: ${data.message}`);
                 }

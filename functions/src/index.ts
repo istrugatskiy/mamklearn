@@ -343,7 +343,7 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
             const location = await db.ref(`currentGames/${userState.val().code.slice(0, 5)}/${userState.val().code.slice(5)}`).once('value');
             let playerObject: tempSubmitQuestion = (await db.ref(`${location.val()}players/${context.auth!.uid}`).once('value')).val();
             const questionData = (await db.ref(`${location.val()}quiz/questionObjects/${playerObject.currentQuestionNumber - 1}`).once('value')).val() as questionObject;
-            if (playerObject.timePenaltyEnd && playerObject.timePenaltyEnd > Date.now() - 2000) {
+            if (playerObject.timePenaltyEnd && playerObject.timePenaltyEnd > Date.now() + 1000) {
                 return {
                     message: 'Time penalty still in effect',
                     code: 500,
@@ -368,7 +368,7 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
             }
             const startVal = playerObject.currentQuestion.startTime;
             const endVal = playerObject.currentQuestion.endTime;
-            if (Date.now() - 5000 > endVal && endVal && endVal != -1) {
+            if (Date.now() - 1000 > endVal && endVal && endVal != -1) {
                 timePenalty += Math.floor((Date.now() - endVal) / 2 / 1000);
             }
             const nextQuestion = (await db.ref(`${location.val()}quiz/questionObjects/${playerObject.currentQuestionNumber}`).once('value')).val() as questionObject;
@@ -386,20 +386,14 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
                 await db.ref(`${location.val()}leaderboards/${context.auth.uid}/currentQuestion`).set(playerObject.currentQuestionNumber + 1);
                 playerObject.currentQuestion = question;
                 playerObject.currentQuestionNumber++;
-                playerObject.timePenaltyEnd = null;
-                playerObject.timePenaltyStart = null;
             } else if (isCorrect && !nextQuestion) {
                 playerObject.currentQuestionNumber++;
-                playerObject.timePenaltyEnd = null;
-                playerObject.timePenaltyStart = null;
             }
             if (timePenalty > 0) {
                 if (startVal !== -1 && !isCorrect) {
                     const difference = endVal - startVal;
                     playerObject.currentQuestion.startTime = timePenalty * 1000 + Date.now();
                     playerObject.currentQuestion.endTime = difference + timePenalty * 1000 + Date.now();
-                } else if (startVal !== -1) {
-                    // Handle check if question has timelimit
                 }
                 playerObject.timePenaltyStart = Date.now();
                 playerObject.timePenaltyEnd = Date.now() + timePenalty * 1000;

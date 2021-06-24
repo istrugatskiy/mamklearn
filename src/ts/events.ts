@@ -8,7 +8,7 @@ export const eventHandle = () => {
         if (eventTarget in window.clickEvents) {
             window.clickEvents[eventTarget](event);
         }
-        for (var i = 0; i < keys.length; i++) {
+        for (let i = 0; i < keys.length; i++) {
             if (eventTarget.includes(keys[i])) {
                 window.clickIncludesEvents[keys[i]](event);
                 break;
@@ -19,7 +19,7 @@ export const eventHandle = () => {
         if (event.key == 'Enter' || event.key == ' ') {
             const keys = Object.keys(window.keyboardIncludesEvents);
             const eventTarget = (event.target! as HTMLElement).id;
-            for (var i = 0; i < keys.length; i++) {
+            for (let i = 0; i < keys.length; i++) {
                 if (eventTarget.includes(keys[i])) {
                     window.keyboardIncludesEvents[keys[i]](event);
                     break;
@@ -35,8 +35,8 @@ export const eventHandle = () => {
         }
     });
     window.addEventListener('input', (event) => {
-        if ((event.target! as HTMLElement).matches('[contenteditable]')) {
-            const target = event.target! as HTMLElement;
+        const target = event.target! as HTMLElement;
+        if (target.matches('[contenteditable]')) {
             let characterOffset = getCaretCharacterOffsetWithin(target);
             const maxLength = Number.parseInt(target.dataset.maxlength!);
             target.textContent = String(target.textContent!.replace(/(\r\n|\r|\n)/, ''));
