@@ -422,7 +422,7 @@ export class networkManager {
             });
     }
 
-    static handleGameState(location: string, callback: (state: { isRunning: boolean; totalQuestions: number }) => void) {
+    static handleGameState(location: string, callback: (state: { isRunning: boolean; totalQuestions: number; gameEnd: number }) => void) {
         this.unsubHandler = onValue(ref(database, `${location}globalState`), (snap) => {
             callback(snap.val());
         });

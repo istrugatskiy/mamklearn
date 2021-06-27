@@ -362,9 +362,6 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
                         timePenalty = 10;
                     }
                 }
-            } else {
-                isCorrect = true;
-                await db.ref(`${location.val()}globalState/gameEnd`).set(Date.now());
             }
             const startVal = playerObject.currentQuestion.startTime;
             const endVal = playerObject.currentQuestion.endTime;
@@ -388,6 +385,8 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
                 playerObject.currentQuestionNumber++;
             } else if (isCorrect && !nextQuestion) {
                 playerObject.currentQuestionNumber++;
+                isCorrect = true;
+                await db.ref(`${location.val()}globalState/gameEnd`).set(Date.now());
             }
             if (timePenalty > 0) {
                 if (startVal !== -1 && !isCorrect) {

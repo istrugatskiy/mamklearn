@@ -50,6 +50,11 @@ export const initEvents = () => {
 };
 
 export const initQuestionHandler = (questionAmount: number) => {
+    networkManager.handleGameState(window.currentGameState.location, (val) => {
+        if (val.gameEnd) {
+            gameFinish((val.gameEnd + 15000 - getCurrentDate()) / 1000);
+        }
+    });
     networkManager.studentListener(
         (questionNumber, question, isCorrect) => {
             function timeHandler() {
@@ -207,7 +212,6 @@ function questionValidationFailed(question: studentQuestion, endTime: number) {
     }, 400);
 }
 
-// @ts-ignore
 function gameFinish(timeLeft: number) {
     $('gameFinishNotify').style.display = 'block';
     $('gameFinishNotify').textContent = `The game will end in ${timeLeft}s`;
@@ -215,11 +219,11 @@ function gameFinish(timeLeft: number) {
     let init = timeLeft;
     finishUpInterval = window.setInterval(() => {
         let delta = (Date.now() - start) / 1000;
-        let internal = (init as number) - delta;
+        let internal = init - delta;
         if (internal < 0) {
             internal = 0;
         }
-        $('gameFinishNotify').textContent = `The game will end in ${Math.floor(timeLeft)}s`;
+        $('gameFinishNotify').textContent = `The game will end in ${Math.floor(internal)}s`;
     }, 100);
     resettableTime3 = window.setTimeout(() => {
         clearInterval(finishUpInterval);
@@ -271,15 +275,16 @@ function kickPlayer(special: boolean = false, specialText: string = 'Kicked From
         }, 1000);
         $('gameStartScreenStudent').style.display = 'none';
         !networkManager.studentPlayListener || networkManager.studentPlayListener();
+        !networkManager.unsubHandler || networkManager.unsubHandler();
         isGameLive = false;
         goBack();
+        clearTimeout(resettableTime4);
+        $('currentUserEndPlace').style.display = 'none';
     }
     clearInterval(timerInterval);
     clearTimeout(resettableTime);
     clearTimeout(resettableTime2);
     clearTimeout(resettableTime3);
-    clearTimeout(resettableTime4);
-    $('currentUserEndPlace').style.display = 'none';
     $('gameResults').style.display = 'none';
     $('currentUserEndPlace').classList.add('titleTransitionBack');
     $('currentUserEndPlace').classList.remove('btnTransitionA');
