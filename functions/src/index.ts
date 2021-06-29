@@ -386,7 +386,9 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
             } else if (isCorrect && !nextQuestion) {
                 playerObject.currentQuestionNumber++;
                 isCorrect = true;
-                await db.ref(`${location.val()}globalState/gameEnd`).set(Date.now());
+                if (!(await db.ref(`${location.val()}globalState/gameEnd`).once('value')).val()) {
+                    await db.ref(`${location.val()}globalState/gameEnd`).set(Date.now());
+                }
             }
             if (timePenalty > 0) {
                 if (startVal !== -1 && !isCorrect) {

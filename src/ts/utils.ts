@@ -1,9 +1,14 @@
 // These are some helper functions used throughout the app!
 import { getAuth, signOut } from 'firebase/auth';
 let hasLoggedOut = false;
-let errorCount = 0;
 
-export const getID = (inputEvent: Event | string) => {
+/**
+ * Gets the numbered id of the inputted string.
+ *
+ * @param {(Event | string)} inputEvent The input string which should like this 'example12'.
+ * @return {string} Returns the numbered id. Given the example above it would return '12'.
+ */
+export const getID = (inputEvent: Event | string): string => {
     let input = typeof inputEvent === 'string' || inputEvent instanceof String ? inputEvent : (inputEvent.target as HTMLElement).id;
     let inputChars = Array.from(input);
     let output = '';
@@ -15,12 +20,23 @@ export const getID = (inputEvent: Event | string) => {
     return output;
 };
 
+/**
+ * Returns a reference to the first object with the specified value of the ID attribute.
+ *
+ * @param {string} a String that specifies the ID value.
+ * @return {HTMLElement} Reference to the first object with the specified value of the ID attribute.
+ */
 export const $ = (a: string): HTMLElement => {
     return document.getElementById(a)!;
 };
 
-// Thanks stackoverflow lol
-export const ordinalSuffix = (i: number) => {
+/**
+ * Returns the ordinal suffix given a specified number/
+ *
+ * @param {number} i The number specified.
+ * @return {('st' | 'nd' | 'rd' | 'th')} The ordinal suffix that would accompany the number specified.
+ */
+export const ordinalSuffix = (i: number): 'st' | 'nd' | 'rd' | 'th' => {
     let j = i % 10,
         k = i % 100;
     if (j == 1 && k != 11) {
@@ -35,15 +51,34 @@ export const ordinalSuffix = (i: number) => {
     return 'th';
 };
 
+/**
+ * Clears the children of the specified element.
+ *
+ * @param {string} element The element whose children will be cleared.
+ */
 export const clearChildren = (element: string) => {
     while ($(element).firstChild) $(element).removeChild($(element).lastChild!);
 };
 
-export const mathClamp = (num: number, min: number, max: number) => {
+/**
+ * Clamps a number between two values.
+ *
+ * @param {number} num The number to clamp.
+ * @param {number} min The minimum value that the number can be.
+ * @param {number} max The maximum value the number can be.
+ * @return {number} The number clamped between the two specified values.
+ */
+export const mathClamp = (num: number, min: number, max: number): number => {
     return num <= min ? min : num >= max ? max : num;
 };
 
-export const getCaretCharacterOffsetWithin = (element: HTMLElement) => {
+/**
+ * Gets the character offset of the specified element.
+ *
+ * @param {HTMLElement} element The element for which to get the character offset.
+ * @return {number} The character offset of the specified element.
+ */
+export const getCaretCharacterOffsetWithin = (element: HTMLElement): number => {
     let caretOffset = 0;
     const doc = element.ownerDocument;
     const win = doc.defaultView!;
@@ -58,13 +93,29 @@ export const getCaretCharacterOffsetWithin = (element: HTMLElement) => {
     return caretOffset;
 };
 
-export const characterCount = (thisVar: Element, total: string | null) => {
-    thisVar.nextElementSibling!.textContent = `${thisVar.textContent!.length}/${total}`;
+/**
+ * Updates the character count UI with new values.
+ *
+ * @param {Element} element The element that needs to be update.
+ * @param {(string | null)} total The total characters allowed for the field.
+ */
+export const characterCount = (element: Element, total: string | null) => {
+    element.nextElementSibling!.textContent = `${element.textContent!.length}/${total}`;
 };
 
-export const deepEqual = (object1: any, object2: any) => {
+/**
+ * Checks if two objects are equal.
+ *
+ * @param {*} object1 The first object.
+ * @param {*} object2 The second object.
+ * @return {boolean} Whether the two objects are equal.
+ */
+export const deepEqual = (object1: any, object2: any): boolean => {
     const keys1 = Object.keys(object1);
     const keys2 = Object.keys(object2);
+    const isObject = (object: object) => {
+        return object != null && typeof object === 'object';
+    };
 
     if (keys1.length !== keys2.length) {
         return false;
@@ -82,12 +133,14 @@ export const deepEqual = (object1: any, object2: any) => {
     return true;
 };
 
-export const isObject = (object: object) => {
-    return object != null && typeof object === 'object';
-};
-
-// Creates object from template!
-// Uniqifies the id's if specified.
+/**
+ * Renders a template to specified location.
+ *
+ * @param {string} templateID The template's ID.
+ * @param {string} place The ID of the element to which you want to append the template.
+ * @param {(boolean | string | null)} [modifID=false] The name of the string you want to replace in the elements id.
+ * @param {(boolean | number | null)} [replace=false] The new string to put in the old string's place.
+ */
 export const createTemplate = (templateID: string, place: string, modifID: boolean | string | null = false, replace: boolean | number | null = false) => {
     let content = ($(templateID) as HTMLTemplateElement).content.cloneNode(true) as HTMLElement;
     if (modifID !== null) {
@@ -98,11 +151,21 @@ export const createTemplate = (templateID: string, place: string, modifID: boole
     $(place).appendChild(content);
 };
 
+/**
+ * Sets the main title screen with a new template.
+ *
+ * @param {string} templateID The ID of the new template.
+ */
 export const setTitle = (templateID: string) => {
     clearChildren('title');
     createTemplate(templateID, 'title');
 };
 
+/**
+ * Shows the user an error message and logs debug information.
+ *
+ * @param {string} msg The message that you want to pass.
+ */
 export const throwExcept = (msg: string) => {
     // Prevents false positive errors
     if (hasLoggedOut) return;
@@ -112,6 +175,12 @@ export const throwExcept = (msg: string) => {
     console.trace(msg);
 };
 
+/**
+ * Sets the caret position in an element to the specified offset.
+ *
+ * @param {HTMLElement} element The element whose caret position to set.
+ * @param {number} offset The offset, the larger the farther left the cursor will be.
+ */
 export const setCaretPosition = (element: HTMLElement, offset: number) => {
     let range = document.createRange();
     let sel = window.getSelection();
@@ -149,6 +218,9 @@ export const setCaretPosition = (element: HTMLElement, offset: number) => {
     }
 };
 
+/**
+ * Logs the user out and reloads the page.
+ */
 export const logOut = () => {
     const auth = getAuth();
     signOut(auth)
@@ -161,31 +233,51 @@ export const logOut = () => {
         });
 };
 
+/**
+ * Linearly interpolates between {@link x} and {@link y} by {@link a}
+ *
+ * @param {number} x The initial value.
+ * @param {number} y The new value.
+ * @param {number} a The interpolation value.
+ */
 export const mathLerp = (x: number, y: number, a: number) => x * (1 - a) + y * a;
 
+/**
+ * Dynamically imports a chonk and calls the specified callback.
+ *
+ * @param {string} chonkToLoad The name of the chonk that you want to load.
+ * @param {(returnedObject: any) => void} callback The callback called on success.
+ */
 export const loadChonk = (chonkToLoad: string, callback: (returnedObject: any) => void) => {
     import(`./${chonkToLoad}`)
         .then((obj) => {
             callback(obj);
         })
         .catch((error) => {
-            errorCount++;
-            if (errorCount < 15) {
-                setTimeout(() => {
-                    console.warn(`Failed to fetch chonk (${error})! Retrying...`);
-                    loadChonk(chonkToLoad, callback);
-                }, 2000);
-            } else {
-                throwExcept(`@LoadChonk: ${error}`);
-            }
+            console.warn(`Failed to fetch chonk (${error})! Retrying...`);
+            loadChonk(chonkToLoad, callback);
         });
 };
 
-// Demo of what the mamklearn codebase COULD be like, like I'll ever bother using classes
+/**
+ * A helpful utility for managing multiple audio tracks.
+ *
+ * @class AudioManager
+ */
 export class AudioManager {
     private audioObjects: { [key: string]: { source: string; index: number | null } } = {};
     private currentlyPlaying: HTMLMediaElement[] = [];
+    private errors = {
+        trackNotDefined: 'The audio track you attempted to play is not defined!',
+        trackNotPlayed: 'You need to play the track before modifying it!',
+    };
 
+    /**
+     * Creates an instance of AudioManager.
+     *
+     * @param {{ [name: string]: string }} audioObjects A key value pair of the name by which you want to reference the audio track and its actual location.
+     * @memberof AudioManager
+     */
     constructor(audioObjects: { [name: string]: string }) {
         Object.entries(audioObjects).forEach(([key, value]) => {
             this.audioObjects[key] = {
@@ -195,6 +287,14 @@ export class AudioManager {
         });
     }
 
+    /**
+     * Plays the specified audio track.
+     *
+     * @param {string} name The name of the track you want to load.
+     * @param {boolean} [shouldLoop=false] Whether the track should loop.
+     * @param {number} [volume=1] The starting volume of the track.
+     * @memberof AudioManager
+     */
     play(name: string, shouldLoop: boolean = false, volume: number = 1) {
         if (this.audioObjects[name]) {
             let newAudio = new Audio(this.audioObjects[name].source);
@@ -203,66 +303,98 @@ export class AudioManager {
             newAudio.play();
             this.audioObjects[name].index = this.currentlyPlaying.push(newAudio) - 1;
         } else {
-            throw new TypeError('The audio clip you attempted to play is not defined!');
+            this.raiseException('trackNotDefined');
         }
     }
 
+    /**
+     * Interpolates between the current volume of the specified track and the new volume.
+     *
+     * @param {string} name The name of the track you want to modify.
+     * @param {number} newVolume The new volume.
+     * @param {boolean} [noInterpolate=false] Disable volume interpolation
+     * @memberof AudioManager
+     */
     setVolume(name: string, newVolume: number, noInterpolate: boolean = false) {
         if (this.audioObjects[name].index !== null) {
             const currentAudio = this.currentlyPlaying[this.audioObjects[name].index!];
-            let distance = 0;
-            let initVolume = currentAudio.volume;
             if (noInterpolate) {
                 currentAudio.volume = newVolume;
             } else {
-                const interval = window.setInterval(() => {
-                    if (currentAudio.volume >= newVolume && initVolume - newVolume < 0) {
-                        clearInterval(interval);
-                    } else if (currentAudio.volume <= newVolume && initVolume - newVolume > 0) {
-                        clearInterval(interval);
-                    } else {
-                        distance += 0.05;
-                        currentAudio.volume = mathClamp(mathLerp(initVolume, newVolume, distance), 0, 1);
-                    }
-                }, 100);
+                this.lerper(currentAudio, newVolume, 'volume');
             }
         } else {
-            throw new TypeError('You need to play the clip before modifying it!');
+            this.raiseException('trackNotPlayed');
         }
     }
 
+    /**
+     * Interpolates between the current speed of the specified track and the new speed.
+     *
+     * @param {string} name The name of the track you want to modify.
+     * @param {number} newSpeed The new speed.
+     * @memberof AudioManager
+     */
     setSpeed(name: string, newSpeed: number) {
         if (this.audioObjects[name].index !== null) {
             const currentAudio = this.currentlyPlaying[this.audioObjects[name].index!];
-            let distance = 0;
-            let initVolume = currentAudio.playbackRate;
-            const interval = window.setInterval(() => {
-                if (currentAudio.playbackRate >= newSpeed && initVolume - newSpeed < 0) {
-                    clearInterval(interval);
-                } else if (currentAudio.playbackRate <= newSpeed && initVolume - newSpeed > 0) {
-                    clearInterval(interval);
-                } else {
-                    distance += 0.05;
-                    currentAudio.playbackRate = mathClamp(mathLerp(initVolume, newSpeed, distance), 0, 10);
-                }
-            }, 100);
+            this.lerper(currentAudio, newSpeed, 'playbackRate');
         } else {
-            throw new TypeError('You need to play the clip before modifying it!');
+            this.raiseException('trackNotPlayed');
         }
     }
 
+    /**
+     * Stops all currently playing tracks and resets the object.
+     *
+     * @memberof AudioManager
+     */
     clearAll() {
-        this.currentlyPlaying.forEach((audioClip) => {
-            audioClip.pause();
+        this.currentlyPlaying.forEach((audioTrack) => {
+            audioTrack.pause();
         });
         this.currentlyPlaying = [];
         this.audioObjects = {};
     }
+
+    private lerper(currentAudio: HTMLMediaElement, newValue: number, prop: 'playbackRate' | 'volume') {
+        let distance = 0;
+        const initValue = currentAudio[prop];
+        const interval = window.setInterval(() => {
+            if (currentAudio[prop] >= newValue && initValue - newValue < 0) {
+                clearInterval(interval);
+            } else if (currentAudio[prop] <= newValue && initValue - newValue > 0) {
+                clearInterval(interval);
+            } else {
+                distance += 0.05;
+                currentAudio[prop] = mathClamp(mathLerp(initValue, newValue, distance), 0, 10);
+            }
+        }, 100);
+    }
+
+    private raiseException(input: 'trackNotPlayed' | 'trackNotDefined') {
+        throw new TypeError(this.errors[input]);
+    }
 }
 
+/**
+ * Downloads a file to a users device.
+ *
+ * @param {string} filename The name that you wish to give to the file.
+ * @param {string} text The data that you want to be placed in the file.
+ */
 export const download = (filename: string, text: string) => {
-    const pom = document.createElement('a');
-    pom.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(text));
-    pom.setAttribute('download', filename);
-    pom.click();
+    const el = document.createElement('a');
+    el.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(text));
+    el.setAttribute('download', filename);
+    el.click();
+};
+
+/**
+ * Takes a function as an argument and runs it if it isn't null.
+ *
+ * @param {() => any} inputFunction The function to input.
+ */
+export const call = (inputFunction: () => any | null) => {
+    !inputFunction || inputFunction();
 };

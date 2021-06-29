@@ -10,12 +10,8 @@ interface studentQuestion {
 }
 
 const root = document.documentElement;
-let otherInterval: number;
-let timerInterval: number;
-let finishUpInterval: number;
-let bottomBarOffset: number;
-let currentQuestion: number;
-let totalQuestions: number;
+let otherInterval: number, timerInterval: number, finishUpInterval: number, bottomBarOffset: number, currentQuestion: number, totalQuestions: number;
+
 let isGameLive: boolean;
 let timerOffset: number = 0;
 let resettableTime: number;
@@ -52,6 +48,7 @@ export const initEvents = () => {
 export const initQuestionHandler = (questionAmount: number) => {
     networkManager.handleGameState(window.currentGameState.location, (val) => {
         if (val.gameEnd) {
+            // TODO: Fix later
             gameFinish((val.gameEnd + 15000 - getCurrentDate()) / 1000);
         }
     });
