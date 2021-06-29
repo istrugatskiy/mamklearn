@@ -357,6 +357,15 @@ export class AudioManager {
         this.audioObjects = {};
     }
 
+    /**
+     * Handles lerping for HTMLMedia element properties.
+     *
+     * @private
+     * @param {HTMLMediaElement} currentAudio The HTMLMediaElement you wish to perform the operation on.
+     * @param {number} newValue The new value of the property.
+     * @param {('playbackRate' | 'volume')} prop The property whose value you wish to interpolate.
+     * @memberof AudioManager
+     */
     private lerper(currentAudio: HTMLMediaElement, newValue: number, prop: 'playbackRate' | 'volume') {
         let distance = 0;
         const initValue = currentAudio[prop];
@@ -372,6 +381,13 @@ export class AudioManager {
         }, 100);
     }
 
+    /**
+     * Throws a new TypeError with a specified error message.
+     *
+     * @private
+     * @param {('trackNotPlayed' | 'trackNotDefined')} input The type of error message you wish to pass.
+     * @memberof AudioManager
+     */
     private raiseException(input: 'trackNotPlayed' | 'trackNotDefined') {
         throw new TypeError(this.errors[input]);
     }

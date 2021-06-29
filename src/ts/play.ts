@@ -314,7 +314,7 @@ function setQuestion(question: studentQuestion) {
     }
     $('studentAnswersFlex').style.display = 'flex';
     $('titleButtonStudent').firstElementChild!.textContent = question.questionName;
-    let options = $('studentAnswersFlex').children;
+    const options = $('studentAnswersFlex').children;
     for (let i = 0; i < 4; i++) {
         if (!question.answers || !question.answers[i]) {
             options[i].style.display = 'none';
@@ -323,6 +323,7 @@ function setQuestion(question: studentQuestion) {
             options[i].style.display = 'block';
             options[i].firstElementChild!.textContent = question.answers[i];
         }
+        (options[i] as HTMLElement).blur();
     }
     if (!question.answers || question.answers.join('').length == 0) {
         $('resettableCharLimited').textContent = '0/180';

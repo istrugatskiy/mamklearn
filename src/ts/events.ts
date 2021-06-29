@@ -1,32 +1,35 @@
 import { characterCount, getCaretCharacterOffsetWithin, setCaretPosition, throwExcept } from './utils';
 
-// Handles the majority of events.
+/**
+ * Initiliiazes the event handling Library.
+ */
 export const eventHandle = () => {
+    // Attaches a click listener that handles click events and clickIncludesEvents
     window.addEventListener('click', (event) => {
-        const keys = Object.keys(window.clickIncludesEvents);
         const eventTarget = (event.target! as HTMLElement).id;
         if (eventTarget in window.clickEvents) {
             window.clickEvents[eventTarget](event);
         }
-        for (let i = 0; i < keys.length; i++) {
-            if (eventTarget.includes(keys[i])) {
-                window.clickIncludesEvents[keys[i]](event);
+        for (const [key, value] of Object.entries(window.clickIncludesEvents)) {
+            if (eventTarget.includes(key)) {
+                value(event);
                 break;
             }
         }
     });
+    // Attaches keydown for handling spacebar and enter input.
     window.addEventListener('keydown', (event) => {
         if (event.key == 'Enter' || event.key == ' ') {
-            const keys = Object.keys(window.keyboardIncludesEvents);
             const eventTarget = (event.target! as HTMLElement).id;
-            for (let i = 0; i < keys.length; i++) {
-                if (eventTarget.includes(keys[i])) {
-                    window.keyboardIncludesEvents[keys[i]](event);
+            for (const [key, value] of Object.entries(window.keyboardIncludesEvents)) {
+                if (eventTarget.includes(key)) {
+                    value(event);
                     break;
                 }
             }
         }
     });
+    // Attaches submit listener for handling submit events.
     window.addEventListener('submit', function (event) {
         event.preventDefault();
         const eventTarget = (event.target! as HTMLElement).id;
@@ -34,6 +37,7 @@ export const eventHandle = () => {
             window.submitEvents[eventTarget](event);
         }
     });
+    // Attaches event listener for dealing with all contenteditable.
     window.addEventListener('input', (event) => {
         const target = event.target! as HTMLElement;
         if (target.matches('[contenteditable]')) {
@@ -49,12 +53,14 @@ export const eventHandle = () => {
             characterCount(target, target.dataset.maxlength as string);
         }
     });
+    // This is to prevent weirdnesses with contenteditable.
     window.addEventListener('beforeinput', (event) => {
         const target = event.target! as HTMLElement;
         if ((event.target! as HTMLElement).matches('[contenteditable]')) {
             target.dataset.revert = target.textContent as string;
         }
     });
+    // Shows error message if error is encountered.
     window.addEventListener('error', (error) => {
         throwExcept('@ScriptErrorHandler: ' + error.message);
     });
