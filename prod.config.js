@@ -9,7 +9,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 module.exports = {
     entry: ['./src/ts/app.ts'],
     output: {
-        filename: 'mamkEngine~[chunkhash].js',
+        filename: 'mamkEngine~[chunkhash:8].js',
         path: path.resolve(__dirname, 'dist/'),
     },
     module: {
