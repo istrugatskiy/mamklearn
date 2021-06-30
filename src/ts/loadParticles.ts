@@ -2,6 +2,7 @@
 
 import 'particles.js';
 
+// The config for particles.js
 let ParticleData = {
     particles: {
         number: {
@@ -113,8 +114,12 @@ let ParticleData = {
     retina_detect: false,
 };
 
+// The library requires the config to be a network request, but you can trick it with this scuffedness.
 const particleDataCompiled = 'data:text/plain;base64,' + window.btoa(JSON.stringify(ParticleData));
 
+/**
+ * Initializes the particle library with the mamklearn snow preset.
+ */
 export const initParticles = () => {
     if (!window.location.href.includes('#performance-mode')) {
         particlesJS.load('particles-js', particleDataCompiled);

@@ -31,7 +31,7 @@ export const $ = (a: string): HTMLElement => {
 };
 
 /**
- * Returns the ordinal suffix given a specified number/
+ * Returns the ordinal suffix given a specified number.
  *
  * @param {number} i The number specified.
  * @return {('st' | 'nd' | 'rd' | 'th')} The ordinal suffix that would accompany the number specified.
@@ -321,7 +321,7 @@ export class AudioManager {
             if (noInterpolate) {
                 currentAudio.volume = newVolume;
             } else {
-                this.lerper(currentAudio, newVolume, 'volume');
+                this.lerper(currentAudio, newVolume, 'volume', 1);
             }
         } else {
             this.raiseException('trackNotPlayed');
@@ -338,7 +338,7 @@ export class AudioManager {
     setSpeed(name: string, newSpeed: number) {
         if (this.audioObjects[name].index !== null) {
             const currentAudio = this.currentlyPlaying[this.audioObjects[name].index!];
-            this.lerper(currentAudio, newSpeed, 'playbackRate');
+            this.lerper(currentAudio, newSpeed, 'playbackRate', 10);
         } else {
             this.raiseException('trackNotPlayed');
         }
@@ -364,9 +364,10 @@ export class AudioManager {
      * @param {HTMLMediaElement} currentAudio The HTMLMediaElement you wish to perform the operation on.
      * @param {number} newValue The new value of the property.
      * @param {('playbackRate' | 'volume')} prop The property whose value you wish to interpolate.
+     * @param {number} maxValue The maximum value of the potential prop.
      * @memberof AudioManager
      */
-    private lerper(currentAudio: HTMLMediaElement, newValue: number, prop: 'playbackRate' | 'volume') {
+    private lerper(currentAudio: HTMLMediaElement, newValue: number, prop: 'playbackRate' | 'volume', maxValue: number) {
         let distance = 0;
         const initValue = currentAudio[prop];
         const interval = window.setInterval(() => {
@@ -376,7 +377,7 @@ export class AudioManager {
                 clearInterval(interval);
             } else {
                 distance += 0.05;
-                currentAudio[prop] = mathClamp(mathLerp(initValue, newValue, distance), 0, 10);
+                currentAudio[prop] = mathClamp(mathLerp(initValue, newValue, distance), 0, maxValue);
             }
         }, 100);
     }

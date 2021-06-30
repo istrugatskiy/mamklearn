@@ -10,14 +10,10 @@ interface studentQuestion {
 }
 
 const root = document.documentElement;
-let otherInterval: number, timerInterval: number, finishUpInterval: number, bottomBarOffset: number, currentQuestion: number, totalQuestions: number;
-
+let [otherInterval, timerInterval, finishUpInterval, bottomBarOffset, currentQuestion, totalQuestions]: number[] = [];
 let isGameLive: boolean;
 let timerOffset: number = 0;
-let resettableTime: number;
-let resettableTime2: number;
-let resettableTime3: number;
-let resettableTime4: number;
+let timeouts: number[] = [];
 
 let clickListeners = {
     shortAnswerSubmitButton: () => {
@@ -174,7 +170,7 @@ function questionValidationFailed(question: studentQuestion, endTime: number) {
             while (object.firstElementChild!.firstChild) object.firstElementChild!.removeChild(object.firstElementChild!.lastChild!);
             object.disabled = false;
             object.classList.remove('transitionQuestionB');
-            resettableTime = window.setTimeout(() => {
+            timeouts[0] = window.setTimeout(() => {
                 object.style.display = 'block';
                 object.classList.add('transitionQuestionC');
                 setTimeout(() => {
@@ -191,7 +187,7 @@ function questionValidationFailed(question: studentQuestion, endTime: number) {
         $('titleButtonStudent').style.display = 'none';
         $('studentShortAnswer').style.display = 'none';
         $('userNotifyPlay').style.display = 'block';
-        resettableTime2 = window.setTimeout(() => {
+        timeouts[1] = window.setTimeout(() => {
             $('userNotifyPlay').classList.add('fadeOutThingy');
             $('titleButtonStudent').classList.add('transitionQuestionC');
             $('studentShortAnswer').classList.add('transitionQuestionC');
@@ -222,7 +218,7 @@ function gameFinish(timeLeft: number) {
         }
         $('gameFinishNotify').textContent = `The game will end in ${Math.floor(internal)}s`;
     }, 100);
-    resettableTime3 = window.setTimeout(() => {
+    timeouts[2] = window.setTimeout(() => {
         clearInterval(finishUpInterval);
         $('gameFinishNotify').style.animation = 'fadeOut 0.3s';
         setTimeout(() => {
@@ -245,7 +241,7 @@ function gameEnd(firstPlace: number[], secondPlace: number[], thirdPlace: number
     setTimeout(() => {
         $('errorMessageB').style.display = 'none';
     }, 500);
-    resettableTime4 = window.setTimeout(() => {
+    timeouts[3] = window.setTimeout(() => {
         $('imageObjectContainer').style.animation = 'fadeOut 0.3s';
         setTimeout(() => {
             $('imageObjectContainer').style.display = 'none';
@@ -275,13 +271,13 @@ function kickPlayer(special: boolean = false, specialText: string = 'Kicked From
         !networkManager.unsubHandler || networkManager.unsubHandler();
         isGameLive = false;
         goBack();
-        clearTimeout(resettableTime4);
+        clearTimeout(timeouts[3]);
         $('currentUserEndPlace').style.display = 'none';
     }
     clearInterval(timerInterval);
-    clearTimeout(resettableTime);
-    clearTimeout(resettableTime2);
-    clearTimeout(resettableTime3);
+    for (let i = 0; i < 3; i++) {
+        clearTimeout(timeouts[i]);
+    }
     $('gameResults').style.display = 'none';
     $('currentUserEndPlace').classList.add('titleTransitionBack');
     $('currentUserEndPlace').classList.remove('btnTransitionA');
