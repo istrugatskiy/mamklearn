@@ -1,9 +1,15 @@
+/**
+ * @license mamkEngine Copyright (c) 2021 Ilya Strugatskiy. All rights reserved.
+ */
 import { getAuth } from 'firebase/auth';
 
 const functions = {
     location: 'https://us-central1-mamaroneck-learn.cloudfunctions.net/',
     token: '',
 };
+/**
+ * Initializes the functions API, (it needs the users token which needs to be loaded).
+ */
 export const initFunctions = () => {
     getAuth()
         .currentUser!.getIdToken()
@@ -11,7 +17,12 @@ export const initFunctions = () => {
             functions.token = data;
         });
 };
-
+/**
+ * Creates a callable instance of the specified cloud function.
+ *
+ * @param {string} functionName The name of the cloud function you want to call.
+ * @return {Promise<Any>}
+ */
 export const httpsCallable = (functionName: string) => {
     return async (payload?: any) => {
         const parsedPayload = {

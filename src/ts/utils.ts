@@ -1,4 +1,6 @@
-// These are some helper functions used throughout the app!
+/**
+ * @license mamkEngine Copyright (c) 2021 Ilya Strugatskiy. All rights reserved.
+ */
 import { getAuth, signOut } from 'firebase/auth';
 let hasLoggedOut = false;
 

@@ -1,4 +1,6 @@
-// Defines imports and globals
+/**
+ * @license mamkLearn Copyright (c) 2021 Ilya Strugatskiy. All rights reserved.
+ */
 import '../css/globals.css';
 import '../css/button.css';
 import '../css/loader.css';

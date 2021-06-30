@@ -1,3 +1,6 @@
+/**
+ * @license mamkLearn Copyright (c) 2021 Ilya Strugatskiy. All rights reserved.
+ */
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, Unsubscribe } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, Reference, child, onValue, set, push, remove, onChildAdded, onChildRemoved } from 'firebase/database';

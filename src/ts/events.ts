@@ -1,3 +1,6 @@
+/**
+ * @license mamkEngine Copyright (c) 2021 Ilya Strugatskiy. All rights reserved.
+ */
 import { characterCount, getCaretCharacterOffsetWithin, setCaretPosition, throwExcept } from './utils';
 
 /**

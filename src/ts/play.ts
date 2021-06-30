@@ -1,3 +1,6 @@
+/**
+ * @license mamkLearn Copyright (c) 2021 Ilya Strugatskiy. All rights reserved.
+ */
 import { $, mathClamp, getID, ordinalSuffix, clearChildren } from './utils';
 import { setCharImage, goBack } from './app';
 import { networkManager } from './networkEngine';
