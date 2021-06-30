@@ -1,7 +1,7 @@
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, Unsubscribe } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, Reference, child, onValue, set, push, remove, onChildAdded, onChildRemoved } from 'firebase/database';
-import { getFunctions, httpsCallable } from 'firebase/functions';
+import { httpsCallable, initFunctions } from './functionsLite';
 import { setCharImage } from './app';
 import { throwExcept } from './utils';
 import { $ } from './utils';
@@ -51,15 +51,15 @@ const auth = getAuth(firebaseApp);
 let provider = new GoogleAuthProvider();
 auth.useDeviceLanguage();
 const database = getDatabase();
-const functions = getFunctions();
 /* Cloud Functions */
-const initGame = httpsCallable(functions, 'initGame');
-const leaveGame = httpsCallable(functions, 'leaveGame');
-const joinGameStudent = httpsCallable(functions, 'joinGameStudent');
-const kickPlayer = httpsCallable(functions, 'kickPlayer');
-const timeSync = httpsCallable(functions, 'timeSync');
-const startGame = httpsCallable(functions, 'startGame');
-const submitQuestion = httpsCallable(functions, 'submitQuestion');
+initFunctions();
+const initGame = httpsCallable('initGame');
+const leaveGame = httpsCallable('leaveGame');
+const joinGameStudent = httpsCallable('joinGameStudent');
+const kickPlayer = httpsCallable('kickPlayer');
+const timeSync = httpsCallable('timeSync');
+const startGame = httpsCallable('startGame');
+const submitQuestion = httpsCallable('submitQuestion');
 /* Cloud Functions */
 let charConfig: Reference;
 let currentUser: Reference;
