@@ -1,4 +1,4 @@
-import { getAuth } from '@firebase/auth';
+import { getAuth } from 'firebase/auth';
 
 const functions = {
     location: 'https://us-central1-mamaroneck-learn.cloudfunctions.net/',
@@ -14,8 +14,8 @@ export const initFunctions = () => {
 
 export const httpsCallable = (functionName: string) => {
     return async (payload?: any) => {
-        payload = {
-            data: payload,
+        const parsedPayload = {
+            data: typeof payload === 'undefined' ? '' : payload,
         };
         const response = await fetch(functions.location + functionName, {
             method: 'POST',
@@ -23,8 +23,19 @@ export const httpsCallable = (functionName: string) => {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${functions.token}`,
             },
-            body: JSON.stringify(payload),
+            body: JSON.stringify(parsedPayload),
         });
-        return response.json();
+        return new Promise<any>((resolve, reject) => {
+            response
+                .json()
+                .then((val) =>
+                    resolve({
+                        data: val.result,
+                    })
+                )
+                .catch((e) => {
+                    reject(e);
+                });
+        });
     };
 };

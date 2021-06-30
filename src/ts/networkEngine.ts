@@ -1,7 +1,7 @@
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, Unsubscribe } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, Reference, child, onValue, set, push, remove, onChildAdded, onChildRemoved } from 'firebase/database';
-import { httpsCallable, initFunctions } from './functionsLite';
+import { httpsCallable } from './firebaseFunctionsLite';
 import { setCharImage } from './app';
 import { throwExcept } from './utils';
 import { $ } from './utils';
@@ -52,7 +52,6 @@ let provider = new GoogleAuthProvider();
 auth.useDeviceLanguage();
 const database = getDatabase();
 /* Cloud Functions */
-initFunctions();
 const initGame = httpsCallable('initGame');
 const leaveGame = httpsCallable('leaveGame');
 const joinGameStudent = httpsCallable('joinGameStudent');

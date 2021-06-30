@@ -7,6 +7,7 @@ import { $, createTemplate, setTitle, logOut, clearChildren, loadChonk } from '.
 import { eventHandle } from './events';
 import { initParticles } from './loadParticles';
 import { networkManager } from './networkEngine';
+import { initFunctions } from './firebaseFunctionsLite';
 
 interface eventList {
     [key: string]: (event: Event) => void;
@@ -14,7 +15,6 @@ interface eventList {
 interface keyboardEventList {
     [key: string]: (event: KeyboardEvent) => void;
 }
-
 declare global {
     interface Window {
         currentUserConfig: number[];
@@ -39,6 +39,7 @@ console.log('%cUse link to get quiz answers:https://bit.ly/31Apj2U', 'font-size:
 networkManager.onReady = () => {
     initializeApp();
     eventHandle();
+    initFunctions();
 };
 networkManager.onLoginSuccess = completeLoginFlow;
 networkManager.onLoginFail = () => {
