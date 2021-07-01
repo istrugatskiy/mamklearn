@@ -4,9 +4,9 @@
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, Unsubscribe } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, Reference, child, onValue, set, push, remove, onChildAdded, onChildRemoved } from 'firebase/database';
-import { httpsCallable } from './firebaseFunctionsLite';
+import { httpsCallable, initFunctions } from './firebaseFunctionsLite';
 import { setCharImage } from './app';
-import { throwExcept } from './utils';
+import { getCurrentDate, throwExcept, timeHandler } from './utils';
 import { $ } from './utils';
 
 interface answer {
@@ -70,7 +70,6 @@ let newValue: { [key: string]: string } = {};
 let errorHasBeenThrown = false;
 let hasInitialized = false;
 let alreadyInGame = false;
-let timerOffset = 0;
 
 const listener = onAuthStateChanged(auth, (user) => {
     if (window.location.pathname !== '/index.html' && window.location.pathname !== '/') {
@@ -87,7 +86,11 @@ const listener = onAuthStateChanged(auth, (user) => {
             charConfig = child(currentUser, 'charConfig');
             quizList = child(currentUser, 'quizList');
             monitorUserState();
-            networkManager.onLoginSuccess();
+            initFunctions().then(() =>
+                timeHandler().then(() => {
+                    networkManager.onLoginSuccess();
+                })
+            );
             listener();
         } else {
             networkManager.onLoginFail();
@@ -479,7 +482,6 @@ export class networkManager {
                 if (firstTime) initialRender(val.currentQuestionNumber, val.currentQuestion, false);
                 firstTime = false;
             } else if (firstTime) {
-                timeHandler();
                 initialRender(val.currentQuestionNumber, val.currentQuestion, true);
             } else if (val.currentQuestionNumber) {
                 secondRender(val.currentQuestionNumber, val.currentQuestion);
@@ -519,21 +521,4 @@ function sortArray(input: { [key: string]: { currentQuestion: number; playerName
         const secondEl = b as { currentQuestion: number; playerName: string };
         return secondEl.currentQuestion - firstEl.currentQuestion;
     });
-}
-
-function timeHandler() {
-    networkManager
-        .getTime()
-        .then((serverTime) => {
-            timerOffset = Date.now() - serverTime;
-        })
-        .catch(() => {
-            setTimeout(() => {
-                timeHandler();
-            }, 4000);
-        });
-}
-
-function getCurrentDate() {
-    return Date.now() + timerOffset;
 }

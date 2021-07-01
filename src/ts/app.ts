@@ -9,7 +9,6 @@ import { $, createTemplate, setTitle, logOut, clearChildren, loadChonk } from '.
 import { eventHandle } from './events';
 import { initParticles } from './loadParticles';
 import { networkManager } from './networkEngine';
-import { initFunctions } from './firebaseFunctionsLite';
 
 interface eventList {
     [key: string]: (event: Event) => void;
@@ -41,7 +40,6 @@ console.log('%cUse link to get quiz answers:https://bit.ly/31Apj2U', 'font-size:
 networkManager.onReady = () => {
     initializeApp();
     eventHandle();
-    initFunctions();
 };
 networkManager.onLoginSuccess = completeLoginFlow;
 networkManager.onLoginFail = () => {
@@ -249,13 +247,16 @@ function joinGameStudent() {
                 setTimeout(() => {
                     $('loader-1').style.display = 'none';
                     $('gameStartScreenStudent').style.display = 'block';
+                    let firstTime = true;
                     networkManager.handleGameState(window.currentGameState.location, (val) => {
                         if (val && val.isRunning) {
                             networkManager.unsubHandler();
-                            setTimeout(() => {
-                                obj.initQuestionHandler(val.totalQuestions);
-                            }, 4100);
+                            // This is for dealing with the countdown.
+                            // We do it on clientside because doing it server side would be a pain.
+                            // Plus its only four seconds.
+                            setTimeout(() => obj.initQuestionHandler(val.totalQuestions), firstTime ? 0 : 4100);
                         }
+                        firstTime = false;
                     });
                 }, 1000);
             });

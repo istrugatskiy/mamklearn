@@ -2,7 +2,9 @@
  * @license mamkEngine Copyright (c) 2021 Ilya Strugatskiy. All rights reserved.
  */
 import { getAuth, signOut } from 'firebase/auth';
+import { networkManager } from './networkEngine';
 let hasLoggedOut = false;
+let timerOffset = 0;
 
 /**
  * Gets the numbered id of the inputted string.
@@ -39,15 +41,15 @@ export const $ = (a: string): HTMLElement => {
  * @return {('st' | 'nd' | 'rd' | 'th')} The ordinal suffix that would accompany the number specified.
  */
 export const ordinalSuffix = (i: number): 'st' | 'nd' | 'rd' | 'th' => {
-    let j = i % 10,
-        k = i % 100;
-    if (j == 1 && k != 11) {
+    let mod10 = i % 10;
+    let mod100 = i % 100;
+    if (mod10 == 1 && mod100 != 11) {
         return 'st';
     }
-    if (j == 2 && k != 12) {
+    if (mod10 == 2 && mod100 != 12) {
         return 'nd';
     }
-    if (j == 3 && k != 13) {
+    if (mod10 == 3 && mod100 != 13) {
         return 'rd';
     }
     return 'th';
@@ -414,6 +416,30 @@ export const download = (filename: string, text: string) => {
  *
  * @param {() => any} inputFunction The function to input.
  */
-export const call = (inputFunction: () => any | null) => {
-    !inputFunction || inputFunction();
+export const call = (inputFunction: unknown) => {
+    !(inputFunction && typeof inputFunction === 'function') || inputFunction();
+};
+
+/**
+ * Initializes the time handler in the background.
+ */
+export const timeHandler = async () => {
+    await networkManager
+        .getTime()
+        .then((serverTime) => {
+            timerOffset = Date.now() - serverTime;
+        })
+        .catch(() => {
+            setTimeout(() => {
+                timeHandler();
+            }, 4000);
+        });
+};
+/**
+ * Returns the current server date.
+ *
+ * @return {number} This returns the current server date, or if unavailable the current date.
+ */
+export const getCurrentDate = () => {
+    return Date.now() + timerOffset;
 };

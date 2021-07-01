@@ -1,7 +1,10 @@
+/**
+ * @license mamklearn Copyright (c) 2021 Ilya Strugatskiy. All rights reserved. Some portions of this project licensed under MIT license, see about.html for more info.
+ */
 // Contains code related to making quizzes
 import '../css/make.css';
 import dragula from 'dragula';
-import { $, characterCount, deepEqual, createTemplate, setTitle, clearChildren, getID, AudioManager, mathClamp, download } from './utils';
+import { $, characterCount, deepEqual, createTemplate, setTitle, clearChildren, getID, AudioManager, mathClamp, download, call, getCurrentDate } from './utils';
 import { setCharImage } from './app';
 import { networkManager } from './networkEngine';
 
@@ -42,6 +45,7 @@ let playerNumber = 0;
 let mainAudio: AudioManager;
 let clearableTimeout: number;
 let clearableTimeout2: number;
+let otherInterval: number;
 
 let clickListeners = {
     deleteQuizConfirm: () => {
@@ -544,10 +548,11 @@ networkManager.quitQuizTeacher = () => {
     $('gameStartButtonTeacher').classList.add('btnTransitionA');
     $('gameCodeTeacher').classList.add('btnTransitionA');
     $('teacherCountdown').style.display = 'none';
-    networkManager.removeStudentHandler ? networkManager.removeStudentHandler() : null;
-    networkManager.otherStudentHandler ? networkManager.otherStudentHandler() : null;
-    networkManager.unsubHandler ? networkManager.unsubHandler() : null;
-    networkManager.leaderboardHandler ? networkManager.leaderboardHandler() : null;
+    call(networkManager.removeStudentHandler);
+    call(networkManager.otherStudentHandler);
+    call(networkManager.unsubHandler);
+    call(networkManager.leaderboardHandler);
+    clearTimeout(otherInterval);
     setTimeout(() => {
         $('loader-1').style.display = 'none';
         $('errorMessageA').style.display = 'none';
@@ -708,8 +713,8 @@ function kickPlayer(eventId: string) {
 }
 
 export function startGameTeacher(shouldHandle: boolean) {
-    networkManager.removeStudentHandler ? networkManager.removeStudentHandler() : null;
-    networkManager.otherStudentHandler ? networkManager.otherStudentHandler() : null;
+    call(networkManager.removeStudentHandler);
+    call(networkManager.otherStudentHandler);
     $('gameStartButtonTeacher').disabled = true;
     const people = Array.from($('characterPeopleDiv').children);
     people.forEach((object) => {
@@ -793,6 +798,11 @@ export function startGameTeacher(shouldHandle: boolean) {
                 });
             }
         );
+        networkManager.handleGameState(`actualGames/${networkManager.authInstance.currentUser!.uid}/`, (snap) => {
+            if (snap.gameEnd) {
+                gameFinish((snap.gameEnd + 15000 - getCurrentDate()) / 1000);
+            }
+        });
         $('gameStartButtonTeacher').classList.add('btnTransitionA');
         $('gameCodeTeacher').classList.add('btnTransitionA');
         setTimeout(() => {
@@ -1020,4 +1030,27 @@ function copyShareLink() {
     setTimeout(() => {
         $('errorMessageA').style.display = 'none';
     }, 1000);
+}
+
+function gameFinish(timeLeft: number) {
+    $('gameFinishNotify').style.display = 'block';
+    $('gameFinishNotify').textContent = `The game will end in ${timeLeft}s`;
+    let start = Date.now();
+    let init = timeLeft;
+    let finishUpInterval = window.setInterval(() => {
+        let delta = (Date.now() - start) / 1000;
+        let internal = init - delta;
+        if (internal < 0) {
+            internal = 0;
+        }
+        $('gameFinishNotify').textContent = `The game will end in ${Math.floor(internal)}s`;
+    }, 100);
+    otherInterval = window.setTimeout(() => {
+        clearInterval(finishUpInterval);
+        $('gameFinishNotify').style.animation = 'fadeOut 0.3s';
+        setTimeout(() => {
+            $('gameFinishNotify').style.display = 'none';
+            $('gameFinishNotify').style.animation = 'flowFromTop 1s forwards';
+        }, 300);
+    }, (timeLeft as number) * 1000);
 }

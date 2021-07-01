@@ -7,11 +7,12 @@ const functions = {
     location: 'https://us-central1-mamaroneck-learn.cloudfunctions.net/',
     token: '',
 };
+
 /**
  * Initializes the functions API, (it needs the users token which needs to be loaded).
  */
-export const initFunctions = () => {
-    getAuth()
+export const initFunctions = async () => {
+    await getAuth()
         .currentUser!.getIdToken()
         .then((data) => {
             functions.token = data;

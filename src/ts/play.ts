@@ -1,7 +1,7 @@
 /**
  * @license mamkLearn Copyright (c) 2021 Ilya Strugatskiy. All rights reserved.
  */
-import { $, mathClamp, getID, ordinalSuffix, clearChildren } from './utils';
+import { $, mathClamp, getID, ordinalSuffix, clearChildren, call, getCurrentDate } from './utils';
 import { setCharImage, goBack } from './app';
 import { networkManager } from './networkEngine';
 
@@ -15,7 +15,6 @@ interface studentQuestion {
 const root = document.documentElement;
 let [otherInterval, timerInterval, finishUpInterval, bottomBarOffset, currentQuestion, totalQuestions]: number[] = [];
 let isGameLive: boolean;
-let timerOffset: number = 0;
 let timeouts: number[] = [];
 
 let clickListeners = {
@@ -47,25 +46,11 @@ export const initEvents = () => {
 export const initQuestionHandler = (questionAmount: number) => {
     networkManager.handleGameState(window.currentGameState.location, (val) => {
         if (val.gameEnd) {
-            // TODO: Fix later
             gameFinish((val.gameEnd + 15000 - getCurrentDate()) / 1000);
         }
     });
     networkManager.studentListener(
         (questionNumber, question, isCorrect) => {
-            function timeHandler() {
-                networkManager
-                    .getTime()
-                    .then((serverTime) => {
-                        timerOffset = Date.now() - serverTime;
-                    })
-                    .catch(() => {
-                        setTimeout(() => {
-                            timeHandler();
-                        }, 4000);
-                    });
-            }
-            timeHandler();
             currentQuestion = questionNumber;
             totalQuestions = questionAmount;
             isGameLive = true;
@@ -270,8 +255,8 @@ function kickPlayer(special: boolean = false, specialText: string = 'Kicked From
             $('errorMessageA').style.display = 'none';
         }, 1000);
         $('gameStartScreenStudent').style.display = 'none';
-        !networkManager.studentPlayListener || networkManager.studentPlayListener();
-        !networkManager.unsubHandler || networkManager.unsubHandler();
+        call(networkManager.studentPlayListener);
+        call(networkManager.unsubHandler);
         isGameLive = false;
         goBack();
         clearTimeout(timeouts[3]);
@@ -385,11 +370,14 @@ function submitMultipleChoice(event: string) {
 }
 
 function submitShortAnswer() {
-    $('studentShortAnswerText').contentEditable = 'false';
-    $('shortAnswerSubmitButton').disabled = true;
-    $('studentShortAnswerText').classList.add('contentEditableDisabled');
-    answerQuestion($('studentShortAnswerText').textContent!);
-    clearInterval(timerInterval);
+    const answerText = $('studentShortAnswerText');
+    if (answerText.textContent && !/^\s*$/.test(answerText.textContent)) {
+        answerText.contentEditable = 'false';
+        $('shortAnswerSubmitButton').disabled = true;
+        answerText.classList.add('contentEditableDisabled');
+        answerQuestion(answerText.textContent!);
+        clearInterval(timerInterval);
+    }
 }
 
 window.addEventListener('resize', () => {
@@ -400,7 +388,3 @@ window.addEventListener('resize', () => {
         }
     }
 });
-
-function getCurrentDate() {
-    return Date.now() + timerOffset;
-}
