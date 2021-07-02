@@ -76,10 +76,6 @@ const listener = onAuthStateChanged(auth, (user) => {
         networkManager.onReady();
         return;
     }
-    if (!hasInitialized) {
-        networkManager.onReady();
-        hasInitialized = true;
-    }
     if (user) {
         if (user!.email!.endsWith('mamkschools.org')) {
             currentUser = ref(database, `userProfiles/${getAuth().currentUser!.uid}`);
@@ -88,6 +84,7 @@ const listener = onAuthStateChanged(auth, (user) => {
             monitorUserState();
             initFunctions().then(() =>
                 timeHandler().then(() => {
+                    networkManager.onReady();
                     networkManager.onLoginSuccess();
                 })
             );
@@ -96,6 +93,9 @@ const listener = onAuthStateChanged(auth, (user) => {
             networkManager.onLoginFail();
             getAuth().signOut();
         }
+    } else if (!hasInitialized) {
+        networkManager.onReady();
+        hasInitialized = true;
     }
 });
 

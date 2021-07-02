@@ -293,6 +293,7 @@ export const startGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
                     playerName: (values[index] as { playerName: string; playerConfig: number[] }).playerName,
                 });
             });
+            await db.ref(`actualGames/${context.auth.uid}/globalState/players`).set(playerList.length);
             await db.ref(`actualGames/${context.auth.uid}/globalState/totalQuestions`).set(allQuestions.length);
             await db.ref(`actualGames/${context.auth.uid}/globalState/isRunning`).set(true);
             return {
@@ -386,8 +387,12 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
             } else if (isCorrect && !nextQuestion) {
                 playerObject.currentQuestionNumber++;
                 isCorrect = true;
-                if (!(await db.ref(`${location.val()}globalState/gameEnd`).once('value')).val()) {
+                await db.ref(`${location.val()}globalState/players`).set(admin.database.ServerValue.increment(-1));
+                const shouldGameEnd = (await db.ref(`${location.val()}globalState/players`).once('value')).val() <= 0;
+                if (!(await db.ref(`${location.val()}globalState/gameEnd`).once('value')).val() && !shouldGameEnd) {
                     await db.ref(`${location.val()}globalState/gameEnd`).set(Date.now());
+                } else if (shouldGameEnd) {
+                    functions.logger.log('Game Ended');
                 }
             }
             if (timePenalty > 0) {
