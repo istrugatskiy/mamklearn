@@ -74,6 +74,7 @@ let alreadyInGame = false;
 const listener = onAuthStateChanged(auth, (user) => {
     if (window.location.pathname !== '/index.html' && window.location.pathname !== '/') {
         networkManager.onReady();
+        listener();
         return;
     }
     if (user) {
@@ -84,7 +85,10 @@ const listener = onAuthStateChanged(auth, (user) => {
             monitorUserState();
             initFunctions().then(() =>
                 timeHandler().then(() => {
-                    networkManager.onReady();
+                    if (!hasInitialized) {
+                        networkManager.onReady();
+                        hasInitialized = true;
+                    }
                     networkManager.onLoginSuccess();
                 })
             );
