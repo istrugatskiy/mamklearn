@@ -227,6 +227,12 @@ export const kickPlayer = functions.runWith({ maxInstances: 1 }).https.onCall(as
         };
     } else if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
         const db = admin.database();
+        if (!(await db.ref(`actualGames/${context.auth.uid}/globalState/isRunning`).once('value')).val()) {
+            return {
+                message: 'Cannot kick players after a game started.',
+                code: 400,
+            };
+        }
         const currentValue = await db.ref(`actualGames/${context.auth.uid}/players/${data}`).once('value');
         if (currentValue.val()) {
             await db.ref(`actualGames/${context.auth.uid}/players/${data}`).set(null);
@@ -293,7 +299,7 @@ export const startGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
                     playerName: (values[index] as { playerName: string; playerConfig: number[] }).playerName,
                 });
             });
-            await db.ref(`actualGames/${context.auth.uid}/globalState/players`).set(playerList.length);
+            await db.ref(`actualGames/${context.auth.uid}/globalState/players`).set(values.length);
             await db.ref(`actualGames/${context.auth.uid}/globalState/totalQuestions`).set(allQuestions.length);
             await db.ref(`actualGames/${context.auth.uid}/globalState/isRunning`).set(true);
             return {

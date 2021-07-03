@@ -4,7 +4,7 @@
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, Unsubscribe } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, Reference, child, onValue, set, push, remove, onChildAdded, onChildRemoved } from 'firebase/database';
-import { httpsCallable, initFunctions } from './firebaseFunctionsLite';
+import { httpsCallable } from './firebaseFunctionsLite';
 import { setCharImage } from './app';
 import { getCurrentDate, throwExcept, timeHandler } from './utils';
 import { $ } from './utils';
@@ -83,15 +83,13 @@ const listener = onAuthStateChanged(auth, (user) => {
             charConfig = child(currentUser, 'charConfig');
             quizList = child(currentUser, 'quizList');
             monitorUserState();
-            initFunctions().then(() =>
-                timeHandler().then(() => {
-                    if (!hasInitialized) {
-                        networkManager.onReady();
-                        hasInitialized = true;
-                    }
-                    networkManager.onLoginSuccess();
-                })
-            );
+            timeHandler().then(() => {
+                if (!hasInitialized) {
+                    networkManager.onReady();
+                    hasInitialized = true;
+                }
+                networkManager.onLoginSuccess();
+            });
             listener();
         } else {
             networkManager.onLoginFail();

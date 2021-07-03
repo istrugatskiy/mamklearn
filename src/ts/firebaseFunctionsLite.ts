@@ -1,23 +1,11 @@
 /**
  * @license mamkEngine Copyright (c) 2021 Ilya Strugatskiy. All rights reserved.
  */
-import { getAuth } from 'firebase/auth';
 
-const functions = {
-    location: 'https://us-central1-mamaroneck-learn.cloudfunctions.net/',
-    token: '',
-};
+import { networkManager } from './networkEngine';
 
-/**
- * Initializes the functions API, (it needs the users token which needs to be loaded).
- */
-export const initFunctions = async () => {
-    await getAuth()
-        .currentUser!.getIdToken()
-        .then((data) => {
-            functions.token = data;
-        });
-};
+const location = 'https://us-central1-mamaroneck-learn.cloudfunctions.net/';
+
 /**
  * Creates a callable instance of the specified cloud function.
  *
@@ -26,14 +14,15 @@ export const initFunctions = async () => {
  */
 export const httpsCallable = (functionName: string) => {
     return async (payload?: any) => {
+        const token = await networkManager.authInstance.currentUser!.getIdToken();
         const parsedPayload = {
             data: typeof payload === 'undefined' ? '' : payload,
         };
-        const response = await fetch(functions.location + functionName, {
+        const response = await fetch(location + functionName, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${functions.token}`,
+                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(parsedPayload),
         });

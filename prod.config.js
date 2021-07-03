@@ -24,7 +24,7 @@ module.exports = {
                 options: {
                     appendTsSuffixTo: [/\.vue$/],
                 },
-                exclude: /functions/
+                exclude: /functions/,
             },
         ],
     },
@@ -59,9 +59,6 @@ module.exports = {
     ],
     optimization: {
         minimize: true,
-        splitChunks: {
-            chunks: 'all',
-        },
         minimizer: [
             `...`,
             new CssMinimizerPlugin(),
