@@ -227,7 +227,7 @@ export const kickPlayer = functions.runWith({ maxInstances: 1 }).https.onCall(as
         };
     } else if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
         const db = admin.database();
-        if (!(await db.ref(`actualGames/${context.auth.uid}/globalState/isRunning`).once('value')).val()) {
+        if ((await db.ref(`actualGames/${context.auth.uid}/globalState/isRunning`).once('value')).val()) {
             return {
                 message: 'Cannot kick players after a game started.',
                 code: 400,

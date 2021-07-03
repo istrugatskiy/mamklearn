@@ -239,6 +239,9 @@ function JoinGame() {
 }
 
 function joinGameStudent() {
+    if ($('gameID').value.length == 8) {
+        $('gameID').value = $('gameID').value.slice(0, 5) + '-' + $('gameID').value.slice(5);
+    }
     networkManager.joinGameStudent($('gameID').value, (exists, message) => {
         if (exists) {
             loadChonk('play', (obj: typeof import('./play')) => {
