@@ -257,6 +257,11 @@ ul {
 		font-size: 20px;
 	}
 }
+@media screen and (max-width: 500px) {
+	#gameStartScreenStudent {
+		font-size: 16px;
+	}
+}
 #gameStartScreenStudent span {
 	position: relative;
 	display: inline-block;
@@ -458,10 +463,12 @@ ul {
 	font-size: xxx-large;
 	box-shadow: 0px 0px 12px #000000;
 	cursor: text;
+	text-align: center;
 }
 @media screen and (max-width: 800px) {
 	.formInput {
 		width: 300px;
+		font-size: xx-large;
 	}
 }
 .clickBoxGrey > * {
@@ -980,6 +987,14 @@ ul {
 .initTitle {
 	margin-bottom: 0;
 }
+@media screen and (max-width: 500px) {
+	.initTitle {
+		font-size: xxx-large;
+	}
+	.bottomBar {
+		font-size: 16px;
+	}
+}
 #shouldRejoin {
 	left: 50%;
 	position: absolute;
@@ -992,6 +1007,11 @@ ul {
 	font-size: xx-large;
 	display: none;
 }
+@media screen and (max-width: 800px) {
+	#shouldRejoin > .button {
+		min-width: inherit !important;
+	}
+}
 @keyframes modalPopin {
 	from {
 		transform: translate(-50%, 100%);
@@ -1000,5 +1020,10 @@ ul {
 	to {
 		transform: translate(-50%, -15%);
 		opacity: 1;
+	}
+}
+@media screen and (max-height: 800px) {
+	.bottomBar {
+		position: relative;
 	}
 }

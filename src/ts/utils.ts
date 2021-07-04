@@ -259,7 +259,9 @@ export const loadChonk = (chonkToLoad: string, callback: (returnedObject: any) =
         })
         .catch((error) => {
             console.warn(`Failed to fetch chonk (${error})! Retrying...`);
-            loadChonk(chonkToLoad, callback);
+            setTimeout(() => {
+                loadChonk(chonkToLoad, callback);
+            }, 2000);
         });
 };
 

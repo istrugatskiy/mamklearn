@@ -22,11 +22,6 @@
 .button > * {
 	pointer-events: none;
 }
-.button:hover {
-	background-color: rgba(4, 57, 217, 0);
-	border-radius: 12px;
-	color: white;
-}
 .button:active {
 	background-color: rgba(4, 57, 217, 0);
 	border-radius: 12px;
@@ -53,4 +48,11 @@
 	color: white;
 	box-shadow: none;
 	cursor: default;
+}
+@media (hover: hover) {
+	.button:hover {
+		background-color: rgba(4, 57, 217, 0);
+		border-radius: 12px;
+		color: white;
+	}
 }

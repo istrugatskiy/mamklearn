@@ -307,7 +307,6 @@ function setQuestion(question: studentQuestion) {
             options[i].style.display = 'block';
             options[i].firstElementChild!.textContent = question.answers[i];
         }
-        (options[i] as HTMLElement).blur();
     }
     if (!question.answers || question.answers.join('').length == 0) {
         $('resettableCharLimited').textContent = '0/180';
