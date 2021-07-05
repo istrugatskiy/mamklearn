@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
+import { database, initializeApp } from 'firebase-admin';
 
-admin.initializeApp();
+initializeApp();
 
 interface questionObject {
     questionName: string;
@@ -32,7 +32,7 @@ interface tempSubmitQuestion {
 export const initGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
     if (data && (typeof data === 'string' || data instanceof String)) {
         if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
-            const db = admin.database();
+            const db = database();
             const user = db.ref(`userProfiles/${context.auth.uid}/`);
             const gameState = user.child('currentGameState/isInGame/');
             const isTeacher = user.child('currentGameState/isTeacher/');
@@ -121,7 +121,7 @@ export const initGame = functions.runWith({ maxInstances: 1 }).https.onCall(asyn
 
 export const leaveGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
     if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
-        const db = admin.database();
+        const db = database();
         const user = db.ref(`userProfiles/${context.auth.uid}/`);
         const gameState = user.child('currentGameState/');
         const snap = await gameState.once('value');
@@ -172,7 +172,7 @@ export const joinGameStudent = functions.runWith({ maxInstances: 1 }).https.onCa
             code: 400,
         };
     } else if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
-        const db = admin.database();
+        const db = database();
         const user = db.ref(`userProfiles/${context.auth.uid}`);
         const gameState = user.child('currentGameState/isInGame');
         const gameCode = user.child('currentGameState/code');
@@ -226,7 +226,7 @@ export const kickPlayer = functions.runWith({ maxInstances: 1 }).https.onCall(as
             code: 400,
         };
     } else if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
-        const db = admin.database();
+        const db = database();
         if ((await db.ref(`actualGames/${context.auth.uid}/globalState/isRunning`).once('value')).val()) {
             return {
                 message: 'Cannot kick players after a game started.',
@@ -257,7 +257,7 @@ export const kickPlayer = functions.runWith({ maxInstances: 1 }).https.onCall(as
 
 export const startGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
     if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
-        const db = admin.database();
+        const db = database();
         const playerList = (await db.ref(`actualGames/${context.auth.uid}/players`).once('value')).val();
         if (playerList !== null) {
             const allQuestions = (await db.ref(`actualGames/${context.auth.uid}/quiz/questionObjects/`).once('value')).val() as questionObject[];
@@ -300,6 +300,7 @@ export const startGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
                 });
             });
             await db.ref(`actualGames/${context.auth.uid}/globalState/players`).set(values.length);
+            await db.ref(`actualGames/${context.auth.uid}/globalState/playersTotal`).set(values.length);
             await db.ref(`actualGames/${context.auth.uid}/globalState/totalQuestions`).set(allQuestions.length);
             await db.ref(`actualGames/${context.auth.uid}/globalState/isRunning`).set(true);
             return {
@@ -337,7 +338,7 @@ export const timeSync = functions.runWith({ maxInstances: 1 }).https.onCall(asyn
 export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
     if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
         if (typeof data === 'string' || typeof data === 'number') {
-            const db = admin.database();
+            const db = database();
             const userState = await db.ref(`userProfiles/${context.auth.uid}/currentGameState`).once('value');
             if (!userState.val().isInGame || userState.val().isTeacher) {
                 return {
@@ -393,12 +394,49 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
             } else if (isCorrect && !nextQuestion) {
                 playerObject.currentQuestionNumber++;
                 isCorrect = true;
-                await db.ref(`${location.val()}globalState/players`).set(admin.database.ServerValue.increment(-1));
+                await db.ref(`${location.val()}globalState/players`).set(database.ServerValue.increment(-1));
+                const totalPlayers = (await db.ref(`${location.val()}globalState/playersTotal`).once('value')).val();
+                const firstName = (context.auth!.token.name as string).split(' ')[0];
+                const lastName = (context.auth!.token.name as string).split(' ')[1];
+                await db.ref(`${location.val()}globalState/players`).transaction(async (input) => {
+                    await db.ref(`${location.val()}finalResults/${context.auth!.uid}`).set({
+                        place: totalPlayers - input,
+                        name: `${firstName} ${lastName.charAt(0)}.`,
+                    });
+                    await db.ref(`${location.val()}leaderboards/${context.auth!.uid}`).remove();
+                    return input;
+                });
                 const shouldGameEnd = (await db.ref(`${location.val()}globalState/players`).once('value')).val() <= 0;
+                const sortArray = (input: { [key: string]: { currentQuestion: number; playerName: string } }) => {
+                    let tempArray: { key: string; currentQuestion: number; playerName: string }[] = [];
+                    for (const [key, value] of Object.entries(input)) {
+                        tempArray.push({
+                            key: key,
+                            currentQuestion: value.currentQuestion,
+                            playerName: value.playerName,
+                        });
+                    }
+                    return tempArray.sort((a, b) => {
+                        const firstEl = a as { currentQuestion: number; playerName: string };
+                        const secondEl = b as { currentQuestion: number; playerName: string };
+                        return secondEl.currentQuestion - firstEl.currentQuestion;
+                    });
+                };
                 if (!(await db.ref(`${location.val()}globalState/gameEnd`).once('value')).val() && !shouldGameEnd) {
                     await db.ref(`${location.val()}globalState/gameEnd`).set(Date.now());
                 } else if (shouldGameEnd) {
-                    functions.logger.log('Game Ended');
+                    const leaderboards = await db.ref(`${location.val()}leaderboards`).once('value');
+                    sortArray(leaderboards.val()).forEach(async (player) => {
+                        await db.ref(`${location.val()}globalState/players`).transaction(async (input) => {
+                            const firstName = (player.playerName as string).split(' ')[0];
+                            const lastName = player.playerName.split(' ')[1];
+                            await db.ref(`${location.val()}finalResults/${player.key}`).set({
+                                place: totalPlayers - input,
+                                name: `${firstName} ${lastName.charAt(0)}.`,
+                            });
+                            return input - 1;
+                        });
+                    });
                 }
             }
             if (timePenalty > 0) {

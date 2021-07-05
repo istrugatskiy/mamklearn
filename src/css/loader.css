@@ -80,6 +80,8 @@
 .spinner {
     animation: rotation 1.35s linear infinite forwards;
     stroke: white;
+    margin-top: 15px;
+    height: 50px;
 }
 @keyframes rotation {
     0% {

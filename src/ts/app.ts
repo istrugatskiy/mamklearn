@@ -314,6 +314,13 @@ function updateImageState(data: boolean) {
     networkManager.setCharImage(window.currentUserConfig);
 }
 
+/**
+ * Sets the specified character image with a specified configuration.
+ *
+ * @export
+ * @param {string} charID The characters ID.
+ * @param {number[]} currentUserConfig The new configuration.
+ */
 export function setCharImage(charID: string, currentUserConfig: number[]) {
     $(charID + 'Eyes').src = `img/eyes-${currentUserConfig[0]}.png`;
     $(charID + 'Nose').src = `img/nose-${currentUserConfig[1]}.png`;

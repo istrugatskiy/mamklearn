@@ -149,7 +149,7 @@ function questionValidationFailed(question: studentQuestion, endTime: number) {
         if (internal < 0) {
             internal = 0;
         }
-        $('mistakeQuestion').textContent = `You can try again in ${Math.floor(internal)} seconds`;
+        $('mistakeQuestion').textContent = `You can try again in ${Math.ceil(internal)} seconds`;
     }, 100);
     Array.from($('studentAnswersFlex').children).forEach((object) => {
         object.classList.add('transitionQuestionB');
@@ -304,6 +304,7 @@ function setQuestion(question: studentQuestion) {
             options[i].style.display = 'none';
         } else {
             options[i].disabled = false;
+            options[i].firstElementChild!.style.minHeight = '';
             options[i].style.display = 'block';
             options[i].firstElementChild!.textContent = question.answers[i];
         }
@@ -362,6 +363,7 @@ function submitMultipleChoice(event: string) {
     Array.from($('studentAnswersFlex').children).forEach((object, index) => {
         object.disabled = true;
         if ((index + 1).toString() == response) {
+            object.style.minHeight = object.clientHeight + 'px';
             while (object.firstElementChild!.firstChild) object.firstElementChild!.removeChild(object.firstElementChild!.lastChild!);
             object.firstElementChild!.appendChild($('svgLoader').content.cloneNode(true));
         }
