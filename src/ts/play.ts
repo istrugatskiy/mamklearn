@@ -16,6 +16,7 @@ const root = document.documentElement;
 let [otherInterval, timerInterval, finishUpInterval, bottomBarOffset, currentQuestion, totalQuestions]: number[] = [];
 let isGameLive: boolean;
 let timeouts: number[] = [];
+let hasGameEnded = false;
 
 let clickListeners = {
     shortAnswerSubmitButton: () => {
@@ -132,10 +133,16 @@ export const initQuestionHandler = (questionAmount: number) => {
             questionValidationFailed(question, endTime);
         }
     );
+    networkManager.onGameEnd(() => {
+        hasGameEnded = true;
+        gameEnd(window.currentUserConfig, [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], 1);
+    });
 };
 
 networkManager.quitQuizStudent = () => {
-    kickPlayer(true);
+    if (!hasGameEnded) {
+        kickPlayer(true);
+    }
 };
 
 function questionValidationFailed(question: studentQuestion, endTime: number) {
@@ -216,7 +223,6 @@ function gameFinish(timeLeft: number) {
     }, (timeLeft as number) * 1000);
 }
 
-// @ts-ignore
 function gameEnd(firstPlace: number[], secondPlace: number[], thirdPlace: number[], yourPlace: number) {
     clearInterval(timerInterval);
     clearInterval(otherInterval);
@@ -247,6 +253,7 @@ function gameEnd(firstPlace: number[], secondPlace: number[], thirdPlace: number
 }
 
 function kickPlayer(special: boolean = false, specialText: string = 'Kicked From Game') {
+    hasGameEnded = false;
     if (special) {
         $('errorActual').textContent = specialText;
         $('errorMessageA').style.display = 'block';
@@ -300,11 +307,12 @@ function setQuestion(question: studentQuestion) {
     $('titleButtonStudent').firstElementChild!.textContent = question.questionName;
     const options = $('studentAnswersFlex').children;
     for (let i = 0; i < 4; i++) {
+        options[i].style.minHeight = '';
+
         if (!question.answers || !question.answers[i]) {
             options[i].style.display = 'none';
         } else {
             options[i].disabled = false;
-            options[i].firstElementChild!.style.minHeight = '';
             options[i].style.display = 'block';
             options[i].firstElementChild!.textContent = question.answers[i];
         }

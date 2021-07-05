@@ -119,6 +119,7 @@ export const initGame = functions.runWith({ maxInstances: 1 }).https.onCall(asyn
     }
 });
 
+// Handles players leaving the game
 export const leaveGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
     if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
         const db = database();
@@ -165,6 +166,7 @@ export const leaveGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
     }
 });
 
+// Handles students joining the game.
 export const joinGameStudent = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
     if (typeof data !== 'string' || data.length !== 9 || !data.match(/^[0-9-]*$/)) {
         return {
@@ -219,6 +221,7 @@ export const joinGameStudent = functions.runWith({ maxInstances: 1 }).https.onCa
     }
 });
 
+// This is for teacher kicking students.
 export const kickPlayer = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
     if (typeof data !== 'string') {
         return {
@@ -255,6 +258,7 @@ export const kickPlayer = functions.runWith({ maxInstances: 1 }).https.onCall(as
     }
 });
 
+// For teacher starting game.
 export const startGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
     if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
         const db = database();
@@ -321,6 +325,7 @@ export const startGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
     }
 });
 
+// Synchronises time.
 export const timeSync = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
     if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
         return {
@@ -339,6 +344,7 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
     if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
         if (typeof data === 'string' || typeof data === 'number') {
             const db = database();
+            let hasGameEnded = false;
             const userState = await db.ref(`userProfiles/${context.auth.uid}/currentGameState`).once('value');
             if (!userState.val().isInGame || userState.val().isTeacher) {
                 return {
@@ -426,17 +432,28 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
                     await db.ref(`${location.val()}globalState/gameEnd`).set(Date.now());
                 } else if (shouldGameEnd) {
                     const leaderboards = await db.ref(`${location.val()}leaderboards`).once('value');
-                    sortArray(leaderboards.val()).forEach(async (player) => {
-                        await db.ref(`${location.val()}globalState/players`).transaction(async (input) => {
-                            const firstName = (player.playerName as string).split(' ')[0];
-                            const lastName = player.playerName.split(' ')[1];
-                            await db.ref(`${location.val()}finalResults/${player.key}`).set({
-                                place: totalPlayers - input,
-                                name: `${firstName} ${lastName.charAt(0)}.`,
+                    if (leaderboards.val()) {
+                        sortArray(leaderboards.val()).forEach(async (player) => {
+                            await db.ref(`${location.val()}globalState/players`).transaction(async (input) => {
+                                const firstName = (player.playerName as string).split(' ')[0];
+                                const lastName = player.playerName.split(' ')[1];
+                                await db.ref(`${location.val()}finalResults/${player.key}`).set({
+                                    place: totalPlayers - input,
+                                    name: `${firstName} ${lastName.charAt(0)}.`,
+                                });
+                                return input - 1;
                             });
-                            return input - 1;
                         });
+                    }
+                    const userList = (await db.ref(`${location.val()}players/`).once('value')).val() as { [key: string]: { playerName: string; userConfig: number[] } };
+                    Object.keys(userList).forEach(async (userID) => {
+                        await db.ref(`userProfiles/${userID}/currentGameState/`).set(null);
                     });
+                    await db.ref(`${location.val()}finalResults/hasRendered/`).set(true);
+                    await db.ref(`currentGames/${userState.val().code.slice(0, 5)}/${userState.val().code.slice(5)}`).set(null);
+                    await db.ref(location.val()).remove();
+                    await db.ref(`userProfiles/${(location.val() as string).replace('actualGames/', '')}currentGameState/`).set(null);
+                    hasGameEnded = true;
                 }
             }
             if (timePenalty > 0) {
@@ -448,7 +465,9 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
                 playerObject.timePenaltyStart = Date.now();
                 playerObject.timePenaltyEnd = Date.now() + timePenalty * 1000;
             }
-            await db.ref(`${location.val()}players/${context.auth!.uid}`).set(playerObject);
+            if (!hasGameEnded) {
+                await db.ref(`${location.val()}players/${context.auth!.uid}`).set(playerObject);
+            }
             return {
                 message: isCorrect ? 'correct' : 'incorrect',
                 timePenalty: timePenalty,

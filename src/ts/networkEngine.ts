@@ -6,7 +6,7 @@ import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, Reference, child, onValue, set, push, remove, onChildAdded, onChildRemoved } from 'firebase/database';
 import { httpsCallable } from './firebaseFunctionsLite';
 import { setCharImage } from './app';
-import { getCurrentDate, throwExcept, timeHandler } from './utils';
+import { call, getCurrentDate, throwExcept, timeHandler } from './utils';
 import { $ } from './utils';
 
 interface answer {
@@ -444,8 +444,7 @@ export class networkManager {
         this.prevLeaderboardValues = {};
         this.leaderboardHandler = onValue(ref(database, `actualGames/${this.authInstance.currentUser!.uid}/leaderboards`), (snap) => {
             if (!snap.val()) {
-                this.quitQuizTeacher();
-                this.leaderboardHandler();
+                call(this.leaderboardHandler);
                 return;
             }
             if (firstTime) {
@@ -489,6 +488,15 @@ export class networkManager {
                 secondRender(val.currentQuestionNumber, val.currentQuestion);
             }
             firstTime = false;
+        });
+    }
+
+    static onGameEnd(input: () => void) {
+        onValue(ref(database, `${window.currentGameState.location}finalResults/`), (snap) => {
+            console.log(snap.val());
+            if (snap.val() && snap.val().hasRendered) {
+                input();
+            }
         });
     }
 

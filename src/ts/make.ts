@@ -799,7 +799,7 @@ export function startGameTeacher(shouldHandle: boolean) {
             }
         );
         networkManager.handleGameState(`actualGames/${networkManager.authInstance.currentUser!.uid}/`, (snap) => {
-            if (snap.gameEnd) {
+            if (snap && snap.gameEnd) {
                 gameFinish((snap.gameEnd + 15000 - getCurrentDate()) / 1000);
             }
         });
