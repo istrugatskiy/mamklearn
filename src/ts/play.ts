@@ -46,7 +46,7 @@ export const initEvents = () => {
 
 export const initQuestionHandler = (questionAmount: number) => {
     networkManager.handleGameState(window.currentGameState.location, (val) => {
-        if (val.gameEnd) {
+        if (val && val.gameEnd) {
             gameFinish((val.gameEnd + 15000 - getCurrentDate()) / 1000);
         }
     });
@@ -54,6 +54,10 @@ export const initQuestionHandler = (questionAmount: number) => {
         (questionNumber, question, isCorrect) => {
             currentQuestion = questionNumber;
             totalQuestions = questionAmount;
+            bottomBarOffset = 15;
+            for (let i = 0; i <= currentQuestion; i++) {
+                updateStudentLocation(i);
+            }
             isGameLive = true;
             if (isCorrect) {
                 kickPlayer();
@@ -62,7 +66,6 @@ export const initQuestionHandler = (questionAmount: number) => {
                 clearInterval(otherInterval);
             }
             setCharImage('player', window.currentUserConfig);
-            bottomBarOffset = 15;
             let studentRaceBoxNumbers = document.createDocumentFragment();
             for (let i = 1; i <= totalQuestions; i++) {
                 let node = document.createElement('th');
@@ -166,7 +169,6 @@ function questionValidationFailed(question: studentQuestion, endTime: number) {
             object.disabled = false;
             object.classList.remove('transitionQuestionB');
             timeouts[0] = window.setTimeout(() => {
-                object.style.display = 'block';
                 object.classList.add('transitionQuestionC');
                 setTimeout(() => {
                     object.classList.remove('transitionQuestionC');
@@ -191,6 +193,14 @@ function questionValidationFailed(question: studentQuestion, endTime: number) {
             setTimeout(() => {
                 $('studentShortAnswer').classList.remove('transitionQuestionC');
                 $('titleButtonStudent').classList.remove('transitionQuestionC');
+                // Layout engine thinks that there's more stuff to the right while there is nothing
+                // This scuffed hack should take care of that
+                const scuffedElement = document.createElement('div');
+                scuffedElement.style.visibility = 'hidden';
+                $('studentPlayScreen').appendChild(scuffedElement);
+                setTimeout(() => {
+                    $('studentPlayScreen').lastElementChild!.remove();
+                }, 3000);
             }, 400);
             setTimeout(() => {
                 clearInterval(otherInterval);

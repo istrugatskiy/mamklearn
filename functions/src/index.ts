@@ -445,11 +445,11 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
                             });
                         });
                     }
+                    await db.ref(`${location.val()}finalResults/hasRendered/`).set(true);
                     const userList = (await db.ref(`${location.val()}players/`).once('value')).val() as { [key: string]: { playerName: string; userConfig: number[] } };
                     Object.keys(userList).forEach(async (userID) => {
                         await db.ref(`userProfiles/${userID}/currentGameState/`).set(null);
                     });
-                    await db.ref(`${location.val()}finalResults/hasRendered/`).set(true);
                     await db.ref(`currentGames/${userState.val().code.slice(0, 5)}/${userState.val().code.slice(5)}`).set(null);
                     await db.ref(location.val()).remove();
                     await db.ref(`userProfiles/${(location.val() as string).replace('actualGames/', '')}currentGameState/`).set(null);

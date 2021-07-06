@@ -1,546 +1,547 @@
 #makeDiv {
-	top: 50px;
+    top: 50px;
 }
 .modal-popup {
-	position: absolute;
-	display: none;
+    position: absolute;
+    display: none;
 }
-@media screen and (max-height:800px) {
-	.modal-popup {
-		position: absolute;
-	}
+@media screen and (max-height: 800px) {
+    .modal-popup {
+        position: absolute;
+    }
 }
 .modal-popupActive {
-	display: block;
-	min-width: 100%;
-	min-height: 100%;
+    display: block;
+    min-width: 100%;
+    min-height: 100%;
 }
 #modal-bg {
-	animation: fadein 0.5s;
-	background-color: rgba(0, 0, 0, 0.5);
+    animation: fadein 0.5s;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 @keyframes modalPopin {
-	from {
-		transform: translate(-50%, 100%);
-		opacity: 0;
-	}
-	to {
-		transform: translate(-50%, -15%);
-		opacity: 1;
-	}
+    from {
+        transform: translate(-50%, 100%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, -15%);
+        opacity: 1;
+    }
 }
 @keyframes modalPopin2 {
-	from {
-		transform: translate(-50%, 100%);
-		opacity: 0;
-	}
-	to {
-		transform: translate(-50%, -50%);
-		opacity: 1;
-	}
+    from {
+        transform: translate(-50%, 100%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
 }
 @keyframes modalPopout {
-	from {
-		transform: translate(-50%, -15%);
-		opacity: 1;
-	}
-	to {
-		transform: translate(-50%, 100%);
-		opacity: 0;
-	}
+    from {
+        transform: translate(-50%, -15%);
+        opacity: 1;
+    }
+    to {
+        transform: translate(-50%, 100%);
+        opacity: 0;
+    }
 }
 @keyframes modalPopout2 {
-	from {
-		transform: translate(0%, 15%);
-		opacity: 1;
-	}
-	to {
-		transform: translate(0%, 100%);
-		opacity: 0;
-	}
+    from {
+        transform: translate(0%, 15%);
+        opacity: 1;
+    }
+    to {
+        transform: translate(0%, 100%);
+        opacity: 0;
+    }
 }
 #createQuizMenu {
-	left: 50%;
-	position: absolute;
-	text-align: center;
-	animation: modalPopin 0.5s;
-	animation-timing-function: cubic-bezier(0.280, 0.840, 0.420, 1);
-	top: 15%;
-	transform: translate(-50%, -15%);
-	font-size: xx-large;
+    left: 50%;
+    position: absolute;
+    text-align: center;
+    animation: modalPopin 0.5s;
+    animation-timing-function: cubic-bezier(0.28, 0.84, 0.42, 1);
+    top: 15%;
+    transform: translate(-50%, -15%);
+    font-size: xx-large;
 }
 #submitQuizID {
-	min-width: 246.44px;
+    min-width: 246.44px;
 }
 @media screen and (max-width: 815px) {
-	#makeDiv {
-		padding-left: 0 !important;
-		text-align: center !important;
-	}
-	#gameStartScreenStudent {
-		font-size: 1.3em;
-	}
+    #makeDiv {
+        padding-left: 0 !important;
+        text-align: center !important;
+    }
+    #gameStartScreenStudent {
+        font-size: 1.3em;
+    }
 }
 #manageQuizMenu {
-	left: 50%;
-	position: absolute;
-	text-align: center;
-	animation: modalPopin 0.5s;
-	animation-timing-function: cubic-bezier(0.280, 0.840, 0.420, 1);
-	top: 15%;
-	transform: translate(-50%, -15%);
-	font-size: xx-large;
-	display: none;
+    left: 50%;
+    position: absolute;
+    text-align: center;
+    animation: modalPopin 0.5s;
+    animation-timing-function: cubic-bezier(0.28, 0.84, 0.42, 1);
+    top: 15%;
+    transform: translate(-50%, -15%);
+    font-size: xx-large;
+    display: none;
 }
-@media screen and (max-width: 800px) {
-	#manageQuizMenu > .button{
-		min-width: 290px !important;
-	}
-}
-#quizDeleteConfirm, #editQuizMenu, #shareQuizMenu {
-	left: 50%;
-	position: absolute;
-	text-align: center;
-	animation: modalPopin 0.5s;
-	animation-timing-function: cubic-bezier(0.280, 0.840, 0.420, 1);
-	height: 100%;
-	top: 15%;
-	transform: translate(-50%, -15%);
-	font-size: xx-large;
-	display: none;
+#quizDeleteConfirm,
+#editQuizMenu,
+#shareQuizMenu {
+    left: 50%;
+    position: absolute;
+    text-align: center;
+    animation: modalPopin 0.5s;
+    animation-timing-function: cubic-bezier(0.28, 0.84, 0.42, 1);
+    height: 100%;
+    top: 15%;
+    transform: translate(-50%, -15%);
+    font-size: xx-large;
+    display: none;
 }
 .toggleButton {
-	cursor: pointer;
-	display: block;
-	transform-origin: 50% 50%;
-	transform-style: preserve-3d;
-	transition: transform 0.14s ease;
-	pointer-events: all;
+    cursor: pointer;
+    display: block;
+    transform-origin: 50% 50%;
+    transform-style: preserve-3d;
+    transition: transform 0.14s ease;
+    pointer-events: all;
 }
 .toggleButton * {
-	pointer-events: none;
+    pointer-events: none;
 }
 .toggleButton:active {
-	transform: rotateX(30deg);
+    transform: rotateX(30deg);
 }
 .toggleButton input {
-	display: none;
+    display: none;
 }
-.toggleButton input+div {
-	border: 3px solid rgba(255, 255, 255, 0.2);
-	border-radius: 50%;
-	position: relative;
-	width: 44px;
-	height: 44px;
+.toggleButton input + div {
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    position: relative;
+    width: 44px;
+    height: 44px;
 }
-.toggleButton input+div svg {
-	fill: none;
-	stroke-width: 3.6;
-	stroke: #fff;
-	stroke-linecap: round;
-	stroke-linejoin: round;
-	width: 50px;
-	height: 50px;
-	display: block;
-	position: absolute;
-	left: -3px;
-	top: -3px;
-	right: -3px;
-	bottom: -3px;
-	z-index: 1;
-	stroke-dashoffset: 124.6;
-	/* CSS minimizer has seizure tring to compile this */
-	/* For now fixed by adding .0 to 133 */
-	stroke-dasharray: 0 162.6 133.0 29.6;
-	transition: all 0.4s ease 0s;
+.toggleButton input + div svg {
+    fill: none;
+    stroke-width: 3.6;
+    stroke: #fff;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    width: 50px;
+    height: 50px;
+    display: block;
+    position: absolute;
+    left: -3px;
+    top: -3px;
+    right: -3px;
+    bottom: -3px;
+    z-index: 1;
+    stroke-dashoffset: 124.6;
+    /* CSS minimizer has seizure tring to compile this */
+    /* For now fixed by adding .0 to 133 */
+    stroke-dasharray: 0 162.6 133 29.6;
+    transition: all 0.4s ease 0s;
 }
-.toggleButton input+div:before, .toggleButton input+div:after {
-	content: "";
-	width: 3px;
-	height: 16px;
-	background: #fff;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	border-radius: 5px;
+.toggleButton input + div:before,
+.toggleButton input + div:after {
+    content: '';
+    width: 3px;
+    height: 16px;
+    background: #fff;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    border-radius: 5px;
 }
-.toggleButton input+div:before {
-	opacity: 0;
-	transform: scale(0.3) translate(-50%, -50%) rotate(45deg);
-	animation: bounceInBefore 0.3s linear forwards 0.3s;
+.toggleButton input + div:before {
+    opacity: 0;
+    transform: scale(0.3) translate(-50%, -50%) rotate(45deg);
+    animation: bounceInBefore 0.3s linear forwards 0.3s;
 }
-.toggleButton input+div:after {
-	opacity: 0;
-	transform: scale(0.3) translate(-50%, -50%) rotate(-45deg);
-	animation: bounceInAfter 0.3s linear forwards 0.3s;
+.toggleButton input + div:after {
+    opacity: 0;
+    transform: scale(0.3) translate(-50%, -50%) rotate(-45deg);
+    animation: bounceInAfter 0.3s linear forwards 0.3s;
 }
-.toggleButton input:checked+div svg {
-	stroke-dashoffset: 162.6;
-	stroke-dasharray: 0 162.6 28 134.6;
-	transition: all 0.4s ease 0.2s;
+.toggleButton input:checked + div svg {
+    stroke-dashoffset: 162.6;
+    stroke-dasharray: 0 162.6 28 134.6;
+    transition: all 0.4s ease 0.2s;
 }
-.toggleButton input:checked+div:before {
-	opacity: 0;
-	transform: scale(0.3) translate(-50%, -50%) rotate(45deg);
-	animation: bounceInBeforeDont 0.3s linear forwards 0s;
+.toggleButton input:checked + div:before {
+    opacity: 0;
+    transform: scale(0.3) translate(-50%, -50%) rotate(45deg);
+    animation: bounceInBeforeDont 0.3s linear forwards 0s;
 }
-.toggleButton input:checked+div:after {
-	opacity: 0;
-	transform: scale(0.3) translate(-50%, -50%) rotate(-45deg);
-	animation: bounceInAfterDont 0.3s linear forwards 0s;
+.toggleButton input:checked + div:after {
+    opacity: 0;
+    transform: scale(0.3) translate(-50%, -50%) rotate(-45deg);
+    animation: bounceInAfterDont 0.3s linear forwards 0s;
 }
 @keyframes bounceInBefore {
-	0% {
-		opacity: 0;
-		transform: scale(0.3) translate(-50%, -50%) rotate(45deg);
-	}
-	50% {
-		opacity: 0.9;
-		transform: scale(1.1) translate(-50%, -50%) rotate(45deg);
-	}
-	80% {
-		opacity: 1;
-		transform: scale(0.89) translate(-50%, -50%) rotate(45deg);
-	}
-	100% {
-		opacity: 1;
-		transform: scale(1) translate(-50%, -50%) rotate(45deg);
-	}
+    0% {
+        opacity: 0;
+        transform: scale(0.3) translate(-50%, -50%) rotate(45deg);
+    }
+    50% {
+        opacity: 0.9;
+        transform: scale(1.1) translate(-50%, -50%) rotate(45deg);
+    }
+    80% {
+        opacity: 1;
+        transform: scale(0.89) translate(-50%, -50%) rotate(45deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translate(-50%, -50%) rotate(45deg);
+    }
 }
 @keyframes bounceInAfter {
-	0% {
-		opacity: 0;
-		transform: scale(0.3) translate(-50%, -50%) rotate(-45deg);
-	}
-	50% {
-		opacity: 0.9;
-		transform: scale(1.1) translate(-50%, -50%) rotate(-45deg);
-	}
-	80% {
-		opacity: 1;
-		transform: scale(0.89) translate(-50%, -50%) rotate(-45deg);
-	}
-	100% {
-		opacity: 1;
-		transform: scale(1) translate(-50%, -50%) rotate(-45deg);
-	}
+    0% {
+        opacity: 0;
+        transform: scale(0.3) translate(-50%, -50%) rotate(-45deg);
+    }
+    50% {
+        opacity: 0.9;
+        transform: scale(1.1) translate(-50%, -50%) rotate(-45deg);
+    }
+    80% {
+        opacity: 1;
+        transform: scale(0.89) translate(-50%, -50%) rotate(-45deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translate(-50%, -50%) rotate(-45deg);
+    }
 }
 @keyframes bounceInBeforeDont {
-	0% {
-		opacity: 1;
-		transform: scale(1) translate(-50%, -50%) rotate(45deg);
-	}
-	100% {
-		opacity: 0;
-		transform: scale(0.3) translate(-50%, -50%) rotate(45deg);
-	}
+    0% {
+        opacity: 1;
+        transform: scale(1) translate(-50%, -50%) rotate(45deg);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.3) translate(-50%, -50%) rotate(45deg);
+    }
 }
 @keyframes bounceInAfterDont {
-	0% {
-		opacity: 1;
-		transform: scale(1) translate(-50%, -50%) rotate(-45deg);
-	}
-	100% {
-		opacity: 0;
-		transform: scale(0.3) translate(-50%, -50%) rotate(-45deg);
-	}
+    0% {
+        opacity: 1;
+        transform: scale(1) translate(-50%, -50%) rotate(-45deg);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.3) translate(-50%, -50%) rotate(-45deg);
+    }
 }
 .checkboxCustomConfig {
-	display: block;
-	height: 50px;
-	margin-top: 70px;
-	position: relative;
+    display: block;
+    height: 50px;
+    margin-top: 70px;
+    position: relative;
 }
 .toggleButton {
-	display: table-cell;
-	position: absolute;
-	left: 380px;
+    display: table-cell;
+    position: absolute;
+    left: 380px;
 }
 .labelForCheck {
-	position: absolute;
-	bottom: -25px;
-	left: 120px;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-	color: white;
+    position: absolute;
+    bottom: -25px;
+    left: 120px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
 }
 .questionInput {
-	position: absolute;
-	bottom: -13px;
-	left: 0px;
-	overflow: hidden;
-	max-height: 80px;
-	max-width: 369px;
-	display: inline;
+    position: absolute;
+    bottom: -13px;
+    left: 0px;
+    overflow: hidden;
+    max-height: 80px;
+    max-width: 369px;
+    display: inline;
 }
 .toggleButtonPosition {
-	left: 0px;
+    left: 0px;
 }
 .labelForCheckPosition {
-	left: 60px;
+    left: 60px;
 }
 .arrowBRight {
-	border: solid white;
-	border-width: 0 2px 2px 0;
-	display: inline-block;
-	padding: 3px;
-	transform: rotate(-45deg) scale(4) translateZ(0);
-	margin-left: 30px;
-	margin-bottom: 10px;
-	transition: transform 0.3s;
-	backface-visibility: hidden;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(-45deg) scale(4) translateZ(0);
+    margin-left: 30px;
+    margin-bottom: 10px;
+    transition: transform 0.3s;
+    backface-visibility: hidden;
 }
 .arrowBDown {
-	border: solid white;
-	border-width: 0 2px 2px 0;
-	display: inline-block;
-	padding: 3px;
-	transform: rotate(45deg) scale(4) translateZ(0);
-	margin-left: 30px;
-	margin-bottom: 10px;
-	transition: transform 0.3s;
-	backface-visibility: hidden;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(45deg) scale(4) translateZ(0);
+    margin-left: 30px;
+    margin-bottom: 10px;
+    transition: transform 0.3s;
+    backface-visibility: hidden;
 }
 .arrowBRight::before {
-	all: initial;
+    all: initial;
 }
-.arrowBDown:hover, .arrowBRight:hover {
-	border-color: rgb(153, 153, 153);
+.arrowBDown:hover,
+.arrowBRight:hover {
+    border-color: rgb(153, 153, 153);
 }
 .contentA1 {
-	height: auto;
-	max-height: 1000px;
-	transition: 0.2s all;
-	margin-bottom: 80px;
-	transform: translateY(0%);
-	opacity: 1;
-	visibility: visible;
+    height: auto;
+    max-height: 1000px;
+    transition: 0.2s all;
+    margin-bottom: 80px;
+    transform: translateY(0%);
+    opacity: 1;
+    visibility: visible;
 }
 .contentA2 {
-	height: auto;
-	max-height: 0px;
-	transition: 0.2s all;
-	transform: translateY(50%);
-	opacity: 0;
-	pointer-events: none;
-	visibility: hidden;
+    height: auto;
+    max-height: 0px;
+    transition: 0.2s all;
+    transform: translateY(50%);
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
 }
 .draggableActual {
-	cursor: move;
-	touch-action: none;
+    cursor: move;
+    touch-action: none;
 }
-.draggableActual:active, .draggableActual:focus {
-	cursor: move;
+.draggableActual:active,
+.draggableActual:focus {
+    cursor: move;
 }
-.draggableActual2{
-	cursor: move;
+.draggableActual2 {
+    cursor: move;
 }
 .dragging {
-	transform: rotate(5deg);
+    transform: rotate(5deg);
 }
 .gu-mirror {
-	position: fixed !important;
-	margin: 0 !important;
-	z-index: 9999 !important;
-	opacity: 1;
-	font-size: xx-large;
-	cursor: grabbing;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-	filter: alpha(opacity=100);
+    position: fixed !important;
+    margin: 0 !important;
+    z-index: 9999 !important;
+    opacity: 1;
+    font-size: xx-large;
+    cursor: grabbing;
+    -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=100)';
+    filter: alpha(opacity=100);
 }
 .gu-hide {
-	visibility: hidden !important;
+    visibility: hidden !important;
 }
 .gu-unselectable {
-	-webkit-user-select: none !important;
-	-moz-user-select: none !important;
-	-ms-user-select: none !important;
-	user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
 }
 .gu-transit {
-	opacity: 0.2;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
-	filter: alpha(opacity=20);
-	transform: rotate(0deg);
+    opacity: 0.2;
+    -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=20)';
+    filter: alpha(opacity=20);
+    transform: rotate(0deg);
 }
-.button:hover+.charLimited {
-	transition: all 0.2s;
-	color: white;
+.button:hover + .charLimited {
+    transition: all 0.2s;
+    color: white;
 }
-.button:active+.charLimited {
-	transition: all 0.2s;
-	color: white;
+.button:active + .charLimited {
+    transition: all 0.2s;
+    color: white;
 }
-.button:focus+.charLimited {
-	transition: all 0.2s;
-	color: white;
+.button:focus + .charLimited {
+    transition: all 0.2s;
+    color: white;
 }
 #addQuestionButton {
-	margin-top: 50px;
-	position: relative;
+    margin-top: 50px;
+    position: relative;
 }
 #saveQuizButton {
-	min-width: 169.93px;
+    min-width: 169.93px;
 }
 .errorDivMake {
-	background-color: white;
-	border: 2px solid white;
-	text-decoration: none;
-	border-radius: 30px;
-	transform: scale(1);
-	border-color: rgba(255, 255, 255, 0);
-	color: black;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-	font-size: 32px;
-	box-shadow: 0px 0px 12px #000000;
-	width: auto;
-	height: auto;
-	min-width: 400px;
-	min-height: 200px;
-	max-width: 600px;
+    background-color: white;
+    border: 2px solid white;
+    text-decoration: none;
+    border-radius: 30px;
+    transform: scale(1);
+    border-color: rgba(255, 255, 255, 0);
+    color: black;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 32px;
+    box-shadow: 0px 0px 12px #000000;
+    width: auto;
+    height: auto;
+    min-width: 400px;
+    min-height: 200px;
+    max-width: 600px;
 }
 .innerError {
-	all: unset;
-	display: list-item;
-	list-style-type: disc;
-	font-size: x-large;
-	text-align: left;
-	margin-left: 30px;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    all: unset;
+    display: list-item;
+    list-style-type: disc;
+    font-size: x-large;
+    text-align: left;
+    margin-left: 30px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 .innerError2 {
-	all: unset;
-	list-style-type: none;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    all: unset;
+    list-style-type: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 .modal-bg {
-	animation: fadein 0.5s;
-	background-color: rgba(0, 0, 0, 0.5);
+    animation: fadein 0.5s;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 .errorDivMake2 {
-	margin-top: 30px;
+    margin-top: 30px;
 }
 .errorDivMakeOuter {
-	position: absolute;
-	transform: translate(-50%, -15%);
-	animation: modalPopin 0.3s;
-	left: 50%;
-	top: 30%;
-	text-align: center;
-	height: 100%;
-	z-index: 12;
+    position: absolute;
+    transform: translate(-50%, -15%);
+    animation: modalPopin 0.3s;
+    left: 50%;
+    top: 30%;
+    text-align: center;
+    height: 100%;
+    z-index: 12;
 }
 #modal-popupB {
-	min-width: 100%;
-	min-height: 100%;
+    min-width: 100%;
+    min-height: 100%;
 }
 .answerContainer {
-	max-height: 1000px;
-	transition: all 0.3s;
-	margin-top: 70px;
+    max-height: 1000px;
+    transition: all 0.3s;
+    margin-top: 70px;
 }
 .shortAnswerEditorStyles {
-	transition: all 0.3s;
-	max-height: 0px;
-	visibility: hidden;
-	transform: translate(+50%, 0%);
-	opacity: 0;
+    transition: all 0.3s;
+    max-height: 0px;
+    visibility: hidden;
+    transform: translate(+50%, 0%);
+    opacity: 0;
 }
 .noSpaceEditor {
-	margin-bottom: 0px;
+    margin-bottom: 0px;
 }
 .timeLimitMagic {
-	left: 210px;
-	width: 160px;
-	visibility: hidden;
-	transform: scale(0);
-	transition: all 0.3s cubic-bezier(0.29, 0.09, 0.07, 1.65);
-	height: 45px;
+    left: 210px;
+    width: 160px;
+    visibility: hidden;
+    transform: scale(0);
+    transition: all 0.3s cubic-bezier(0.29, 0.09, 0.07, 1.65);
+    height: 45px;
 }
 .timeLimitMagic + div {
-	visibility: hidden;
-	transform: scale(1);
-	transition: all 0.3s cubic-bezier(0.29, 0.09, 0.07, 1.65);
+    visibility: hidden;
+    transform: scale(1);
+    transition: all 0.3s cubic-bezier(0.29, 0.09, 0.07, 1.65);
 }
 .displayTimeLimit {
-	visibility: visible;
-	transform: scale(1);
-	transition: all 0.3s cubic-bezier(0.29, 0.09, 0.07, 1.65);
+    visibility: visible;
+    transform: scale(1);
+    transition: all 0.3s cubic-bezier(0.29, 0.09, 0.07, 1.65);
 }
 .displayTimeLimit + div {
-	opacity: 1;
-	visibility: visible;
-	transition: all 0.3s cubic-bezier(0.29, 0.09, 0.07, 1.65);
+    opacity: 1;
+    visibility: visible;
+    transition: all 0.3s cubic-bezier(0.29, 0.09, 0.07, 1.65);
 }
-.weirdButton2 input+div:before, .weirdButton2 input+div:after {
-	background: #00000000;
+.weirdButton2 input + div:before,
+.weirdButton2 input + div:after {
+    background: #00000000;
 }
 .hackDoNotUse {
-	display: inline-block;
-	min-width: 200px;
+    display: inline-block;
+    min-width: 200px;
 }
 #teacherPlayScreen {
-	top: 10%;
+    top: 10%;
 }
 #characterPeopleDiv {
-	text-align: center;
-	margin: 100px;
+    text-align: center;
+    margin: 100px;
 }
 @media screen and (max-width: 1000px) {
-	#characterPeopleDiv {
-		margin: 10px;
-	}
+    #characterPeopleDiv {
+        margin: 10px;
+    }
 }
 .studentPlayer {
-	position: absolute;
-	width: 300px;
-	height: 420px;
+    position: absolute;
+    width: 300px;
+    height: 420px;
 }
 .studentPlayer > * {
-	transition: transform 0.3s;
+    transition: transform 0.3s;
 }
 .studentPlayer:hover > * {
-	transform: scale(0);
+    transform: scale(0);
 }
 .studentPlayer:active > * {
-	transform: scale(0);
+    transform: scale(0);
 }
 .studentPlayer:focus > * {
-	transform: scale(0);
+    transform: scale(0);
 }
 .studentPlayer:hover > .kickPlayerDiv {
-	transform: scale(1);
+    transform: scale(1);
 }
 .studentPlayer:active > .kickPlayerDiv {
-	transform: scale(1);
-	text-decoration: underline;
+    transform: scale(1);
+    text-decoration: underline;
 }
 .studentPlayer:focus > .kickPlayerDiv {
-	transform: scale(1);
-	text-decoration: underline;
+    transform: scale(1);
+    text-decoration: underline;
 }
 .parentTransformElement {
-	width: 300px;
-	display: inline-block;
-	height: 420px;
-	margin-bottom: 25px;
-	margin-left: 10px;
-	margin-right: 10px;
+    width: 300px;
+    display: inline-block;
+    height: 420px;
+    margin-bottom: 25px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 @keyframes hideme {
-	0% {
-		transform: translateY(0px);
-		opacity: 1;
-	}
-	100% {
-		transform: translateY(-100px);
-		opacity: 0;
-	}
+    0% {
+        transform: translateY(0px);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100px);
+        opacity: 0;
+    }
 }
 .kickPlayerDiv {
-	transform: scale(0);
-	position: absolute;
-	top: 130px;
-	transition: transform 0.3s;
+    transform: scale(0);
+    position: absolute;
+    top: 130px;
+    transition: transform 0.3s;
 }
 .createQuizButton {
     min-width: 300px;
@@ -550,51 +551,51 @@
     font-size: xx-large;
     max-width: 300px;
     margin-left: 15px;
-	margin-right: 15px;
+    margin-right: 15px;
 }
 .teacherCountdownAnim {
-	transition: transform 0.3s;
-	transform: scale(0) rotate(360deg);
+    transition: transform 0.3s;
+    transform: scale(0) rotate(360deg);
 }
 #teacherCountdown {
-	font-size: 128px;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, 0);
+    font-size: 128px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 0);
 }
 .teacherScreenPlayer {
-	position: absolute;
-	top: 130px;
-	left: 30px;
+    position: absolute;
+    top: 130px;
+    left: 30px;
 }
 .teacherScreenPlayer > * {
-	height: 305px;
+    height: 305px;
 }
 .inGamePlayerButton {
-	max-width: 600px;
-	animation: slideAndFade 0.3s;
-	animation-delay: calc(0.1s * var(--c));
-	opacity: 0;
-	animation-fill-mode: forwards;
-	animation-timing-function: cubic-bezier(0.29, 0.09, 0.07, 1.4);
+    max-width: 600px;
+    animation: slideAndFade 0.3s;
+    animation-delay: calc(0.1s * var(--c));
+    opacity: 0;
+    animation-fill-mode: forwards;
+    animation-timing-function: cubic-bezier(0.29, 0.09, 0.07, 1.4);
 }
 .liveLeaderboards {
-	display: none;
-	top: 10%;
+    display: none;
+    top: 10%;
 }
 @keyframes slideAndFade {
-	from {
-		transform: translateX(450px);
-		opacity: 0;
-	}
-	to {
-		transform: translateX(0);
-		opacity: 1;
-	}
+    from {
+        transform: translateX(450px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 #gameCodeTeacher {
-	-webkit-user-select: text; /* Safari */
-  	-ms-user-select: text; /* IE 10 and IE 11 */
-  	user-select: text;
+    -webkit-user-select: text; /* Safari */
+    -ms-user-select: text; /* IE 10 and IE 11 */
+    user-select: text;
 }

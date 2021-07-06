@@ -478,6 +478,7 @@ export class networkManager {
         let firstTime = true;
         this.studentPlayListener = onValue(ref(database, `${window.currentGameState.location}players/${auth.currentUser!.uid}/`), (snap) => {
             const val = snap.val();
+            if (!val) return;
             if (val.timePenaltyEnd > getCurrentDate()) {
                 validationFailed(val.currentQuestion, val.timePenaltyEnd);
                 if (firstTime) initialRender(val.currentQuestionNumber, val.currentQuestion, false);
@@ -493,7 +494,6 @@ export class networkManager {
 
     static onGameEnd(input: () => void) {
         onValue(ref(database, `${window.currentGameState.location}finalResults/`), (snap) => {
-            console.log(snap.val());
             if (snap.val() && snap.val().hasRendered) {
                 input();
             }
