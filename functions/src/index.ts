@@ -31,7 +31,11 @@ interface tempSubmitQuestion {
 // Handles game initialization for teacher play screen
 export const initGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
     if (data && (typeof data === 'string' || data instanceof String)) {
-        if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
+        if (
+            context.auth &&
+            context.auth.token.email &&
+            (/.*@mamkschools.org$/.test(context.auth.token.email) || /.*@student.mamkschools.org$/.test(context.auth.token.email) || /.*@mamklearn.com$/.test(context.auth.token.email) || context.auth.token.email == 'ilyastrug@gmail.com')
+        ) {
             const db = database();
             const user = db.ref(`userProfiles/${context.auth.uid}/`);
             const gameState = user.child('currentGameState/isInGame/');
@@ -121,7 +125,11 @@ export const initGame = functions.runWith({ maxInstances: 1 }).https.onCall(asyn
 
 // Handles players leaving the game
 export const leaveGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
-    if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
+    if (
+        context.auth &&
+        context.auth.token.email &&
+        (/.*@mamkschools.org$/.test(context.auth.token.email) || /.*@student.mamkschools.org$/.test(context.auth.token.email) || /.*@mamklearn.com$/.test(context.auth.token.email) || context.auth.token.email == 'ilyastrug@gmail.com')
+    ) {
         const db = database();
         const user = db.ref(`userProfiles/${context.auth.uid}/`);
         const gameState = user.child('currentGameState/');
@@ -173,7 +181,11 @@ export const joinGameStudent = functions.runWith({ maxInstances: 1 }).https.onCa
             message: 'Malformed request sent from the client. You may be running an old version (try clearing your cache).',
             code: 400,
         };
-    } else if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
+    } else if (
+        context.auth &&
+        context.auth.token.email &&
+        (/.*@mamkschools.org$/.test(context.auth.token.email) || /.*@student.mamkschools.org$/.test(context.auth.token.email) || /.*@mamklearn.com$/.test(context.auth.token.email) || context.auth.token.email == 'ilyastrug@gmail.com')
+    ) {
         const db = database();
         const user = db.ref(`userProfiles/${context.auth.uid}`);
         const gameState = user.child('currentGameState/isInGame');
@@ -228,7 +240,11 @@ export const kickPlayer = functions.runWith({ maxInstances: 1 }).https.onCall(as
             message: 'Malformed request sent from the client. You may be running an old version (try clearing your cache).',
             code: 400,
         };
-    } else if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
+    } else if (
+        context.auth &&
+        context.auth.token.email &&
+        (/.*@mamkschools.org$/.test(context.auth.token.email) || /.*@student.mamkschools.org$/.test(context.auth.token.email) || /.*@mamklearn.com$/.test(context.auth.token.email) || context.auth.token.email == 'ilyastrug@gmail.com')
+    ) {
         const db = database();
         if ((await db.ref(`actualGames/${context.auth.uid}/globalState/isRunning`).once('value')).val()) {
             return {
@@ -260,7 +276,11 @@ export const kickPlayer = functions.runWith({ maxInstances: 1 }).https.onCall(as
 
 // For teacher starting game.
 export const startGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
-    if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
+    if (
+        context.auth &&
+        context.auth.token.email &&
+        (/.*@mamkschools.org$/.test(context.auth.token.email) || /.*@student.mamkschools.org$/.test(context.auth.token.email) || /.*@mamklearn.com$/.test(context.auth.token.email) || context.auth.token.email == 'ilyastrug@gmail.com')
+    ) {
         const db = database();
         const playerList = (await db.ref(`actualGames/${context.auth.uid}/players`).once('value')).val();
         if (playerList !== null) {
@@ -327,7 +347,11 @@ export const startGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
 
 // Synchronises time.
 export const timeSync = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
-    if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
+    if (
+        context.auth &&
+        context.auth.token.email &&
+        (/.*@mamkschools.org$/.test(context.auth.token.email) || /.*@student.mamkschools.org$/.test(context.auth.token.email) || /.*@mamklearn.com$/.test(context.auth.token.email) || context.auth.token.email == 'ilyastrug@gmail.com')
+    ) {
         return {
             message: Date.now(),
             code: 200,
@@ -341,7 +365,11 @@ export const timeSync = functions.runWith({ maxInstances: 1 }).https.onCall(asyn
 });
 
 export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
-    if (context.auth && context.auth.token.email && context.auth.token.email.endsWith('mamkschools.org')) {
+    if (
+        context.auth &&
+        context.auth.token.email &&
+        (/.*@mamkschools.org$/.test(context.auth.token.email) || /.*@student.mamkschools.org$/.test(context.auth.token.email) || /.*@mamklearn.com$/.test(context.auth.token.email) || context.auth.token.email == 'ilyastrug@gmail.com')
+    ) {
         if (typeof data === 'string' || typeof data === 'number') {
             const db = database();
             let hasGameEnded = false;

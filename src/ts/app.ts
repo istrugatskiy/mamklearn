@@ -45,7 +45,7 @@ networkManager.onLoginSuccess = completeLoginFlow;
 networkManager.onLoginFail = () => {
     const error = $('loginError1');
     error.style.display = 'block';
-    error.textContent = "Please use an account that ends in 'mamkschools.org' or 'student.mamkschools.org'";
+    error.textContent = "Please use an account that ends in 'mamkschools.org' or an approved developer account.";
 };
 
 const onShareQuiz = () => {
@@ -76,27 +76,17 @@ window.clickEvents = {
     btn2: playCode,
     makebtn: makeCode,
     signOutbtn: logOut,
-    loginBtn: () => {
-        login();
-    },
+    loginBtn: () => login(),
     customButtonChange: arrowButtonPress,
-    customButtonChange2: () => {
-        updateImageState(false);
-    },
-    leftCustomizeArrow: () => {
-        updateImageState(false);
-    },
-    arrowCustomizeRight: () => {
-        updateImageState(true);
-    },
+    customButtonChange2: () => updateImageState(false),
+    leftCustomizeArrow: () => updateImageState(false),
+    arrowCustomizeRight: () => updateImageState(true),
     playMenuBack: goBack,
     AboutLink: (event: Event) => {
         event.preventDefault();
         userClick('about.html');
     },
-    aboutWindowButton: () => {
-        userClick('/', 'aboutWindowButton');
-    },
+    aboutWindowButton: () => userClick('/', 'aboutWindowButton'),
     PrivacyPolicyLink: (event: Event) => {
         event.preventDefault();
         userClick('privacy.html');

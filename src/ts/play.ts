@@ -136,9 +136,9 @@ export const initQuestionHandler = (questionAmount: number) => {
             questionValidationFailed(question, endTime);
         }
     );
-    networkManager.onGameEnd(() => {
+    networkManager.onGameEnd((input) => {
         hasGameEnded = true;
-        gameEnd(window.currentUserConfig, [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], 1);
+        gameEnd(window.currentUserConfig, [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], input[networkManager.authInstance.currentUser!.uid]?.place);
     });
 };
 

@@ -1,0 +1,67 @@
+{
+    "rules": {
+        "currentGames": {
+            "$firstID": {
+                "$secondID": {
+                    ".read": "true"
+                }
+            }
+        },
+        "actualGames": {
+            "$uid": {
+                ".read": "$uid === auth.uid && (auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/) || auth.token.email.matches(/.*@mamklearn.com$/) || auth.token.email == 'ilyastrug@gmail.com')",
+                "globalState": {
+                    ".read": "(auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/) || auth.token.email.matches(/.*@mamklearn.com$/) || auth.token.email == 'ilyastrug@gmail.com')"
+                },
+                "finalResults": {
+                    ".read": "(auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/) || auth.token.email.matches(/.*@mamklearn.com$/) || auth.token.email == 'ilyastrug@gmail.com')"
+                },
+                "players": {
+                    "$user_id": {
+                        ".read": "$user_id === auth.uid && (auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/) || auth.token.email.matches(/.*@mamklearn.com$/) || auth.token.email == 'ilyastrug@gmail.com')"
+                    }
+                }
+            }
+        },
+        "sharedQuizzes": {
+            "$sharedUserId": {
+                "$sharedQuiz": {
+                    ".read": "(auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/) || auth.token.email.matches(/.*@mamklearn.com$/) || auth.token.email == 'ilyastrug@gmail.com')",
+                    ".write": "$sharedUserId === auth.uid && (auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/) || auth.token.email.matches(/.*@mamklearn.com$/) || auth.token.email == 'ilyastrug@gmail.com')"
+                }
+            }
+        },
+        "userProfiles": {
+            "$uid": {
+                ".read": "$uid === auth.uid && (auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/) || auth.token.email.matches(/.*@mamklearn.com$/) || auth.token.email == 'ilyastrug@gmail.com')",
+                "charConfig": {
+                    "0": {
+                        ".write": "$uid === auth.uid && (auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/) || auth.token.email.matches(/.*@mamklearn.com$/) || auth.token.email == 'ilyastrug@gmail.com') && newData.isNumber() && newData.val() % 1 === 0.0 && newData.val() >= 0 && newData.val() <= 9"
+                    },
+                    "1": {
+                        ".write": "$uid === auth.uid && (auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/) || auth.token.email.matches(/.*@mamklearn.com$/) || auth.token.email == 'ilyastrug@gmail.com') && newData.isNumber() && newData.val() % 1 === 0.0 && newData.val() >= 0 && newData.val() <= 9"
+                    },
+                    "2": {
+                        ".write": "$uid === auth.uid && (auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/) || auth.token.email.matches(/.*@mamklearn.com$/) || auth.token.email == 'ilyastrug@gmail.com') && newData.isNumber() && newData.val() % 1 === 0.0 && newData.val() >= 0 && newData.val() <= 9"
+                    },
+                    "3": {
+                        ".write": "$uid === auth.uid && (auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/) || auth.token.email.matches(/.*@mamklearn.com$/) || auth.token.email == 'ilyastrug@gmail.com') && newData.isNumber() && newData.val() % 1 === 0.0 && newData.val() >= 0 && newData.val() <= 9"
+                    },
+                    "4": {
+                        ".write": "$uid === auth.uid && (auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/) || auth.token.email.matches(/.*@mamklearn.com$/) || auth.token.email == 'ilyastrug@gmail.com') && newData.isNumber() && newData.val() % 1 === 0.0 && newData.val() >= 0 && newData.val() <= 9"
+                    }
+                },
+                "quizList": {
+                    "$quizId": {
+                        ".write": "$uid === auth.uid && (auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/) || auth.token.email.matches(/.*@mamklearn.com$/) || auth.token.email == 'ilyastrug@gmail.com')"
+                    }
+                },
+                "quizData": {
+                    "$quizDataId": {
+                        ".write": "$uid === auth.uid && (auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/) || auth.token.email.matches(/.*@mamklearn.com$/) || auth.token.email == 'ilyastrug@gmail.com')"
+                    }
+                }
+            }
+        }
+    }
+}
