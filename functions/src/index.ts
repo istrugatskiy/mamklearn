@@ -428,19 +428,26 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
             } else if (isCorrect && !nextQuestion) {
                 playerObject.currentQuestionNumber++;
                 isCorrect = true;
-                await db.ref(`${location.val()}globalState/players`).set(database.ServerValue.increment(-1));
+                functions.logger.log('first time: ' + (await db.ref(`${location.val()}globalState/players`).once('value')).val());
+                await db.ref(`${location.val()}globalState/players`).set(database.ServerValue.increment(-1), (a) => {
+                    functions.logger.log(a);
+                });
                 const totalPlayers = (await db.ref(`${location.val()}globalState/playersTotal`).once('value')).val();
                 const firstName = (context.auth!.token.name as string).split(' ')[0];
                 const lastName = (context.auth!.token.name as string).split(' ')[1];
+                functions.logger.log('Second time: ' + (await db.ref(`${location.val()}globalState/players`).once('value')).val());
                 await db.ref(`${location.val()}globalState/players`).transaction(async (input) => {
                     await db.ref(`${location.val()}finalResults/${context.auth!.uid}`).set({
                         place: totalPlayers - input,
                         name: `${firstName} ${lastName.charAt(0)}.`,
                     });
                     await db.ref(`${location.val()}leaderboards/${context.auth!.uid}`).remove();
+                    functions.logger.log('input: ' + input);
                     return input;
                 });
                 const shouldGameEnd = (await db.ref(`${location.val()}globalState/players`).once('value')).val() <= 0;
+                functions.logger.log((await db.ref(`${location.val()}globalState/players`).once('value')).val());
+                functions.logger.log((await db.ref(`${location.val()}globalState/players`).once('value')).val() <= 0);
                 const sortArray = (input: { [key: string]: { currentQuestion: number; playerName: string } }) => {
                     let tempArray: { key: string; currentQuestion: number; playerName: string }[] = [];
                     for (const [key, value] of Object.entries(input)) {

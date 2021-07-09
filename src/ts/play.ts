@@ -138,6 +138,7 @@ export const initQuestionHandler = (questionAmount: number) => {
     );
     networkManager.onGameEnd((input) => {
         hasGameEnded = true;
+        // Wow look I know how to use optional chaining
         gameEnd(window.currentUserConfig, [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], input[networkManager.authInstance.currentUser!.uid]?.place);
     });
 };
