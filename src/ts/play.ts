@@ -318,6 +318,7 @@ function setQuestion(question: studentQuestion) {
     $('titleButtonStudent').firstElementChild!.textContent = question.questionName;
     const options = $('studentAnswersFlex').children;
     for (let i = 0; i < 4; i++) {
+        (options[i] as HTMLElement).blur();
         options[i].style.minHeight = '';
 
         if (!question.answers || !question.answers[i]) {

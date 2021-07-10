@@ -429,22 +429,29 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
                 playerObject.currentQuestionNumber++;
                 isCorrect = true;
                 functions.logger.log('first time: ' + (await db.ref(`${location.val()}globalState/players`).once('value')).val());
-                await db.ref(`${location.val()}globalState/players`).set(database.ServerValue.increment(-1), (a) => {
-                    functions.logger.log(a);
-                });
+                await db.ref(`${location.val()}globalState/players`).set(database.ServerValue.increment(-1));
                 const totalPlayers = (await db.ref(`${location.val()}globalState/playersTotal`).once('value')).val();
                 const firstName = (context.auth!.token.name as string).split(' ')[0];
                 const lastName = (context.auth!.token.name as string).split(' ')[1];
                 functions.logger.log('Second time: ' + (await db.ref(`${location.val()}globalState/players`).once('value')).val());
-                await db.ref(`${location.val()}globalState/players`).transaction(async (input) => {
-                    await db.ref(`${location.val()}finalResults/${context.auth!.uid}`).set({
-                        place: totalPlayers - input,
-                        name: `${firstName} ${lastName.charAt(0)}.`,
-                    });
-                    await db.ref(`${location.val()}leaderboards/${context.auth!.uid}`).remove();
-                    functions.logger.log('input: ' + input);
-                    return input;
-                });
+                await db.ref(`${location.val()}globalState/players`).transaction(
+                    async (input) => {
+                        if (input != null) {
+                            await db.ref(`${location.val()}finalResults/${context.auth!.uid}`).set({
+                                place: totalPlayers - input,
+                                name: `${firstName} ${lastName.charAt(0)}.`,
+                            });
+                            await db.ref(`${location.val()}leaderboards/${context.auth!.uid}`).remove();
+                            functions.logger.log('input: ' + input);
+                        }
+                        return input;
+                    },
+                    (a, b, c) => {
+                        functions.logger.log('a: ' + a?.message);
+                        functions.logger.log('b:' + b);
+                        functions.logger.log('c: ' + c);
+                    }
+                );
                 const shouldGameEnd = (await db.ref(`${location.val()}globalState/players`).once('value')).val() <= 0;
                 functions.logger.log((await db.ref(`${location.val()}globalState/players`).once('value')).val());
                 functions.logger.log((await db.ref(`${location.val()}globalState/players`).once('value')).val() <= 0);
