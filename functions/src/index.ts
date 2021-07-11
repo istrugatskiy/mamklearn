@@ -428,30 +428,26 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
             } else if (isCorrect && !nextQuestion) {
                 playerObject.currentQuestionNumber++;
                 isCorrect = true;
-                functions.logger.log('first time: ' + (await db.ref(`${location.val()}globalState/players`).once('value')).val());
-                await db.ref(`${location.val()}globalState/players`).set(database.ServerValue.increment(-1));
+                db.ref(`${location.val()}globalState/players`).on('value', (snap) => {
+                    functions.logger.log(`Player Value: ${snap.val()}`);
+                });
                 const totalPlayers = (await db.ref(`${location.val()}globalState/playersTotal`).once('value')).val();
                 const firstName = (context.auth!.token.name as string).split(' ')[0];
                 const lastName = (context.auth!.token.name as string).split(' ')[1];
-                functions.logger.log('Second time: ' + (await db.ref(`${location.val()}globalState/players`).once('value')).val());
-                await db.ref(`${location.val()}globalState/players`).transaction(
-                    async (input) => {
-                        if (input != null) {
-                            await db.ref(`${location.val()}finalResults/${context.auth!.uid}`).set({
-                                place: totalPlayers - input,
-                                name: `${firstName} ${lastName.charAt(0)}.`,
-                            });
-                            await db.ref(`${location.val()}leaderboards/${context.auth!.uid}`).remove();
-                            functions.logger.log('input: ' + input);
-                        }
-                        return input;
-                    },
-                    (a, b, c) => {
-                        functions.logger.log('a: ' + a?.message);
-                        functions.logger.log('b:' + b);
-                        functions.logger.log('c: ' + c);
+                // We use transactions here instead of increment because its simpler.
+                await db.ref(`${location.val()}globalState/players`).transaction(async (input) => {
+                    if (input != null) {
+                        input = input--;
+                        await db.ref(`${location.val()}finalResults/${context.auth!.uid}`).set({
+                            place: totalPlayers - input,
+                            name: `${firstName} ${lastName.charAt(0)}.`,
+                        });
+                        await db.ref(`${location.val()}leaderboards/${context.auth!.uid}`).remove();
+                        functions.logger.log('input: ' + input);
                     }
-                );
+                    functions.logger.log('Unvalidated input: ' + input);
+                    return input;
+                });
                 const shouldGameEnd = (await db.ref(`${location.val()}globalState/players`).once('value')).val() <= 0;
                 functions.logger.log((await db.ref(`${location.val()}globalState/players`).once('value')).val());
                 functions.logger.log((await db.ref(`${location.val()}globalState/players`).once('value')).val() <= 0);
@@ -477,13 +473,14 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
                     if (leaderboards.val()) {
                         sortArray(leaderboards.val()).forEach(async (player) => {
                             await db.ref(`${location.val()}globalState/players`).transaction(async (input) => {
+                                input = input--;
                                 const firstName = (player.playerName as string).split(' ')[0];
                                 const lastName = player.playerName.split(' ')[1];
                                 await db.ref(`${location.val()}finalResults/${player.key}`).set({
                                     place: totalPlayers - input,
                                     name: `${firstName} ${lastName.charAt(0)}.`,
                                 });
-                                return input - 1;
+                                return input;
                             });
                         });
                     }
@@ -495,6 +492,7 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
                     await db.ref(`currentGames/${userState.val().code.slice(0, 5)}/${userState.val().code.slice(5)}`).set(null);
                     await db.ref(location.val()).remove();
                     await db.ref(`userProfiles/${(location.val() as string).replace('actualGames/', '')}currentGameState/`).set(null);
+                    db.ref(`${location.val()}/globalState/players`).off('value');
                     hasGameEnded = true;
                 }
             }
