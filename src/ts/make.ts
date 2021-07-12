@@ -772,7 +772,7 @@ export function startGameTeacher(shouldHandle: boolean) {
                 data.forEach((value, index) => {
                     const container = $('playerContainer');
                     const currentChild = container.children![index];
-                    if (currentChild.id.replace('playerList_', '') !== value.key) {
+                    if (currentChild.id.replace('playerList_', '') !== value.key || currentChild.firstElementChild?.textContent !== `${index + 1}. `) {
                         if ($(`playerList_${value.key}`).style.maxWidth == '600px') {
                             doMagic();
                         } else {
@@ -788,6 +788,7 @@ export function startGameTeacher(shouldHandle: boolean) {
                             currentChild.style.color = '#fff';
                             setTimeout(() => {
                                 currentChild.style.color = '#000';
+                                currentChild.firstElementChild!.textContent = `${index + 1}.`;
                                 currentChild.lastChild!.remove();
                                 currentChild.appendChild(document.createTextNode(` ${value.playerName}`));
                                 currentChild.id = `playerList_${value.key}`;

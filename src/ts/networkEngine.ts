@@ -144,9 +144,9 @@ const monitorUserState = () => {
         } else if (!snap.val()) {
             alreadyInGame = false;
             if (window.currentGameState.isTeacher) {
-                networkManager.quitQuizTeacher ? networkManager.quitQuizTeacher() : null;
+                call(networkManager.quitQuizTeacher);
             } else {
-                networkManager.quitQuizStudent ? networkManager.quitQuizStudent() : null;
+                call(networkManager.quitQuizStudent);
             }
         }
         const temp = window.currentGameState ? window.currentGameState.location : '';
@@ -442,6 +442,7 @@ export class networkManager {
     ) {
         let firstTime = true;
         this.prevLeaderboardValues = {};
+        alreadyInGame = true;
         this.leaderboardHandler = onValue(ref(database, `actualGames/${this.authInstance.currentUser!.uid}/leaderboards`), (snap) => {
             if (!snap.val()) {
                 call(this.leaderboardHandler);
@@ -454,6 +455,9 @@ export class networkManager {
                 Object.keys(this.prevLeaderboardValues).forEach((key) => {
                     if (!snap.val()[key]) {
                         removePlayer(key);
+                        setTimeout(() => {
+                            updateList(sortArray(snap.val()));
+                        }, 1500);
                         check = true;
                     }
                 });

@@ -843,7 +843,7 @@ ul {
     background-color: rgb(255, 255, 255);
     display: none;
     animation: fadein 0.5s forwards;
-    z-index: 13;
+    z-index: 16;
 }
 .gameResultImage {
     position: absolute;

@@ -244,7 +244,10 @@ function gameEnd(firstPlace: number[], secondPlace: number[], thirdPlace: number
     $('userEndPlaceNumber').textContent = yourPlace.toString();
     $('currentUserEndPlaceSup').textContent = ordinalSuffix(yourPlace);
     setTimeout(() => {
+        $('gameFinishNotify').style.display = 'none';
+        clearInterval(finishUpInterval);
         $('errorMessageB').style.display = 'none';
+        clearTimeout(timeouts[2]);
     }, 500);
     timeouts[3] = window.setTimeout(() => {
         $('imageObjectContainer').style.animation = 'fadeOut 0.3s';

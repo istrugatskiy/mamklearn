@@ -385,6 +385,12 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
             const location = await db.ref(`currentGames/${userState.val().code.slice(0, 5)}/${userState.val().code.slice(5)}`).once('value');
             let playerObject: tempSubmitQuestion = (await db.ref(`${location.val()}players/${context.auth!.uid}`).once('value')).val();
             const questionData = (await db.ref(`${location.val()}quiz/questionObjects/${playerObject.currentQuestionNumber - 1}`).once('value')).val() as questionObject;
+            if ((await db.ref(`${location.val()}finalResults/${context.auth.uid}`).once('value')).val()) {
+                return {
+                    message: 'You have already completed all questions',
+                    code: 500,
+                };
+            }
             if (playerObject.timePenaltyEnd && playerObject.timePenaltyEnd > Date.now() + 1000) {
                 return {
                     message: 'Time penalty still in effect',
@@ -428,29 +434,24 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
             } else if (isCorrect && !nextQuestion) {
                 playerObject.currentQuestionNumber++;
                 isCorrect = true;
-                db.ref(`${location.val()}globalState/players`).on('value', (snap) => {
-                    functions.logger.log(`Player Value: ${snap.val()}`);
-                });
                 const totalPlayers = (await db.ref(`${location.val()}globalState/playersTotal`).once('value')).val();
                 const firstName = (context.auth!.token.name as string).split(' ')[0];
                 const lastName = (context.auth!.token.name as string).split(' ')[1];
-                // We use transactions here instead of increment because its simpler.
-                await db.ref(`${location.val()}globalState/players`).transaction(async (input) => {
-                    if (input != null) {
-                        input = input--;
-                        await db.ref(`${location.val()}finalResults/${context.auth!.uid}`).set({
-                            place: totalPlayers - input,
-                            name: `${firstName} ${lastName.charAt(0)}.`,
-                        });
-                        await db.ref(`${location.val()}leaderboards/${context.auth!.uid}`).remove();
-                        functions.logger.log('input: ' + input);
+                // We use transactions here because increment didn't play nicely with it.
+                let externalInput = 0;
+                await db.ref(`${location.val()}globalState/players`).transaction((input) => {
+                    if (typeof input === 'number') {
+                        input--;
+                        externalInput = input;
                     }
-                    functions.logger.log('Unvalidated input: ' + input);
                     return input;
                 });
+                await db.ref(`${location.val()}finalResults/${context.auth.uid}`).set({
+                    place: totalPlayers - externalInput,
+                    name: `${firstName} ${lastName.charAt(0)}.`,
+                });
+                await db.ref(`${location.val()}leaderboards/${context.auth.uid}`).remove();
                 const shouldGameEnd = (await db.ref(`${location.val()}globalState/players`).once('value')).val() <= 0;
-                functions.logger.log((await db.ref(`${location.val()}globalState/players`).once('value')).val());
-                functions.logger.log((await db.ref(`${location.val()}globalState/players`).once('value')).val() <= 0);
                 const sortArray = (input: { [key: string]: { currentQuestion: number; playerName: string } }) => {
                     let tempArray: { key: string; currentQuestion: number; playerName: string }[] = [];
                     for (const [key, value] of Object.entries(input)) {
@@ -471,17 +472,20 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
                 } else if (shouldGameEnd) {
                     const leaderboards = await db.ref(`${location.val()}leaderboards`).once('value');
                     if (leaderboards.val()) {
-                        sortArray(leaderboards.val()).forEach(async (player) => {
-                            await db.ref(`${location.val()}globalState/players`).transaction(async (input) => {
-                                input = input--;
-                                const firstName = (player.playerName as string).split(' ')[0];
-                                const lastName = player.playerName.split(' ')[1];
-                                await db.ref(`${location.val()}finalResults/${player.key}`).set({
-                                    place: totalPlayers - input,
-                                    name: `${firstName} ${lastName.charAt(0)}.`,
-                                });
+                        sortArray(leaderboards.val()).forEach(async ({ playerName, key }) => {
+                            let finalInput = 0;
+                            await db.ref(`${location.val()}globalState/players`).transaction((input) => {
+                                input--;
+                                finalInput = input;
                                 return input;
                             });
+                            const firstName = playerName.split(' ')[0];
+                            const lastName = playerName.split(' ')[1];
+                            await db.ref(`${location.val()}finalResults/${key}`).set({
+                                place: totalPlayers - finalInput,
+                                name: `${firstName} ${lastName.charAt(0)}.`,
+                            });
+                            await db.ref(`${location.val()}leaderboards/${key}`).remove();
                         });
                     }
                     await db.ref(`${location.val()}finalResults/hasRendered/`).set(true);

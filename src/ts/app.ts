@@ -97,7 +97,7 @@ window.clickEvents = {
     },
     rejoinGameConfirm: () => {
         if (window.currentGameState.isTeacher) {
-            // Handles differently based on your location
+            // Handles differently based on your location within the app
             if ($('makebtn')) {
                 makeCode(true);
             } else if ($('gameID')) {
