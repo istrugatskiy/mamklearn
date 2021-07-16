@@ -1,5 +1,6 @@
 import * as functions from 'firebase-functions';
 import { database, initializeApp } from 'firebase-admin';
+import { google } from '@google-cloud/tasks/build/protos/protos';
 
 initializeApp();
 
@@ -452,51 +453,40 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
                 });
                 await db.ref(`${location.val()}leaderboards/${context.auth.uid}`).remove();
                 const shouldGameEnd = (await db.ref(`${location.val()}globalState/players`).once('value')).val() <= 0;
-                const sortArray = (input: { [key: string]: { currentQuestion: number; playerName: string } }) => {
-                    let tempArray: { key: string; currentQuestion: number; playerName: string }[] = [];
-                    for (const [key, value] of Object.entries(input)) {
-                        tempArray.push({
-                            key: key,
-                            currentQuestion: value.currentQuestion,
-                            playerName: value.playerName,
-                        });
-                    }
-                    return tempArray.sort((a, b) => {
-                        const firstEl = a as { currentQuestion: number; playerName: string };
-                        const secondEl = b as { currentQuestion: number; playerName: string };
-                        return secondEl.currentQuestion - firstEl.currentQuestion;
-                    });
-                };
+
                 if (!(await db.ref(`${location.val()}globalState/gameEnd`).once('value')).val() && !shouldGameEnd) {
                     await db.ref(`${location.val()}globalState/gameEnd`).set(Date.now());
-                } else if (shouldGameEnd) {
-                    const leaderboards = await db.ref(`${location.val()}leaderboards`).once('value');
-                    if (leaderboards.val()) {
-                        sortArray(leaderboards.val()).forEach(async ({ playerName, key }) => {
-                            let finalInput = 0;
-                            await db.ref(`${location.val()}globalState/players`).transaction((input) => {
-                                input--;
-                                finalInput = input;
-                                return input;
-                            });
-                            const firstName = playerName.split(' ')[0];
-                            const lastName = playerName.split(' ')[1];
-                            await db.ref(`${location.val()}finalResults/${key}`).set({
-                                place: totalPlayers - finalInput,
-                                name: `${firstName} ${lastName.charAt(0)}.`,
-                            });
-                            await db.ref(`${location.val()}leaderboards/${key}`).remove();
-                        });
+                    const { CloudTasksClient } = await import('@google-cloud/tasks');
+                    const client = new CloudTasksClient();
+                    const project = JSON.parse(process.env.FIREBASE_CONFIG!).projectId;
+                    const queue = 'mamklearn-game-end';
+                    const projectLocation = 'us-central1';
+                    const url = `https://${projectLocation}-${project}.cloudfunctions.net/firestoreTtlCallback`;
+                    const serviceAccountEmail = 'client@<project-id>.iam.gserviceaccount.com';
+                    const payload = {
+                        location: location.val(),
+                        totalPlayers: totalPlayers,
+                        gameCode: (userState.val().code as number).toString(),
+                    };
+                    const parent = client.queuePath(project, projectLocation, queue);
+                    const task = {
+                        httpRequest: {
+                            httpMethod: 'POST',
+                            url,
+                            oidcToken: {
+                                serviceAccountEmail,
+                            },
+                            body: '',
+                        },
+                    };
+
+                    if (payload) {
+                        task.httpRequest.body = Buffer.from(JSON.stringify(payload)).toString('base64');
                     }
-                    await db.ref(`${location.val()}finalResults/hasRendered/`).set(true);
-                    const userList = (await db.ref(`${location.val()}players/`).once('value')).val() as { [key: string]: { playerName: string; userConfig: number[] } };
-                    Object.keys(userList).forEach(async (userID) => {
-                        await db.ref(`userProfiles/${userID}/currentGameState/`).set(null);
-                    });
-                    await db.ref(`currentGames/${userState.val().code.slice(0, 5)}/${userState.val().code.slice(5)}`).set(null);
-                    await db.ref(location.val()).remove();
-                    await db.ref(`userProfiles/${(location.val() as string).replace('actualGames/', '')}currentGameState/`).set(null);
-                    db.ref(`${location.val()}/globalState/players`).off('value');
+                    await client.createTask({ parent, task } as google.cloud.tasks.v2.ICreateTaskRequest);
+                } else if (shouldGameEnd) {
+                    // TODO: Cancel cloud task.
+                    await gameEnd(location.val(), totalPlayers, (userState.val().code as number).toString());
                     hasGameEnded = true;
                 }
             }
@@ -530,3 +520,63 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
         };
     }
 });
+
+export const handleGameEnd = functions.runWith({ maxInstances: 1 }).https.onRequest(async (req, res) => {
+    try {
+        const body = req.body as {
+            location: string;
+            totalPlayers: number;
+            gameCode: string;
+        };
+        gameEnd(body.location, body.totalPlayers, body.gameCode);
+    } catch (e) {
+        functions.logger.log(e);
+        res.send(200);
+    }
+});
+
+async function gameEnd(location: string, totalPlayers: number, gameCode: string) {
+    const db = database();
+    const sortArray = (input: { [key: string]: { currentQuestion: number; playerName: string } }) => {
+        let tempArray: { key: string; currentQuestion: number; playerName: string }[] = [];
+        for (const [key, value] of Object.entries(input)) {
+            tempArray.push({
+                key: key,
+                currentQuestion: value.currentQuestion,
+                playerName: value.playerName,
+            });
+        }
+        return tempArray.sort((a, b) => {
+            const firstEl = a as { currentQuestion: number; playerName: string };
+            const secondEl = b as { currentQuestion: number; playerName: string };
+            return secondEl.currentQuestion - firstEl.currentQuestion;
+        });
+    };
+    const leaderboards = await db.ref(`${location}leaderboards`).once('value');
+    if (leaderboards.val()) {
+        sortArray(leaderboards.val()).forEach(async ({ playerName, key }) => {
+            let finalInput = 0;
+            await db.ref(`${location}globalState/players`).transaction((input) => {
+                input--;
+                finalInput = input;
+                return input;
+            });
+            const firstName = playerName.split(' ')[0];
+            const lastName = playerName.split(' ')[1];
+            await db.ref(`${location}finalResults/${key}`).set({
+                place: totalPlayers - finalInput,
+                name: `${firstName} ${lastName.charAt(0)}.`,
+            });
+            await db.ref(`${location}leaderboards/${key}`).remove();
+        });
+    }
+    await db.ref(`${location}finalResults/hasRendered/`).set(true);
+    const userList = (await db.ref(`${location}players/`).once('value')).val() as { [key: string]: { playerName: string; userConfig: number[] } };
+    Object.keys(userList).forEach(async (userID) => {
+        await db.ref(`userProfiles/${userID}/currentGameState/`).set(null);
+    });
+    await db.ref(`currentGames/${gameCode.slice(0, 5)}/${gameCode.slice(5)}`).set(null);
+    await db.ref(location).remove();
+    await db.ref(`userProfiles/${location.replace('actualGames/', '')}currentGameState/`).set(null);
+    db.ref(`${location}/globalState/players`).off('value');
+}
