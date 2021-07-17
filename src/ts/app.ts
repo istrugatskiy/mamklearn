@@ -312,9 +312,16 @@ function updateImageState(data: boolean) {
  * @param {number[]} currentUserConfig The new configuration.
  */
 export function setCharImage(charID: string, currentUserConfig: number[]) {
-    $(charID + 'Eyes').src = `img/eyes-${currentUserConfig[0]}.png`;
-    $(charID + 'Nose').src = `img/nose-${currentUserConfig[1]}.png`;
-    $(charID + 'Mouth').src = `img/mouth-${currentUserConfig[2]}.png`;
-    $(charID + 'Shirt').src = `img/shirt-${currentUserConfig[3]}.png`;
-    $(charID + 'Arms').src = `img/arms-${currentUserConfig[4]}.svg`;
+    $(`${charID}Eyes`).src = `img/eyes-${currentUserConfig[0]}.png`;
+    $(`${charID}Nose`).src = `img/nose-${currentUserConfig[1]}.png`;
+    $(`${charID}Mouth`).src = `img/mouth-${currentUserConfig[2]}.png`;
+    $(`${charID}Shirt`).src = `img/shirt-${currentUserConfig[3]}.png`;
+    $(`${charID}Arms`).src = `img/arms-${currentUserConfig[4]}.svg`;
+    // Handles edge case where player doesn't have character config denoted by negative value for last number.
+    if (currentUserConfig[4] !== -1) {
+        ($(`${charID}Eyes`).parentElement!.lastElementChild! as HTMLElement).src = 'img/base.svg';
+    } else {
+        ($(`${charID}Eyes`).parentElement!.lastElementChild! as HTMLElement).src = 'img/qIcon-0.svg';
+        $(`${charID}Arms`).src = `img/arms-5.svg`;
+    }
 }

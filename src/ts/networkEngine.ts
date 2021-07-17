@@ -496,7 +496,7 @@ export class networkManager {
         });
     }
 
-    static onGameEnd(input: (returnData: { [key: string]: { place: number; name: string } }) => void) {
+    static onGameEnd(input: (returnData: { [key: string]: { place: number; name: string; playerConfig: number[] } }) => void) {
         onValue(ref(database, `${window.currentGameState.location}finalResults/`), (snap) => {
             if (snap.val() && snap.val().hasRendered) {
                 input(snap.val());

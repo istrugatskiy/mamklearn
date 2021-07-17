@@ -138,8 +138,13 @@ export const initQuestionHandler = (questionAmount: number) => {
     );
     networkManager.onGameEnd((input) => {
         hasGameEnded = true;
-        // Wow look I know how to use optional chaining
-        gameEnd(window.currentUserConfig, [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], input[networkManager.authInstance.currentUser!.uid]?.place);
+        let firstThreePlayers: number[][] = [];
+        Object.values(input).forEach((element) => {
+            if (element.place <= 3) {
+                firstThreePlayers[element.place - 1] = element.playerConfig;
+            }
+        });
+        gameEnd(firstThreePlayers[0], firstThreePlayers[1], firstThreePlayers[2], input[networkManager.authInstance.currentUser!.uid].place);
     });
 };
 
@@ -239,8 +244,8 @@ function gameEnd(firstPlace: number[], secondPlace: number[], thirdPlace: number
     clearInterval(otherInterval);
     $('gameResults').style.display = 'block';
     setCharImage('firstPlace', firstPlace);
-    setCharImage('secondPlace', secondPlace);
-    setCharImage('thirdPlace', thirdPlace);
+    secondPlace ? setCharImage('secondPlace', secondPlace) : setCharImage('secondPlace', [1, 2, 2, 2, -1]);
+    thirdPlace ? setCharImage('thirdPlace', thirdPlace) : setCharImage('thirdPlace', [1, 2, 2, 2, -1]);
     $('userEndPlaceNumber').textContent = yourPlace.toString();
     $('currentUserEndPlaceSup').textContent = ordinalSuffix(yourPlace);
     setTimeout(() => {
