@@ -2,7 +2,7 @@
  * @license mamkEngine Copyright (c) 2021 Ilya Strugatskiy. All rights reserved.
  */
 import { getAuth, signOut } from 'firebase/auth';
-import { networkManager } from './networkEngine';
+import { httpsCallable } from './firebaseFunctionsLite';
 let hasLoggedOut = false;
 let timerOffset = 0;
 
@@ -426,10 +426,9 @@ export const call = (inputFunction: unknown) => {
  * Initializes the time handler in the background.
  */
 export const timeHandler = async () => {
-    await networkManager
-        .getTime()
-        .then((serverTime) => {
-            timerOffset = Date.now() - serverTime;
+    httpsCallable('timeSync')()
+        .then(({ data }) => {
+            timerOffset = data.message <= Date.now() ? Date.now() - data.message : data.message - Date.now();
         })
         .catch(() => {
             setTimeout(() => {

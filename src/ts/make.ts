@@ -6,7 +6,10 @@ import '../css/make.css';
 import dragula from 'dragula';
 import { $, characterCount, deepEqual, createTemplate, setTitle, clearChildren, getID, AudioManager, mathClamp, download, call, getCurrentDate } from './utils';
 import { setCharImage } from './app';
-import { networkManager } from './networkEngine';
+import { getDatabase, onChildAdded, onChildRemoved, onValue, ref, set, Unsubscribe } from 'firebase/database';
+import { getAuth } from 'firebase/auth';
+import { globals } from './globals';
+import { actuallyStartGame, handleCurrentQuiz, networkKickPlayer, setQuiz, setQuizList, startGame } from './networkEngine';
 
 let editState = false;
 interface answer {
@@ -46,6 +49,16 @@ let mainAudio: AudioManager;
 let clearableTimeout: number;
 let clearableTimeout2: number;
 let otherInterval: number;
+let finishUpInterval: number;
+const database = getDatabase();
+const auth = getAuth();
+let unsubHandler: Unsubscribe;
+let alreadyAware: { [key: string]: { playerName: string; playerConfig: number[] } };
+let playerJoinedHandler: Unsubscribe;
+let playerLeftHandler: Unsubscribe;
+let leaderboardHandler: Unsubscribe;
+let prevLeaderboardValues: { [key: string]: { currentQuestion: number; playerName: string } } = {};
+let otherTimeout: number;
 
 let clickListeners = {
     deleteQuizConfirm: () => {
@@ -132,7 +145,7 @@ let clickIncludesListeners = {
         (event.target as HTMLElement).disabled = true;
         (event.target as HTMLElement).tabIndex = -1;
         (event.target as HTMLElement).style.pointerEvents = 'none';
-        networkManager.kickPlayer(studentID);
+        networkKickPlayer(studentID);
     },
     quizID_: (event: Event) => {
         quizButtonOnClick(event);
@@ -171,7 +184,7 @@ let keyboardIncludesListeners = {
         (event.target as HTMLElement).disabled = true;
         (event.target as HTMLElement).tabIndex = -1;
         (event.target as HTMLElement).style.pointerEvents = 'none';
-        networkManager.kickPlayer(studentID);
+        networkKickPlayer(studentID);
     },
 };
 
@@ -243,7 +256,7 @@ function createNewQuiz() {
     button.textContent = '';
     createTemplate('svgLoader', button.id);
     quizList[`quizID_${Object.keys(quizList).length}`] = quizName;
-    networkManager.setQuizList(quizName, () => {
+    setQuizList(quizName, () => {
         setTimeout(() => {
             checkOnce = true;
             exitModalPopupTemplate('createQuizMenu');
@@ -538,20 +551,25 @@ export function addQuiz() {
     }
 }
 
-networkManager.quitQuizTeacher = () => {
+globals.quitQuizTeacher = quitQuizTeacher;
+
+function quitQuizTeacher() {
+    clearInterval(finishUpInterval);
+    clearInterval(otherTimeout);
     $('liveLeaderboards').style.display = 'none';
     clearTimeout(clearableTimeout);
     clearTimeout(clearableTimeout2);
     $('errorActual').textContent = 'Game Has Ended';
     $('errorMessageA').style.display = 'block';
+    $('gameFinishNotify').style.display = 'none';
     clearChildren('characterPeopleDiv');
     $('gameStartButtonTeacher').classList.add('btnTransitionA');
     $('gameCodeTeacher').classList.add('btnTransitionA');
     $('teacherCountdown').style.display = 'none';
-    call(networkManager.removeStudentHandler);
-    call(networkManager.otherStudentHandler);
-    call(networkManager.unsubHandler);
-    call(networkManager.leaderboardHandler);
+    call(playerJoinedHandler);
+    call(playerLeftHandler);
+    call(unsubHandler);
+    call(leaderboardHandler);
     clearTimeout(otherInterval);
     setTimeout(() => {
         $('loader-1').style.display = 'none';
@@ -561,7 +579,7 @@ networkManager.quitQuizTeacher = () => {
     $('liveLeaderboards').style.display = 'none';
     $('title').style.display = 'block';
     goBackMakeA();
-};
+}
 
 function quizButtonOnClick(event: Event) {
     const eventTarget = (event.target! as HTMLElement).id;
@@ -577,7 +595,7 @@ function quizButtonOnClick(event: Event) {
         document.querySelector('.backButtonC')!.disabled = true;
         document.querySelector('.backButtonC')!.classList.add('btnTransitionA');
         currentQuizEdit = eventTarget;
-        networkManager.handleCurrentQuiz(currentQuizEdit.replace('quizID_', ''), (val) => {
+        handleCurrentQuiz(currentQuizEdit.replace('quizID_', ''), (val) => {
             $('playQuiz').disabled = val === null;
             $('shareQuiz').disabled = val === null;
             $('submitQuizID').textContent = 'Create';
@@ -665,7 +683,7 @@ export function playQuiz() {
     exitModalPopupTemplate('manageQuizMenu');
     $('title').style.display = 'none';
     playerNumber = 0;
-    networkManager.startGame(
+    startGame(
         (value) => {
             $('gameStartButtonTeacher').disabled = true;
             $('gameCodeTeacher').textContent = `Game Code: ${value.message.toString().slice(0, 5)}-${value.message.toString().slice(5)}`;
@@ -673,14 +691,21 @@ export function playQuiz() {
             mainAudio.play('mainTheme', true);
             mainAudio.setVolume('mainTheme', 0.6);
             $('teacherPlayScreen').style.display = 'block';
-            networkManager.studentHandler(
-                (internal, playerID) => {
-                    renderPlayer(internal.playerName, internal.playerConfig, playerID);
-                },
-                (playerID) => {
-                    kickPlayer(playerID);
+            alreadyAware = {};
+            playerJoinedHandler = onChildAdded(ref(database, `actualGames/${auth.currentUser!.uid}/players/`), (snap) => {
+                if (alreadyAware[snap.key!] !== null) {
+                    const val = snap.val() as { playerName: string; playerConfig: number[] };
+                    renderPlayer(val.playerName, val.playerConfig, snap.key!);
                 }
-            );
+                alreadyAware[snap.key!] = snap.val();
+            });
+
+            playerLeftHandler = onChildRemoved(ref(database, `actualGames/${auth.currentUser!.uid}/players/`), (snap) => {
+                if (alreadyAware[snap.key!] !== snap.val()) {
+                    kickPlayer(snap.key!);
+                }
+                alreadyAware[snap.key!] = snap.val();
+            });
         },
         currentQuizEdit ? currentQuizEdit.replace('quizID_', '') : ''
     );
@@ -713,15 +738,15 @@ function kickPlayer(eventId: string) {
 }
 
 export function startGameTeacher(shouldHandle: boolean) {
-    call(networkManager.removeStudentHandler);
-    call(networkManager.otherStudentHandler);
+    call(playerJoinedHandler);
+    call(playerLeftHandler);
     $('gameStartButtonTeacher').disabled = true;
     const people = Array.from($('characterPeopleDiv').children);
     people.forEach((object) => {
         object.disabled = true;
         object.classList.add('btnTransitionA');
     });
-    if (networkManager.removeStudentHandler === null || networkManager.removeStudentHandler === undefined || shouldHandle) {
+    if (playerJoinedHandler === null || playerJoinedHandler === undefined || shouldHandle) {
         !mainAudio || mainAudio.clearAll();
         mainAudio = new AudioManager({
             mainTheme: 'data/MainTheme.mp3',
@@ -733,75 +758,48 @@ export function startGameTeacher(shouldHandle: boolean) {
         $('gameCodeTeacher').style.display = 'none';
         completeProcess();
     } else {
-        networkManager.actuallyStartGame(() => {
+        actuallyStartGame(() => {
             completeProcess();
             mainAudio.setVolume('mainTheme', 0);
         });
     }
     function completeProcess() {
-        networkManager.trackLeaderboards(
-            (data) => {
-                const fragment = document.createDocumentFragment();
-                const templateElement = document.createElement('div');
-                templateElement.classList.add('button', 'inGamePlayerButton', 'buttonLikeTitle');
-                templateElement.appendChild(document.createElement('b'));
-                data.forEach((value, index) => {
-                    const clone = templateElement.cloneNode(true) as HTMLElement;
-                    clone.id = `playerList_${value.key}`;
-                    clone.firstElementChild!.textContent = `${(index + 1).toString()}. `;
-                    clone.style = `--c: ${index}`;
-                    clone.appendChild(document.createTextNode(` ${value.playerName}`));
-                    fragment.appendChild(clone);
-                    index++;
-                });
-                clearChildren('playerContainer');
-                $('playerContainer').appendChild(fragment);
-            },
-            (id) => {
-                $(`playerList_${id}`).style.maxWidth = '600px';
-                $(`playerList_${id}`).style.transition = '';
-                $(`playerList_${id}`).classList.remove('inGamePlayerButton');
-                setTimeout(() => {
-                    $(`playerList_${id}`).classList.add('btnTransitionA');
-                    setTimeout(() => {
-                        $(`playerList_${id}`).remove();
-                    }, 300);
-                }, 300);
-            },
-            (data) => {
-                data.forEach((value, index) => {
-                    const container = $('playerContainer');
-                    const currentChild = container.children![index];
-                    if (currentChild.id.replace('playerList_', '') !== value.key || currentChild.firstElementChild?.textContent !== `${index + 1}. `) {
-                        if ($(`playerList_${value.key}`).style.maxWidth == '600px') {
-                            doMagic();
-                        } else {
-                            $(`playerList_${value.key}`).style.maxWidth = '600px';
-                            $(`playerList_${value.key}`).classList.remove('inGamePlayerButton');
-                            setTimeout(() => {
-                                doMagic();
-                            }, 300);
-                        }
-
-                        function doMagic() {
-                            currentChild.style.transition = 'color 0.3s';
-                            currentChild.style.color = '#fff';
-                            setTimeout(() => {
-                                currentChild.style.color = '#000';
-                                currentChild.firstElementChild!.textContent = `${index + 1}.`;
-                                currentChild.lastChild!.remove();
-                                currentChild.appendChild(document.createTextNode(` ${value.playerName}`));
-                                currentChild.id = `playerList_${value.key}`;
-                                currentChild.style.opacity = 1;
-                            }, 300);
-                        }
+        let firstTime = true;
+        prevLeaderboardValues = {};
+        globals.alreadyInGame = true;
+        leaderboardHandler = onValue(ref(database, `actualGames/${auth.currentUser!.uid}/leaderboards`), (snap) => {
+            if (!snap.val()) {
+                call(leaderboardHandler);
+                return;
+            }
+            if (firstTime) {
+                createLeaderboard(sortArray(snap.val()));
+            } else {
+                let check = false;
+                Object.keys(prevLeaderboardValues).forEach((key) => {
+                    if (!snap.val()[key]) {
+                        removePlayerLeaderboard(key);
+                        setTimeout(() => {
+                            updateLeaderboard(sortArray(snap.val()));
+                        }, 1500);
+                        check = true;
                     }
                 });
+                if (check) {
+                    setTimeout(() => {
+                        updateLeaderboard(sortArray(snap.val()));
+                    }, 1000);
+                } else {
+                    updateLeaderboard(sortArray(snap.val()));
+                }
             }
-        );
-        networkManager.handleGameState(`actualGames/${networkManager.authInstance.currentUser!.uid}/`, (snap) => {
-            if (snap && snap.gameEnd) {
-                gameFinish((snap.gameEnd + 15000 - getCurrentDate()) / 1000);
+            prevLeaderboardValues = snap.val();
+            firstTime = false;
+        });
+        unsubHandler = onValue(ref(database, `actualGames/${auth.currentUser!.uid}/globalState`), (snap) => {
+            const val = snap.val() as { isRunning: boolean; totalQuestions: number; gameEnd: number };
+            if (val && val.gameEnd) {
+                gameFinish((val.gameEnd + 15000 - getCurrentDate()) / 1000);
             }
         });
         $('gameStartButtonTeacher').classList.add('btnTransitionA');
@@ -818,6 +816,107 @@ export function startGameTeacher(shouldHandle: boolean) {
             $('liveLeaderboards').style.display = 'block';
         }, 5000);
     }
+}
+
+function gameFinish(timeLeft: number) {
+    $('gameFinishNotify').style.display = 'block';
+    $('gameFinishNotify').textContent = `The game will end in ${timeLeft}s`;
+    let start = Date.now();
+    let init = timeLeft;
+    clearInterval(finishUpInterval);
+    finishUpInterval = window.setInterval(() => {
+        let delta = (Date.now() - start) / 1000;
+        let internal = init - delta;
+        if (internal < 0) {
+            internal = 0;
+        }
+        $('gameFinishNotify').textContent = `The game will end in ${Math.floor(internal)}s`;
+    }, 100);
+    otherTimeout = window.setTimeout(() => {
+        clearInterval(finishUpInterval);
+        $('gameFinishNotify').style.animation = 'fadeOut 0.3s';
+        setTimeout(() => {
+            $('gameFinishNotify').style.display = 'none';
+            $('gameFinishNotify').style.animation = 'flowFromTop 1s forwards';
+        }, 300);
+    }, (timeLeft as number) * 1000);
+}
+
+function createLeaderboard(data: { key: string; currentQuestion: number; playerName: string }[]) {
+    const fragment = document.createDocumentFragment();
+    const templateElement = document.createElement('div');
+    templateElement.classList.add('button', 'inGamePlayerButton', 'buttonLikeTitle');
+    templateElement.appendChild(document.createElement('b'));
+    data.forEach((value, index) => {
+        const clone = templateElement.cloneNode(true) as HTMLElement;
+        clone.id = `playerList_${value.key}`;
+        clone.firstElementChild!.textContent = `${(index + 1).toString()}. `;
+        clone.style = `--c: ${index}`;
+        clone.appendChild(document.createTextNode(` ${value.playerName}`));
+        fragment.appendChild(clone);
+        index++;
+    });
+    clearChildren('playerContainer');
+    $('playerContainer').appendChild(fragment);
+}
+
+function removePlayerLeaderboard(id: string) {
+    $(`playerList_${id}`).style.maxWidth = '600px';
+    $(`playerList_${id}`).style.transition = '';
+    $(`playerList_${id}`).classList.remove('inGamePlayerButton');
+    setTimeout(() => {
+        $(`playerList_${id}`).classList.add('btnTransitionA');
+        setTimeout(() => {
+            $(`playerList_${id}`).remove();
+        }, 300);
+    }, 300);
+}
+
+function updateLeaderboard(data: { key: string; currentQuestion: number; playerName: string }[]) {
+    data.forEach((value, index) => {
+        const container = $('playerContainer');
+        const currentChild = container.children![index];
+        if (currentChild.id.replace('playerList_', '') !== value.key || currentChild.firstElementChild?.textContent !== `${index + 1}. `) {
+            if ($(`playerList_${value.key}`).style.maxWidth == '600px') {
+                doMagic();
+            } else {
+                $(`playerList_${value.key}`).style.maxWidth = '600px';
+                $(`playerList_${value.key}`).classList.remove('inGamePlayerButton');
+                setTimeout(() => {
+                    doMagic();
+                }, 300);
+            }
+
+            function doMagic() {
+                currentChild.style.transition = 'color 0.3s';
+                currentChild.style.color = '#fff';
+                setTimeout(() => {
+                    currentChild.style.color = '#000';
+                    currentChild.firstElementChild!.textContent = `${index + 1}.`;
+                    currentChild.lastChild!.remove();
+                    currentChild.appendChild(document.createTextNode(` ${value.playerName}`));
+                    currentChild.id = `playerList_${value.key}`;
+                    currentChild.style.opacity = 1;
+                }, 300);
+            }
+        }
+    });
+}
+
+function sortArray(input: { [key: string]: { currentQuestion: number; playerName: string } }) {
+    let tempArray: { key: string; currentQuestion: number; playerName: string }[] = [];
+    for (const [key, value] of Object.entries(input)) {
+        tempArray.push({
+            key: key,
+            currentQuestion: value.currentQuestion,
+            playerName: value.playerName,
+        });
+    }
+    return tempArray.sort((a, b) => {
+        const firstEl = a as { currentQuestion: number; playerName: string };
+        const secondEl = b as { currentQuestion: number; playerName: string };
+        return secondEl.currentQuestion - firstEl.currentQuestion;
+    });
 }
 
 function doCountdown() {
@@ -865,8 +964,8 @@ function deleteQuiz() {
 
 function deleteQuizConfirm() {
     delete quizList[currentQuizEdit];
-    networkManager.setQuizList(quizList[currentQuizEdit], () => {}, currentQuizEdit.replace('quizID_', ''));
-    networkManager.setQuiz(currentQuizEdit.replace('quizID_', ''), null, () => {
+    setQuizList(quizList[currentQuizEdit], () => {}, currentQuizEdit.replace('quizID_', ''));
+    setQuiz(currentQuizEdit.replace('quizID_', ''), null, () => {
         exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm');
     });
     $('deleteQuizConfirm').disabled = true;
@@ -883,7 +982,8 @@ function editQuiz() {
     $('shareQuiz').disabled = true;
     $('editQuiz').disabled = true;
     $('deleteQuiz').disabled = true;
-    networkManager.handleCurrentQuiz(currentQuizEdit.replace('quizID_', ''), (val) => {
+    activeArea = null;
+    handleCurrentQuiz(currentQuizEdit.replace('quizID_', ''), (val) => {
         $('manageQuizMenu').style.animation = 'modalPopout 0.3s';
         if (val === undefined || val === null) {
             quizObject2[currentQuizEdit] = JSON.parse(JSON.stringify(quizObject));
@@ -963,8 +1063,8 @@ function editQuizForm() {
     } else {
         quizObject2[currentQuizEdit] = tempQuiz;
         quizList[currentQuizEdit] = $('quizNameUpdate').value;
-        networkManager.setQuizList(quizList[currentQuizEdit], () => {}, currentQuizEdit.replace('quizID_', ''));
-        networkManager.setQuiz(tempQuiz.quizID.replace('quizID_', ''), tempQuiz, () => {
+        setQuizList(quizList[currentQuizEdit], () => {}, currentQuizEdit.replace('quizID_', ''));
+        setQuiz(tempQuiz.quizID.replace('quizID_', ''), tempQuiz, () => {
             setTimeout(() => {
                 exitModalPopupF(false);
                 setTimeout(() => {
@@ -983,7 +1083,7 @@ function editQuizForm() {
 
 function shareQuiz() {
     $('actuallyShareQuiz').disabled = true;
-    networkManager.handleCurrentQuiz(currentQuizEdit.replace('quizID_', ''), (value) => {
+    handleCurrentQuiz(currentQuizEdit.replace('quizID_', ''), (value) => {
         $('actuallyShareQuiz').disabled = false;
         if (value == null) {
             $('coolTextArea').value = 'An empty quiz cannot be shared!';
@@ -1014,13 +1114,15 @@ function actuallyShareQuiz() {
         $('actuallyShareQuiz').style.display = 'none';
         $('whenActuallyShared').style.display = 'block';
     }
-    networkManager.shareQuiz(currentQuizEdit.replace('quizID_', ''), quizObject2[currentQuizEdit], (obj) => {
-        $('coolTextArea').value = `mamklearn.com/?shareUser=${networkManager.authInstance.currentUser!.uid}&shareQuiz=${obj}`;
-        setTimeout(() => {
-            $('actuallyShareQuiz').style.display = 'none';
-            $('whenActuallyShared').style.display = 'block';
-            quizObject2[currentQuizEdit].isShared = true;
-        }, 300);
+    set(ref(database, `sharedQuizzes/${auth.currentUser!.uid}/${currentQuizEdit.replace('quizID_', '')}`), quizObject2[currentQuizEdit]).then(() => {
+        set(ref(database, `userProfiles/${auth.currentUser!.uid}/quizData/${currentQuizEdit.replace('quizID_', '')}/isShared`), true).then(() => {
+            $('coolTextArea').value = `mamklearn.com/?shareUser=${auth.currentUser!.uid}&shareQuiz=${currentQuizEdit.replace('quizID_', '')}`;
+            setTimeout(() => {
+                $('actuallyShareQuiz').style.display = 'none';
+                $('whenActuallyShared').style.display = 'block';
+                quizObject2[currentQuizEdit].isShared = true;
+            }, 300);
+        });
     });
 }
 
@@ -1031,27 +1133,4 @@ function copyShareLink() {
     setTimeout(() => {
         $('errorMessageA').style.display = 'none';
     }, 1000);
-}
-
-function gameFinish(timeLeft: number) {
-    $('gameFinishNotify').style.display = 'block';
-    $('gameFinishNotify').textContent = `The game will end in ${timeLeft}s`;
-    let start = Date.now();
-    let init = timeLeft;
-    let finishUpInterval = window.setInterval(() => {
-        let delta = (Date.now() - start) / 1000;
-        let internal = init - delta;
-        if (internal < 0) {
-            internal = 0;
-        }
-        $('gameFinishNotify').textContent = `The game will end in ${Math.floor(internal)}s`;
-    }, 100);
-    otherInterval = window.setTimeout(() => {
-        clearInterval(finishUpInterval);
-        $('gameFinishNotify').style.animation = 'fadeOut 0.3s';
-        setTimeout(() => {
-            $('gameFinishNotify').style.display = 'none';
-            $('gameFinishNotify').style.animation = 'flowFromTop 1s forwards';
-        }, 300);
-    }, (timeLeft as number) * 1000);
 }

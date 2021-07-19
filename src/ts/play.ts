@@ -3,7 +3,10 @@
  */
 import { $, mathClamp, getID, ordinalSuffix, clearChildren, call, getCurrentDate } from './utils';
 import { setCharImage, goBack } from './app';
-import { networkManager } from './networkEngine';
+import { getDatabase, onValue, ref, Unsubscribe } from 'firebase/database';
+import { globals } from './globals';
+import { getAuth } from 'firebase/auth';
+import { networkSubmitQuestion, onGameEnd } from './networkEngine';
 
 interface studentQuestion {
     questionName: string;
@@ -17,6 +20,10 @@ let [otherInterval, timerInterval, finishUpInterval, bottomBarOffset, currentQue
 let isGameLive: boolean;
 let timeouts: number[] = [];
 let hasGameEnded = false;
+let unsubHandler: Unsubscribe;
+let studentPlayListener: Unsubscribe;
+
+const database = getDatabase();
 
 let clickListeners = {
     shortAnswerSubmitButton: () => {
@@ -44,99 +51,113 @@ export const initEvents = () => {
     window.keyboardIncludesEvents = { ...window.keyboardIncludesEvents, ...keyboardIncludesListeners };
 };
 
+const initGameStudent = (questionNumber: number, question: studentQuestion, isCorrect: boolean, questionAmount: number) => {
+    currentQuestion = questionNumber;
+    totalQuestions = questionAmount;
+    bottomBarOffset = 15;
+    for (let i = 0; i <= currentQuestion; i++) {
+        updateStudentLocation(i);
+    }
+    isGameLive = true;
+    if (isCorrect) {
+        kickPlayer();
+        clearInterval(timerInterval);
+        clearInterval(finishUpInterval);
+        clearInterval(otherInterval);
+    }
+    setCharImage('player', window.currentUserConfig);
+    let studentRaceBoxNumbers = document.createDocumentFragment();
+    for (let i = 1; i <= totalQuestions; i++) {
+        let node = document.createElement('th');
+        node.textContent = i.toString();
+        studentRaceBoxNumbers.appendChild(node);
+    }
+    let node = document.createElement('th');
+    node.textContent = 'finish';
+    studentRaceBoxNumbers.appendChild(node);
+    clearChildren('studentRaceNumbers');
+    $('studentRaceNumbers').appendChild(studentRaceBoxNumbers);
+    $('gameStartScreenStudent').style.animation = 'fadeOut 0.5s forwards';
+    setTimeout(() => {
+        $('gameStartScreenStudent').style.display = 'none';
+        $('gameStartScreenStudent').style.animation = '';
+    }, 500);
+    if (questionNumber > totalQuestions && isCorrect) {
+        updateStudentLocation(currentQuestion);
+        $('errorMessageB').style.display = 'block';
+        return;
+    }
+    $('mainLoader').classList.remove('loader--active');
+    $('title').style.display = 'none';
+    $('studentPlayScreen').style.display = 'block';
+    setQuestion(question);
+    setTimeout(() => {
+        $('loader-1').style.display = 'none';
+        $('errorMessageA').style.display = 'none';
+    }, 1000);
+};
+
+const updateQuestion = (questionNumber: number, question: studentQuestion) => {
+    currentQuestion = questionNumber;
+    clearInterval(timerInterval);
+    clearInterval(otherInterval);
+    if (questionNumber <= totalQuestions) {
+        Array.from($('studentAnswersFlex').children).forEach((object) => {
+            object.classList.add('transitionQuestionB');
+            setTimeout(() => {
+                while (object.firstElementChild!.firstChild) object.firstElementChild!.removeChild(object.firstElementChild!.lastChild!);
+                object.disabled = false;
+                object.classList.remove('transitionQuestionB');
+                object.classList.add('transitionQuestionC');
+                setTimeout(() => {
+                    object.classList.remove('transitionQuestionC');
+                }, 400);
+            }, 400);
+        });
+        $('titleButtonStudent').classList.add('transitionQuestionA');
+        $('studentShortAnswer').classList.add('transitionQuestionB');
+        setTimeout(() => {
+            setQuestion(question);
+        }, 400);
+        // Separate timeout to get on a separate thread and fix random flickering
+        setTimeout(() => {
+            $('studentShortAnswer').classList.add('transitionQuestionC');
+            $('studentShortAnswer').classList.remove('transitionQuestionB');
+        }, 400);
+        setTimeout(() => {
+            $('titleButtonStudent').classList.remove('transitionQuestionA');
+            $('studentShortAnswer').classList.remove('transitionQuestionC');
+        }, 800);
+    } else {
+        updateStudentLocation(currentQuestion);
+        $('errorMessageB').style.display = 'block';
+    }
+};
+
 export const initQuestionHandler = (questionAmount: number) => {
-    networkManager.handleGameState(window.currentGameState.location, (val) => {
+    call(unsubHandler);
+    unsubHandler = onValue(ref(database, `${window.currentGameState.location}globalState`), (snap) => {
+        const val = snap.val() as { isRunning: boolean; totalQuestions: number; gameEnd: number };
         if (val && val.gameEnd) {
             gameFinish((val.gameEnd + 15000 - getCurrentDate()) / 1000);
         }
     });
-    networkManager.studentListener(
-        (questionNumber, question, isCorrect) => {
-            currentQuestion = questionNumber;
-            totalQuestions = questionAmount;
-            bottomBarOffset = 15;
-            for (let i = 0; i <= currentQuestion; i++) {
-                updateStudentLocation(i);
-            }
-            isGameLive = true;
-            if (isCorrect) {
-                kickPlayer();
-                clearInterval(timerInterval);
-                clearInterval(finishUpInterval);
-                clearInterval(otherInterval);
-            }
-            setCharImage('player', window.currentUserConfig);
-            let studentRaceBoxNumbers = document.createDocumentFragment();
-            for (let i = 1; i <= totalQuestions; i++) {
-                let node = document.createElement('th');
-                node.textContent = i.toString();
-                studentRaceBoxNumbers.appendChild(node);
-            }
-            let node = document.createElement('th');
-            node.textContent = 'finish';
-            studentRaceBoxNumbers.appendChild(node);
-            clearChildren('studentRaceNumbers');
-            $('studentRaceNumbers').appendChild(studentRaceBoxNumbers);
-            $('gameStartScreenStudent').style.animation = 'fadeOut 0.5s forwards';
-            setTimeout(() => {
-                $('gameStartScreenStudent').style.display = 'none';
-                $('gameStartScreenStudent').style.animation = '';
-            }, 500);
-            if (questionNumber > totalQuestions && isCorrect) {
-                updateStudentLocation(currentQuestion);
-                $('errorMessageB').style.display = 'block';
-                return;
-            }
-            $('mainLoader').classList.remove('loader--active');
-            $('title').style.display = 'none';
-            $('studentPlayScreen').style.display = 'block';
-            setQuestion(question);
-            setTimeout(() => {
-                $('loader-1').style.display = 'none';
-                $('errorMessageA').style.display = 'none';
-            }, 1000);
-        },
-        (questionNumber, question) => {
-            currentQuestion = questionNumber;
-            clearInterval(timerInterval);
-            clearInterval(otherInterval);
-            if (questionNumber <= totalQuestions) {
-                Array.from($('studentAnswersFlex').children).forEach((object) => {
-                    object.classList.add('transitionQuestionB');
-                    setTimeout(() => {
-                        while (object.firstElementChild!.firstChild) object.firstElementChild!.removeChild(object.firstElementChild!.lastChild!);
-                        object.disabled = false;
-                        object.classList.remove('transitionQuestionB');
-                        object.classList.add('transitionQuestionC');
-                        setTimeout(() => {
-                            object.classList.remove('transitionQuestionC');
-                        }, 400);
-                    }, 400);
-                });
-                $('titleButtonStudent').classList.add('transitionQuestionA');
-                $('studentShortAnswer').classList.add('transitionQuestionB');
-                setTimeout(() => {
-                    setQuestion(question);
-                }, 400);
-                // Separate timeout to get on a separate thread and fix random flickering
-                setTimeout(() => {
-                    $('studentShortAnswer').classList.add('transitionQuestionC');
-                    $('studentShortAnswer').classList.remove('transitionQuestionB');
-                }, 400);
-                setTimeout(() => {
-                    $('titleButtonStudent').classList.remove('transitionQuestionA');
-                    $('studentShortAnswer').classList.remove('transitionQuestionC');
-                }, 800);
-            } else {
-                updateStudentLocation(currentQuestion);
-                $('errorMessageB').style.display = 'block';
-            }
-        },
-        (question, endTime) => {
-            questionValidationFailed(question, endTime);
+    let firstTime = true;
+    studentPlayListener = onValue(ref(database, `${window.currentGameState.location}players/${getAuth().currentUser!.uid}/`), (snap) => {
+        const val = snap.val();
+        if (!val) return;
+        if (val.timePenaltyEnd > getCurrentDate()) {
+            questionValidationFailed(val.currentQuestion, val.timePenaltyEnd);
+            if (firstTime) initGameStudent(val.currentQuestionNumber, val.currentQuestion, false, questionAmount);
+            firstTime = false;
+        } else if (firstTime) {
+            initGameStudent(val.currentQuestionNumber, val.currentQuestion, true, questionAmount);
+        } else if (val.currentQuestionNumber) {
+            updateQuestion(val.currentQuestionNumber, val.currentQuestion);
         }
-    );
-    networkManager.onGameEnd((input) => {
+        firstTime = false;
+    });
+    onGameEnd((input) => {
         hasGameEnded = true;
         let firstThreePlayers: number[][] = [];
         Object.values(input).forEach((element) => {
@@ -144,11 +165,11 @@ export const initQuestionHandler = (questionAmount: number) => {
                 firstThreePlayers[element.place - 1] = element.playerConfig;
             }
         });
-        gameEnd(firstThreePlayers[0], firstThreePlayers[1], firstThreePlayers[2], input[networkManager.authInstance.currentUser!.uid].place);
+        gameEnd(firstThreePlayers[0], firstThreePlayers[1], firstThreePlayers[2], input[getAuth().currentUser!.uid].place);
     });
 };
 
-networkManager.quitQuizStudent = () => {
+globals.quitQuizStudent = () => {
     if (!hasGameEnded) {
         kickPlayer(true);
     }
@@ -221,6 +242,7 @@ function gameFinish(timeLeft: number) {
     $('gameFinishNotify').textContent = `The game will end in ${timeLeft}s`;
     let start = Date.now();
     let init = timeLeft;
+    clearInterval(finishUpInterval);
     finishUpInterval = window.setInterval(() => {
         let delta = (Date.now() - start) / 1000;
         let internal = init - delta;
@@ -281,8 +303,8 @@ function kickPlayer(special: boolean = false, specialText: string = 'Kicked From
             $('errorMessageA').style.display = 'none';
         }, 1000);
         $('gameStartScreenStudent').style.display = 'none';
-        call(networkManager.studentPlayListener);
-        call(networkManager.unsubHandler);
+        call(studentPlayListener);
+        call(unsubHandler);
         isGameLive = false;
         goBack();
         clearTimeout(timeouts[3]);
@@ -381,7 +403,7 @@ function updateStudentLocation(studentLocation: number) {
 }
 
 function answerQuestion(answer: string) {
-    networkManager.submitQuestion(answer);
+    networkSubmitQuestion(answer);
 }
 
 function submitMultipleChoice(event: string) {

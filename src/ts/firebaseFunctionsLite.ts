@@ -2,7 +2,7 @@
  * @license mamkEngine Copyright (c) 2021 Ilya Strugatskiy. All rights reserved.
  */
 
-import { networkManager } from './networkEngine';
+import { getAuth } from 'firebase/auth';
 
 const location = 'https://us-central1-mamaroneck-learn.cloudfunctions.net/';
 
@@ -13,8 +13,9 @@ const location = 'https://us-central1-mamaroneck-learn.cloudfunctions.net/';
  * @return {Promise<Any>}
  */
 export const httpsCallable = (functionName: string) => {
+    const auth = getAuth();
     return async (payload?: any) => {
-        const token = await networkManager.authInstance.currentUser!.getIdToken();
+        const token = await auth.currentUser!.getIdToken();
         const parsedPayload = {
             data: typeof payload === 'undefined' ? '' : payload,
         };
@@ -26,7 +27,10 @@ export const httpsCallable = (functionName: string) => {
             },
             body: JSON.stringify(parsedPayload),
         });
-        return new Promise<any>((resolve, reject) => {
+        if (response.status > 299 || response.status < 200) {
+            throw new Error('Server Error');
+        }
+        return new Promise<{ data: any }>((resolve, reject) => {
             response
                 .json()
                 .then((val) =>

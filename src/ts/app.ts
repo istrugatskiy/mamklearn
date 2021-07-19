@@ -5,16 +5,35 @@ import '../css/globals.css';
 import '../css/button.css';
 import '../css/loader.css';
 import '../css/style.css';
-import { $, createTemplate, setTitle, logOut, clearChildren, loadChonk } from './utils';
+import { $, createTemplate, setTitle, logOut, clearChildren, loadChonk, timeHandler, throwExcept, call } from './utils';
 import { eventHandle } from './events';
 import { initParticles } from './loadParticles';
-import { networkManager } from './networkEngine';
+import { child, getDatabase, onValue, push, ref, Reference, set } from 'firebase/database';
+import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from 'firebase/auth';
+import { globals } from './globals';
+import { leaveGame, networkJoinGameStudent, setQuiz } from './networkEngine';
 
 interface eventList {
     [key: string]: (event: Event) => void;
 }
 interface keyboardEventList {
     [key: string]: (event: KeyboardEvent) => void;
+}
+interface answer {
+    answer: string | null;
+    correct: boolean;
+}
+interface questionObject {
+    questionName: string;
+    shortAnswer: boolean;
+    timeLimit: string | boolean;
+    Answers: [answer, answer, answer, answer];
+}
+interface quizObject {
+    quizID: string;
+    quizName: string;
+    isShared: boolean;
+    questionObjects: questionObject[];
 }
 declare global {
     interface Window {
@@ -31,21 +50,122 @@ window.customOptionsIncrement = 0;
 window.currentUserConfig = [0, 0, 0, 0, 0];
 let prevRejected = false;
 const customOptions = ['Eyes', 'Nose', 'Mouth', 'Shirt', 'Arms'];
+const provider = new GoogleAuthProvider();
+let currentUser: Reference;
+let charConfig: Reference;
+let quizList: Reference;
+let makeMenuInitialized = false;
+let newQuizData: { [key: string]: string } = {};
 let makeObj: typeof import('./make');
 
 // Creates a console message that rickrolls you
 console.log('%cUse link to get quiz answers:https://bit.ly/31Apj2U', 'font-size: 32px;');
 
+const database = getDatabase();
+const auth = getAuth();
+
 // If the user is logged in initiliaze appropriate code
-networkManager.onReady = () => {
-    initializeApp();
+
+const onReady = () => {
+    initApp();
     eventHandle();
 };
-networkManager.onLoginSuccess = completeLoginFlow;
-networkManager.onLoginFail = () => {
-    const error = $('loginError1');
-    error.style.display = 'block';
-    error.textContent = "Please use an account that ends in 'mamkschools.org' or an approved developer account.";
+
+let hasInitialized = false;
+
+const listener = onAuthStateChanged(
+    auth,
+    (user) => {
+        if (window.location.pathname !== '/index.html' && window.location.pathname !== '/') {
+            onReady();
+            listener();
+            return;
+        }
+        if (user) {
+            if (/.*@mamkschools.org$/.test(user.email!) || /.*@student.mamkschools.org$/.test(user.email!) || /.*@mamklearn.com$/.test(user.email!) || user.email == 'ilyastrug@gmail.com') {
+                currentUser = ref(database, `userProfiles/${getAuth().currentUser!.uid}`);
+                charConfig = child(currentUser, 'charConfig');
+                quizList = child(currentUser, 'quizList');
+                monitorUserState();
+                timeHandler().then(() => {
+                    if (!hasInitialized) {
+                        onReady();
+                        hasInitialized = true;
+                    }
+                    completeLoginFlow();
+                });
+                listener();
+            } else {
+                const error = $('loginError1');
+                error.style.display = 'block';
+                error.textContent = "Please use an account that ends in 'mamkschools.org' or an approved developer account.";
+                getAuth().signOut();
+            }
+        } else if (!hasInitialized) {
+            onReady();
+            hasInitialized = true;
+        }
+    },
+    () => {
+        const error = $('loginError1');
+        error.style.display = 'block';
+        error.textContent = 'A communication error occurred.';
+    }
+);
+
+const monitorUserState = () => {
+    if (window.location.pathname !== '/index.html' && window.location.pathname !== '/') return;
+    onValue(
+        charConfig,
+        (snap) => {
+            if (auth.currentUser) {
+                if (snap.val()) {
+                    window.currentUserConfig = snap.val();
+                    if ($('currentUserArms')) {
+                        setCharImage('currentUser', window.currentUserConfig);
+                    }
+                } else {
+                    for (let index = 0; index < 5; index++) {
+                        set(child(charConfig, index.toString()), 0);
+                    }
+                }
+            }
+        },
+        (error) => {
+            throwExcept(`@MonitorUserState: ${error.message}`);
+        }
+    );
+    onValue(child(currentUser, 'currentGameState/'), (snap) => {
+        if (!globals.alreadyInGame) {
+            if (snap.val() && snap.val().isInGame) {
+                if ($('modal-bg').style.display !== 'block') {
+                    $('title').style.display = 'none';
+                    $('rejoinGame').style.display = 'block';
+                }
+            } else {
+                $('rejoinGame').classList.add('handleOutTransition');
+                setTimeout(() => {
+                    $('quitGameConfirm').disabled = false;
+                    $('rejoinGameConfirm').disabled = false;
+                    $('title').style.display = 'block';
+                    $('rejoinGame').style.display = 'none';
+                    $('rejoinGame').classList.remove('handleOutTransition');
+                }, 300);
+            }
+        } else if (!snap.val()) {
+            globals.alreadyInGame = false;
+            if (window.currentGameState.isTeacher) {
+                call(globals.quitQuizTeacher);
+            } else {
+                call(globals.quitQuizStudent);
+            }
+        }
+        const temp = window.currentGameState ? window.currentGameState.location : '';
+        window.currentGameState = snap.val();
+        if (window.currentGameState) {
+            window.currentGameState.location = temp;
+        }
+    });
 };
 
 const onShareQuiz = () => {
@@ -58,14 +178,37 @@ const onShareQuiz = () => {
     }, 1000);
 };
 
-const initializeApp = () => {
+const getSharedQuiz = (shareUser: string, actualQuiz: string) => {
+    const unsub = onValue(
+        ref(database, `sharedQuizzes/${shareUser}/${actualQuiz}`),
+        (snap) => {
+            if (snap.val()) {
+                push(child(currentUser, 'quizList'), snap.val().quizName).then((object) => {
+                    const newQuizObject: quizObject = snap.val();
+                    newQuizObject.isShared = false;
+                    setQuiz(object.key!, newQuizObject, () => {
+                        onShareQuiz();
+                    });
+                    unsub();
+                });
+            } else {
+                throwExcept('@GetSharedQuiz: quiz does not exist');
+            }
+        },
+        (error) => {
+            throwExcept(`@GetSharedQuiz: ${error.message}`);
+        }
+    );
+};
+
+const initApp = () => {
     $('mainLoader').classList.remove('loader--active');
     initParticles();
     const search = new URLSearchParams(window.location.search);
     const data = search.get('shareUser');
     const otherData = search.get('shareQuiz');
-    if (data && otherData && networkManager.authInstance.currentUser) {
-        networkManager.getSharedQuiz(data, otherData, onShareQuiz);
+    if (data && otherData && auth.currentUser) {
+        getSharedQuiz(data, otherData);
     } else if (data && otherData) {
         prevRejected = true;
         $('loginInstructionsText').textContent = 'Please login with your mamkschools.org account to copy the quiz.';
@@ -125,7 +268,7 @@ window.clickEvents = {
     quitGameConfirm: () => {
         $('quitGameConfirm').disabled = true;
         $('rejoinGameConfirm').disabled = true;
-        networkManager.leaveGame(() => {});
+        leaveGame();
     },
 };
 
@@ -139,7 +282,9 @@ window.submitEvents = {
 window.keyboardIncludesEvents = {};
 
 const login = () => {
-    networkManager.startLogin();
+    signInWithPopup(auth, provider).catch((error) => {
+        $('loginError1').textContent = `${error.code}: ${error.message}`;
+    });
 };
 
 function completeLoginFlow() {
@@ -149,7 +294,7 @@ function completeLoginFlow() {
             const search = new URLSearchParams(window.location.search);
             const data = search.get('shareUser');
             const otherData = search.get('shareQuiz');
-            networkManager.getSharedQuiz(data!, otherData!, onShareQuiz);
+            getSharedQuiz(data!, otherData!);
         }
         $('title').classList.remove('handleOutTransition');
         setTitle('homeScreen');
@@ -181,24 +326,55 @@ function makeCode(isInGame: boolean | Event = false) {
             handleGameState(obj);
             makeObj = obj;
         }
-        networkManager.initQuizList(() => {
+        const renderQuizList = (newQuizData: { [key: string]: string }) => {
             $('title').classList.add('handleOutTransition');
             setTimeout(() => {
                 $('title').classList.remove('handleOutTransition');
                 setTitle('makeMenu');
-                networkManager.setClientQuizList = obj.quizSetter as () => void;
                 $('title').style.top = '100px';
+                obj.quizSetter(newQuizData);
             }, 300);
-        });
+        };
+        if (makeMenuInitialized) {
+            renderQuizList(newQuizData);
+            return;
+        }
+        onValue(
+            quizList,
+            (snap) => {
+                newQuizData = {};
+                if (auth.currentUser) {
+                    if (snap.val()) {
+                        let newSnap = Object.keys(snap.val());
+                        const values = Object.values(snap.val());
+                        newSnap.forEach((el: string, index: number) => {
+                            if (values[index]) {
+                                newQuizData[`quizID_${el}`] = values[index] as string;
+                            }
+                        });
+                    }
+                    if (!makeMenuInitialized) {
+                        renderQuizList(newQuizData);
+                        makeMenuInitialized = true;
+                    } else {
+                        obj.quizSetter(newQuizData);
+                    }
+                }
+            },
+            (error) => {
+                throwExcept(`@InitQuizList: ${error.message}`);
+            }
+        );
     });
 }
 
 function handleGameState(obj: typeof import('./make')) {
     let alreadyRun: boolean = false;
-    networkManager.handleGameState(`actualGames/${networkManager.authInstance.currentUser!.uid}/`, (snap) => {
-        if (snap && snap.isRunning && !networkManager.isMain) {
+    const unsubHandler = onValue(ref(database, `actualGames/${auth.currentUser!.uid}/globalState`), (snap) => {
+        const val = snap.val() as { isRunning: boolean; totalQuestions: number; gameEnd: number };
+        if (val && val.isRunning && !globals.isMain) {
             obj.startGameTeacher(true);
-            networkManager.unsubHandler();
+            unsubHandler();
         } else if (!alreadyRun) {
             obj.playQuiz();
         }
@@ -232,7 +408,7 @@ function joinGameStudent() {
     if ($('gameID').value.length == 8) {
         $('gameID').value = $('gameID').value.slice(0, 5) + '-' + $('gameID').value.slice(5);
     }
-    networkManager.joinGameStudent($('gameID').value, (exists, message) => {
+    networkJoinGameStudent($('gameID').value, (exists, message) => {
         if (exists) {
             loadChonk('play', (obj: typeof import('./play')) => {
                 $('mainLoader').classList.add('loader--active');
@@ -241,9 +417,10 @@ function joinGameStudent() {
                     $('loader-1').style.display = 'none';
                     $('gameStartScreenStudent').style.display = 'block';
                     let firstTime = true;
-                    networkManager.handleGameState(window.currentGameState.location, (val) => {
+                    const unsubHandler = onValue(ref(database, `${window.currentGameState.location}globalState`), (snap) => {
+                        const val = snap.val() as { isRunning: boolean; totalQuestions: number; gameEnd: number };
                         if (val && val.isRunning) {
-                            networkManager.unsubHandler();
+                            unsubHandler();
                             // This is for dealing with the countdown.
                             // We do it on clientside because doing it server side would be a pain.
                             // Plus its only four seconds.
@@ -301,7 +478,9 @@ function updateImageState(data: boolean) {
         }
     }
     setCharImage('currentUser', window.currentUserConfig);
-    networkManager.setCharImage(window.currentUserConfig);
+    window.currentUserConfig.forEach((value, index) => {
+        set(child(charConfig, index.toString()), value);
+    });
 }
 
 /**
