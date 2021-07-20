@@ -1,7 +1,7 @@
 /**
  * @license mamkEngine Copyright (c) 2021 Ilya Strugatskiy. All rights reserved.
  */
-import { characterCount, getCaretCharacterOffsetWithin, setCaretPosition, throwExcept } from './utils';
+import { characterCount, getCaretCharacterOffsetWithin, mathClamp, setCaretPosition, throwExcept } from './utils';
 
 /**
  * Initiliiazes the event handling Library.
@@ -46,12 +46,13 @@ export const eventHandle = () => {
         if (target.matches('[contenteditable]')) {
             let characterOffset = getCaretCharacterOffsetWithin(target);
             const maxLength = Number.parseInt(target.dataset.maxlength!);
+            const prevCursor = Number.parseInt(target.dataset.prevCursor!);
             target.textContent = String(target.textContent!.replace(/(\r\n|\r|\n)/, ''));
-            if (maxLength < target.textContent!.length) {
+            if (target.textContent!.length > maxLength) {
                 target.textContent = target.dataset.revert as string;
-                setCaretPosition(target, characterOffset - 1);
+                setCaretPosition(target, mathClamp(prevCursor, 0, target.textContent.length));
             } else {
-                setCaretPosition(target, characterOffset);
+                setCaretPosition(target, mathClamp(characterOffset, 0, target.textContent.length));
             }
             characterCount(target, target.dataset.maxlength as string);
         }
@@ -61,6 +62,7 @@ export const eventHandle = () => {
         const target = event.target! as HTMLElement;
         if ((event.target! as HTMLElement).matches('[contenteditable]')) {
             target.dataset.revert = target.textContent as string;
+            target.dataset.prevCursor = getCaretCharacterOffsetWithin(target).toString();
         }
     });
     // Shows error message if error is encountered.

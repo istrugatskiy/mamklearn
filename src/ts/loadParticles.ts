@@ -6,7 +6,7 @@
 import 'particles.js';
 
 // The config for particles.js
-let ParticleData = {
+const ParticleData = {
     particles: {
         number: {
             value: 25,

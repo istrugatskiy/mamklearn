@@ -10,7 +10,7 @@ const location = 'https://us-central1-mamaroneck-learn.cloudfunctions.net/';
  * Creates a callable instance of the specified cloud function.
  *
  * @param {string} functionName The name of the cloud function you want to call.
- * @return {Promise<Any>}
+ * @return {Promise<Any>} Returns a promise representing the result.
  */
 export const httpsCallable = (functionName: string) => {
     const auth = getAuth();
