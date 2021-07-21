@@ -9,7 +9,7 @@ import { setCharImage } from './app';
 import { getDatabase, onChildAdded, onChildRemoved, onValue, ref, set, Unsubscribe } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
 import { globals } from './globals';
-import { actuallyStartGame, handleCurrentQuiz, networkKickPlayer, setQuiz, setQuizList, startGame } from './networkEngine';
+import { actuallyStartGame, getQuizData, networkKickPlayer, setQuiz, setQuizList, startGame } from './networkEngine';
 
 let editState = false;
 interface answer {
@@ -189,10 +189,10 @@ let keyboardIncludesListeners = {
 };
 
 export const initEvents = () => {
-    window.clickEvents = { ...window.clickEvents, ...clickListeners };
-    window.clickIncludesEvents = { ...window.clickIncludesEvents, ...clickIncludesListeners };
-    window.submitEvents = { ...window.submitEvents, ...submitListeners };
-    window.keyboardIncludesEvents = { ...window.keyboardIncludesEvents, ...keyboardIncludesListeners };
+    globals.clickEvents = { ...globals.clickEvents, ...clickListeners };
+    globals.clickIncludesEvents = { ...globals.clickIncludesEvents, ...clickIncludesListeners };
+    globals.submitEvents = { ...globals.submitEvents, ...submitListeners };
+    globals.keyboardIncludesEvents = { ...globals.keyboardIncludesEvents, ...keyboardIncludesListeners };
 };
 
 window.addEventListener('beforeunload', (event) => {
@@ -206,7 +206,7 @@ function createQuiz() {
     if (checkOnce) {
         document.querySelector('.createButtonA')!.disabled = true;
         $('QuizName').disabled = false;
-        window.clickEvents['modal-bg'] = () => {
+        globals.clickEvents['modal-bg'] = () => {
             exitModalPopupTemplate('createQuizMenu');
         };
         $('submitQuizID').disabled = false;
@@ -234,7 +234,6 @@ function createQuiz() {
 }
 
 function goBackMakeA() {
-    window.customOptionsIncrement = 0;
     document.querySelector('.backButtonC')!.disabled = true;
     $('title').classList.add('handleOutTransition');
     setTimeout(() => {
@@ -243,7 +242,7 @@ function goBackMakeA() {
         setTitle('homeScreen');
         $('title').style.height = '800px';
         $('title').style.top = '15%';
-        setCharImage('currentUser', window.currentUserConfig);
+        setCharImage('currentUser', globals.currentUserConfig);
     }, 300);
 }
 
@@ -585,7 +584,7 @@ function quizButtonOnClick(event: Event) {
     const eventTarget = (event.target! as HTMLElement).id;
     if (checkOnce) {
         document.querySelector('.createButtonA')!.disabled = true;
-        window.clickEvents['modal-bg'] = () => {
+        globals.clickEvents['modal-bg'] = () => {
             exitModalPopupTemplate('manageQuizMenu');
         };
         $('QuizName').disabled = false;
@@ -595,7 +594,7 @@ function quizButtonOnClick(event: Event) {
         document.querySelector('.backButtonC')!.disabled = true;
         document.querySelector('.backButtonC')!.classList.add('btnTransitionA');
         currentQuizEdit = eventTarget;
-        handleCurrentQuiz(currentQuizEdit.replace('quizID_', ''), (val) => {
+        getQuizData(currentQuizEdit.replace('quizID_', ''), (val) => {
             $('playQuiz').disabled = val === null;
             $('shareQuiz').disabled = val === null;
             $('submitQuizID').textContent = 'Create';
@@ -983,7 +982,7 @@ function editQuiz() {
     $('editQuiz').disabled = true;
     $('deleteQuiz').disabled = true;
     activeArea = null;
-    handleCurrentQuiz(currentQuizEdit.replace('quizID_', ''), (val) => {
+    getQuizData(currentQuizEdit.replace('quizID_', ''), (val) => {
         $('manageQuizMenu').style.animation = 'modalPopout 0.3s';
         if (val === undefined || val === null) {
             quizObject2[currentQuizEdit] = JSON.parse(JSON.stringify(quizObject));
@@ -1083,7 +1082,7 @@ function editQuizForm() {
 
 function shareQuiz() {
     $('actuallyShareQuiz').disabled = true;
-    handleCurrentQuiz(currentQuizEdit.replace('quizID_', ''), (value) => {
+    getQuizData(currentQuizEdit.replace('quizID_', ''), (value) => {
         $('actuallyShareQuiz').disabled = false;
         if (value == null) {
             $('coolTextArea').value = 'An empty quiz cannot be shared!';

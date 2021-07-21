@@ -13,12 +13,6 @@ import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from
 import { globals } from './globals';
 import { leaveGame, networkJoinGameStudent, setQuiz } from './networkEngine';
 
-interface eventList {
-    [key: string]: (event: Event) => void;
-}
-interface keyboardEventList {
-    [key: string]: (event: KeyboardEvent) => void;
-}
 interface answer {
     answer: string | null;
     correct: boolean;
@@ -35,19 +29,6 @@ interface quizObject {
     isShared: boolean;
     questionObjects: questionObject[];
 }
-declare global {
-    interface Window {
-        currentUserConfig: number[];
-        customOptionsIncrement: number;
-        clickEvents: eventList;
-        clickIncludesEvents: eventList;
-        keyboardIncludesEvents: keyboardEventList;
-        submitEvents: eventList;
-        currentGameState: { isInGame: boolean; code: number; isTeacher: boolean; location: string };
-    }
-}
-window.customOptionsIncrement = 0;
-window.currentUserConfig = [0, 0, 0, 0, 0];
 let prevRejected = false;
 const customOptions = ['Eyes', 'Nose', 'Mouth', 'Shirt', 'Arms'];
 const provider = new GoogleAuthProvider();
@@ -57,12 +38,14 @@ let quizList: Reference;
 let makeMenuInitialized = false;
 let newQuizData: { [key: string]: string } = {};
 let makeObj: typeof import('./make');
+let customOptionsIncrement: number = 0;
 
 // Creates a console message that rickrolls you
 console.log('%cUse link to get quiz answers:https://bit.ly/31Apj2U', 'font-size: 32px;');
 
 const database = getDatabase();
 const auth = getAuth();
+const isNonMainPage = window.location.pathname !== '/index.html' && window.location.pathname !== '/';
 
 // If the user is logged in initiliaze appropriate code
 
@@ -76,7 +59,7 @@ let hasInitialized = false;
 const listener = onAuthStateChanged(
     auth,
     (user) => {
-        if (window.location.pathname !== '/index.html' && window.location.pathname !== '/') {
+        if (isNonMainPage) {
             onReady();
             listener();
             return;
@@ -114,15 +97,15 @@ const listener = onAuthStateChanged(
 );
 
 const monitorUserState = () => {
-    if (window.location.pathname !== '/index.html' && window.location.pathname !== '/') return;
+    if (isNonMainPage) return;
     onValue(
         charConfig,
         (snap) => {
             if (auth.currentUser) {
                 if (snap.val()) {
-                    window.currentUserConfig = snap.val();
+                    globals.currentUserConfig = snap.val();
                     if ($('currentUserArms')) {
-                        setCharImage('currentUser', window.currentUserConfig);
+                        setCharImage('currentUser', globals.currentUserConfig);
                     }
                 } else {
                     for (let index = 0; index < 5; index++) {
@@ -154,16 +137,16 @@ const monitorUserState = () => {
             }
         } else if (!snap.val()) {
             globals.alreadyInGame = false;
-            if (window.currentGameState.isTeacher) {
+            if (globals.currentGameState.isTeacher) {
                 call(globals.quitQuizTeacher);
             } else {
                 call(globals.quitQuizStudent);
             }
         }
-        const temp = window.currentGameState ? window.currentGameState.location : '';
-        window.currentGameState = snap.val();
-        if (window.currentGameState) {
-            window.currentGameState.location = temp;
+        const temp = globals.currentGameState ? globals.currentGameState.location : '';
+        globals.currentGameState = snap.val();
+        if (globals.currentGameState) {
+            globals.currentGameState.location = temp;
         }
     });
 };
@@ -215,11 +198,16 @@ const initApp = () => {
     }
 };
 
-window.clickEvents = {
+const charCustomize = () => {
+    $('customButtonChange').textContent = customOptions[customOptionsIncrement];
+};
+
+globals.clickEvents = {
     btn2: playCode,
     makebtn: makeCode,
     signOutbtn: logOut,
     loginBtn: () => login(),
+    charCustomize: charCustomize,
     customButtonChange: arrowButtonPress,
     customButtonChange2: () => updateImageState(false),
     leftCustomizeArrow: () => updateImageState(false),
@@ -239,7 +227,7 @@ window.clickEvents = {
         userClick('tos.html');
     },
     rejoinGameConfirm: () => {
-        if (window.currentGameState.isTeacher) {
+        if (globals.currentGameState.isTeacher) {
             // Handles differently based on your location within the app
             if ($('makebtn')) {
                 makeCode(true);
@@ -255,7 +243,7 @@ window.clickEvents = {
             $('title').style.display = 'block';
             playCode();
             setTimeout(() => {
-                $('gameID').value = `${window.currentGameState.code.toString().slice(0, 5)}-${window.currentGameState.code.toString().slice(5)}`;
+                $('gameID').value = `${globals.currentGameState.code.toString().slice(0, 5)}-${globals.currentGameState.code.toString().slice(5)}`;
                 JoinGame();
             }, 300);
         }
@@ -273,13 +261,13 @@ window.clickEvents = {
 };
 
 // These are the events that include the text in the elements id.
-window.clickIncludesEvents = {};
+globals.clickIncludesEvents = {};
 
-window.submitEvents = {
+globals.submitEvents = {
     joinQuizForm: JoinGame,
 };
 
-window.keyboardIncludesEvents = {};
+globals.keyboardIncludesEvents = {};
 
 const login = () => {
     signInWithPopup(auth, provider).catch((error) => {
@@ -300,7 +288,7 @@ function completeLoginFlow() {
         setTitle('homeScreen');
         $('title').style.top = '15%';
         $('title').style.height = '800px';
-        setCharImage('currentUser', window.currentUserConfig);
+        setCharImage('currentUser', globals.currentUserConfig);
     }, 300);
 }
 
@@ -417,7 +405,7 @@ function joinGameStudent() {
                     $('loader-1').style.display = 'none';
                     $('gameStartScreenStudent').style.display = 'block';
                     let firstTime = true;
-                    const unsubHandler = onValue(ref(database, `${window.currentGameState.location}globalState`), (snap) => {
+                    const unsubHandler = onValue(ref(database, `${globals.currentGameState.location}globalState`), (snap) => {
                         const val = snap.val() as { isRunning: boolean; totalQuestions: number; gameEnd: number };
                         if (val && val.isRunning) {
                             unsubHandler();
@@ -451,34 +439,34 @@ export function goBack() {
         setTitle('homeScreen');
         $('title').style.height = '800px';
         $('title').style.top = '15%';
-        setCharImage('currentUser', window.currentUserConfig);
-        window.customOptionsIncrement = 0;
+        setCharImage('currentUser', globals.currentUserConfig);
+        customOptionsIncrement = 0;
     }, 300);
 }
 
 function arrowButtonPress() {
-    window.customOptionsIncrement = window.customOptionsIncrement + 1;
-    if (window.customOptionsIncrement > 4) {
-        window.customOptionsIncrement = 0;
+    customOptionsIncrement = customOptionsIncrement + 1;
+    if (customOptionsIncrement > 4) {
+        customOptionsIncrement = 0;
     }
-    $('customButtonChange').textContent = customOptions[window.customOptionsIncrement];
+    $('customButtonChange').textContent = customOptions[customOptionsIncrement];
     $('customButtonChange').focus();
 }
 
 function updateImageState(data: boolean) {
     if (data) {
-        window.currentUserConfig[window.customOptionsIncrement]++;
-        if (window.currentUserConfig[window.customOptionsIncrement] > 9) {
-            window.currentUserConfig[window.customOptionsIncrement] = 0;
+        globals.currentUserConfig[customOptionsIncrement]++;
+        if (globals.currentUserConfig[customOptionsIncrement] > 9) {
+            globals.currentUserConfig[customOptionsIncrement] = 0;
         }
     } else {
-        window.currentUserConfig[window.customOptionsIncrement]--;
-        if (window.currentUserConfig[window.customOptionsIncrement] < 0) {
-            window.currentUserConfig[window.customOptionsIncrement] = 9;
+        globals.currentUserConfig[customOptionsIncrement]--;
+        if (globals.currentUserConfig[customOptionsIncrement] < 0) {
+            globals.currentUserConfig[customOptionsIncrement] = 9;
         }
     }
-    setCharImage('currentUser', window.currentUserConfig);
-    window.currentUserConfig.forEach((value, index) => {
+    setCharImage('currentUser', globals.currentUserConfig);
+    globals.currentUserConfig.forEach((value, index) => {
         set(child(charConfig, index.toString()), value);
     });
 }

@@ -46,9 +46,9 @@ let keyboardIncludesListeners = {
 };
 
 export const initEvents = () => {
-    window.clickEvents = { ...window.clickEvents, ...clickListeners };
-    window.clickIncludesEvents = { ...window.clickIncludesEvents, ...clickIncludesListeners };
-    window.keyboardIncludesEvents = { ...window.keyboardIncludesEvents, ...keyboardIncludesListeners };
+    globals.clickEvents = { ...globals.clickEvents, ...clickListeners };
+    globals.clickIncludesEvents = { ...globals.clickIncludesEvents, ...clickIncludesListeners };
+    globals.keyboardIncludesEvents = { ...globals.keyboardIncludesEvents, ...keyboardIncludesListeners };
 };
 
 const initGameStudent = (questionNumber: number, question: studentQuestion, isCorrect: boolean, questionAmount: number) => {
@@ -65,7 +65,7 @@ const initGameStudent = (questionNumber: number, question: studentQuestion, isCo
         clearInterval(finishUpInterval);
         clearInterval(otherInterval);
     }
-    setCharImage('player', window.currentUserConfig);
+    setCharImage('player', globals.currentUserConfig);
     let studentRaceBoxNumbers = document.createDocumentFragment();
     for (let i = 1; i <= totalQuestions; i++) {
         let node = document.createElement('th');
@@ -136,14 +136,14 @@ const updateQuestion = (questionNumber: number, question: studentQuestion) => {
 
 export const initQuestionHandler = (questionAmount: number) => {
     call(unsubHandler);
-    unsubHandler = onValue(ref(database, `${window.currentGameState.location}globalState`), (snap) => {
+    unsubHandler = onValue(ref(database, `${globals.currentGameState.location}globalState`), (snap) => {
         const val = snap.val() as { isRunning: boolean; totalQuestions: number; gameEnd: number };
         if (val && val.gameEnd) {
             gameFinish((val.gameEnd + 15000 - getCurrentDate()) / 1000);
         }
     });
     let firstTime = true;
-    studentPlayListener = onValue(ref(database, `${window.currentGameState.location}players/${getAuth().currentUser!.uid}/`), (snap) => {
+    studentPlayListener = onValue(ref(database, `${globals.currentGameState.location}players/${getAuth().currentUser!.uid}/`), (snap) => {
         const val = snap.val();
         if (!val) return;
         if (val.timePenaltyEnd > getCurrentDate()) {

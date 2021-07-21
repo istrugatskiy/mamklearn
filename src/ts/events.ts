@@ -1,6 +1,7 @@
 /**
  * @license mamkEngine Copyright (c) 2021 Ilya Strugatskiy. All rights reserved.
  */
+import { globals } from './globals';
 import { characterCount, getCaretCharacterOffsetWithin, mathClamp, setCaretPosition, throwExcept } from './utils';
 
 /**
@@ -10,10 +11,10 @@ export const eventHandle = () => {
     // Attaches a click listener that handles click events and clickIncludesEvents
     window.addEventListener('click', (event) => {
         const eventTarget = (event.target! as HTMLElement).id;
-        if (eventTarget in window.clickEvents) {
-            window.clickEvents[eventTarget](event);
+        if (eventTarget in globals.clickEvents) {
+            globals.clickEvents[eventTarget](event);
         }
-        for (const [key, value] of Object.entries(window.clickIncludesEvents)) {
+        for (const [key, value] of Object.entries(globals.clickIncludesEvents)) {
             if (eventTarget.includes(key)) {
                 value(event);
                 break;
@@ -24,7 +25,7 @@ export const eventHandle = () => {
     window.addEventListener('keydown', (event) => {
         if (event.key == 'Enter' || event.key == ' ') {
             const eventTarget = (event.target! as HTMLElement).id;
-            for (const [key, value] of Object.entries(window.keyboardIncludesEvents)) {
+            for (const [key, value] of Object.entries(globals.keyboardIncludesEvents)) {
                 if (eventTarget.includes(key)) {
                     value(event);
                     break;
@@ -36,8 +37,8 @@ export const eventHandle = () => {
     window.addEventListener('submit', function (event) {
         event.preventDefault();
         const eventTarget = (event.target! as HTMLElement).id;
-        if (eventTarget in window.submitEvents) {
-            window.submitEvents[eventTarget](event);
+        if (eventTarget in globals.submitEvents) {
+            globals.submitEvents[eventTarget](event);
         }
     });
     // Attaches event listener for dealing with all contenteditable.
