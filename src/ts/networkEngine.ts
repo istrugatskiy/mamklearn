@@ -265,8 +265,8 @@ export const networkSubmitQuestion = (input: number | string) => {
  *
  * @param {(returnData: { [key: string]: { place: number; name: string; playerConfig: number[] } }) => void} input
  */
-export const onGameEnd = (input: (returnData: { [key: string]: { place: number; name: string; playerConfig: number[] } }) => void) => {
-    const gameEnd = onValue(ref(database, `${globals.currentGameState.location}finalResults/`), (snap) => {
+export const onGameEnd = (input: (returnData: { [key: string]: { place: number; name: string; playerConfig: number[] } }) => void, location?: string) => {
+    const gameEnd = onValue(ref(database, `${location ? location : globals.currentGameState.location}finalResults/`), (snap) => {
         if (snap.val() && snap.val().hasRendered) {
             input(snap.val());
             gameEnd();

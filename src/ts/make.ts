@@ -9,7 +9,7 @@ import { setCharImage } from './app';
 import { getDatabase, onChildAdded, onChildRemoved, onValue, ref, set, Unsubscribe } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
 import { globals } from './globals';
-import { actuallyStartGame, getQuizData, networkKickPlayer, setQuiz, setQuizList, startGame } from './networkEngine';
+import { actuallyStartGame, getQuizData, networkKickPlayer, onGameEnd, setQuiz, setQuizList, startGame } from './networkEngine';
 
 let editState = false;
 interface answer {
@@ -59,6 +59,7 @@ let playerLeftHandler: Unsubscribe;
 let leaderboardHandler: Unsubscribe;
 let prevLeaderboardValues: { [key: string]: { currentQuestion: number; playerName: string } } = {};
 let otherTimeout: number;
+let hasGameEnded = false;
 
 let clickListeners = {
     deleteQuizConfirm: () => {
@@ -550,9 +551,14 @@ export function addQuiz() {
     }
 }
 
-globals.quitQuizTeacher = quitQuizTeacher;
+globals.quitQuizTeacher = () => {
+    if (!hasGameEnded) {
+        quitQuizTeacher();
+    }
+};
 
 function quitQuizTeacher() {
+    hasGameEnded = false;
     clearInterval(finishUpInterval);
     clearInterval(otherTimeout);
     $('liveLeaderboards').style.display = 'none';
@@ -766,6 +772,16 @@ export function startGameTeacher(shouldHandle: boolean) {
         let firstTime = true;
         prevLeaderboardValues = {};
         globals.alreadyInGame = true;
+        onGameEnd((input) => {
+            hasGameEnded = true;
+            let firstThreePlayers: number[][] = [];
+            Object.values(input).forEach((element) => {
+                if (element.place <= 3) {
+                    firstThreePlayers[element.place - 1] = element.playerConfig;
+                }
+            });
+            gameEnd(firstThreePlayers[0], firstThreePlayers[1], firstThreePlayers[2]);
+        }, `actualGames/${auth.currentUser!.uid}/`);
         leaderboardHandler = onValue(ref(database, `actualGames/${auth.currentUser!.uid}/leaderboards`), (snap) => {
             if (!snap.val()) {
                 call(leaderboardHandler);
@@ -875,7 +891,7 @@ function updateLeaderboard(data: { key: string; currentQuestion: number; playerN
     data.forEach((value, index) => {
         const container = $('playerContainer');
         const currentChild = container.children![index];
-        if (currentChild.id.replace('playerList_', '') !== value.key || currentChild.firstElementChild?.textContent !== `${index + 1}. `) {
+        if (currentChild.id.replace('playerList_', '') !== value.key || currentChild.firstElementChild?.textContent?.trim() !== `${index + 1}.`) {
             if ($(`playerList_${value.key}`).style.maxWidth == '600px') {
                 doMagic();
             } else {
@@ -1123,6 +1139,27 @@ function actuallyShareQuiz() {
             }, 300);
         });
     });
+}
+
+function gameEnd(firstPlace: number[], secondPlace: number[], thirdPlace: number[]) {
+    clearInterval(otherInterval);
+    $('gameResults').style.display = 'block';
+    setCharImage('firstPlace', firstPlace);
+    secondPlace ? setCharImage('secondPlace', secondPlace) : setCharImage('secondPlace', [1, 2, 2, 2, -1]);
+    thirdPlace ? setCharImage('thirdPlace', thirdPlace) : setCharImage('thirdPlace', [1, 2, 2, 2, -1]);
+    setTimeout(() => {
+        $('gameFinishNotify').style.display = 'none';
+        clearInterval(finishUpInterval);
+        $('errorMessageB').style.display = 'none';
+    }, 500);
+    window.setTimeout(() => {
+        $('imageObjectContainer').style.animation = 'fadeOut 0.3s';
+        setTimeout(() => {
+            $('gameResults').style.display = 'none';
+            $('imageObjectContainer').style.animation = '';
+            quitQuizTeacher();
+        }, 200);
+    }, 12000);
 }
 
 function copyShareLink() {

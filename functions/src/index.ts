@@ -567,7 +567,7 @@ async function gameEnd(location: string, totalPlayers: number, gameCode: string)
             });
         };
         const leaderboards = await db.ref(`${location}leaderboards`).once('value');
-        const userList = (await db.ref(`${location}players/`).once('value')).val() as { [key: string]: { playerName: string; userConfig: number[] } };
+        const userList = (await db.ref(`${location}players/`).once('value')).val() as { [key: string]: { playerName: string; playerConfig: number[] } };
         if (leaderboards.val()) {
             const sortedArray = sortArray(leaderboards.val());
             // Can't use foreach because it isn't asynchronous.
@@ -584,7 +584,7 @@ async function gameEnd(location: string, totalPlayers: number, gameCode: string)
                 await db.ref(`${location}finalResults/${key}`).set({
                     place: totalPlayers - finalInput,
                     name: `${firstName} ${lastName.charAt(0)}.`,
-                    playerConfig: userList[key].userConfig,
+                    playerConfig: userList[key].playerConfig,
                 });
                 await db.ref(`${location}leaderboards/${key}`).remove();
             }
@@ -597,6 +597,5 @@ async function gameEnd(location: string, totalPlayers: number, gameCode: string)
         await db.ref(`currentGames/${gameCode.slice(0, 5)}/${gameCode.slice(5)}`).set(null);
         await db.ref(location).remove();
         await db.ref(`userProfiles/${location.replace('actualGames/', '')}currentGameState/`).set(null);
-        db.ref(`${location}/globalState/players`).off('value');
     }
 }
