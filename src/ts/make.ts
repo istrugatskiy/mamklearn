@@ -1147,6 +1147,7 @@ function gameEnd(firstPlace: number[], secondPlace: number[], thirdPlace: number
     setCharImage('firstPlace', firstPlace);
     secondPlace ? setCharImage('secondPlace', secondPlace) : setCharImage('secondPlace', [1, 2, 2, 2, -1]);
     thirdPlace ? setCharImage('thirdPlace', thirdPlace) : setCharImage('thirdPlace', [1, 2, 2, 2, -1]);
+    mainAudio?.setVolume('playTheme', 0);
     setTimeout(() => {
         $('gameFinishNotify').style.display = 'none';
         clearInterval(finishUpInterval);
