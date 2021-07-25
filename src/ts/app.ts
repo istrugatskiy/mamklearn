@@ -484,7 +484,7 @@ export function setCharImage(charID: string, currentUserConfig: number[]) {
     $(`${charID}Mouth`).src = `img/mouth-${currentUserConfig[2]}.png`;
     $(`${charID}Shirt`).src = `img/shirt-${currentUserConfig[3]}.png`;
     $(`${charID}Arms`).src = `img/arms-${currentUserConfig[4]}.svg`;
-    // Handles edge case where player doesn't have character config denoted by negative value for last number.
+    // Handles edge case where player doesn't have character config, the case is denoted by negative value for last number.
     if (currentUserConfig[4] !== -1) {
         ($(`${charID}Eyes`).parentElement!.lastElementChild! as HTMLElement).src = 'img/base.svg';
     } else {
