@@ -198,16 +198,11 @@ const initApp = () => {
     }
 };
 
-const charCustomize = () => {
-    $('customButtonChange').textContent = customOptions[customOptionsIncrement];
-};
-
 globals.clickEvents = {
     btn2: playCode,
     makebtn: makeCode,
     signOutbtn: logOut,
     loginBtn: () => login(),
-    charCustomize: charCustomize,
     customButtonChange: arrowButtonPress,
     customButtonChange2: () => updateImageState(false),
     leftCustomizeArrow: () => updateImageState(false),
@@ -303,10 +298,12 @@ function userClick(link: string, disableObject?: string) {
 }
 
 // make and play on button click functions here!
+// The reason why it can accept events is because by defualt eventHandle will pass an event object to any function that it calls.
 function makeCode(isInGame: boolean | Event = false) {
     $('makebtn').disabled = true;
     $('btn2').disabled = true;
     clearChildren('makebtn');
+    customOptionsIncrement = 0;
     createTemplate('svgLoader', 'makebtn');
     loadChonk('make', (obj: typeof import('./make')) => {
         obj.initEvents();
