@@ -436,6 +436,7 @@ export const timeHandler = async () => {
             }, 4000);
         });
 };
+
 /**
  * Returns the current server date.
  *
