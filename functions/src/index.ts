@@ -378,7 +378,7 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
             const db = database();
             let hasGameEnded = false;
             const userState = await db.ref(`userProfiles/${context.auth.uid}/currentGameState`).once('value');
-            if (!userState.val().isInGame || userState.val().isTeacher) {
+            if (!userState.val()?.isInGame || userState.val()?.isTeacher) {
                 return {
                     message: 'User is not in a game',
                     code: 500,
