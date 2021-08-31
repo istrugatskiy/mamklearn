@@ -39,3 +39,10 @@ Install the following extensions from vscode:
 6. Prettier Code Formatter
 
 You're done!
+
+# Some Cool Stats (last updated: 8-30-2021):
+- Client Typescript: 3098 lines
+- Client CSS (like there's any other CSS): 2004 lines
+- Client HTML (like there's any other HTML): 806 lines
+- Server Typescript: 601 lines
+- Total Lines (not including config files / firebase database rules): 6509 lines
