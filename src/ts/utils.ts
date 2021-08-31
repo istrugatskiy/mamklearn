@@ -56,17 +56,6 @@ export const ordinalSuffix = (i: number): 'st' | 'nd' | 'rd' | 'th' => {
 };
 
 /**
- * Clears the children of the specified element.
- *
- * @param {string} element The element whose children will be cleared.
- */
-export const clearChildren = (element: string) => {
-    const node = $(element);
-    const cNode = node.cloneNode(false);
-    node.parentNode?.replaceChild(cNode, node);
-};
-
-/**
  * Clamps a number between two values.
  *
  * @param {number} num The number to clamp.
@@ -163,7 +152,7 @@ export const createTemplate = (templateID: string, place: string, modifID: boole
  * @param {string} templateID The ID of the new template.
  */
 export const setTitle = (templateID: string) => {
-    clearChildren('title');
+    $('title').replaceChildren();
     createTemplate(templateID, 'title');
 };
 

@@ -4,7 +4,7 @@
 // Contains code related to making quizzes
 import '../css/make.css';
 import dragula from 'dragula';
-import { $, characterCount, deepEqual, createTemplate, setTitle, clearChildren, getID, AudioManager, mathClamp, download, call, getCurrentDate } from './utils';
+import { $, characterCount, deepEqual, createTemplate, setTitle, getID, AudioManager, mathClamp, download, call, getCurrentDate } from './utils';
 import { setCharImage } from './app';
 import { getDatabase, onChildAdded, onChildRemoved, onValue, ref, set, Unsubscribe } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
@@ -239,7 +239,7 @@ function goBackMakeA() {
     $('title').classList.add('handleOutTransition');
     setTimeout(() => {
         $('title').classList.remove('handleOutTransition');
-        clearChildren('title');
+        $('title').replaceChildren();
         setTitle('homeScreen');
         $('title').style.height = '800px';
         $('title').style.top = '15%';
@@ -464,7 +464,7 @@ const verifyQuiz = () => {
                 finalResult!.lastElementChild!.classList.add('innerError');
             }
         });
-        clearChildren('innerError3');
+        $('innerError3').replaceChildren();
         $('innerError3').appendChild(finalResult);
         return false;
     } else {
@@ -495,9 +495,9 @@ function exitModalPopupF(promptUser: boolean) {
             $('addQuestionButton').disabled = false;
             $('exportQuizButton').disabled = false;
             $('modal-popupA').style.pointerEvents = 'all';
-            clearChildren('saveQuizButton');
+            $('saveQuizButton').replaceChildren();
             $('saveQuizButton').textContent = 'Save';
-            clearChildren('draggableDiv');
+            $('draggableDiv').replaceChildren();
             drake.destroy();
             highestQuestion = 0;
             checkOnce = true;
@@ -567,7 +567,7 @@ function quitQuizTeacher() {
     $('errorActual').textContent = 'Game Has Ended';
     $('errorMessageA').style.display = 'block';
     $('gameFinishNotify').style.display = 'none';
-    clearChildren('characterPeopleDiv');
+    $('characterPeopleDiv').replaceChildren();
     $('gameStartButtonTeacher').classList.add('btnTransitionA');
     $('gameCodeTeacher').classList.add('btnTransitionA');
     $('teacherCountdown').style.display = 'none';
@@ -820,7 +820,7 @@ export function startGameTeacher(shouldHandle: boolean) {
         $('gameStartButtonTeacher').classList.add('btnTransitionA');
         $('gameCodeTeacher').classList.add('btnTransitionA');
         setTimeout(() => {
-            clearChildren('characterPeopleDiv');
+            $('characterPeopleDiv').replaceChildren();
             doCountdown();
         }, 300);
         clearableTimeout2 = window.setTimeout(() => {
@@ -866,12 +866,12 @@ function createLeaderboard(data: { key: string; currentQuestion: number; playerN
         const clone = templateElement.cloneNode(true) as HTMLElement;
         clone.id = `playerList_${value.key}`;
         clone.firstElementChild!.textContent = `${(index + 1).toString()}. `;
-        clone.style = `--c: ${index}`;
+        clone.style.setProperty(`--c`, index.toString());
         clone.appendChild(document.createTextNode(` ${value.playerName}`));
         fragment.appendChild(clone);
         index++;
     });
-    clearChildren('playerContainer');
+    $('playerContainer').replaceChildren();
     $('playerContainer').appendChild(fragment);
 }
 
@@ -911,7 +911,7 @@ function updateLeaderboard(data: { key: string; currentQuestion: number; playerN
                     currentChild.lastChild!.remove();
                     currentChild.appendChild(document.createTextNode(` ${value.playerName}`));
                     currentChild.id = `playerList_${value.key}`;
-                    currentChild.style.opacity = 1;
+                    currentChild.style.opacity = '1';
                 }, 300);
             }
         }
@@ -966,7 +966,7 @@ function deleteQuiz() {
     $('manageQuizMenu').style.animation = 'modalPopout 0.3s';
     $('deleteQuizConfirm').disabled = false;
     $('backButtonDeleteConfirm').disabled = false;
-    clearChildren('deleteQuizConfirm');
+    $('deleteQuizConfirm').replaceChildren();
     $('deleteQuizConfirm').textContent = 'Delete';
     $('deleteQuizConfirm').style.backgroundColor = 'orange';
     setTimeout(() => {
@@ -986,7 +986,7 @@ function deleteQuizConfirm() {
     $('deleteQuizConfirm').disabled = true;
     $('backButtonDeleteConfirm').disabled = true;
     $('deleteQuizConfirm').style.backgroundColor = '';
-    clearChildren('deleteQuizConfirm');
+    $('deleteQuizConfirm').replaceChildren();
     createTemplate('svgLoader', 'deleteQuizConfirm');
 }
 
@@ -1091,7 +1091,7 @@ function editQuizForm() {
                 }, 200);
             }, 500);
         });
-        clearChildren('saveQuizButton');
+        $('saveQuizButton').replaceChildren();
         createTemplate('svgLoader', 'saveQuizButton');
     }
 }

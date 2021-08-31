@@ -1,7 +1,7 @@
 /**
  * @license mamkLearn Copyright (c) 2021 Ilya Strugatskiy. All rights reserved.
  */
-import { $, mathClamp, getID, ordinalSuffix, clearChildren, call, getCurrentDate } from './utils';
+import { $, mathClamp, getID, ordinalSuffix, call, getCurrentDate } from './utils';
 import { setCharImage, goBack } from './app';
 import { getDatabase, onValue, ref, Unsubscribe } from 'firebase/database';
 import { globals } from './globals';
@@ -75,7 +75,7 @@ const initGameStudent = (questionNumber: number, question: studentQuestion, isCo
     let node = document.createElement('th');
     node.textContent = 'finish';
     studentRaceBoxNumbers.appendChild(node);
-    clearChildren('studentRaceNumbers');
+    $('studentRaceNumbers').replaceChildren();
     $('studentRaceNumbers').appendChild(studentRaceBoxNumbers);
     $('gameStartScreenStudent').style.animation = 'fadeOut 0.5s forwards';
     setTimeout(() => {

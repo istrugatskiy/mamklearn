@@ -5,7 +5,7 @@ import '../css/globals.css';
 import '../css/button.css';
 import '../css/loader.css';
 import '../css/style.css';
-import { $, createTemplate, setTitle, logOut, clearChildren, loadChonk, timeHandler, throwExcept, call } from './utils';
+import { $, createTemplate, setTitle, logOut, loadChonk, timeHandler, throwExcept, call } from './utils';
 import { eventHandle } from './events';
 import { initParticles } from './loadParticles';
 import { child, DatabaseReference, getDatabase, onValue, push, ref, set } from 'firebase/database';
@@ -297,8 +297,8 @@ globals.submitEvents = {
 globals.keyboardIncludesEvents = {};
 
 const login = () => {
-    signInWithPopup(auth, provider).catch((error) => {
-        $('loginError1').textContent = `${error.code}: ${error.message}`;
+    signInWithPopup(auth, provider).catch(({ code, message }) => {
+        $('loginError1').textContent = `${code}: ${message}`;
     });
 };
 
@@ -334,7 +334,7 @@ function userClick(link: string, disableObject?: string) {
 function makeCode(isInGame: boolean | Event = false) {
     $('makebtn').disabled = true;
     $('btn2').disabled = true;
-    clearChildren('makebtn');
+    $('makebtn').replaceChildren();
     customOptionsIncrement = 0;
     createTemplate('svgLoader', 'makebtn');
     loadChonk('make', (obj: typeof import('./make')) => {
@@ -416,7 +416,7 @@ function JoinGame() {
     $('gameID').disabled = true;
     $('submitID').disabled = true;
     $('playMenuBack').classList.add('disabled');
-    clearChildren('submitID');
+    $('submitID').replaceChildren();
     createTemplate('svgLoader', 'submitID');
     joinGameStudent();
 }
