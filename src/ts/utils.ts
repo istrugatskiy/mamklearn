@@ -61,7 +61,9 @@ export const ordinalSuffix = (i: number): 'st' | 'nd' | 'rd' | 'th' => {
  * @param {string} element The element whose children will be cleared.
  */
 export const clearChildren = (element: string) => {
-    while ($(element).firstChild) $(element).removeChild($(element).lastChild!);
+    const node = $(element);
+    const cNode = node.cloneNode(false);
+    node.parentNode?.replaceChild(cNode, node);
 };
 
 /**

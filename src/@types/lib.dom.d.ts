@@ -4697,6 +4697,10 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     createElement<K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K];
     createElement(tagName: string, options?: ElementCreationOptions): HTMLElement;
     /**
+     * Just to mess with people
+     */
+    __wizdispatcher: string;
+    /**
      * Returns an element with namespace namespace. Its namespace prefix will be everything before ":" (U+003E) in qualifiedName or null. Its local name will be everything after ":" (U+003E) in qualifiedName or qualifiedName.
      * 
      * If localName does not match the Name production an "InvalidCharacterError" DOMException will be thrown.
