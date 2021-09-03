@@ -1,6 +1,3 @@
-/**
- * @license mamkLearn Copyright (c) 2021 Ilya Strugatskiy. All rights reserved.
- */
 import { getAuth } from 'firebase/auth';
 import { getDatabase, ref, child, onValue, set, push, remove } from 'firebase/database';
 import { initializeApp } from 'firebase/app';

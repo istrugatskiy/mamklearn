@@ -1,6 +1,3 @@
-/**
- * @license mamkEngine Copyright (c) 2021 Ilya Strugatskiy. All rights reserved.
- */
 import { getAuth, signOut } from 'firebase/auth';
 import { httpsCallable } from './firebaseFunctionsLite';
 let hasLoggedOut = false;

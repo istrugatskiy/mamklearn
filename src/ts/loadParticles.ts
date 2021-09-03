@@ -1,8 +1,4 @@
-/**
- * @license mamkEngine Copyright (c) 2021 Ilya Strugatskiy. All rights reserved. Some portions of this project licensed under MIT license, see about.html for more info.
- */
 // Definese the configuration data for particles js and initializes it.
-
 import 'particles.js';
 
 // The config for particles.js

@@ -1,9 +1,6 @@
-/**
- * @license mamklearn Copyright (c) 2021 Ilya Strugatskiy. All rights reserved. Some portions of this project licensed under MIT license, see about.html for more info.
- */
 // Contains code related to making quizzes
 import '../css/make.css';
-import dragula from 'dragula';
+import { dragula } from './dragula';
 import { $, characterCount, deepEqual, createTemplate, setTitle, getID, AudioManager, mathClamp, download, call, getCurrentDate } from './utils';
 import { setCharImage } from './app';
 import { getDatabase, onChildAdded, onChildRemoved, onValue, ref, set, Unsubscribe } from 'firebase/database';
@@ -1029,15 +1026,13 @@ function editQuiz() {
         }
         $('quizNameUpdate').value = quizList[currentQuizEdit];
         drake = dragula([$('draggableDiv')], {
-            moves: function (_el, _container, handle) {
-                return handle!.classList.contains('draggableActual');
-            },
+            moves: (_el, _container, handle) => handle!.classList.contains('draggableActual'),
         })
-            .on('drag', function (el) {
+            .on('drag', (el) => {
                 el.classList.add('dragging');
                 collapseAllArea();
             })
-            .on('dragend', function (el) {
+            .on('dragend', (el) => {
                 el.classList.remove('dragging');
                 document.body.style.cursor = 'inherit';
                 setTimeout(() => {

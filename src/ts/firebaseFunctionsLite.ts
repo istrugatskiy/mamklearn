@@ -1,7 +1,3 @@
-/**
- * @license mamkEngine Copyright (c) 2021 Ilya Strugatskiy. All rights reserved.
- */
-
 import { getAuth } from 'firebase/auth';
 
 const location = 'https://us-central1-mamaroneck-learn.cloudfunctions.net/';

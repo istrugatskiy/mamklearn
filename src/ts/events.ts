@@ -1,6 +1,3 @@
-/**
- * @license mamkEngine Copyright (c) 2021 Ilya Strugatskiy. All rights reserved.
- */
 import { globals } from './globals';
 import { characterCount, getCaretCharacterOffsetWithin, mathClamp, setCaretPosition, throwExcept } from './utils';
 

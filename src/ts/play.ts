@@ -1,6 +1,3 @@
-/**
- * @license mamkLearn Copyright (c) 2021 Ilya Strugatskiy. All rights reserved.
- */
 import { $, mathClamp, getID, ordinalSuffix, call, getCurrentDate } from './utils';
 import { setCharImage, goBack } from './app';
 import { getDatabase, onValue, ref, Unsubscribe } from 'firebase/database';
