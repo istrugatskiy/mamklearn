@@ -76,3 +76,16 @@ export type emitterMap = {
     drop: [element: HTMLElement, target: HTMLElement, source: HTMLElement, sibling: HTMLElement];
     cloned: [clone: HTMLElement, original: HTMLElement, type: 'mirror' | 'copy'];
 };
+
+export type DragulaJS = {
+    containers: HTMLElement[];
+    start: (item: HTMLElement) => void;
+    end: () => void;
+    cancel: (revert?: boolean | undefined) => void;
+    remove: () => void;
+    destroy: () => void;
+    canMove: (item: HTMLElement) => boolean;
+    dragging: boolean;
+    on: <t extends keyof eventResponses>(type: t, handler: eventResponses[t]) => DragulaJS;
+    emit: <t extends keyof eventResponses>(type: t, ...args: emitterMap[t]) => void;
+};

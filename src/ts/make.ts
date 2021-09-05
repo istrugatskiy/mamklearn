@@ -7,6 +7,7 @@ import { getDatabase, onChildAdded, onChildRemoved, onValue, ref, set, Unsubscri
 import { getAuth } from 'firebase/auth';
 import { globals } from './globals';
 import { actuallyStartGame, getQuizData, networkKickPlayer, onGameEnd, setQuiz, setQuizList, startGame } from './networkEngine';
+import { DragulaJS } from './dragulaTypes';
 
 let editState = false;
 interface answer {
@@ -32,7 +33,7 @@ const quizObject = {
     isShared: false,
     questionObjects: [],
 };
-let drake: dragula.Drake;
+let drake: DragulaJS;
 let currentQuizEdit: string;
 let iconIterate = 0;
 let activeArea: number | null;
@@ -58,7 +59,7 @@ let prevLeaderboardValues: { [key: string]: { currentQuestion: number; playerNam
 let otherTimeout: number;
 let hasGameEnded = false;
 
-let clickListeners = {
+const clickListeners = {
     deleteQuizConfirm: () => {
         deleteQuizConfirm();
     },
@@ -125,7 +126,7 @@ let clickListeners = {
     },
 };
 
-let clickIncludesListeners = {
+const clickIncludesListeners = {
     collapseSubArea: (event: Event) => {
         collapseSubArea(getID(event) as unknown as number);
     },
@@ -154,7 +155,7 @@ let clickIncludesListeners = {
     },
 };
 
-let submitListeners = {
+const submitListeners = {
     editQuizForm: () => {
         editQuizForm();
     },
@@ -163,7 +164,7 @@ let submitListeners = {
     },
 };
 
-let keyboardIncludesListeners = {
+const keyboardIncludesListeners = {
     deleteQuestion: (event: Event) => {
         deleteQuestion(getID(event));
     },
@@ -276,7 +277,7 @@ function addQuestion() {
 
 function doneButtonA() {
     if (allowState2) {
-        $('modal-popupB').style.animation = 'modalPopout2 0.5s';
+        $('modal-popupB').style.animation = 'modalPopout 0.5s';
         $('editQuizMenu').style.animation = 'fadein 0.5s';
         $('editQuizMenu').style.visibility = 'visible';
         $('saveQuizButton').disabled = false;

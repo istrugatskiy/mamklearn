@@ -38,7 +38,10 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
         end: end,
         cancel: cancel,
         remove: remove,
-        destroy: destroy,
+        destroy: () => {
+            events(true);
+            release();
+        },
         canMove: canMove,
         dragging: false,
         on: <t extends keyof eventResponses>(type: t, handler: eventResponses[t]) => {
@@ -66,7 +69,6 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
     return state;
 
     function isValidContainer(el: HTMLElement) {
-        console.log(el);
         return state.containers.includes(el) || isContainer(el);
     }
 
@@ -85,11 +87,6 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
         documentElement[remove ? 'removeEventListener' : 'addEventListener']('click', preventGrabbed);
     }
 
-    function destroy() {
-        events(true);
-        release();
-    }
-
     function preventGrabbed(event: Event) {
         if (_grabbed) {
             event.preventDefault();
@@ -100,7 +97,7 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
         _moveX = event.clientX;
         _moveY = event.clientY;
 
-        const ignore = whichMouseButton(event) !== 0 || event.metaKey || event.ctrlKey;
+        const ignore = whichMouseButton(event) !== 1 || event.metaKey || event.ctrlKey;
         if (ignore) {
             return; // we only care about honest-to-god left clicks and touch events
         }
@@ -167,7 +164,7 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
             return; // don't drag container itself
         }
         const handle = item;
-        while (getParent(item) && isValidContainer(getParent(item) as HTMLElement)) {
+        while (getParent(item) && !isValidContainer(getParent(item) as HTMLElement)) {
             if (invalid(item, handle)) {
                 return;
             }
@@ -207,7 +204,7 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
     }
 
     function start(context: Context) {
-        if (!context.item) return;
+        if (!context?.item) return;
         if (isCopy(context.item, context.source)) {
             _copy = context.item.cloneNode(true) as HTMLElement;
             state.emit('cloned', _copy, context.item, 'copy');
@@ -363,6 +360,7 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
 
         let clientX = getCoord('clientX', event);
         let clientY = getCoord('clientY', event);
+
         let x = clientX - _offsetX;
         let y = clientY - _offsetY;
 
@@ -524,11 +522,11 @@ function whichMouseButton(event: MouseEvent) {
     if (event instanceof TouchEvent) {
         return event.touches.length;
     }
-    return event.button;
+    return event.buttons;
 }
 
 function getOffset(el: HTMLElement | null) {
-    let rect = el?.getBoundingClientRect();
+    const rect = el?.getBoundingClientRect();
     return {
         left: rect?.left! + getScroll('scrollLeft', 'pageXOffset'),
         top: rect?.top! + getScroll('scrollTop', 'pageYOffset'),
@@ -589,11 +587,9 @@ function getEventHost(event: MouseEvent) {
             return event.changedTouches[0];
         }
     }
-    return undefined;
+    return event;
 }
 
 function getCoord(coord: 'pageX' | 'pageY' | 'clientX' | 'clientY', event: MouseEvent) {
-    const host = getEventHost(event);
-    if (host) return host[coord];
-    else return 0;
+    return getEventHost(event)[coord];
 }

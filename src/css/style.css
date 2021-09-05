@@ -1051,11 +1051,11 @@ ul {
 }
 @keyframes modalPopin {
     from {
-        transform: translate(-50%, 100%);
+        transform: translateY(100%);
         opacity: 0;
     }
     to {
-        transform: translate(-50%, -15%);
+        transform: translateY(90px);
         opacity: 1;
     }
 }

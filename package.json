@@ -35,7 +35,6 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "@types/dragula": "^3.7.0",
     "@types/firebase": "^3.2.1",
     "firebase": "^9.0.1",
     "particles.js": "^2.0.0",

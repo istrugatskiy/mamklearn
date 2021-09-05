@@ -53,7 +53,7 @@
                 },
                 "quizList": {
                     "$quizId": {
-                        ".write": "$uid === auth.uid && (auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/) || auth.token.email.matches(/.*@mamklearn.com$/) || auth.token.email == 'ilyastrug@gmail.com')"
+                        ".write": "($uid === auth.uid && (auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/) || auth.token.email.matches(/.*@mamklearn.com$/) || auth.token.email == 'ilyastrug@gmail.com')) && (!newData.exists() || (newData.val().length <= 15 && newData.val().length > 0))"
                     }
                 },
                 "quizData": {

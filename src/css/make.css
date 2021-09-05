@@ -19,55 +19,15 @@
     animation: fadein 0.5s;
     background-color: rgba(0, 0, 0, 0.5);
 }
-@keyframes modalPopin {
-    from {
-        transform: translate(-50%, 100%);
-        opacity: 0;
-    }
-    to {
-        transform: translate(-50%, -15%);
-        opacity: 1;
-    }
-}
-@keyframes modalPopin2 {
-    from {
-        transform: translate(-50%, 100%);
-        opacity: 0;
-    }
-    to {
-        transform: translate(-50%, -50%);
-        opacity: 1;
-    }
-}
 @keyframes modalPopout {
     from {
-        transform: translate(-50%, -15%);
+        transform: translateY(90px);
         opacity: 1;
     }
     to {
-        transform: translate(-50%, 100%);
+        transform: translateY(100%);
         opacity: 0;
     }
-}
-@keyframes modalPopout2 {
-    from {
-        transform: translate(0%, 15%);
-        opacity: 1;
-    }
-    to {
-        transform: translate(0%, 100%);
-        opacity: 0;
-    }
-}
-#createQuizMenu {
-    left: 50%;
-    position: absolute;
-    text-align: center;
-    animation: modalPopin 0.5s;
-    animation-timing-function: cubic-bezier(0.28, 0.84, 0.42, 1);
-    top: 15%;
-    transform: translate(-50%, -15%);
-    font-size: xx-large;
 }
 #submitQuizID {
     min-width: 246.44px;
@@ -81,30 +41,22 @@
         font-size: 1.3em;
     }
 }
-#manageQuizMenu {
-    left: 50%;
-    position: absolute;
-    text-align: center;
-    animation: modalPopin 0.5s;
-    animation-timing-function: cubic-bezier(0.28, 0.84, 0.42, 1);
-    top: 15%;
-    transform: translate(-50%, -15%);
-    font-size: xx-large;
-    display: none;
-}
+#manageQuizMenu,
+#createQuizMenu,
 #quizDeleteConfirm,
 #editQuizMenu,
-#shareQuizMenu {
-    left: 50%;
-    position: absolute;
+#shareQuizMenu,
+.errorDivMakeOuter {
+    transform: translateY(95px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
     text-align: center;
     animation: modalPopin 0.5s;
     animation-timing-function: cubic-bezier(0.28, 0.84, 0.42, 1);
     height: 100%;
-    top: 15%;
-    transform: translate(-50%, -15%);
     font-size: xx-large;
-    display: none;
 }
 .toggleButton {
     cursor: pointer;
@@ -334,6 +286,11 @@
 .draggableActual2 {
     cursor: move;
 }
+.draggable {
+    margin-left: auto;
+    margin-right: auto;
+    width: 404px;
+}
 .dragging {
     transform: rotate(5deg);
 }
@@ -420,13 +377,6 @@
     margin-top: 30px;
 }
 .errorDivMakeOuter {
-    position: absolute;
-    transform: translate(-50%, -15%);
-    animation: modalPopin 0.3s;
-    left: 50%;
-    top: 30%;
-    text-align: center;
-    height: 100%;
     z-index: 12;
 }
 #modal-popupB {

@@ -5,6 +5,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
     entry: ['./src/ts/app.ts'],
@@ -59,9 +60,16 @@ module.exports = {
     ],
     optimization: {
         minimize: true,
+        mangleExports: 'size',
         minimizer: [
-            `...`,
             new CssMinimizerPlugin(),
+            new TerserPlugin({
+                terserOptions: {
+                    mangle: {
+                        module: true,
+                    },
+                },
+            }),
         ],
     },
     resolve: {
