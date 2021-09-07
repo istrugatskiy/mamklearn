@@ -1,0 +1,243 @@
+{
+  "rules": {
+    "currentGames": {
+      "$firstID": {
+        "$secondID": {
+          ".read": "true"
+        }
+      }
+    },
+    "actualGames": {
+      "$uid": {
+        "globalState": {
+          ".read": "((auth.uid == auth.uid && (((auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/)) || auth.token.email.matches(/.*@mamklearn.com$/)) || auth.token.email == 'ilyastrug@gmail.com')) && data.parent().child(auth.uid).val() != null)"
+        },
+        "finalResults": {
+          ".read": "((auth.uid == auth.uid && (((auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/)) || auth.token.email.matches(/.*@mamklearn.com$/)) || auth.token.email == 'ilyastrug@gmail.com')) && data.parent().child(auth.uid).val() != null)"
+        },
+        "players": {
+          "$player_id": {
+            ".read": "($player_id == auth.uid && (((auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/)) || auth.token.email.matches(/.*@mamklearn.com$/)) || auth.token.email == 'ilyastrug@gmail.com'))"
+          }
+        },
+        ".read": "($uid == auth.uid && (((auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/)) || auth.token.email.matches(/.*@mamklearn.com$/)) || auth.token.email == 'ilyastrug@gmail.com'))"
+      }
+    },
+    "sharedQuizzes": {
+      "$shareUser": {
+        "$sharedQuiz": {
+          ".validate": "newData.hasChildren(['quizID', 'quizName', 'isShared'])",
+          "quizID": {
+            ".validate": "(((newData.isString() && newData.val().length <= 100) && newData.val().contains('quizID_')) && !newData.val().replace('quizID_', '').matches(/[\\[\\].#$\\/\\u0000-\\u001F\\u007F]/))"
+          },
+          "quizName": {
+            ".validate": "((newData.isString() && newData.val().length <= 15) && newData.val().length > 0)"
+          },
+          "isShared": {
+            ".validate": "newData.isBoolean()"
+          },
+          "questionObject": {
+            "$key1": {
+              ".validate": "(newData.hasChildren(['questionName', 'shortAnswer', 'timeLimit', 'Answers']) && $key1.matches(/^\\d+$/))",
+              "questionName": {
+                ".validate": "(newData.isString() && newData.val().length <= 90)"
+              },
+              "shortAnswer": {
+                ".validate": "newData.isBoolean()"
+              },
+              "timeLimit": {
+                ".validate": "(newData.isString() || newData.isBoolean())"
+              },
+              "Answers": {
+                "0": {
+                  ".validate": "newData.hasChildren(['answer', 'correct'])",
+                  "answer": {
+                    ".validate": "(newData.isString() && newData.val().length <= 50)"
+                  },
+                  "correct": {
+                    ".validate": "newData.isBoolean()"
+                  },
+                  "$other": {
+                    ".validate": "false"
+                  }
+                },
+                "1": {
+                  ".validate": "newData.hasChildren(['answer', 'correct'])",
+                  "answer": {
+                    ".validate": "(newData.isString() && newData.val().length <= 50)"
+                  },
+                  "correct": {
+                    ".validate": "newData.isBoolean()"
+                  },
+                  "$other": {
+                    ".validate": "false"
+                  }
+                },
+                "2": {
+                  ".validate": "newData.hasChildren(['correct'])",
+                  "answer": {
+                    ".validate": "(newData.isString() && newData.val().length <= 50)"
+                  },
+                  "correct": {
+                    ".validate": "newData.isBoolean()"
+                  },
+                  "$other": {
+                    ".validate": "false"
+                  }
+                },
+                "3": {
+                  ".validate": "newData.hasChildren(['correct'])",
+                  "answer": {
+                    ".validate": "(newData.isString() && newData.val().length <= 50)"
+                  },
+                  "correct": {
+                    ".validate": "newData.isBoolean()"
+                  },
+                  "$other": {
+                    ".validate": "false"
+                  }
+                },
+                ".validate": "newData.hasChildren(['0', '1', '2', '3'])",
+                "$other": {
+                  ".validate": "false"
+                }
+              },
+              "$other": {
+                ".validate": "false"
+              }
+            },
+            ".validate": "newData.hasChildren()"
+          },
+          "$other": {
+            ".validate": "false"
+          },
+          ".read": "(auth.uid == auth.uid && (((auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/)) || auth.token.email.matches(/.*@mamklearn.com$/)) || auth.token.email == 'ilyastrug@gmail.com'))",
+          ".write": "($shareUser == auth.uid && (((auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/)) || auth.token.email.matches(/.*@mamklearn.com$/)) || auth.token.email == 'ilyastrug@gmail.com'))"
+        }
+      }
+    },
+    "userProfiles": {
+      "$uid": {
+        "charConfig": {
+          "0": {
+            ".validate": "(((newData.isNumber() && newData.val() >= 0) && newData.val() <= 9) && newData.val() % 1 == 0)"
+          },
+          "1": {
+            ".validate": "(((newData.isNumber() && newData.val() >= 0) && newData.val() <= 9) && newData.val() % 1 == 0)"
+          },
+          "2": {
+            ".validate": "(((newData.isNumber() && newData.val() >= 0) && newData.val() <= 9) && newData.val() % 1 == 0)"
+          },
+          "3": {
+            ".validate": "(((newData.isNumber() && newData.val() >= 0) && newData.val() <= 9) && newData.val() % 1 == 0)"
+          },
+          "4": {
+            ".validate": "(((newData.isNumber() && newData.val() >= 0) && newData.val() <= 9) && newData.val() % 1 == 0)"
+          },
+          ".validate": "newData.hasChildren(['0', '1', '2', '3', '4'])",
+          "$other": {
+            ".validate": "false"
+          },
+          ".write": "($uid == auth.uid && (((auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/)) || auth.token.email.matches(/.*@mamklearn.com$/)) || auth.token.email == 'ilyastrug@gmail.com'))"
+        },
+        "quizList": {
+          "$quizID": {
+            ".validate": "((newData.isString() && newData.val().length <= 15) && newData.val().length > 0)",
+            ".write": "((data.val() != null && newData.val() == null) && ($uid == auth.uid && (((auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/)) || auth.token.email.matches(/.*@mamklearn.com$/)) || auth.token.email == 'ilyastrug@gmail.com')))"
+          }
+        },
+        "quizData": {
+          "$quizID": {
+            ".validate": "newData.hasChildren(['quizID', 'quizName', 'isShared'])",
+            "quizID": {
+              ".validate": "(((newData.isString() && newData.val().length <= 100) && newData.val().contains('quizID_')) && !newData.val().replace('quizID_', '').matches(/[\\[\\].#$\\/\\u0000-\\u001F\\u007F]/))"
+            },
+            "quizName": {
+              ".validate": "((newData.isString() && newData.val().length <= 15) && newData.val().length > 0)"
+            },
+            "isShared": {
+              ".validate": "newData.isBoolean()"
+            },
+            "questionObject": {
+              "$key1": {
+                ".validate": "(newData.hasChildren(['questionName', 'shortAnswer', 'timeLimit', 'Answers']) && $key1.matches(/^\\d+$/))",
+                "questionName": {
+                  ".validate": "(newData.isString() && newData.val().length <= 90)"
+                },
+                "shortAnswer": {
+                  ".validate": "newData.isBoolean()"
+                },
+                "timeLimit": {
+                  ".validate": "(newData.isString() || newData.isBoolean())"
+                },
+                "Answers": {
+                  "0": {
+                    ".validate": "newData.hasChildren(['answer', 'correct'])",
+                    "answer": {
+                      ".validate": "(newData.isString() && newData.val().length <= 50)"
+                    },
+                    "correct": {
+                      ".validate": "newData.isBoolean()"
+                    },
+                    "$other": {
+                      ".validate": "false"
+                    }
+                  },
+                  "1": {
+                    ".validate": "newData.hasChildren(['answer', 'correct'])",
+                    "answer": {
+                      ".validate": "(newData.isString() && newData.val().length <= 50)"
+                    },
+                    "correct": {
+                      ".validate": "newData.isBoolean()"
+                    },
+                    "$other": {
+                      ".validate": "false"
+                    }
+                  },
+                  "2": {
+                    ".validate": "newData.hasChildren(['correct'])",
+                    "answer": {
+                      ".validate": "(newData.isString() && newData.val().length <= 50)"
+                    },
+                    "correct": {
+                      ".validate": "newData.isBoolean()"
+                    },
+                    "$other": {
+                      ".validate": "false"
+                    }
+                  },
+                  "3": {
+                    ".validate": "newData.hasChildren(['correct'])",
+                    "answer": {
+                      ".validate": "(newData.isString() && newData.val().length <= 50)"
+                    },
+                    "correct": {
+                      ".validate": "newData.isBoolean()"
+                    },
+                    "$other": {
+                      ".validate": "false"
+                    }
+                  },
+                  ".validate": "newData.hasChildren(['0', '1', '2', '3'])",
+                  "$other": {
+                    ".validate": "false"
+                  }
+                },
+                "$other": {
+                  ".validate": "false"
+                }
+              },
+              ".validate": "newData.hasChildren()"
+            },
+            "$other": {
+              ".validate": "false"
+            },
+            ".write": "($uid == auth.uid && (((auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/)) || auth.token.email.matches(/.*@mamklearn.com$/)) || auth.token.email == 'ilyastrug@gmail.com'))"
+          }
+        },
+        ".read": "($uid == auth.uid && (((auth.token.email.matches(/.*@mamkschools.org$/) || auth.token.email.matches(/.*@student.mamkschools.org$/)) || auth.token.email.matches(/.*@mamklearn.com$/)) || auth.token.email == 'ilyastrug@gmail.com'))"
+      }
+    }
+  }
+}

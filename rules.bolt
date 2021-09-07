@@ -1,0 +1,146 @@
+// Validates user given the uid.
+function isValiduser(uid) {
+    uid === auth.uid 
+    && (auth.token.email.matches(/.*@mamkschools.org$/) 
+    || auth.token.email.matches(/.*@student.mamkschools.org$/) 
+    || auth.token.email.matches(/.*@mamklearn.com$/) 
+    || auth.token.email == 'ilyastrug@gmail.com')
+}
+
+// This is where the actual path for the /actualGame/{uid} is stored.
+// First id and second id are parts of the numeric user id.
+path /currentGames/{firstID}/{secondID} {
+    read() { true }
+}
+
+// Where the data for the actual game is processed.
+path /actualGames/{uid} {
+    // If teacher allow global read.
+    read() { isValiduser(uid) }
+
+    // Allow all users in the game to read the global game state.
+    path /globalState {
+        read() { isValiduser(auth.uid) && this.parent().child(auth.uid).val() !== null }
+    }
+
+    // Allow all users in the game to read finalResults.
+    path /finalResults {
+        read() { isValiduser(auth.uid) && this.parent().child(auth.uid).val() !== null }
+    }
+
+    // Player specific data.
+    path /players/{player_id} {
+        read() { isValiduser(player_id) }
+    }
+}
+
+// Where shared quizzes are stored for users.
+path /sharedQuizzes/{shareUser}/{sharedQuiz} is Quiz {
+    // Allow read to any mamklearn user who knows the quiz name and id.
+    read() { isValiduser(auth.uid) }
+
+    // Allow write to quiz owner
+    write() { isValiduser(shareUser) }
+}
+
+// The majority of user data is stored here.
+path /userProfiles/{uid} {
+    // If account owner allow read.
+    read() { isValiduser(uid) }
+
+    // The players character configuration.
+    path /charConfig is Character {
+        write() { isValiduser(uid) }
+    }
+
+    // The quiz list that the user sees when opening the make menu.
+    path /quizList/{quizID} is MaybeQuizName {
+        write() { isValiduser(uid) }
+    }
+
+    // The player's quiz store.
+    path /quizData/{quizID} is Quiz {
+        write() { isValiduser(uid) }
+    }
+}
+
+// Fix bug
+type MaybeQuizName extends String {
+    validate() { this.length <= 15 && this.length > 0 }
+    delete() { true }
+}
+
+// A type representing the mamklearn player character.
+type Character extends Object {
+    '0': CharacterVal;
+    '1': CharacterVal;
+    '2': CharacterVal;
+    '3': CharacterVal;
+    '4': CharacterVal;
+}
+
+// A type representing individual parameters of a player's character.
+type CharacterVal extends Number {
+    validate() { this >= 0 && this <= 9 && this % 1 === 0.0 }
+}
+
+// A type representing all mamklearn quizzes.
+type Quiz extends Object {
+    quizID: QuizID;
+    quizName: QuizName;
+    isShared: Boolean;
+    questionObject: Map<FakeNumber, QuestionObject>;
+}
+
+// Mamklearn quizID type
+type QuizID extends String {
+    validate() { this.length <= 100 && this.contains('quizID_') && !this.replace('quizID_', '').matches(/[\[\].#$\/\u0000-\u001F\u007F]/) }
+}
+
+// Mamklearn quiz name length can't be more than 15 characters.
+type QuizName extends String {
+    validate() { this.length <= 15 && this.length > 0 }
+}
+
+// A type representing an individual question.
+type QuestionObject extends Object {
+    questionName: QuestionName;
+    shortAnswer: Boolean;
+    timeLimit: String | Boolean;
+    Answers: Answers;
+}
+
+// We have to do it this way because there is no other way to limit children in bolt.
+type Answers extends Object {
+    '0': RequiredAnswer;
+    '1': RequiredAnswer;
+    '2': Answer;
+    '3': Answer;
+}
+
+// A type representing question names.
+type QuestionName extends String {
+    validate() { this.length <= 90 }
+}
+
+// A type representing quiz answers.
+type Answer extends Object {
+    answer: AnswerLength | Null;
+    correct: Boolean;
+}
+
+// For a use case where answers are required.
+type RequiredAnswer extends Object {
+    answer: AnswerLength;
+    correct: Boolean;
+}
+
+// Scuffed hack for bypassing bolt extends from String type error.
+type FakeNumber extends String {
+    validate() { this.matches(/^\d+$/) }
+}
+
+// Answer length type.
+type AnswerLength extends String {
+    validate() { this.length <= 50 }
+}
