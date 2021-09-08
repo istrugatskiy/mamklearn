@@ -420,6 +420,7 @@ const verifyQuiz = () => {
         let answerError1: number[] = [];
         let answerError2: number[] = [];
         tempQuiz.questionObjects.forEach((question, index) => {
+            // Add one to index because questions don't start at zero.
             index++;
             if (/^$/.test(question.questionName)) {
                 nullSpace01.push(index);

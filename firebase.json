@@ -1,28 +1,24 @@
 {
-  "hosting": {
-    "public": "dist",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ]
-  },
-  "functions": {
-    "predeploy": "npm --prefix \"$RESOURCE_DIR\" run build",
-    "source": "functions"
-  },
-  "emulators": {
-    "functions": {
-      "port": 5001
-    },
     "hosting": {
-      "port": 5000
+        "public": "dist",
+        "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
     },
-    "ui": {
-      "enabled": true
+    "functions": {
+        "predeploy": "npm --prefix \"$RESOURCE_DIR\" run build",
+        "source": "functions"
+    },
+    "emulators": {
+        "functions": {
+            "port": 5001
+        },
+        "hosting": {
+            "port": 5000
+        },
+        "ui": {
+            "enabled": true
+        }
+    },
+    "database": {
+        "rules": "rules.bolt"
     }
-  },
-  "database": {
-    "rules": "database.rules.json"
-  }
 }

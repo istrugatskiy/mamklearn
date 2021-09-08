@@ -20,12 +20,12 @@ path /actualGames/{uid} {
 
     // Allow all users in the game to read the global game state.
     path /globalState {
-        read() { isValiduser(auth.uid) && this.parent().child(auth.uid).val() !== null }
+        read() { isValiduser(auth.uid) && this.parent().child('players').child(auth.uid).val() !== null }
     }
 
     // Allow all users in the game to read finalResults.
     path /finalResults {
-        read() { isValiduser(auth.uid) && this.parent().child(auth.uid).val() !== null }
+        read() { isValiduser(auth.uid) && this.parent().child('players').child(auth.uid).val() !== null }
     }
 
     // Player specific data.
@@ -66,8 +66,7 @@ path /userProfiles/{uid} {
 
 // Fix bug
 type MaybeQuizName extends String {
-    validate() { this.length <= 15 && this.length > 0 }
-    delete() { true }
+    validate() { (this.length <= 15 && this.length > 0) || this === null }
 }
 
 // A type representing the mamklearn player character.
@@ -89,12 +88,12 @@ type Quiz extends Object {
     quizID: QuizID;
     quizName: QuizName;
     isShared: Boolean;
-    questionObject: Map<FakeNumber, QuestionObject>;
+    questionObjects: Map<FakeNumber, QuestionObject>;
 }
 
 // Mamklearn quizID type
 type QuizID extends String {
-    validate() { this.length <= 100 && this.contains('quizID_') && !this.replace('quizID_', '').matches(/[\[\].#$\/\u0000-\u001F\u007F]/) }
+    validate() { this.length <= 100 && this.contains('quizID_') }
 }
 
 // Mamklearn quiz name length can't be more than 15 characters.
@@ -137,7 +136,7 @@ type RequiredAnswer extends Object {
 
 // Scuffed hack for bypassing bolt extends from String type error.
 type FakeNumber extends String {
-    validate() { this.matches(/^\d+$/) }
+    validate() { this.matches(/^\d+$/) && this !== '25' }
 }
 
 // Answer length type.

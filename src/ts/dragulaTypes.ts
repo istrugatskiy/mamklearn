@@ -89,3 +89,8 @@ export type DragulaJS = {
     on: <t extends keyof eventResponses>(type: t, handler: eventResponses[t]) => DragulaJS;
     emit: <t extends keyof eventResponses>(type: t, ...args: emitterMap[t]) => void;
 };
+
+export type leftTopOffsets = {
+    left: number;
+    top: number;
+};

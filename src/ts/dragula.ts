@@ -2,24 +2,31 @@
 // This rewrite was done with the goal of making DragulaJS more performant, easier to debug, and more in line with how the modern web works.
 // Original project: https://github.com/bevacqua/dragula
 import { Context, DragulaOptions, emitterMap, eventResponses, eventStore } from './dragulaTypes';
-import { makeOptionsSafe } from './dragulaUtils';
+import { getOffset, makeOptionsSafe, touchy, whichMouseButton } from './dragulaUtils';
 const doc = document;
 const { documentElement } = doc;
 
+/**
+ * Initializes dragula with specified containers and options and returns an object which allows you to interact with dragula's internals.
+ *
+ * @param {Element[]} [initialContainers] The initial containers to which you want to attach dragula.
+ * @param {DragulaOptions} [dragulaOptions] A valid Dragula Options object which can be used to customize dragula.
+ * @return {DragulaJS} A DragulaJS instance which can be used to customize / hook in to dragula's internal workings.
+ */
 export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaOptions) => {
     const { moves, accepts, invalid, containers, isContainer, copy, copySortSource, revertOnSpill, removeOnSpill, direction, ignoreInputTextSelection, mirrorContainer, slideFactorX, slideFactorY } = makeOptionsSafe(initialContainers, dragulaOptions);
-    let _mirror: HTMLElement | null; // mirror image
-    let _source: HTMLElement | null; // source container
+    let mirror: HTMLElement | null; // mirror image
+    let source: HTMLElement | null; // source container
     let _item: HTMLElement | null; // item being dragged
-    let _offsetX: number; // reference x
-    let _offsetY: number; // reference y
-    let _moveX: number; // reference move x
-    let _moveY: number; // reference move y
-    let _initialSibling: HTMLElement | null; // reference sibling when grabbed
-    let _currentSibling: HTMLElement | null; // reference sibling now
+    let offsetX: number; // reference x
+    let offsetY: number; // reference y
+    let moveX: number; // reference move x
+    let moveY: number; // reference move y
+    let initialSibling: HTMLElement | null; // reference sibling when grabbed
+    let currentSibling: HTMLElement | null; // reference sibling now
     let _copy: HTMLElement | null; // item used for copying
-    let _lastDropTarget: HTMLElement | null; // last container item was over
-    let _grabbed: Context | null; // holds mousedown context until first mousemove
+    let lastDropTarget: HTMLElement | null; // last container item was over
+    let grabbed: Context | null; // holds mousedown context until first mousemove
     const currentEvents: eventStore = {
         cancel: [],
         remove: [],
@@ -64,13 +71,20 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
         state.on('over', spillOver).on('out', spillOut);
     }
 
+    // Initializes events.
     events();
 
-    return state;
-
-    function isValidContainer(el: HTMLElement) {
+    /**
+     * Checks if the given object is a container.
+     *
+     * @param {HTMLElement} el The element that you wish to check.
+     * @return {boolean} Whether the element is considered a container by a user defined function or is in the list of valid containers.
+     */
+    const isValidContainer = (el: HTMLElement) => {
         return state.containers.includes(el) || isContainer(el);
-    }
+    };
+
+    return state;
 
     function events(remove: boolean = false) {
         const op = remove ? 'remove' : 'add';
@@ -88,14 +102,14 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
     }
 
     function preventGrabbed(event: Event) {
-        if (_grabbed) {
+        if (grabbed) {
             event.preventDefault();
         }
     }
 
     function grab(event: MouseEvent) {
-        _moveX = event.clientX;
-        _moveY = event.clientY;
+        moveX = event.clientX;
+        moveY = event.clientY;
 
         const ignore = whichMouseButton(event) !== 1 || event.metaKey || event.ctrlKey;
         if (ignore) {
@@ -106,7 +120,7 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
         if (!context) {
             return;
         }
-        _grabbed = context;
+        grabbed = context;
         eventualMovements();
         if (event.type === 'mousedown') {
             if (isInput(item)) {
@@ -119,7 +133,7 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
     }
 
     function startBecauseMouseMoved(event: MouseEvent) {
-        if (!_grabbed) {
+        if (!grabbed) {
             return;
         }
         if (whichMouseButton(event) === 0) {
@@ -128,7 +142,7 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
         }
 
         // truthy check fixes #239, equality fixes #207, fixes #501
-        if (event.clientX !== void 0 && Math.abs(event.clientX - _moveX) <= slideFactorX && event.clientY !== void 0 && Math.abs(event.clientY - _moveY) <= slideFactorY) {
+        if (event.clientX !== void 0 && Math.abs(event.clientX - moveX) <= slideFactorX && event.clientY !== void 0 && Math.abs(event.clientY - moveY) <= slideFactorY) {
             return;
         }
 
@@ -141,15 +155,15 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
             }
         }
 
-        let grabbed = _grabbed; // call to end() unsets _grabbed
+        const _grabbed = grabbed; // call to end() unsets _grabbed
         eventualMovements(true);
         movements();
         end();
-        start(grabbed);
+        start(_grabbed);
 
-        let offset = getOffset(_item);
-        _offsetX = getCoord('pageX', event) - offset.left;
-        _offsetY = getCoord('pageY', event) - offset.top;
+        const offset = getOffset(_item);
+        offsetX = getCoord('pageX', event) - offset.left;
+        offsetY = getCoord('pageY', event) - offset.top;
 
         (_copy || _item)?.classList.add('gu-transit');
         renderMirrorImage();
@@ -157,7 +171,7 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
     }
 
     function canStart(item: HTMLElement | undefined): Context | undefined {
-        if (state.dragging && _mirror) {
+        if (state.dragging && mirror) {
             return;
         }
         if (isValidContainer(item!)) {
@@ -210,24 +224,24 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
             state.emit('cloned', _copy, context.item, 'copy');
         }
 
-        _source = context.source;
+        source = context.source;
         _item = context.item;
-        _initialSibling = _currentSibling = context.item.nextElementSibling! as HTMLElement;
+        initialSibling = currentSibling = context.item.nextElementSibling! as HTMLElement;
 
         state.dragging = true;
-        state.emit('drag', _item, _source);
+        state.emit('drag', _item, source);
     }
 
     function end() {
         if (!state.dragging) {
             return;
         }
-        let item = _copy || _item;
+        const item = _copy || _item;
         drop(item, getParent(item as HTMLElement | undefined) as HTMLElement);
     }
 
     function ungrab() {
-        _grabbed = null;
+        grabbed = null;
         eventualMovements(true);
         movements(true);
     }
@@ -241,9 +255,9 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
         const item = _copy || _item;
         const clientX = getCoord('clientX', event);
         const clientY = getCoord('clientY', event);
-        const elementBehindCursor = getElementBehindPoint(_mirror, clientX, clientY);
+        const elementBehindCursor = getElementBehindPoint(mirror, clientX, clientY);
         const dropTarget = findDropTarget(elementBehindCursor!, clientX, clientY);
-        if (dropTarget && ((_copy && copySortSource) || !_copy || dropTarget !== _source)) {
+        if (dropTarget && ((_copy && copySortSource) || !_copy || dropTarget !== source)) {
             drop(item, dropTarget);
         } else if (removeOnSpill) {
             remove();
@@ -254,13 +268,13 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
 
     function drop(item: HTMLElement | null, target: HTMLElement | null) {
         const parent = getParent(item as HTMLElement | undefined);
-        if (_copy && copySortSource && target === _source) {
+        if (_copy && copySortSource && target === source) {
             parent!.removeChild(_item!);
         }
         if (isInitialPlacement(target)) {
-            state.emit('cancel', item!, _source!, _source!);
+            state.emit('cancel', item!, source!, source!);
         } else {
-            state.emit('drop', item!, target!, _source!, _currentSibling!);
+            state.emit('drop', item!, target!, source!, currentSibling!);
         }
         cleanup();
     }
@@ -269,12 +283,12 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
         if (!state.dragging) {
             return;
         }
-        let item = _copy || _item;
-        let parent = getParent(item!);
+        const item = _copy || _item;
+        const parent = getParent(item!);
         if (parent) {
             parent.removeChild(item!);
         }
-        state.emit(_copy ? 'cancel' : 'remove', item!, parent!, _source!);
+        state.emit(_copy ? 'cancel' : 'remove', item!, parent!, source!);
         cleanup();
     }
 
@@ -292,13 +306,13 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
                     parent.removeChild(_copy);
                 }
             } else {
-                _source?.insertBefore(item as Node, _initialSibling);
+                source?.insertBefore(item as Node, initialSibling);
             }
         }
         if (initial || reverts) {
-            state.emit('cancel', item!, _source!, _source!);
+            state.emit('cancel', item!, source!, source!);
         } else {
-            state.emit('drop', item!, parent!, _source!, _currentSibling!);
+            state.emit('drop', item!, parent!, source!, currentSibling!);
         }
         cleanup();
     }
@@ -311,23 +325,23 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
             item.classList.remove('gu-transit');
         }
         state.dragging = false;
-        if (_lastDropTarget) {
-            state.emit('out', item!, _lastDropTarget, _source!);
+        if (lastDropTarget) {
+            state.emit('out', item!, lastDropTarget, source!);
         }
         state.emit('dragend', item!);
-        _source = _item = _copy = _initialSibling = _currentSibling = _lastDropTarget = null;
+        source = _item = _copy = initialSibling = currentSibling = lastDropTarget = null;
     }
 
     function isInitialPlacement(target: HTMLElement | null, s?: HTMLElement) {
         let sibling;
         if (s !== void 0) {
             sibling = s;
-        } else if (_mirror) {
-            sibling = _currentSibling;
+        } else if (mirror) {
+            sibling = currentSibling;
         } else {
             sibling = (_copy || _item)?.nextElementSibling;
         }
-        return target === _source && sibling === _initialSibling;
+        return target === source && sibling === initialSibling;
     }
 
     function findDropTarget(elementBehindCursor: HTMLElement, clientX: number, clientY: number) {
@@ -339,11 +353,11 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
 
             const immediate = getImmediateChild(target, elementBehindCursor);
             const reference = getReference(target, immediate!, clientX, clientY);
-            let initial = isInitialPlacement(target, reference!);
+            const initial = isInitialPlacement(target, reference!);
             if (initial) {
                 return true; // should always be able to drop it right back where it was
             }
-            return accepts(_item!, target, _source!, reference!);
+            return accepts(_item!, target, source!, reference!);
         };
         let target = elementBehindCursor;
         while (target && !accepted()) {
@@ -353,43 +367,43 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
     }
 
     function drag(event: MouseEvent) {
-        if (!_mirror) {
+        if (!mirror) {
             return;
         }
         event.preventDefault();
 
-        let clientX = getCoord('clientX', event);
-        let clientY = getCoord('clientY', event);
+        const clientX = getCoord('clientX', event);
+        const clientY = getCoord('clientY', event);
 
-        let x = clientX - _offsetX;
-        let y = clientY - _offsetY;
+        const x = clientX - offsetX;
+        const y = clientY - offsetY;
 
-        _mirror.style.left = x + 'px';
-        _mirror.style.top = y + 'px';
+        mirror.style.left = x + 'px';
+        mirror.style.top = y + 'px';
 
         const item = _copy || _item;
-        const elementBehindCursor = getElementBehindPoint(_mirror, clientX, clientY);
+        const elementBehindCursor = getElementBehindPoint(mirror, clientX, clientY);
         let dropTarget = findDropTarget(elementBehindCursor as HTMLElement, clientX, clientY);
-        let changed = dropTarget !== null && dropTarget !== _lastDropTarget;
+        const changed = dropTarget !== null && dropTarget !== lastDropTarget;
         if (changed || dropTarget === null) {
             out();
-            _lastDropTarget = dropTarget;
+            lastDropTarget = dropTarget;
             over();
         }
-        let parent = getParent(item!);
-        if (dropTarget === _source && _copy && !copySortSource) {
+        const parent = getParent(item!);
+        if (dropTarget === source && _copy && !copySortSource) {
             if (parent) {
                 parent.removeChild(item!);
             }
             return;
         }
         let reference;
-        let immediate = getImmediateChild(dropTarget, elementBehindCursor);
+        const immediate = getImmediateChild(dropTarget, elementBehindCursor);
         if (immediate !== null) {
             reference = getReference(dropTarget, immediate, clientX, clientY);
         } else if (revertOnSpill === true && !_copy) {
-            reference = _initialSibling;
-            dropTarget = _source!;
+            reference = initialSibling;
+            dropTarget = source!;
         } else {
             if (_copy && parent) {
                 parent.removeChild(item!);
@@ -397,18 +411,18 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
             return;
         }
         if ((reference === null && changed) || (reference !== item && reference !== item?.nextElementSibling)) {
-            _currentSibling = reference;
+            currentSibling = reference;
             dropTarget.insertBefore(item as Node, reference);
-            state.emit('shadow', item!, dropTarget, _source!);
+            state.emit('shadow', item!, dropTarget, source!);
         }
         function over() {
             if (changed) {
-                state.emit('over', item!, _lastDropTarget!, _source!);
+                state.emit('over', item!, lastDropTarget!, source!);
             }
         }
         function out() {
-            if (_lastDropTarget) {
-                state.emit('out', item!, _lastDropTarget, _source!);
+            if (lastDropTarget) {
+                state.emit('out', item!, lastDropTarget, source!);
             }
         }
     }
@@ -424,27 +438,27 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
     }
 
     function renderMirrorImage() {
-        if (_mirror) {
+        if (mirror) {
             return;
         }
         const rect = _item?.getBoundingClientRect();
-        _mirror = _item?.cloneNode(true) as HTMLElement;
-        _mirror.style.width = getRectWidth(rect) + 'px';
-        _mirror.style.height = getRectHeight(rect) + 'px';
-        _mirror.classList.remove('gu-transit');
-        _mirror.classList.add('gu-mirror');
-        mirrorContainer.appendChild(_mirror);
+        mirror = _item?.cloneNode(true) as HTMLElement;
+        mirror.style.width = getRectWidth(rect) + 'px';
+        mirror.style.height = getRectHeight(rect) + 'px';
+        mirror.classList.remove('gu-transit');
+        mirror.classList.add('gu-mirror');
+        mirrorContainer.appendChild(mirror);
         touchy(documentElement, 'add', 'mousemove', drag);
         mirrorContainer.classList.add('gu-unselectable');
-        state.emit('cloned', _mirror, _item!, 'mirror');
+        state.emit('cloned', mirror, _item!, 'mirror');
     }
 
     function removeMirrorImage() {
-        if (_mirror) {
+        if (mirror) {
             mirrorContainer?.classList.remove('gu-unselectable');
             touchy(documentElement, 'remove', 'mousemove', drag);
-            getParent(_mirror)!.removeChild(_mirror);
-            _mirror = null;
+            getParent(mirror)!.removeChild(mirror);
+            mirror = null;
         }
     }
 
@@ -464,8 +478,8 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
             // slower, but able to figure out any position
             const len = dropTarget.children.length;
             for (let i = 0; i < len; i++) {
-                let el = dropTarget.children[i];
-                let rect = el.getBoundingClientRect();
+                const el = dropTarget.children[i];
+                const rect = el.getBoundingClientRect();
                 if (horizontal && rect.left + rect.width / 2 > x) {
                     return el as HTMLElement;
                 }
@@ -480,7 +494,7 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
             const resolve = (after: boolean) => (after ? target.nextElementSibling : target);
 
             // faster, but only available if dropped inside a child element
-            let rect = target.getBoundingClientRect();
+            const rect = target.getBoundingClientRect();
             if (horizontal) {
                 return resolve(x > rect.left + getRectWidth(rect) / 2);
             }
@@ -496,52 +510,6 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
         return typeof copy === 'boolean' ? copy : copy(item, container);
     }
 };
-
-function touchy(el: HTMLElement, op: 'add' | 'remove', type: 'mouseup' | 'mousedown' | 'mousemove', fn: (event: MouseEvent) => void) {
-    type eventType = `${typeof op}EventListener`;
-    const touch: { [key: string]: string } = {
-        mouseup: 'touchend',
-        mousedown: 'touchstart',
-        mousemove: 'touchmove',
-    };
-    const pointers: { [key: string]: string } = {
-        mouseup: 'pointerup',
-        mousedown: 'pointerdown',
-        mousemove: 'pointermove',
-    };
-    if (window.navigator.pointerEnabled) {
-        // Have to do type conversion to event because typeScript doesn't know event type.
-        el[`${op}EventListener` as eventType](pointers[type], fn as (event: Event) => void);
-    } else {
-        el[`${op}EventListener` as eventType](touch[type], fn as (event: Event) => void);
-        el[`${op}EventListener` as eventType](type, fn as (event: Event) => void);
-    }
-}
-
-function whichMouseButton(event: MouseEvent) {
-    if (event instanceof TouchEvent) {
-        return event.touches.length;
-    }
-    return event.buttons;
-}
-
-function getOffset(el: HTMLElement | null) {
-    const rect = el?.getBoundingClientRect();
-    return {
-        left: rect?.left! + getScroll('scrollLeft', 'pageXOffset'),
-        top: rect?.top! + getScroll('scrollTop', 'pageYOffset'),
-    };
-}
-
-function getScroll(scrollProp: 'scrollLeft' | 'scrollTop', offsetProp: 'pageXOffset' | 'pageYOffset') {
-    if (typeof window[offsetProp] !== 'undefined') {
-        return window[offsetProp];
-    }
-    if (documentElement.clientHeight) {
-        return documentElement[scrollProp];
-    }
-    return doc.body[scrollProp];
-}
 
 function getElementBehindPoint(point: HTMLElement | null, x: number, y: number) {
     point?.classList.add('gu-hide');

@@ -1033,16 +1033,16 @@ ul {
     }
 }
 #shouldRejoin {
-    left: 50%;
-    position: absolute;
+    transform: translateY(95px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
     text-align: center;
     animation: modalPopin 0.5s;
     animation-timing-function: cubic-bezier(0.28, 0.84, 0.42, 1);
     height: 100%;
-    top: 15%;
-    transform: translate(-50%, -15%);
     font-size: xx-large;
-    display: none;
 }
 @media screen and (max-width: 800px) {
     #shouldRejoin > .button {
