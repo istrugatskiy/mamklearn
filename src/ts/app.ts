@@ -137,9 +137,8 @@ const monitorUserState = () => {
                         setCharImage('currentUser', globals.currentUserConfig);
                     }
                 } else {
-                    for (let index = 0; index < 5; index++) {
-                        set(child(charConfig, index.toString()), 0);
-                    }
+                    globals.currentUserConfig ??= [0, 0, 0, 0, 0];
+                    set(charConfig, globals.currentUserConfig);
                 }
             }
         },
