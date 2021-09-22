@@ -235,25 +235,6 @@ export const logOut = () => {
 export const mathLerp = (x: number, y: number, a: number) => x * (1 - a) + y * a;
 
 /**
- * Dynamically imports a chonk and calls the specified callback.
- *
- * @param {string} chonkToLoad The name of the chonk that you want to load.
- * @param {(returnedObject: any) => void} callback The callback called on success.
- */
-export const loadChonk = (chonkToLoad: string, callback: (returnedObject: any) => void) => {
-    import(`./${chonkToLoad}`)
-        .then((obj) => {
-            callback(obj);
-        })
-        .catch((error) => {
-            console.warn(`Failed to fetch chonk (${error})! Retrying...`);
-            setTimeout(() => {
-                loadChonk(chonkToLoad, callback);
-            }, 2000);
-        });
-};
-
-/**
  * A helpful utility for managing multiple audio tracks.
  *
  * @class AudioManager

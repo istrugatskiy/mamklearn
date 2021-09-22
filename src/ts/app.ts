@@ -2,7 +2,7 @@ import '../css/globals.css';
 import '../css/button.css';
 import '../css/loader.css';
 import '../css/style.css';
-import { $, createTemplate, setTitle, logOut, loadChonk, timeHandler, throwExcept, call } from './utils';
+import { $, createTemplate, setTitle, logOut, timeHandler, throwExcept, call } from './utils';
 import { eventHandle } from './events';
 import { initParticles } from './loadParticles';
 import { child, DatabaseReference, getDatabase, onValue, push, ref, set } from 'firebase/database';
@@ -74,7 +74,7 @@ window.React = {
 
 const database = getDatabase();
 const auth = getAuth();
-const isNonMainPage = window.location.pathname !== '/index.html' && window.location.pathname !== '/';
+const isHome = window.location.pathname !== '/index.html' && window.location.pathname !== '/';
 
 // If the user is logged in initiliaze appropriate code
 
@@ -88,7 +88,7 @@ let hasInitialized = false;
 const listener = onAuthStateChanged(
     auth,
     (user) => {
-        if (isNonMainPage) {
+        if (isHome) {
             onReady();
             listener();
             return;
@@ -126,7 +126,7 @@ const listener = onAuthStateChanged(
 );
 
 const monitorUserState = () => {
-    if (isNonMainPage) return;
+    if (isHome) return;
     onValue(
         charConfig,
         (snap) => {
@@ -334,52 +334,62 @@ function makeCode(isInGame: boolean | Event = false) {
     $('makebtn').replaceChildren();
     customOptionsIncrement = 0;
     createTemplate('svgLoader', 'makebtn');
-    loadChonk('make', (obj: typeof import('./make')) => {
-        obj.initEvents();
-        if (isInGame === true) {
-            handleGameState(obj);
-            makeObj = obj;
-        }
-        const renderQuizList = (newQuizData: { [key: string]: string }) => {
-            $('title').classList.add('handleOutTransition');
-            setTimeout(() => {
-                $('title').classList.remove('handleOutTransition');
-                setTitle('makeMenu');
-                $('title').style.top = '100px';
-                obj.quizSetter(newQuizData);
-            }, 300);
-        };
-        if (makeMenuInitialized) {
-            renderQuizList(newQuizData);
-            return;
-        }
-        onValue(
-            quizList,
-            (snap) => {
-                newQuizData = {};
-                if (auth.currentUser) {
-                    if (snap.val()) {
-                        const newSnap = Object.keys(snap.val());
-                        const values = Object.values(snap.val());
-                        newSnap.forEach((el: string, index: number) => {
-                            if (values[index]) {
-                                newQuizData[`quizID_${el}`] = values[index] as string;
-                            }
-                        });
-                    }
-                    if (!makeMenuInitialized) {
-                        renderQuizList(newQuizData);
-                        makeMenuInitialized = true;
-                    } else {
-                        obj.quizSetter(newQuizData);
-                    }
+    const loadMake = () => {
+        import(`./make`)
+            .then((obj) => {
+                obj.initEvents();
+                if (isInGame === true) {
+                    handleGameState(obj);
+                    makeObj = obj;
                 }
-            },
-            (error) => {
-                throwExcept(`@InitQuizList: ${error.message}`);
-            }
-        );
-    });
+                const renderQuizList = (newQuizData: { [key: string]: string }) => {
+                    $('title').classList.add('handleOutTransition');
+                    setTimeout(() => {
+                        $('title').classList.remove('handleOutTransition');
+                        setTitle('makeMenu');
+                        $('title').style.top = '100px';
+                        obj.quizSetter(newQuizData);
+                    }, 300);
+                };
+                if (makeMenuInitialized) {
+                    renderQuizList(newQuizData);
+                    return;
+                }
+                onValue(
+                    quizList,
+                    (snap) => {
+                        newQuizData = {};
+                        if (auth.currentUser) {
+                            if (snap.val()) {
+                                const newSnap = Object.keys(snap.val());
+                                const values = Object.values(snap.val());
+                                newSnap.forEach((el: string, index: number) => {
+                                    if (values[index]) {
+                                        newQuizData[`quizID_${el}`] = values[index] as string;
+                                    }
+                                });
+                            }
+                            if (!makeMenuInitialized) {
+                                renderQuizList(newQuizData);
+                                makeMenuInitialized = true;
+                            } else {
+                                obj.quizSetter(newQuizData);
+                            }
+                        }
+                    },
+                    (error) => {
+                        throwExcept(`@InitQuizList: ${error.message}`);
+                    }
+                );
+            })
+            .catch((error) => {
+                console.warn(`Failed to fetch chonk (${error})! Retrying...`);
+                setTimeout(() => {
+                    loadMake();
+                }, 2000);
+            });
+    };
+    loadMake();
 }
 
 function handleGameState(obj: typeof import('./make')) {
@@ -424,26 +434,36 @@ function joinGameStudent() {
     }
     networkJoinGameStudent($('gameID').value, (exists, message) => {
         if (exists) {
-            loadChonk('play', (obj: typeof import('./play')) => {
-                $('mainLoader').classList.add('loader--active');
-                obj.initEvents();
-                setTimeout(() => {
-                    $('loader-1').style.display = 'none';
-                    $('gameStartScreenStudent').style.display = 'block';
-                    let firstTime = true;
-                    const unsubHandler = onValue(ref(database, `${globals.currentGameState.location}globalState`), (snap) => {
-                        const val = snap.val() as { isRunning: boolean; totalQuestions: number; gameEnd: number };
-                        if (val && val.isRunning) {
-                            unsubHandler();
-                            // This is for dealing with the countdown.
-                            // We do it on clientside because doing it server side would be a pain.
-                            // Plus its only four seconds.
-                            setTimeout(() => obj.initQuestionHandler(val.totalQuestions), firstTime ? 0 : 4100);
-                        }
-                        firstTime = false;
+            const loadPlay = () => {
+                import(`./play`)
+                    .then((obj) => {
+                        $('mainLoader').classList.add('loader--active');
+                        obj.initEvents();
+                        setTimeout(() => {
+                            $('loader-1').style.display = 'none';
+                            $('gameStartScreenStudent').style.display = 'block';
+                            let firstTime = true;
+                            const unsubHandler = onValue(ref(database, `${globals.currentGameState.location}globalState`), (snap) => {
+                                const val = snap.val() as { isRunning: boolean; totalQuestions: number; gameEnd: number };
+                                if (val && val.isRunning) {
+                                    unsubHandler();
+                                    // This is for dealing with the countdown.
+                                    // We do it on clientside because doing it server side would be a pain.
+                                    // Plus its only four seconds.
+                                    setTimeout(() => obj.initQuestionHandler(val.totalQuestions), firstTime ? 0 : 4100);
+                                }
+                                firstTime = false;
+                            });
+                        }, 1000);
+                    })
+                    .catch((error) => {
+                        console.warn(`Failed to fetch chonk (${error})! Retrying...`);
+                        setTimeout(() => {
+                            loadPlay();
+                        }, 2000);
                     });
-                }, 1000);
-            });
+            };
+            loadPlay();
         } else {
             $('errorActual').textContent = message;
             $('gameID').disabled = false;

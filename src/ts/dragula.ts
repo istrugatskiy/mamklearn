@@ -378,9 +378,8 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
         const x = clientX - offsetX;
         const y = clientY - offsetY;
 
-        mirror.style.left = x + 'px';
-        mirror.style.top = y + 'px';
-
+        mirror.style.transform = `translate(${x}px, ${y}px) rotate(5deg)`;
+        mirror.classList.remove('titleTransitionBack');
         const item = _copy || _item;
         const elementBehindCursor = getElementBehindPoint(mirror, clientX, clientY);
         let dropTarget = findDropTarget(elementBehindCursor as HTMLElement, clientX, clientY);
@@ -397,7 +396,7 @@ export const dragula = (initialContainers?: Element[], dragulaOptions?: DragulaO
             }
             return;
         }
-        let reference;
+        let reference: HTMLElement | null;
         const immediate = getImmediateChild(dropTarget, elementBehindCursor);
         if (immediate !== null) {
             reference = getReference(dropTarget, immediate, clientX, clientY);

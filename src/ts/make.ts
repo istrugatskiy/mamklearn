@@ -295,8 +295,8 @@ function doneButtonA() {
 }
 
 function collapseSubArea(a: number) {
-    let area = $(`collapseSubArea${a}`);
-    let objm = $(`collapsableContent${a}`);
+    const area = $(`collapseSubArea${a}`);
+    const objm = $(`collapsableContent${a}`);
     area.classList.toggle('arrowBRight');
     area.classList.toggle('arrowBDown');
     objm.classList.toggle('contentA1');
@@ -512,6 +512,16 @@ function exitModalPopupF(promptUser: boolean) {
 function addquestionToDOM() {
     highestQuestion++;
     createTemplate('templateQuestion', 'draggableDiv', '${highestQuestion}', highestQuestion);
+    const listener = (event: Event) => {
+        const target = event.target as HTMLElement;
+        console.log(target.classList.contains('contentA2'));
+        if (target && target.classList.contains('contentA2')) {
+            target.style.display = 'none';
+        } else if (target) {
+            target.style.display = 'block';
+        }
+    };
+    $(`collapsableContent${highestQuestion}`).addEventListener('transitionend', listener);
 }
 
 export function addQuiz() {

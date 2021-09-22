@@ -68,6 +68,9 @@ module.exports = {
                     mangle: {
                         module: true,
                     },
+                    compress: {
+                        pure_funcs: ['this.log_', 'assert'],
+                    },
                 },
             }),
         ],
