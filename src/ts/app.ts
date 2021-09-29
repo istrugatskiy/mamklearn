@@ -22,9 +22,10 @@ declare global {
             version: string;
             Component: string;
         };
+        __mamkVersion: string;
     }
 }
-
+window.__mamkVersion = 'v1.0.0';
 interface answer {
     answer: string | null;
     correct: boolean;

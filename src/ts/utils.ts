@@ -166,7 +166,8 @@ export const throwExcept = (msg: string | Error | ErrorEvent) => {
     $('CommError').style.display = 'block';
     $('comError3').textContent = typeof msg === 'string' ? msg : msg.message;
     console.trace(msg);
-    logEvent(getAnalytics(), 'throw_except', typeof msg === 'string' ? { message: msg } : msg);
+    const error = typeof msg === 'string' ? { message: msg } : msg;
+    logEvent(getAnalytics(), 'throw_except', { app_version: window.__mamkVersion, ...error });
 };
 
 /**
