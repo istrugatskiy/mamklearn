@@ -65,6 +65,6 @@ export const eventHandle = () => {
     });
     // Shows error message if error is encountered.
     window.addEventListener('error', (error) => {
-        throwExcept('@ScriptErrorHandler: ' + error.message);
+        throwExcept(error);
     });
 };

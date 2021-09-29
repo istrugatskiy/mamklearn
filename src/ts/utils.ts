@@ -1,3 +1,4 @@
+import { getAnalytics, logEvent } from '@firebase/analytics';
 import { getAuth, signOut } from 'firebase/auth';
 import { httpsCallable } from './firebaseFunctionsLite';
 let hasLoggedOut = false;
@@ -158,13 +159,14 @@ export const setTitle = (templateID: string) => {
  *
  * @param {string} msg The message that you want to pass.
  */
-export const throwExcept = (msg: string) => {
+export const throwExcept = (msg: string | Error | ErrorEvent) => {
     // Prevents false positive errors
     if (hasLoggedOut) return;
     $('commError2').style.display = 'block';
     $('CommError').style.display = 'block';
-    $('comError3').textContent = msg;
+    $('comError3').textContent = typeof msg === 'string' ? msg : msg.message;
     console.trace(msg);
+    logEvent(getAnalytics(), 'throw_except', typeof msg === 'string' ? { message: msg } : msg);
 };
 
 /**

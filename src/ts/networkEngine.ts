@@ -1,6 +1,8 @@
 import { getAuth } from 'firebase/auth';
 import { getDatabase, ref, child, onValue, set, push, remove } from 'firebase/database';
+import { getAnalytics } from 'firebase/analytics';
 import { initializeApp } from 'firebase/app';
+import { getPerformance } from 'firebase/performance';
 import { httpsCallable } from './firebaseFunctionsLite';
 import { globals } from './globals';
 import { throwExcept } from './utils';
@@ -40,7 +42,10 @@ initializeApp(firebaseConfig);
 const auth = getAuth();
 auth.useDeviceLanguage();
 const database = getDatabase();
-
+// Init analytics
+getAnalytics();
+// Init perf
+getPerformance();
 /**
  * Updates the data of a specified quiz (this handles sharing and name changes as well).
  *
@@ -49,15 +54,23 @@ const database = getDatabase();
  * @param {() => void} callback The callback that gets called once the quiz data has been updated on the server.
  */
 export const setQuiz = (quizID: string, quizObject: quizObject | null, callback: () => void) => {
-    set(child(child(ref(database, `userProfiles/${getAuth().currentUser!.uid}`), 'quizData'), quizID), quizObject).then(() => {
-        if (!quizObject || quizObject.isShared) {
-            set(ref(database, `sharedQuizzes/${auth.currentUser!.uid}/${quizID.replace('quizID_', '')}`), quizObject).then(() => {
+    set(child(child(ref(database, `userProfiles/${getAuth().currentUser!.uid}`), 'quizData'), quizID), quizObject)
+        .then(() => {
+            if (!quizObject || quizObject.isShared) {
+                set(ref(database, `sharedQuizzes/${auth.currentUser!.uid}/${quizID.replace('quizID_', '')}`), quizObject)
+                    .then(() => {
+                        callback();
+                    })
+                    .catch((error) => {
+                        throwExcept(error);
+                    });
+            } else {
                 callback();
-            });
-        } else {
-            callback();
-        }
-    });
+            }
+        })
+        .catch((error) => {
+            throwExcept(error);
+        });
 };
 
 /**
