@@ -166,8 +166,12 @@ export const throwExcept = (msg: string | Error | ErrorEvent) => {
     $('CommError').style.display = 'block';
     $('comError3').textContent = typeof msg === 'string' ? msg : msg.message;
     console.trace(msg);
-    const error = typeof msg === 'string' ? { message: msg } : msg;
-    logEvent(getAnalytics(), 'throw_except', { app_version: window.__mamkVersion, ...error });
+    const e = typeof msg === 'string' ? { message: msg } : msg;
+    if (e instanceof ErrorEvent) {
+        logEvent(getAnalytics(), 'throw_except', { app_version: window.__mamkVersion, file_name: e?.filename, line_number: e?.lineno, error: e?.error?.stack });
+    } else {
+        logEvent(getAnalytics(), 'throw_except', { app_version: window.__mamkVersion, ...e });
+    }
 };
 
 /**

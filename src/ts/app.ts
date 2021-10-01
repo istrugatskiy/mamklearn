@@ -25,7 +25,8 @@ declare global {
         __mamkVersion: string;
     }
 }
-window.__mamkVersion = 'v1.0.0';
+// Mamklearn version (used for analytics)
+window.__mamkVersion = 'v1.0.1#' + document.currentScript;
 interface answer {
     answer: string | null;
     correct: boolean;
