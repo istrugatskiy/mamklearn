@@ -30,7 +30,7 @@ interface tempSubmitQuestion {
 }
 
 // Handles game initialization for teacher play screen
-export const initGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
+export const initGame = functions.runWith({ maxInstances: 10 }).https.onCall(async (data, context) => {
     if (data && (typeof data === 'string' || data instanceof String)) {
         if (
             context.auth &&
@@ -125,7 +125,7 @@ export const initGame = functions.runWith({ maxInstances: 1 }).https.onCall(asyn
 });
 
 // Handles players leaving the game
-export const leaveGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
+export const leaveGame = functions.runWith({ maxInstances: 10 }).https.onCall(async (data, context) => {
     if (
         context.auth &&
         context.auth.token.email &&
@@ -177,7 +177,7 @@ export const leaveGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
 });
 
 // Handles students joining the game.
-export const joinGameStudent = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
+export const joinGameStudent = functions.runWith({ maxInstances: 10 }).https.onCall(async (data, context) => {
     if (typeof data !== 'string' || data.length !== 9 || !data.match(/^[0-9-]*$/)) {
         return {
             message: 'Malformed request sent from the client. You may be running an old version (try clearing your cache).',
@@ -236,7 +236,7 @@ export const joinGameStudent = functions.runWith({ maxInstances: 1 }).https.onCa
 });
 
 // This is for teacher kicking students.
-export const kickPlayer = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
+export const kickPlayer = functions.runWith({ maxInstances: 10 }).https.onCall(async (data, context) => {
     if (typeof data !== 'string') {
         return {
             message: 'Malformed request sent from the client. You may be running an old version (try clearing your cache).',
@@ -277,7 +277,7 @@ export const kickPlayer = functions.runWith({ maxInstances: 1 }).https.onCall(as
 });
 
 // For teacher starting game.
-export const startGame = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
+export const startGame = functions.runWith({ maxInstances: 10 }).https.onCall(async (data, context) => {
     if (
         context.auth &&
         context.auth.token.email &&
@@ -350,7 +350,7 @@ export const startGame = functions.runWith({ maxInstances: 1 }).https.onCall(asy
 });
 
 // Synchronises time.
-export const timeSync = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
+export const timeSync = functions.runWith({ maxInstances: 10 }).https.onCall(async (data, context) => {
     if (
         context.auth &&
         context.auth.token.email &&
@@ -368,7 +368,7 @@ export const timeSync = functions.runWith({ maxInstances: 1 }).https.onCall(asyn
     }
 });
 
-export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCall(async (data, context) => {
+export const submitQuestion = functions.runWith({ maxInstances: 10 }).https.onCall(async (data, context) => {
     if (
         context.auth &&
         context.auth.token.email &&
@@ -532,7 +532,7 @@ export const submitQuestion = functions.runWith({ maxInstances: 1 }).https.onCal
     }
 });
 
-export const handleGameEnd = functions.runWith({ maxInstances: 1 }).https.onRequest(async (req, res) => {
+export const handleGameEnd = functions.runWith({ maxInstances: 10 }).https.onRequest(async (req, res) => {
     const body = req.body as {
         location: string;
         totalPlayers: number;
