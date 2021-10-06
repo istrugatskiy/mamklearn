@@ -9,6 +9,7 @@ import { child, DatabaseReference, getDatabase, onValue, push, ref, set } from '
 import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from 'firebase/auth';
 import { globals } from './globals';
 import { leaveGame, networkJoinGameStudent, setQuiz } from './networkEngine';
+import { Character } from './character/character.lit';
 
 declare global {
     interface Window {
@@ -136,7 +137,7 @@ const monitorUserState = () => {
                 if (snap.val()) {
                     globals.currentUserConfig = snap.val();
                     if ($('currentUserArms')) {
-                        setCharImage('currentUser', globals.currentUserConfig);
+                        setCharImage('stableBody', globals.currentUserConfig);
                     }
                 } else {
                     globals.currentUserConfig ??= [0, 0, 0, 0, 0];
@@ -217,6 +218,7 @@ const getSharedQuiz = (shareUser: string, actualQuiz: string) => {
 const initApp = () => {
     $('mainLoader').classList.remove('loader--active');
     initParticles();
+    customElements.define('user-char', Character);
     const search = new URLSearchParams(window.location.search);
     const data = search.get('shareUser');
     const otherData = search.get('shareQuiz');
@@ -313,7 +315,7 @@ function completeLoginFlow() {
         setTitle('homeScreen');
         $('title').style.top = '15%';
         $('title').style.height = '800px';
-        setCharImage('currentUser', globals.currentUserConfig);
+        setCharImage('stableBody', globals.currentUserConfig);
     }, 300);
 }
 
@@ -486,7 +488,7 @@ export function goBack() {
         setTitle('homeScreen');
         $('title').style.height = '800px';
         $('title').style.top = '15%';
-        setCharImage('currentUser', globals.currentUserConfig);
+        setCharImage('stableBody', globals.currentUserConfig);
         customOptionsIncrement = 0;
     }, 300);
 }
@@ -512,7 +514,7 @@ function updateImageState(data: boolean) {
             globals.currentUserConfig[customOptionsIncrement] = 9;
         }
     }
-    setCharImage('currentUser', globals.currentUserConfig);
+    setCharImage('stableBody', globals.currentUserConfig);
     globals.currentUserConfig.forEach((value, index) => {
         set(child(charConfig, index.toString()), value);
     });
@@ -526,16 +528,5 @@ function updateImageState(data: boolean) {
  * @param {number[]} currentUserConfig The new configuration.
  */
 export function setCharImage(charID: string, currentUserConfig: number[]) {
-    $(`${charID}Eyes`).src = `img/eyes-${currentUserConfig[0]}.png`;
-    $(`${charID}Nose`).src = `img/nose-${currentUserConfig[1]}.png`;
-    $(`${charID}Mouth`).src = `img/mouth-${currentUserConfig[2]}.png`;
-    $(`${charID}Shirt`).src = `img/shirt-${currentUserConfig[3]}.png`;
-    $(`${charID}Arms`).src = `img/arms-${currentUserConfig[4]}.svg`;
-    // Handles edge case where player doesn't have character config, the case is denoted by negative value for last number.
-    if (currentUserConfig[4] !== -1) {
-        ($(`${charID}Eyes`).parentElement!.lastElementChild! as HTMLElement).src = 'img/base.svg';
-    } else {
-        ($(`${charID}Eyes`).parentElement!.lastElementChild! as HTMLElement).src = 'img/qIcon-0.svg';
-        $(`${charID}Arms`).src = `img/arms-5.svg`;
-    }
+    $(charID).dataset.character = JSON.stringify(currentUserConfig);
 }

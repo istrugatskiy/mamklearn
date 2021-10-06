@@ -1,13 +1,19 @@
 import { html, LitElement } from 'lit';
-import { customElement, property } from 'lit/decorators';
+import { property } from 'lit/decorators.js';
 
 type options = 'Eyes' | 'Nose' | 'Mouth' | 'Shirt' | 'Arms';
 const customOptions = ['Eyes', 'Nose', 'Mouth', 'Shirt', 'Arms'];
 
-@customElement('user-char')
-export class character extends LitElement {
-    @property()
+export class Character extends LitElement {
+    @property({
+        attribute: 'data-character',
+        type: Array,
+    })
     characterConfig: number[] | undefined;
+
+    constructor() {
+        super();
+    }
 
     /**
      * Get the src of the image that corresponds to the currently configured character.
@@ -15,7 +21,10 @@ export class character extends LitElement {
      */
     private getSrc(property: options): string {
         const lookupIndex = customOptions.indexOf(property);
-        return this.characterConfig ? this.characterConfig[lookupIndex].toString() : 'data:,';
+        if (lookupIndex == -1) {
+            return 'img/qIcon-0.svg';
+        }
+        return this.characterConfig ? `img/${property}-${this.characterConfig[lookupIndex].toString()}.${lookupIndex == 4 ? 'svg' : 'png'}` : 'data:,';
     }
 
     render() {

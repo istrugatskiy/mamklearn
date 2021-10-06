@@ -241,7 +241,7 @@ function goBackMakeA() {
         setTitle('homeScreen');
         $('title').style.height = '800px';
         $('title').style.top = '15%';
-        setCharImage('currentUser', globals.currentUserConfig);
+        setCharImage('stableBody', globals.currentUserConfig);
     }, 300);
 }
 
@@ -722,7 +722,7 @@ function renderPlayer(playerName: string, playerConfig: number[], playerID: stri
     createTemplate('playerForTeacherScreen', 'characterPeopleDiv');
     $('playerName').textContent = playerName;
     $('playerName').id = `playerName_${playerID}`;
-    setCharImage('inGamePlayer', playerConfig);
+    setCharImage('teacherScreenPlayer', playerConfig);
     Array.from($('characterPeopleDiv').lastElementChild!.firstElementChild!.children[1].children).forEach((el) => {
         el.id = '';
     });

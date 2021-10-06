@@ -27,6 +27,14 @@ module.exports = {
                 },
                 exclude: /functions/,
             },
+            {
+                test: /\.lit\.js$/,
+                loader: 'minify-template-literal-loader',
+                options: {
+                    caseSensitive: true,
+                    collapseWhitespace: true,
+                },
+            },
         ],
     },
     devtool: false,
