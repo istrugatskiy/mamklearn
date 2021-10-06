@@ -37,6 +37,7 @@
   "dependencies": {
     "@types/firebase": "^3.2.1",
     "firebase": "^9.0.1",
+    "lit": "^2.0.0",
     "particles.js": "^2.0.0",
     "semver": "^7.3.5"
   }
