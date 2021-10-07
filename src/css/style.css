@@ -343,7 +343,7 @@ ul {
     margin: 25px auto;
 }
 #charCustomize:focus-within {
-    height: 70%;
+    height: 560px;
     background-color: white;
     border: 2px solid white;
     text-decoration: none;
@@ -361,12 +361,22 @@ ul {
     opacity: 0;
     visibility: hidden;
 }
-#charCustomize > #customType {
-    margin: 0px;
+#customType {
+    display: none;
 }
 #charCustomize:focus-within > #customType {
     display: block;
-    opacity: 1;
+}
+#charCustomize > #customType {
+    margin: 0px;
+}
+#customButtonChange2 {
+    display: none;
+}
+#charCustomize:focus-within > #customButtonChange2 {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
 }
 .notifyTextChar {
     font-size: x-large;

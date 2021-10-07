@@ -9,7 +9,7 @@ import { child, DatabaseReference, getDatabase, onValue, push, ref, set } from '
 import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from 'firebase/auth';
 import { globals } from './globals';
 import { leaveGame, networkJoinGameStudent, setQuiz } from './networkEngine';
-import { Character } from './character/character.lit';
+import { Character } from './components/character.lit';
 
 declare global {
     interface Window {

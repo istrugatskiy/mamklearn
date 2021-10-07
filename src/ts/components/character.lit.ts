@@ -145,7 +145,7 @@ export class Character extends LitElement {
         if (lookupIndex == -1) {
             return 'img/qIcon-0.svg';
         }
-        return this.characterConfig ? `img/${property}-${this.characterConfig[lookupIndex].toString()}.${lookupIndex == 4 ? 'svg' : 'png'}` : 'data:,';
+        return this.characterConfig ? `img/${property.toLowerCase()}-${this.characterConfig[lookupIndex].toString()}.${lookupIndex == 4 ? 'svg' : 'png'}` : 'data:,';
     }
 
     render() {
