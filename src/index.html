@@ -207,7 +207,7 @@
         </div>
         <div class="title" id="studentPlayScreen">
             <div class="button buttonLikeTitle playerContainer" id="studentRaceBox">
-                <user-char id="player" class="playerCharacter"></user-char>
+                <user-char id="player" data-style="student-screen"></user-char>
                 <table class="stretchyBoi2">
                     <tr id="studentRaceNumbers"></tr>
                 </table>
@@ -234,10 +234,10 @@
         </div>
         <div id="gameResults">
             <div id="imageObjectContainer">
-                <user-char id="thirdPlace" class="inGamePlayer"></user-char>
-                <user-char id="secondPlace" class="inGamePlayer"></user-char>
+                <user-char id="third-place" data-style="third-place results-player"></user-char>
+                <user-char id="second-place" data-style="second-place results-player"></user-char>
                 <div id="inGame1stContainer" class="inGamePlayer">
-                    <user-char id="firstPlace"></user-char>
+                    <user-char id="first-place" data-style="first-place"></user-char>
                 </div>
                 <img src="img/podium.svg" alt="podium" class="gameResultImage" id="firstPodium" loading="lazy" width="1000" height="1200" />
             </div>
@@ -392,7 +392,7 @@
             <h1 class="titleTransitionBack" id="homeText">Home</h1>
             <div class="button titleTransitionBack" id="charCustomize" tabindex="0">
                 <p class="notifyTextChar" id="tapToCustom">Tap to customize...</p>
-                <user-char id="stableBody"></user-char>
+                <user-char id="user-char" data-style="animated-char"></user-char>
                 <p class="notifyTextChar" id="customType">
                     <a class="arrow left" href="javascript:void(0)" id="leftCustomizeArrow"> </a>
                     <a href="javascript:void(0)" id="customButtonChange">Eyes</a>
@@ -415,7 +415,7 @@
             <div class="parentTransformElement">
                 <div class="button studentPlayer titleTransitionBack" tabindex="0" role="button">
                     <p id="playerName" class="notifyTextChar"></p>
-                    <user-char id="teacherScreenPlayer"></user-char>
+                    <user-char id="teacher-screen" data-style="teacher-screen"></user-char>
                     <div class="kickPlayerDiv">Kick Player</div>
                 </div>
             </div>

@@ -262,9 +262,9 @@ function gameEnd(firstPlace: number[], secondPlace: number[], thirdPlace: number
     clearInterval(timerInterval);
     clearInterval(otherInterval);
     $('gameResults').style.display = 'block';
-    setCharImage('firstPlace', firstPlace);
-    secondPlace ? setCharImage('secondPlace', secondPlace) : setCharImage('secondPlace', [1, 2, 2, 2, -1]);
-    thirdPlace ? setCharImage('thirdPlace', thirdPlace) : setCharImage('thirdPlace', [1, 2, 2, 2, -1]);
+    setCharImage('first-place', firstPlace);
+    secondPlace ? setCharImage('second-place', secondPlace) : setCharImage('second-place', [1, 2, 2, 2, -1]);
+    thirdPlace ? setCharImage('third-place', thirdPlace) : setCharImage('third-place', [1, 2, 2, 2, -1]);
     $('userEndPlaceNumber').textContent = yourPlace.toString();
     $('currentUserEndPlaceSup').textContent = ordinalSuffix(yourPlace);
     setTimeout(() => {

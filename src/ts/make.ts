@@ -241,7 +241,7 @@ function goBackMakeA() {
         setTitle('homeScreen');
         $('title').style.height = '800px';
         $('title').style.top = '15%';
-        setCharImage('stableBody', globals.currentUserConfig);
+        setCharImage('user-char', globals.currentUserConfig);
     }, 300);
 }
 
@@ -722,7 +722,7 @@ function renderPlayer(playerName: string, playerConfig: number[], playerID: stri
     createTemplate('playerForTeacherScreen', 'characterPeopleDiv');
     $('playerName').textContent = playerName;
     $('playerName').id = `playerName_${playerID}`;
-    setCharImage('teacherScreenPlayer', playerConfig);
+    setCharImage('teacher-screen', playerConfig);
     Array.from($('characterPeopleDiv').lastElementChild!.firstElementChild!.children[1].children).forEach((el) => {
         el.id = '';
     });
@@ -1141,9 +1141,9 @@ function actuallyShareQuiz() {
 function gameEnd(firstPlace: number[], secondPlace: number[], thirdPlace: number[]) {
     clearInterval(otherInterval);
     $('gameResults').style.display = 'block';
-    setCharImage('firstPlace', firstPlace);
-    secondPlace ? setCharImage('secondPlace', secondPlace) : setCharImage('secondPlace', [1, 2, 2, 2, -1]);
-    thirdPlace ? setCharImage('thirdPlace', thirdPlace) : setCharImage('thirdPlace', [1, 2, 2, 2, -1]);
+    setCharImage('first-place', firstPlace);
+    secondPlace ? setCharImage('second-place', secondPlace) : setCharImage('second-place', [1, 2, 2, 2, -1]);
+    thirdPlace ? setCharImage('third-place', thirdPlace) : setCharImage('third-place', [1, 2, 2, 2, -1]);
     mainAudio?.setVolume('playTheme', 0);
     setTimeout(() => {
         $('gameFinishNotify').style.display = 'none';

@@ -399,38 +399,6 @@ ul {
         transform: translateY(0%);
     }
 }
-#stableBody {
-    animation: charDefault 2s infinite;
-    animation-timing-function: cubic-bezier(0.28, 0.84, 0.42, 1);
-    z-index: -1;
-    position: relative;
-    margin-top: 94px;
-    margin-bottom: 0px;
-    height: 280px;
-}
-@keyframes charDefault {
-    0% {
-        transform: scale(1, 1) translateY(0) translateZ(0);
-    }
-    10% {
-        transform: scale(1.1, 0.9) translateY(0) translateZ(0);
-    }
-    30% {
-        transform: scale(0.9, 1.1) translateY(-100px) translateZ(0);
-    }
-    50% {
-        transform: scale(1.05, 0.95) translateY(0);
-    }
-    57% {
-        transform: scale(1, 1) translateY(-7px);
-    }
-    64% {
-        transform: scale(1, 1) translateY(0);
-    }
-    100% {
-        transform: scale(1, 1) translateY(0);
-    }
-}
 .arrow {
     border: solid black;
     border-width: 0 3px 3px 0;
@@ -591,14 +559,6 @@ ul {
 :root {
     --questionOffset: 0;
     --bottomBarOffset: 15px;
-}
-.playerCharacter {
-    z-index: -1;
-    position: absolute;
-    height: 150px;
-    bottom: 50px;
-    transform: translateX(calc(114px * var(--questionOffset)));
-    transition: transform 0.3s;
 }
 #studentRaceBox {
     overflow: hidden;
@@ -916,52 +876,6 @@ ul {
         transform: scale(0.3);
     }
 }
-.inGamePlayer {
-    animation-timing-function: cubic-bezier(0.29, 0.09, 0.07, 1.4);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    visibility: hidden;
-}
-#inGame3rd {
-    animation: spawn3rdPlace 0.3s forwards;
-    animation-delay: 1s;
-}
-#inGame3rd > * {
-    position: absolute;
-    left: 210px;
-    top: -55px;
-}
-@keyframes spawn3rdPlace {
-    from {
-        visibility: visible;
-        transform: scale(0) translateY(-50%) translateX(-50%);
-    }
-    to {
-        visibility: visible;
-        transform: scale(1) translateY(-50%) translateX(-50%);
-    }
-}
-#inGame2nd {
-    animation: spawn2ndPlace 1s forwards;
-    animation-delay: 2.25s;
-    top: 0;
-}
-#inGame2nd > * {
-    position: absolute;
-    left: -60px;
-    top: -260px;
-}
-@keyframes spawn2ndPlace {
-    from {
-        visibility: visible;
-        transform: translateY(-50vh) translateX(-50%);
-    }
-    to {
-        visibility: visible;
-        transform: translateY(50vh) translateX(-50%);
-    }
-}
 #inGame1stContainer {
     position: absolute;
     transform: translateY(-470px) translateX(-400px);
@@ -969,33 +883,12 @@ ul {
     animation-delay: 4s;
     visibility: hidden;
 }
-#inGame1st {
-    position: relative;
-    animation: spawn1stPlace 3s forwards;
-    animation-delay: 4s;
-    transform-origin: 50% 78%;
-}
 @keyframes spawn1stPlaceContainer {
     to {
         visibility: visible;
     }
     from {
         visibility: visible;
-    }
-}
-@keyframes spawn1stPlace {
-    0% {
-        visibility: visible;
-        opacity: 0;
-        transform: scale(1);
-    }
-    10% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    100% {
-        visibility: visible;
-        transform: scale(2);
     }
 }
 #currentUserEndPlaceParent {

@@ -137,7 +137,7 @@ const monitorUserState = () => {
                 if (snap.val()) {
                     globals.currentUserConfig = snap.val();
                     if ($('currentUserArms')) {
-                        setCharImage('stableBody', globals.currentUserConfig);
+                        setCharImage('user-char', globals.currentUserConfig);
                     }
                 } else {
                     globals.currentUserConfig ??= [0, 0, 0, 0, 0];
@@ -315,7 +315,7 @@ function completeLoginFlow() {
         setTitle('homeScreen');
         $('title').style.top = '15%';
         $('title').style.height = '800px';
-        setCharImage('stableBody', globals.currentUserConfig);
+        setCharImage('user-char', globals.currentUserConfig);
     }, 300);
 }
 
@@ -488,7 +488,7 @@ export function goBack() {
         setTitle('homeScreen');
         $('title').style.height = '800px';
         $('title').style.top = '15%';
-        setCharImage('stableBody', globals.currentUserConfig);
+        setCharImage('user-char', globals.currentUserConfig);
         customOptionsIncrement = 0;
     }, 300);
 }
@@ -514,7 +514,7 @@ function updateImageState(data: boolean) {
             globals.currentUserConfig[customOptionsIncrement] = 9;
         }
     }
-    setCharImage('stableBody', globals.currentUserConfig);
+    setCharImage('user-char', globals.currentUserConfig);
     globals.currentUserConfig.forEach((value, index) => {
         set(child(charConfig, index.toString()), value);
     });

@@ -515,14 +515,6 @@
     left: 50%;
     transform: translate(-50%, 0);
 }
-.teacherScreenPlayer {
-    position: absolute;
-    top: 130px;
-    left: 30px;
-}
-.teacherScreenPlayer > * {
-    height: 305px;
-}
 .inGamePlayerButton {
     max-width: 600px;
     animation: slideAndFade 0.3s;
