@@ -719,9 +719,8 @@ function renderPlayer(playerName: string, playerConfig: number[], playerID: stri
     playerNumber++;
     $('gameStartButtonTeacher').disabled = playerNumber == 0;
     mainAudio.setVolume('mainTheme', mathClamp(0.6 + (playerNumber / 5) * 0.1, 0.6, 1), true);
-    createTemplate('playerForTeacherScreen', 'characterPeopleDiv');
-    $('playerName').textContent = playerName;
-    $('playerName').id = `playerName_${playerID}`;
+    const char = document.createElement('teacher-screen-player');
+
     setCharImage('teacher-screen', playerConfig);
     Array.from($('characterPeopleDiv').lastElementChild!.firstElementChild!.children[1].children).forEach((el) => {
         el.id = '';

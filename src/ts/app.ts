@@ -10,6 +10,7 @@ import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from
 import { globals } from './globals';
 import { leaveGame, networkJoinGameStudent, setQuiz } from './networkEngine';
 import { Character } from './components/character.lit';
+import { Player } from './components/student.lit';
 
 declare global {
     interface Window {
@@ -219,6 +220,7 @@ const initApp = () => {
     $('mainLoader').classList.remove('loader--active');
     initParticles();
     customElements.define('user-char', Character);
+    customElements.define('teacher-screen-player', Player);
     const search = new URLSearchParams(window.location.search);
     const data = search.get('shareUser');
     const otherData = search.get('shareQuiz');
