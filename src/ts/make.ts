@@ -720,12 +720,10 @@ function renderPlayer(playerName: string, playerConfig: number[], playerID: stri
     $('gameStartButtonTeacher').disabled = playerNumber == 0;
     mainAudio.setVolume('mainTheme', mathClamp(0.6 + (playerNumber / 5) * 0.1, 0.6, 1), true);
     const char = document.createElement('teacher-screen-player');
-
-    setCharImage('teacher-screen', playerConfig);
-    Array.from($('characterPeopleDiv').lastElementChild!.firstElementChild!.children[1].children).forEach((el) => {
-        el.id = '';
-    });
-    $('characterPeopleDiv').lastElementChild!.firstElementChild!.id = `studentCharacterImage_${playerID}`;
+    char.dataset.name = playerName;
+    char.dataset.character = JSON.stringify(playerConfig);
+    char.id = `studentCharacterImage_${playerID}`;
+    $('characterPeopleDiv').appendChild(char);
 }
 
 function kickPlayer(eventId: string) {

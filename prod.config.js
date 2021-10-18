@@ -28,7 +28,7 @@ module.exports = {
                 exclude: /functions/,
             },
             {
-                test: /\.lit\.js$/,
+                test: /\.lit\.js$|\.styles\.js$/,
                 loader: 'minify-template-literal-loader',
                 options: {
                     caseSensitive: true,

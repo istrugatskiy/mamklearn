@@ -1,51 +1,59 @@
-import { LitElement, css, html } from 'lit-element';
-import { property } from 'lit-element/decorators.js';
+import { LitElement, css, html } from 'lit';
+import { property } from 'lit/decorators.js';
+import button from '../styles/button.styles';
+import global from '../styles/globals.styles';
 
 export class Player extends LitElement {
-    static styles = css`
-        .student {
-            width: 300px;
-            display: inline-block;
-            height: 420px;
-            margin-bottom: 25px;
-            margin-left: 10px;
-            margin-right: 10px;
-        }
-        .student-button {
-            position: absolute;
-            width: 300px;
-            height: 420px;
-        }
-        .kick-player {
-            transform: scale(0);
-            position: absolute;
-            top: 130px;
-            transition: transform 0.3s;
-        }
-        .student-button > * {
-            transition: transform 0.3s;
-        }
-        .student-button:hover > * {
-            transform: scale(0);
-        }
-        .student-button:active > * {
-            transform: scale(0);
-        }
-        .student-button:focus > * {
-            transform: scale(0);
-        }
-        .student-button:hover > .kick-player {
-            transform: scale(1);
-        }
-        .student-button:active > .kick-player {
-            transform: scale(1);
-            text-decoration: underline;
-        }
-        .student-button:focus > .kick-player {
-            transform: scale(1);
-            text-decoration: underline;
-        }
-    `;
+    static get styles() {
+        return [
+            global,
+            button,
+            css`
+                .student {
+                    width: 300px;
+                    display: inline-block;
+                    height: 420px;
+                    margin-bottom: 25px;
+                    margin-left: 10px;
+                    margin-right: 10px;
+                }
+                .student-button {
+                    position: absolute;
+                    width: 300px;
+                    height: 420px;
+                }
+                .kick-player {
+                    transform: scale(0);
+                    position: absolute;
+                    top: 130px;
+                    transition: transform 0.3s;
+                }
+                .student-button > * {
+                    transition: transform 0.3s;
+                }
+                .student-button:hover > * {
+                    transform: scale(0);
+                }
+                .student-button:active > * {
+                    transform: scale(0);
+                }
+                .student-button:focus > * {
+                    transform: scale(0);
+                }
+                .student-button:hover > .kick-player {
+                    transform: scale(1);
+                }
+                .student-button:active > .kick-player {
+                    transform: scale(1);
+                    text-decoration: underline;
+                }
+                .student-button:focus > .kick-player {
+                    transform: scale(1);
+                    text-decoration: underline;
+                }
+            `,
+        ];
+    }
 
     @property({
         attribute: 'data-character',
