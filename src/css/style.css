@@ -569,6 +569,7 @@ ul {
 :root {
     --questionOffset: 0;
     --bottomBarOffset: 15px;
+    --char-size: 1;
 }
 #studentRaceBox {
     overflow: hidden;

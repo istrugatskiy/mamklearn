@@ -122,6 +122,10 @@ export class Character extends LitElement {
                 transform: scale(2);
             }
         }
+        .main {
+            transition: transform 0.3s;
+            transform: scale(var(--char-size));
+        }
     `;
 
     @property({
@@ -150,7 +154,7 @@ export class Character extends LitElement {
 
     render() {
         return html`
-            <div class="${this.charStyle}">
+            <div class="${this.charStyle} main">
                 <img alt="your arms" src="${this.getSrc('Arms')}" style="position: absolute" width="250" height="337" />
                 <img alt="your eyes" src="${this.getSrc('Eyes')}" style="position: absolute" width="250" height="337" />
                 <img alt="your nose" src="${this.getSrc('Nose')}" style="position: absolute" width="250" height="337" />

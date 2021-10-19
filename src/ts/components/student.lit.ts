@@ -1,13 +1,11 @@
 import { LitElement, css, html } from 'lit';
 import { property } from 'lit/decorators.js';
-import button from '../styles/button.styles';
-import global from '../styles/globals.styles';
+import commons from '../styles/commons.styles';
 
 export class Player extends LitElement {
     static get styles() {
         return [
-            global,
-            button,
+            commons,
             css`
                 .student {
                     width: 300px;
@@ -33,12 +31,15 @@ export class Player extends LitElement {
                 }
                 .student-button:hover > * {
                     transform: scale(0);
+                    --char-size: 0;
                 }
                 .student-button:active > * {
                     transform: scale(0);
+                    --char-size: 0;
                 }
                 .student-button:focus > * {
                     transform: scale(0);
+                    --char-size: 0;
                 }
                 .student-button:hover > .kick-player {
                     transform: scale(1);
@@ -50,6 +51,12 @@ export class Player extends LitElement {
                 .student-button:focus > .kick-player {
                     transform: scale(1);
                     text-decoration: underline;
+                }
+                .person-name {
+                    font-size: x-large;
+                    text-align: center;
+                    z-index: 1;
+                    word-break: break-word;
                 }
             `,
         ];
@@ -70,9 +77,9 @@ export class Player extends LitElement {
     render() {
         return html`
             <div class="student">
-                <div class="button student-button titleTransitionBack" tabindex="0" role="button">
-                    <p class="notifyTextChar">${this.name}</p>
-                    <user-char data-style="teacher-screen" data-character="${this.characterConfig}"></user-char>
+                <div class="button student-button scale-in" tabindex="0" role="button">
+                    <p class="person-name">${this.name}</p>
+                    <user-char data-style="teacher-screen" data-character="${JSON.stringify(this.characterConfig)}"></user-char>
                     <div class="kick-player">Kick Player</div>
                 </div>
             </div>
