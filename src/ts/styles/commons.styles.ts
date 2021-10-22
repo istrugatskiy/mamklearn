@@ -1,10 +1,12 @@
 import { css } from 'lit';
 import button from './button.styles';
 import globals from './globals.styles';
+import title from './title.styles';
 
 export default css`
     ${button}
     ${globals}
+    ${title}
     .scale-in {
         animation-name: scale;
         animation-duration: 0.3s;

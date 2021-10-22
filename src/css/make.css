@@ -430,18 +430,6 @@
     display: inline-block;
     min-width: 200px;
 }
-#teacherPlayScreen {
-    top: 10%;
-}
-#characterPeopleDiv {
-    text-align: center;
-    margin: 100px;
-}
-@media screen and (max-width: 1000px) {
-    #characterPeopleDiv {
-        margin: 10px;
-    }
-}
 @keyframes hideme {
     0% {
         transform: translateY(0px);
@@ -466,13 +454,6 @@
     transition: transform 0.3s;
     transform: scale(0) rotate(360deg);
 }
-#teacherCountdown {
-    font-size: 128px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, 0);
-}
 .inGamePlayerButton {
     max-width: 600px;
     animation: slideAndFade 0.3s;
@@ -494,9 +475,4 @@
         transform: translateX(0);
         opacity: 1;
     }
-}
-#gameCodeTeacher {
-    -webkit-user-select: text; /* Safari */
-    -ms-user-select: text; /* IE 10 and IE 11 */
-    user-select: text;
 }

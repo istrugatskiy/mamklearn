@@ -1,11 +1,11 @@
 import { LitElement, css, html } from 'lit';
 import { property } from 'lit/decorators.js';
-import commons from '../styles/commons.styles';
+import common from '../styles/commons.styles';
 
 export class Player extends LitElement {
     static get styles() {
         return [
-            commons,
+            common,
             css`
                 .student {
                     width: 300px;
