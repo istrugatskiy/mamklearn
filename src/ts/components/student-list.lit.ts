@@ -42,6 +42,9 @@ export class StudentList extends LitElement {
     })
     gameCode: string = '*****-***';
 
+    @property()
+    playerList: { playerName: string; playerConfig: number[] }[] = [];
+
     @state()
     private displayCountdown = false;
 
@@ -71,7 +74,11 @@ export class StudentList extends LitElement {
             <div class="title" class="play-screen">
                 <h1 class="scale-in" class="game-code">Game Code: ${this.gameCode}</h1>
                 <button class="button scale-in" @click=${this.startGame}>Start Game</button>
-                <div class="character-list"></div>
+                <div class="character-list">
+                    ${this.playerList.map(({ playerConfig, playerName }) => {
+                        return html`<teacher-screen-player data-character="${playerConfig}" data-name="${playerName}"></teacher-screen-player>`;
+                    })}
+                </div>
                 <div style="display: ${this.displayCountdown ? 'block' : 'none'}" class="countdown">
                     <h1 class="${this.countdownAnim}">${this.countdownNumber}</h1>
                 </div>
