@@ -680,10 +680,7 @@ export function playQuiz() {
         playTheme: 'data/MusicOfTheShavedBears.mp3',
         loadingTheme: 'data/AmbientSpace.mp3',
     });
-    $('gameStartButtonTeacher').classList.remove('btnTransitionA');
-    $('gameCodeTeacher').classList.remove('btnTransitionA');
-    $('gameCodeTeacher').style.display = '';
-    $('gameStartButtonTeacher').style.display = '';
+    const quizID = currentQuizEdit.replace('quizID_', '');
     exitModalPopupTemplate('manageQuizMenu');
     $('title').style.display = 'none';
     playerNumber = 0;
@@ -711,7 +708,7 @@ export function playQuiz() {
                 alreadyAware[snap.key!] = snap.val();
             });
         },
-        currentQuizEdit ? currentQuizEdit.replace('quizID_', '') : ''
+        currentQuizEdit ? quizID : ''
     );
 }
 
