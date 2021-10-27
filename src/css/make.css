@@ -450,10 +450,6 @@
     margin-left: 15px;
     margin-right: 15px;
 }
-.teacherCountdownAnim {
-    transition: transform 0.3s;
-    transform: scale(0) rotate(360deg);
-}
 .inGamePlayerButton {
     max-width: 600px;
     animation: slideAndFade 0.3s;

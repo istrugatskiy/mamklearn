@@ -32,6 +32,10 @@ export class StudentList extends LitElement {
                     -ms-user-select: text;
                     user-select: text;
                 }
+                .countdown-disappear {
+                    transition: transform 0.3s;
+                    transform: scale(0) rotate(360deg);
+                }
             `,
         ];
     }
@@ -56,12 +60,21 @@ export class StudentList extends LitElement {
 
     countdown() {
         this.displayCountdown = true;
-        let iterator = 1;
+        let iterator = 3;
         const interval = setInterval(() => {
-            if (iterator > 3) {
+            this.countdownNumber = iterator;
+            this.countdownAnim = 'countdown-disappear';
+            setTimeout(() => {
+                this.countdownAnim = 'scale-in';
+            }, 300);
+            if (iterator == 1) {
+                this.displayCountdown = false;
+                setTimeout(() => {
+                    this.countdownAnim = 'countdown-disappear';
+                }, 1000);
                 clearInterval(interval);
             }
-            iterator++;
+            iterator--;
         }, 1000);
     }
 
