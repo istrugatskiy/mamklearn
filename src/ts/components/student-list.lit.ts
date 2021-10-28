@@ -2,6 +2,9 @@ import { property, state } from 'lit/decorators.js';
 import { html, css, LitElement } from 'lit';
 import common from '../styles/commons.styles';
 import { startGameTeacher } from '../make';
+import { Unsubscribe } from '@firebase/util';
+import { getDatabase, onValue, ref } from '@firebase/database';
+import { getAuth } from '@firebase/auth';
 
 export class StudentList extends LitElement {
     static get styles() {
@@ -46,8 +49,11 @@ export class StudentList extends LitElement {
     })
     gameCode: string = '*****-***';
 
-    @property()
-    playerList: { playerName: string; playerConfig: number[] }[] = [];
+    @state()
+    private playerList: { playerName: string; playerConfig: number[] }[] = [];
+
+    @state()
+    private playerIDs: string[] = [];
 
     @state()
     private displayCountdown = false;
@@ -57,6 +63,9 @@ export class StudentList extends LitElement {
 
     @state()
     private countdownAnim = 'scale-in';
+
+    @state()
+    private removalList: string[] = [];
 
     countdown() {
         this.displayCountdown = true;
@@ -78,6 +87,26 @@ export class StudentList extends LitElement {
         }, 1000);
     }
 
+    private personTracker: Unsubscribe | undefined;
+
+    connectedCallback() {
+        super.connectedCallback();
+        const db = getDatabase();
+        const auth = getAuth();
+        const playersList = ref(db, `actualGames/${auth.currentUser!.uid}/players/`);
+        this.personTracker = onValue(playersList, (snapshot) => {
+            this.playerList = Object.values(snapshot.val() || []);
+            this.playerIDs = Object.keys(snapshot.val() || []);
+        });
+    }
+
+    disconnectedCallback() {
+        super.disconnectedCallback();
+        if (this.personTracker) {
+            this.personTracker();
+        }
+    }
+
     private startGame() {
         startGameTeacher(false);
     }
@@ -85,11 +114,11 @@ export class StudentList extends LitElement {
     render() {
         return html`
             <div class="title" class="play-screen">
-                <h1 class="scale-in" class="game-code">Game Code: ${this.gameCode}</h1>
-                <button class="button scale-in" @click=${this.startGame}>Start Game</button>
+                <h1 class="scale-in game-code">Game Code: ${this.gameCode}</h1>
+                <button class="button scale-in" @click=${this.startGame} ?disabled=${this.playerList.length < 1}>Start Game</button>
                 <div class="character-list">
-                    ${this.playerList.map(({ playerConfig, playerName }) => {
-                        return html`<teacher-screen-player data-character="${playerConfig}" data-name="${playerName}"></teacher-screen-player>`;
+                    ${this.playerList.map(({ playerConfig, playerName }, index) => {
+                        return html`<teacher-screen-player data-character="${JSON.stringify(playerConfig)}" data-name="${playerName}" data-player-id="${this.playerIDs[index]}" data-disappear="false"></teacher-screen-player>`;
                     })}
                 </div>
                 <div style="display: ${this.displayCountdown ? 'block' : 'none'}" class="countdown">

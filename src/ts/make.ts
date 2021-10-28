@@ -1,9 +1,9 @@
 // Contains code related to making quizzes
 import '../css/make.css';
 import { dragula } from './dragula';
-import { $, characterCount, deepEqual, createTemplate, setTitle, getID, AudioManager, mathClamp, download, call, getCurrentDate } from './utils';
+import { $, characterCount, deepEqual, createTemplate, setTitle, getID, AudioManager, download, call, getCurrentDate } from './utils';
 import { setCharImage } from './app';
-import { getDatabase, onChildAdded, onChildRemoved, onValue, ref, set, Unsubscribe } from 'firebase/database';
+import { getDatabase, onValue, ref, set, Unsubscribe } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
 import { globals } from './globals';
 import { actuallyStartGame, getQuizData, networkKickPlayer, onGameEnd, setQuiz, setQuizList, startGame } from './networkEngine';
@@ -51,9 +51,6 @@ let finishUpInterval: number;
 const database = getDatabase();
 const auth = getAuth();
 let unsubHandler: Unsubscribe;
-let alreadyAware: { [key: string]: { playerName: string; playerConfig: number[] } };
-let playerJoinedHandler: Unsubscribe;
-let playerLeftHandler: Unsubscribe;
 let leaderboardHandler: Unsubscribe;
 let prevLeaderboardValues: { [key: string]: { currentQuestion: number; playerName: string } } = {};
 let otherTimeout: number;
@@ -570,8 +567,6 @@ function quitQuizTeacher() {
     $('gameStartButtonTeacher').classList.add('btnTransitionA');
     $('gameCodeTeacher').classList.add('btnTransitionA');
     $('teacherCountdown').style.display = 'none';
-    call(playerJoinedHandler);
-    call(playerLeftHandler);
     call(unsubHandler);
     call(leaderboardHandler);
     clearTimeout(otherInterval);
@@ -680,71 +675,30 @@ export function playQuiz() {
         playTheme: 'data/MusicOfTheShavedBears.mp3',
         loadingTheme: 'data/AmbientSpace.mp3',
     });
-    const quizID = currentQuizEdit.replace('quizID_', '');
     exitModalPopupTemplate('manageQuizMenu');
     $('title').style.display = 'none';
+    const quizScreen = document.createElement('teacher-intro');
+    $('teacher-play-intro').appendChild(quizScreen);
     playerNumber = 0;
     startGame(
         (value) => {
-            $('gameStartButtonTeacher').disabled = true;
-            $('gameCodeTeacher').textContent = `Game Code: ${value.message.toString().slice(0, 5)}-${value.message.toString().slice(5)}`;
+            quizScreen.dataset.code = `${value.message.toString().slice(0, 5)}-${value.message.toString().slice(5)}`;
             $('title').style.display = 'none';
             mainAudio.play('mainTheme', true);
             mainAudio.setVolume('mainTheme', 0.6);
-            $('teacherPlayScreen').style.display = 'block';
-            alreadyAware = {};
-            playerJoinedHandler = onChildAdded(ref(database, `actualGames/${auth.currentUser!.uid}/players/`), (snap) => {
-                if (alreadyAware[snap.key!] !== null) {
-                    const val = snap.val() as { playerName: string; playerConfig: number[] };
-                    renderPlayer(val.playerName, val.playerConfig, snap.key!);
-                }
-                alreadyAware[snap.key!] = snap.val();
-            });
-
-            playerLeftHandler = onChildRemoved(ref(database, `actualGames/${auth.currentUser!.uid}/players/`), (snap) => {
-                if (alreadyAware[snap.key!] !== snap.val()) {
-                    kickPlayer(snap.key!);
-                }
-                alreadyAware[snap.key!] = snap.val();
-            });
         },
-        currentQuizEdit ? quizID : ''
+        currentQuizEdit ? currentQuizEdit.replace('quizID_', '') : ''
     );
 }
 
-function renderPlayer(playerName: string, playerConfig: number[], playerID: string) {
-    playerNumber++;
-    $('gameStartButtonTeacher').disabled = playerNumber == 0;
-    mainAudio.setVolume('mainTheme', mathClamp(0.6 + (playerNumber / 5) * 0.1, 0.6, 1), true);
-    const char = document.createElement('teacher-screen-player');
-    char.dataset.name = playerName;
-    char.dataset.character = JSON.stringify(playerConfig);
-    char.id = `studentCharacterImage_${playerID}`;
-    $('characterPeopleDiv').appendChild(char);
-}
-
-function kickPlayer(eventId: string) {
-    playerNumber--;
-    $('gameStartButtonTeacher').disabled = playerNumber == 0;
-    mainAudio.setVolume('mainTheme', mathClamp(0.6 + (playerNumber / 5) * 0.1, 0.6, 1), true);
-    const el = $(`studentCharacterImage_${eventId}`);
-    el.disabled = true;
-    el.style.animation = 'hideme 0.3s';
-    setTimeout(() => {
-        el.parentElement!.remove();
-    }, 300);
-}
-
 export function startGameTeacher(shouldHandle: boolean) {
-    call(playerJoinedHandler);
-    call(playerLeftHandler);
     $('gameStartButtonTeacher').disabled = true;
     const people = Array.from($('characterPeopleDiv').children);
     people.forEach((object) => {
         object.disabled = true;
         object.classList.add('btnTransitionA');
     });
-    if (playerJoinedHandler === null || playerJoinedHandler === undefined || shouldHandle) {
+    if (shouldHandle) {
         !mainAudio || mainAudio.clearAll();
         mainAudio = new AudioManager({
             mainTheme: 'data/MainTheme.mp3',
