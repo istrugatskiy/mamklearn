@@ -95,6 +95,10 @@ export class StudentList extends LitElement {
         const auth = getAuth();
         const playersList = ref(db, `actualGames/${auth.currentUser!.uid}/players/`);
         this.personTracker = onValue(playersList, (snapshot) => {
+            this.removalList = [];
+            Object.values(this.playerIDs).forEach((id) => {
+                this.removalList.push(id);
+            });
             this.playerList = Object.values(snapshot.val() || []);
             this.playerIDs = Object.keys(snapshot.val() || []);
         });
