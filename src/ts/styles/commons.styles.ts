@@ -20,4 +20,10 @@ export default css`
             transform: scale(1);
         }
     }
+    .scale-out {
+        transition: all 0.3s ease-out;
+        transform: scale(0);
+        visibility: hidden;
+        transition-timing-function: cubic-bezier(0.29, 0.09, 0.07, 1.65);
+    }
 `;

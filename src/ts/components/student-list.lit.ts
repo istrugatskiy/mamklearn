@@ -50,10 +50,7 @@ export class StudentList extends LitElement {
     gameCode: string = '*****-***';
 
     @state()
-    private playerList: { playerName: string; playerConfig: number[] }[] = [];
-
-    @state()
-    private playerIDs: string[] = [];
+    private playerData: { [key: string]: { playerName: string; playerConfig: number[]; toBeRemoved: boolean } } = {};
 
     @state()
     private displayCountdown = false;
@@ -63,9 +60,6 @@ export class StudentList extends LitElement {
 
     @state()
     private countdownAnim = 'scale-in';
-
-    @state()
-    private removalList: string[] = [];
 
     countdown() {
         this.displayCountdown = true;
@@ -95,12 +89,24 @@ export class StudentList extends LitElement {
         const auth = getAuth();
         const playersList = ref(db, `actualGames/${auth.currentUser!.uid}/players/`);
         this.personTracker = onValue(playersList, (snapshot) => {
-            this.removalList = [];
-            Object.values(this.playerIDs).forEach((id) => {
-                this.removalList.push(id);
+            const players = (snapshot.val() || {}) as { [key: string]: { playerName: string; playerConfig: number[]; toBeRemoved: boolean } };
+            let playersRemoved = false;
+            Object.keys(this.playerData).forEach((key) => {
+                if (!players[key]) {
+                    playersRemoved = true;
+                    console.log('removing player');
+                    this.playerData[key].toBeRemoved = true;
+                } else {
+                    this.playerData[key].toBeRemoved = false;
+                }
             });
-            this.playerList = Object.values(snapshot.val() || []);
-            this.playerIDs = Object.keys(snapshot.val() || []);
+            if (!playersRemoved) {
+                this.playerData = players;
+            } else {
+                setTimeout(() => {
+                    this.playerData = players;
+                }, 15000);
+            }
         });
     }
 
@@ -119,11 +125,11 @@ export class StudentList extends LitElement {
         return html`
             <div class="title" class="play-screen">
                 <h1 class="scale-in game-code">Game Code: ${this.gameCode}</h1>
-                <button class="button scale-in" @click=${this.startGame} ?disabled=${this.playerList.length < 1}>Start Game</button>
+                <button class="button scale-in" @click=${this.startGame} ?disabled=${Object.keys(this.playerData).length < 1}>Start Game</button>
                 <div class="character-list">
-                    ${this.playerList.map(({ playerConfig, playerName }) => {
-                        return html`<teacher-screen-player data-character="${JSON.stringify(playerConfig)}" data-name="${playerName}" data-disappear="false"></teacher-screen-player>`;
-                    })}
+                    ${Object.values(this.playerData).map(
+                        ({ playerName, playerConfig, toBeRemoved }) => html`<teacher-screen-player data-character="${JSON.stringify(playerConfig)}" data-name="${playerName}" ?data-disappear=${toBeRemoved}></teacher-screen-player>`
+                    )}
                 </div>
                 <div style="display: ${this.displayCountdown ? 'block' : 'none'}" class="countdown">
                     <h1 class="${this.countdownAnim}">${this.countdownNumber}</h1>

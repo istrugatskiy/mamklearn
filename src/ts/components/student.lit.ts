@@ -74,9 +74,16 @@ export class Player extends LitElement {
     })
     name: string | undefined;
 
+    @property({
+        attribute: 'data-disappear',
+        type: Boolean,
+    })
+    disappear: boolean | undefined;
+
     render() {
+        console.log(this.disappear);
         return html`
-            <div class="student">
+            <div class="student ${this.disappear ? 'scale-out' : ''}">
                 <div class="button student-button scale-in" tabindex="0" role="button">
                     <p class="person-name">${this.name}</p>
                     <user-char data-style="teacher-screen" data-character="${JSON.stringify(this.characterConfig)}"></user-char>

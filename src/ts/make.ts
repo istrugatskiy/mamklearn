@@ -42,7 +42,6 @@ let tempQuiz: quizObject;
 let allowState2 = true;
 let quizList: { [key: string]: string } = {};
 let checkOnce = true;
-let playerNumber = 0;
 let mainAudio: AudioManager;
 let clearableTimeout: number;
 let clearableTimeout2: number;
@@ -679,7 +678,6 @@ export function playQuiz() {
     $('title').style.display = 'none';
     const quizScreen = document.createElement('teacher-intro');
     $('teacher-play-intro').appendChild(quizScreen);
-    playerNumber = 0;
     startGame(
         (value) => {
             quizScreen.dataset.code = `${value.message.toString().slice(0, 5)}-${value.message.toString().slice(5)}`;
