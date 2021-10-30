@@ -121,8 +121,8 @@ export class StudentList extends LitElement {
                 <h1 class="scale-in game-code">Game Code: ${this.gameCode}</h1>
                 <button class="button scale-in" @click=${this.startGame} ?disabled=${this.playerList.length < 1}>Start Game</button>
                 <div class="character-list">
-                    ${this.playerList.map(({ playerConfig, playerName }, index) => {
-                        return html`<teacher-screen-player data-character="${JSON.stringify(playerConfig)}" data-name="${playerName}" data-player-id="${this.playerIDs[index]}" data-disappear="false"></teacher-screen-player>`;
+                    ${this.playerList.map(({ playerConfig, playerName }) => {
+                        return html`<teacher-screen-player data-character="${JSON.stringify(playerConfig)}" data-name="${playerName}" data-disappear="false"></teacher-screen-player>`;
                     })}
                 </div>
                 <div style="display: ${this.displayCountdown ? 'block' : 'none'}" class="countdown">
