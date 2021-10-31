@@ -21,19 +21,9 @@ module.exports = {
             },
             {
                 test: /\.ts$/i,
-                loader: 'ts-loader',
-                options: {
-                    appendTsSuffixTo: [/\.vue$/],
-                },
+                // specify custom loader after default one.
+                use: ['ts-loader'],
                 exclude: /functions/,
-            },
-            {
-                test: /\.lit\.js$|\.styles\.js$/,
-                loader: 'minify-template-literal-loader',
-                options: {
-                    caseSensitive: true,
-                    collapseWhitespace: true,
-                },
             },
         ],
     },

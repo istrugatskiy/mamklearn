@@ -110,9 +110,6 @@ const clickListeners = {
     backButtonDeleteConfirm: () => {
         exitModalPopupTemplate('quizDeleteConfirm', 'quizDeleteConfirm');
     },
-    gameStartButtonTeacher: () => {
-        startGameTeacher(false);
-    },
     exportQuizButton: () => {
         parseActiveQuiz();
         download(`${tempQuiz.quizName}-exported.json`, JSON.stringify(tempQuiz, null, 4));
@@ -134,13 +131,6 @@ const clickIncludesListeners = {
     },
     toggleTime: (event: Event) => {
         toggleTime(getID(event));
-    },
-    studentCharacterImage: (event: Event) => {
-        const studentID = (event.target as HTMLElement).id.replace('studentCharacterImage_', '');
-        (event.target as HTMLElement).disabled = true;
-        (event.target as HTMLElement).tabIndex = -1;
-        (event.target as HTMLElement).style.pointerEvents = 'none';
-        networkKickPlayer(studentID);
     },
     quizID_: (event: Event) => {
         quizButtonOnClick(event);
@@ -683,7 +673,7 @@ export function playQuiz() {
             quizScreen.dataset.code = `${value.message.toString().slice(0, 5)}-${value.message.toString().slice(5)}`;
             $('title').style.display = 'none';
             mainAudio.play('mainTheme', true);
-            mainAudio.setVolume('mainTheme', 0.6);
+            mainAudio.setVolume('mainTheme', 1);
         },
         currentQuizEdit ? currentQuizEdit.replace('quizID_', '') : ''
     );
@@ -703,9 +693,6 @@ export function startGameTeacher(shouldHandle: boolean) {
             playTheme: 'data/MusicOfTheShavedBears.mp3',
             loadingTheme: 'data/AmbientSpace.mp3',
         });
-        $('teacherPlayScreen').style.display = 'block';
-        $('gameStartButtonTeacher').style.display = 'none';
-        $('gameCodeTeacher').style.display = 'none';
         completeProcess();
     } else {
         actuallyStartGame(() => {

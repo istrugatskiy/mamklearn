@@ -1,10 +1,10 @@
 import { property, state } from 'lit/decorators.js';
 import { html, css, LitElement } from 'lit';
 import common from '../styles/commons.styles';
-import { startGameTeacher } from '../make';
 import { Unsubscribe } from '@firebase/util';
 import { getDatabase, onValue, ref } from '@firebase/database';
 import { getAuth } from '@firebase/auth';
+import { actuallyStartGame, networkKickPlayer } from '../networkEngine';
 
 export class StudentList extends LitElement {
     static get styles() {
@@ -50,7 +50,7 @@ export class StudentList extends LitElement {
     gameCode: string = '*****-***';
 
     @state()
-    private playerData: { [key: string]: { playerName: string; playerConfig: number[]; toBeRemoved: boolean } } = {};
+    private playerData: { [key: string]: { playerName: string; playerConfig: number[]; toBeRemoved?: boolean } } = {};
 
     @state()
     private displayCountdown = false;
@@ -61,23 +61,28 @@ export class StudentList extends LitElement {
     @state()
     private countdownAnim = 'scale-in';
 
-    countdown() {
+    @state()
+    private gameStarted = false;
+
+    private kickedPlayers: string[] = [];
+
+    private countdown() {
         this.displayCountdown = true;
         let iterator = 3;
         const interval = setInterval(() => {
-            this.countdownNumber = iterator;
+            iterator--;
             this.countdownAnim = 'countdown-disappear';
             setTimeout(() => {
+                this.countdownNumber = iterator;
                 this.countdownAnim = 'scale-in';
             }, 300);
-            if (iterator == 1) {
+            if (iterator == 0) {
                 this.displayCountdown = false;
                 setTimeout(() => {
                     this.countdownAnim = 'countdown-disappear';
                 }, 1000);
                 clearInterval(interval);
             }
-            iterator--;
         }, 1000);
     }
 
@@ -89,23 +94,26 @@ export class StudentList extends LitElement {
         const auth = getAuth();
         const playersList = ref(db, `actualGames/${auth.currentUser!.uid}/players/`);
         this.personTracker = onValue(playersList, (snapshot) => {
-            const players = (snapshot.val() || {}) as { [key: string]: { playerName: string; playerConfig: number[]; toBeRemoved: boolean } };
+            const players = (snapshot.val() || {}) as { [key: string]: { playerName: string; playerConfig: number[]; toBeRemoved?: boolean } };
             let playersRemoved = false;
             Object.keys(this.playerData).forEach((key) => {
                 if (!players[key]) {
                     playersRemoved = true;
-                    console.log('removing player');
                     this.playerData[key].toBeRemoved = true;
                 } else {
                     this.playerData[key].toBeRemoved = false;
                 }
             });
             if (!playersRemoved) {
+                this.kickedPlayers = [];
                 this.playerData = players;
             } else {
+                // Lit doesn't understand that this.playerData has changed, so we need to force rerender.
+                this.playerData = { ...this.playerData };
                 setTimeout(() => {
+                    this.kickedPlayers = [];
                     this.playerData = players;
-                }, 15000);
+                }, 300);
             }
         });
     }
@@ -118,18 +126,32 @@ export class StudentList extends LitElement {
     }
 
     private startGame() {
-        startGameTeacher(false);
+        this.gameStarted = true;
+        Object.keys(this.playerData).forEach((key) => {
+            this.playerData[key].toBeRemoved = true;
+            this.kickedPlayers.push(key);
+        });
+        this.countdown();
+    }
+
+    private kickPlayer(event: Event) {
+        const el = event.currentTarget as HTMLElement;
+        const id = el.dataset.id!;
+        if (!this.kickedPlayers.includes(id)) {
+            this.kickedPlayers.push(id);
+            networkKickPlayer(id);
+        }
     }
 
     render() {
         return html`
             <div class="title" class="play-screen">
                 <h1 class="scale-in game-code">Game Code: ${this.gameCode}</h1>
-                <button class="button scale-in" @click=${this.startGame} ?disabled=${Object.keys(this.playerData).length < 1}>Start Game</button>
+                <button class="button scale-in" @click=${this.startGame} ?disabled=${Object.keys(this.playerData).length < 1 || this.gameStarted}>Start Game</button>
                 <div class="character-list">
-                    ${Object.values(this.playerData).map(
-                        ({ playerName, playerConfig, toBeRemoved }) => html`<teacher-screen-player data-character="${JSON.stringify(playerConfig)}" data-name="${playerName}" ?data-disappear=${toBeRemoved}></teacher-screen-player>`
-                    )}
+                    ${Object.entries(this.playerData).map(([id, { playerName, playerConfig, toBeRemoved }]) => {
+                        return html`<teacher-screen-player data-character="${JSON.stringify(playerConfig)}" data-name="${playerName}" ?data-disappear=${toBeRemoved} @click="${this.kickPlayer}" data-id="${id}"></teacher-screen-player>`;
+                    })}
                 </div>
                 <div style="display: ${this.displayCountdown ? 'block' : 'none'}" class="countdown">
                     <h1 class="${this.countdownAnim}">${this.countdownNumber}</h1>

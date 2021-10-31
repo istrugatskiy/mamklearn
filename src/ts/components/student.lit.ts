@@ -78,10 +78,9 @@ export class Player extends LitElement {
         attribute: 'data-disappear',
         type: Boolean,
     })
-    disappear: boolean | undefined;
+    disappear: string | undefined;
 
     render() {
-        console.log(this.disappear);
         return html`
             <div class="student ${this.disappear ? 'scale-out' : ''}">
                 <div class="button student-button scale-in" tabindex="0" role="button">

@@ -268,7 +268,7 @@ globals.clickEvents = {
                     makeCode(true);
                 }, 600);
             } else {
-                handleGameState(makeObj);
+                makeObj.playQuiz();
             }
         } else {
             $('title').style.display = 'block';
@@ -346,8 +346,8 @@ function makeCode(isInGame: boolean | Event = false) {
             .then((obj) => {
                 obj.initEvents();
                 if (isInGame === true) {
-                    handleGameState(obj);
                     makeObj = obj;
+                    makeObj.playQuiz();
                 }
                 const renderQuizList = (newQuizData: { [key: string]: string }) => {
                     $('title').classList.add('handleOutTransition');
@@ -397,20 +397,6 @@ function makeCode(isInGame: boolean | Event = false) {
             });
     };
     loadMake();
-}
-
-function handleGameState(obj: typeof import('./make')) {
-    let alreadyRun: boolean = false;
-    const unsubHandler = onValue(ref(database, `actualGames/${auth.currentUser!.uid}/globalState`), (snap) => {
-        const val = snap.val() as { isRunning: boolean; totalQuestions: number; gameEnd: number };
-        if (val && val.isRunning && !globals.isMain) {
-            obj.startGameTeacher(true);
-            unsubHandler();
-        } else if (!alreadyRun) {
-            obj.playQuiz();
-        }
-        alreadyRun = true;
-    });
 }
 
 function playCode() {
