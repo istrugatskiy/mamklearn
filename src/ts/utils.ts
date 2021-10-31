@@ -1,6 +1,6 @@
 import { getAnalytics, logEvent } from '@firebase/analytics';
 import { getAuth, signOut } from 'firebase/auth';
-import { httpsCallable } from './firebaseFunctionsLite';
+import { httpsCallable } from './functions-lite';
 let hasLoggedOut = false;
 let timerOffset = 0;
 

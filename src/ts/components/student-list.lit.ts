@@ -56,13 +56,16 @@ export class StudentList extends LitElement {
     private displayCountdown = false;
 
     @state()
-    private countdownNumber = 3;
+    private countdownNumber = '3';
 
     @state()
     private countdownAnim = 'scale-in';
 
     @state()
     private gameStarted = false;
+
+    @state()
+    private hideGameCode = false;
 
     private kickedPlayers: string[] = [];
 
@@ -73,13 +76,15 @@ export class StudentList extends LitElement {
             iterator--;
             this.countdownAnim = 'countdown-disappear';
             setTimeout(() => {
-                this.countdownNumber = iterator;
+                this.countdownNumber = iterator !== 0 ? iterator.toString() : 'GO!';
                 this.countdownAnim = 'scale-in';
             }, 300);
             if (iterator == 0) {
-                this.displayCountdown = false;
                 setTimeout(() => {
                     this.countdownAnim = 'countdown-disappear';
+                    setTimeout(() => {
+                        this.displayCountdown = false;
+                    }, 300);
                 }, 1000);
                 clearInterval(interval);
             }
@@ -87,6 +92,8 @@ export class StudentList extends LitElement {
     }
 
     private personTracker: Unsubscribe | undefined;
+
+    private stateTracker: Unsubscribe | undefined;
 
     connectedCallback() {
         super.connectedCallback();
@@ -116,22 +123,41 @@ export class StudentList extends LitElement {
                 }, 300);
             }
         });
+        this.stateTracker = onValue(ref(db, `actualGames/${auth.currentUser!.uid}/globalState`), (snapshot) => {
+            const state = snapshot.val() as { isRunning: boolean; totalQuestions: number; gameEnd: number } | undefined;
+            if (state?.isRunning) {
+                this.startGame(true);
+            }
+        });
     }
 
     disconnectedCallback() {
         super.disconnectedCallback();
-        if (this.personTracker) {
-            this.personTracker();
-        }
+        this.personTracker?.();
+        this.stateTracker?.();
     }
 
-    private startGame() {
+    private startGame(gameAlreadyStarted: boolean = false) {
+        this.personTracker?.();
+        this.stateTracker?.();
         this.gameStarted = true;
         Object.keys(this.playerData).forEach((key) => {
             this.playerData[key].toBeRemoved = true;
             this.kickedPlayers.push(key);
         });
-        this.countdown();
+        const transition = () => {
+            setTimeout(() => {
+                this.hideGameCode = true;
+                setTimeout(() => {
+                    this.countdown();
+                }, 300);
+            }, 300);
+        };
+        if (gameAlreadyStarted !== true) {
+            actuallyStartGame(transition);
+        } else {
+            transition();
+        }
     }
 
     private kickPlayer(event: Event) {
@@ -146,8 +172,8 @@ export class StudentList extends LitElement {
     render() {
         return html`
             <div class="title" class="play-screen">
-                <h1 class="scale-in game-code">Game Code: ${this.gameCode}</h1>
-                <button class="button scale-in" @click=${this.startGame} ?disabled=${Object.keys(this.playerData).length < 1 || this.gameStarted}>Start Game</button>
+                <h1 class="${this.hideGameCode ? 'scale-out' : 'scale-in'} game-code">Game Code: ${this.gameCode}</h1>
+                <button class="button ${this.hideGameCode ? 'scale-out' : 'scale-in'}" @click=${this.startGame} ?disabled=${Object.keys(this.playerData).length < 1 || this.gameStarted}>Start Game</button>
                 <div class="character-list">
                     ${Object.entries(this.playerData).map(([id, { playerName, playerConfig, toBeRemoved }]) => {
                         return html`<teacher-screen-player data-character="${JSON.stringify(playerConfig)}" data-name="${playerName}" ?data-disappear=${toBeRemoved} @click="${this.kickPlayer}" data-id="${id}"></teacher-screen-player>`;

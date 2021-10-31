@@ -552,10 +552,7 @@ function quitQuizTeacher() {
     $('errorActual').textContent = 'Game Has Ended';
     $('errorMessageA').style.display = 'block';
     $('gameFinishNotify').style.display = 'none';
-    $('characterPeopleDiv').replaceChildren();
-    $('gameStartButtonTeacher').classList.add('btnTransitionA');
-    $('gameCodeTeacher').classList.add('btnTransitionA');
-    $('teacherCountdown').style.display = 'none';
+    $('teacher-play-intro').replaceChildren();
     call(unsubHandler);
     call(leaderboardHandler);
     clearTimeout(otherInterval);

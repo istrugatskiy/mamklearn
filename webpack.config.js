@@ -20,10 +20,6 @@ module.exports = {
             {
                 test: /\.ts$/i,
                 loader: 'ts-loader',
-                options: {
-                    appendTsSuffixTo: [/\.vue$/],
-                },
-                exclude: /functions/
             },
         ],
     },
@@ -62,6 +58,6 @@ module.exports = {
         minimizer: [`...`, new CssMinimizerPlugin()],
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js'],
+        extensions: ['.ts', '.js'],
     },
 };

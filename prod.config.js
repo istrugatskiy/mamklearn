@@ -23,7 +23,6 @@ module.exports = {
                 test: /\.ts$/i,
                 // specify custom loader after default one.
                 use: ['ts-loader'],
-                exclude: /functions/,
             },
         ],
     },

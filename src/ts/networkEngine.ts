@@ -3,7 +3,7 @@ import { getDatabase, ref, child, onValue, set, push, remove } from 'firebase/da
 import { getAnalytics } from 'firebase/analytics';
 import { initializeApp } from 'firebase/app';
 import { getPerformance } from 'firebase/performance';
-import { httpsCallable } from './firebaseFunctionsLite';
+import { httpsCallable } from './functions-lite';
 import { globals } from './globals';
 import { throwExcept } from './utils';
 

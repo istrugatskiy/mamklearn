@@ -47,14 +47,6 @@ export class Character extends LitElement {
         .teacher-screen > * {
             height: 305px;
         }
-        .student-screen {
-            z-index: -1;
-            position: absolute;
-            height: 150px;
-            bottom: 50px;
-            transform: translateX(calc(114px * var(--questionOffset)));
-            transition: transform 0.3s;
-        }
         .third-place {
             animation: third-place-anim 0.3s forwards;
             animation-delay: 1s;
@@ -125,6 +117,18 @@ export class Character extends LitElement {
         .main {
             transition: transform 0.3s;
             transform: scale(var(--char-size));
+        }
+        .student-screen {
+            z-index: -1;
+            position: absolute;
+            height: 150px;
+            bottom: 50px;
+            transform: translateX(calc(114px * var(--questionOffset)));
+            transition: transform 0.3s;
+        }
+        .student-screen > * {
+            width: 150px;
+            height: 202px;
         }
     `;
 
