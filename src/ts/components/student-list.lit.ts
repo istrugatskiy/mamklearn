@@ -5,6 +5,7 @@ import { Unsubscribe } from '@firebase/util';
 import { getDatabase, onValue, ref } from '@firebase/database';
 import { getAuth } from '@firebase/auth';
 import { actuallyStartGame, networkKickPlayer } from '../networkEngine';
+import { createLeaderboard, updateAudio } from '../make';
 
 export class StudentList extends LitElement {
     static get styles() {
@@ -158,6 +159,9 @@ export class StudentList extends LitElement {
         } else {
             transition();
         }
+        updateAudio('play');
+        createLeaderboard();
+        this.remove();
     }
 
     private kickPlayer(event: Event) {

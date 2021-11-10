@@ -12,6 +12,7 @@ import { leaveGame, networkJoinGameStudent, setQuiz } from './networkEngine';
 import { Character } from './components/character.lit';
 import { Player } from './components/student.lit';
 import { StudentList } from './components/student-list.lit';
+import { Leaderboard } from './components/leaderboards';
 
 declare global {
     interface Window {
@@ -223,6 +224,7 @@ const initApp = () => {
     customElements.define('user-char', Character);
     customElements.define('teacher-screen-player', Player);
     customElements.define('teacher-intro', StudentList);
+    customElements.define('game-leaderboard', Leaderboard);
     const search = new URLSearchParams(window.location.search);
     const data = search.get('shareUser');
     const otherData = search.get('shareQuiz');

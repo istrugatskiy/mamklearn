@@ -1,12 +1,12 @@
 // Contains code related to making quizzes
 import '../css/make.css';
 import { dragula } from './dragula';
-import { $, characterCount, deepEqual, createTemplate, setTitle, getID, AudioManager, download, call, getCurrentDate } from './utils';
+import { $, characterCount, deepEqual, createTemplate, setTitle, getID, AudioManager, download, call } from './utils';
 import { setCharImage } from './app';
-import { getDatabase, onValue, ref, set, Unsubscribe } from 'firebase/database';
+import { getDatabase, ref, set, Unsubscribe } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
 import { globals } from './globals';
-import { actuallyStartGame, getQuizData, networkKickPlayer, onGameEnd, setQuiz, setQuizList, startGame } from './networkEngine';
+import { getQuizData, networkKickPlayer, setQuiz, setQuizList, startGame } from './networkEngine';
 import { DragulaJS } from './dragulaTypes';
 
 let editState = false;
@@ -51,7 +51,6 @@ const database = getDatabase();
 const auth = getAuth();
 let unsubHandler: Unsubscribe;
 let leaderboardHandler: Unsubscribe;
-let prevLeaderboardValues: { [key: string]: { currentQuestion: number; playerName: string } } = {};
 let otherTimeout: number;
 let hasGameEnded = false;
 
@@ -655,6 +654,25 @@ const exitModalPopupTemplate = (popupToKill: string, special?: string) => {
     }
 };
 
+export const updateAudio = (name: 'play' | 'end') => {
+    if (!mainAudio) {
+        mainAudio = new AudioManager({
+            mainTheme: 'data/MainTheme.mp3',
+            playTheme: 'data/MusicOfTheShavedBears.mp3',
+            loadingTheme: 'data/AmbientSpace.mp3',
+        });
+    }
+    if (name === 'play') {
+        mainAudio.setVolume('mainTheme', 0);
+        setTimeout(() => {
+            mainAudio.play('playTheme', true, 0);
+            mainAudio.setVolume('playTheme', 1);
+        }, 4000);
+    } else if (name === 'end') {
+        mainAudio.setVolume('playTheme', 0);
+    }
+};
+
 export function playQuiz() {
     mainAudio = new AudioManager({
         mainTheme: 'data/MainTheme.mp3',
@@ -664,7 +682,7 @@ export function playQuiz() {
     exitModalPopupTemplate('manageQuizMenu');
     $('title').style.display = 'none';
     const quizScreen = document.createElement('teacher-intro');
-    $('teacher-play-intro').appendChild(quizScreen);
+    $('teacher-play-intro').replaceChildren(quizScreen);
     startGame(
         (value) => {
             quizScreen.dataset.code = `${value.message.toString().slice(0, 5)}-${value.message.toString().slice(5)}`;
@@ -674,92 +692,6 @@ export function playQuiz() {
         },
         currentQuizEdit ? currentQuizEdit.replace('quizID_', '') : ''
     );
-}
-
-export function startGameTeacher(shouldHandle: boolean) {
-    $('gameStartButtonTeacher').disabled = true;
-    const people = Array.from($('characterPeopleDiv').children);
-    people.forEach((object) => {
-        object.disabled = true;
-        object.classList.add('btnTransitionA');
-    });
-    if (shouldHandle) {
-        !mainAudio || mainAudio.clearAll();
-        mainAudio = new AudioManager({
-            mainTheme: 'data/MainTheme.mp3',
-            playTheme: 'data/MusicOfTheShavedBears.mp3',
-            loadingTheme: 'data/AmbientSpace.mp3',
-        });
-        completeProcess();
-    } else {
-        actuallyStartGame(() => {
-            completeProcess();
-            mainAudio.setVolume('mainTheme', 0);
-        });
-    }
-    function completeProcess() {
-        let firstTime = true;
-        prevLeaderboardValues = {};
-        globals.alreadyInGame = true;
-        onGameEnd((input) => {
-            hasGameEnded = true;
-            let firstThreePlayers: number[][] = [];
-            Object.values(input).forEach((element) => {
-                if (element.place <= 3) {
-                    firstThreePlayers[element.place - 1] = element.playerConfig;
-                }
-            });
-            gameEnd(firstThreePlayers[0], firstThreePlayers[1], firstThreePlayers[2]);
-        }, `actualGames/${auth.currentUser!.uid}/`);
-        leaderboardHandler = onValue(ref(database, `actualGames/${auth.currentUser!.uid}/leaderboards`), (snap) => {
-            if (!snap.val()) {
-                call(leaderboardHandler);
-                return;
-            }
-            if (firstTime) {
-                createLeaderboard(sortArray(snap.val()));
-            } else {
-                let check = false;
-                Object.keys(prevLeaderboardValues).forEach((key) => {
-                    if (!snap.val()[key]) {
-                        removePlayerLeaderboard(key);
-                        setTimeout(() => {
-                            updateLeaderboard(sortArray(snap.val()));
-                        }, 1500);
-                        check = true;
-                    }
-                });
-                if (check) {
-                    setTimeout(() => {
-                        updateLeaderboard(sortArray(snap.val()));
-                    }, 1000);
-                } else {
-                    updateLeaderboard(sortArray(snap.val()));
-                }
-            }
-            prevLeaderboardValues = snap.val();
-            firstTime = false;
-        });
-        unsubHandler = onValue(ref(database, `actualGames/${auth.currentUser!.uid}/globalState`), (snap) => {
-            const val = snap.val() as { isRunning: boolean; totalQuestions: number; gameEnd: number };
-            if (val && val.gameEnd) {
-                gameFinish((val.gameEnd + 15000 - getCurrentDate()) / 1000);
-            }
-        });
-        $('gameStartButtonTeacher').classList.add('btnTransitionA');
-        $('gameCodeTeacher').classList.add('btnTransitionA');
-        setTimeout(() => {
-            $('characterPeopleDiv').replaceChildren();
-            doCountdown();
-        }, 300);
-        clearableTimeout2 = window.setTimeout(() => {
-            mainAudio.play('playTheme', true, 0);
-            mainAudio.setVolume('playTheme', 1);
-        }, 3000);
-        clearableTimeout = window.setTimeout(() => {
-            $('liveLeaderboards').style.display = 'block';
-        }, 5000);
-    }
 }
 
 function gameFinish(timeLeft: number) {
@@ -786,23 +718,10 @@ function gameFinish(timeLeft: number) {
     }, (timeLeft as number) * 1000);
 }
 
-function createLeaderboard(data: { key: string; currentQuestion: number; playerName: string }[]) {
-    const fragment = document.createDocumentFragment();
-    const templateElement = document.createElement('div');
-    templateElement.classList.add('button', 'inGamePlayerButton', 'buttonLikeTitle');
-    templateElement.appendChild(document.createElement('b'));
-    data.forEach((value, index) => {
-        const clone = templateElement.cloneNode(true) as HTMLElement;
-        clone.id = `playerList_${value.key}`;
-        clone.firstElementChild!.textContent = `${(index + 1).toString()}. `;
-        clone.style.setProperty(`--c`, index.toString());
-        clone.appendChild(document.createTextNode(` ${value.playerName}`));
-        fragment.appendChild(clone);
-        index++;
-    });
-    $('playerContainer').replaceChildren();
-    $('playerContainer').appendChild(fragment);
-}
+export const createLeaderboard = () => {
+    const leaderboard = document.createElement('game-leaderboard');
+    $('leaderboard').replaceChildren(leaderboard);
+};
 
 function removePlayerLeaderboard(id: string) {
     $(`playerList_${id}`).style.maxWidth = '600px';
@@ -861,33 +780,6 @@ function sortArray(input: { [key: string]: { currentQuestion: number; playerName
         const secondEl = b as { currentQuestion: number; playerName: string };
         return secondEl.currentQuestion - firstEl.currentQuestion;
     });
-}
-
-function doCountdown() {
-    const countdown = $('teacherCountdown').firstElementChild!;
-    countdown.textContent = '3';
-    $('teacherCountdown').style.display = 'block';
-    let iterator = 3;
-    for (let index = 0; index <= 3; index++) {
-        setCountdown(index, iterator.toString());
-        iterator--;
-    }
-    setCountdown(3, 'GO!');
-
-    function setCountdown(num: number, iterator: string) {
-        setTimeout(() => {
-            countdown.classList.remove('titleTransitionBack');
-            countdown.classList.add('teacherCountdownAnim');
-            setTimeout(() => {
-                countdown.textContent = iterator;
-                countdown.classList.add('titleTransitionBack');
-                countdown.classList.remove('teacherCountdownAnim');
-            }, 300);
-        }, 1000 * num);
-    }
-    setTimeout(() => {
-        countdown.classList.add('teacherCountdownAnim');
-    }, 4000);
 }
 
 function deleteQuiz() {
