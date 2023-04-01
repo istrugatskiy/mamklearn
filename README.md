@@ -17,7 +17,7 @@ Development:
 yarn run develop
 ```
 
-Production (This is what you run whenver you want to test stuff):
+Production:
 
 ```
 yarn run build
