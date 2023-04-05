@@ -1,0 +1,37 @@
+html {
+    min-height: 100%;
+    position: relative;
+}
+body {
+    height: 100%;
+}
+#particles-js {
+    top: 0;
+    bottom: 0;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    background-color: #232742;
+    background-size: cover;
+    background-image: none;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0px;
+    padding: 0px;
+    min-height: 100%;
+    z-index: 0;
+}
+.main {
+    display: grid;
+    grid-template-columns: 0.2fr 0.8fr;
+    justify-content: space-around;
+    margin: 10px;
+    z-index: 1;
+}
+side-bar {
+    z-index: 1;
+}
+#outlet {
+    z-index: 1;
+}

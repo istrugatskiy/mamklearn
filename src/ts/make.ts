@@ -1,7 +1,7 @@
 // Contains code related to making quizzes
 import '../css/make.css';
 import { dragula } from './dragula';
-import { $, characterCount, deepEqual, createTemplate, setTitle, getID, AudioManager, download, call } from './utils';
+import { $, characterCount, deepEqual, createTemplate, setTitle, getID, AudioManager, download, call } from './old-utils';
 import { setCharImage } from './app';
 import { getDatabase, ref, set, Unsubscribe } from 'firebase/database';
 import { getAuth } from 'firebase/auth';

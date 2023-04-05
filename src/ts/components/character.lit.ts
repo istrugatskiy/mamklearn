@@ -1,12 +1,16 @@
 import { html, LitElement, css } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 
 type options = 'Eyes' | 'Nose' | 'Mouth' | 'Shirt' | 'Arms';
-type charStyles = 'animated-char' | 'teacher-screen' | 'student-screen' | 'third-place results-player' | 'second-place results-player' | 'first-place ' | '';
-const customOptions = ['Eyes', 'Nose', 'Mouth', 'Shirt', 'Arms'];
+type char_styles = 'animated-char' | 'teacher-screen' | 'student-screen' | 'third-place results-player' | 'second-place results-player' | 'first-place ' | '';
+const custom_options = ['Eyes', 'Nose', 'Mouth', 'Shirt', 'Arms'];
 
-export class Character extends LitElement {
+@customElement('mamk-char')
+export class mamk_char extends LitElement {
     static styles = css`
+        img {
+            position: absolute;
+        }
         .animated-char {
             animation: char-anim 2s infinite;
             animation-timing-function: cubic-bezier(0.28, 0.84, 0.42, 1);
@@ -130,42 +134,51 @@ export class Character extends LitElement {
             width: 150px;
             height: 202px;
         }
+        .base {
+            position: block;
+        }
     `;
 
     @property({
         attribute: 'data-character',
         type: Array,
     })
-    characterConfig: number[] | undefined;
+    character_config: number[] | undefined;
 
     @property({
         attribute: 'data-style',
         type: String,
     })
-    charStyle: charStyles = '';
+    char_style: char_styles = '';
 
     /**
      * Get the src of the image that corresponds to the currently configured character.
      * @param string data
      */
-    private getSrc(property: options): string {
-        const lookupIndex = customOptions.indexOf(property);
-        if (lookupIndex == -1) {
+    private get_src(property: options): string {
+        const lookup_index = custom_options.indexOf(property);
+        if (lookup_index == -1) {
             return 'img/qIcon-0.svg';
         }
-        return this.characterConfig ? `img/${property.toLowerCase()}-${this.characterConfig[lookupIndex].toString()}.${lookupIndex == 4 ? 'svg' : 'png'}` : 'data:,';
+        return this.character_config ? `img/${property.toLowerCase()}-${this.character_config[lookup_index].toString()}.${lookup_index == 4 ? 'svg' : 'png'}` : 'data:,';
     }
 
     render() {
         return html`
-            <div class="${this.charStyle} main">
-                <img alt="your arms" src="${this.getSrc('Arms')}" style="position: absolute" width="250" height="337" />
-                <img alt="your eyes" src="${this.getSrc('Eyes')}" style="position: absolute" width="250" height="337" />
-                <img alt="your nose" src="${this.getSrc('Nose')}" style="position: absolute" width="250" height="337" />
-                <img alt="your mouth" src="${this.getSrc('Mouth')}" style="position: absolute" width="250" height="337" />
-                <img alt="your shirt" src="${this.getSrc('Shirt')}" style="position: absolute" width="250" height="337" />
-                <img alt="your profile picture" src="img/base.svg" width="250" height="337" />
+            <div class="${this.char_style} main">
+                <img alt="your arms" src="${this.get_src('Arms')}" width="250" height="337" />
+                <img alt="your eyes" src="${this.get_src('Eyes')}" width="250" height="337" />
+                <img alt="your nose" src="${this.get_src('Nose')}" width="250" height="337" />
+                <img alt="your mouth" src="${this.get_src('Mouth')}" width="250" height="337" />
+                <img alt="your shirt" src="${this.get_src('Shirt')}" width="250" height="337" />
+                <img alt="your profile picture" src="img/base.svg" class="base" width="250" height="337" />
             </div>
         `;
+    }
+}
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'mamk-char': mamk_char;
     }
 }

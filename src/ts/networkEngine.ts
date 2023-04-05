@@ -1,3 +1,6 @@
+/**
+ * @deprecated
+ */
 import { getAuth } from 'firebase/auth';
 import { getDatabase, ref, child, onValue, set, push, remove } from 'firebase/database';
 import { getAnalytics } from 'firebase/analytics';
@@ -5,7 +8,7 @@ import { initializeApp } from 'firebase/app';
 import { getPerformance } from 'firebase/performance';
 import { httpsCallable } from './functions-lite';
 import { globals } from './globals';
-import { throwExcept } from './utils';
+import { throwExcept } from './old-utils';
 
 interface answer {
     answer: string | null;

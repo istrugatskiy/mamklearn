@@ -2,3 +2,4 @@ node_modules/
 dist/
 .firebase/
 .parcel-cache/
+yarn-error.log

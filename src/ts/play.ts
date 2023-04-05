@@ -1,4 +1,4 @@
-import { $, mathClamp, getID, ordinalSuffix, call, getCurrentDate } from './utils';
+import { $, mathClamp, getID, ordinalSuffix, call, getCurrentDate } from './old-utils';
 import { setCharImage, goBack } from './app';
 import { getDatabase, onValue, ref, Unsubscribe } from 'firebase/database';
 import { globals } from './globals';

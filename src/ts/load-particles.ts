@@ -2,7 +2,7 @@
 import 'particles.js';
 
 // The config for particles.js
-const ParticleData = {
+const particle_data = {
     particles: {
         number: {
             value: 25,
@@ -114,13 +114,13 @@ const ParticleData = {
 };
 
 // The library requires the config to be a network request, but you can trick it with this scuffedness.
-const particleDataCompiled = 'data:text/plain;base64,' + window.btoa(JSON.stringify(ParticleData));
+const particle_data_base64 = 'data:text/plain;base64,' + window.btoa(JSON.stringify(particle_data));
 
 /**
  * Initializes the particle library with the mamklearn snow preset.
  */
-export const initParticles = () => {
+export const init_particles = () => {
     if (!window.location.href.includes('#performance-mode')) {
-        particlesJS.load('particles-js', particleDataCompiled);
+        particlesJS.load('particles-js', particle_data_base64);
     }
 };

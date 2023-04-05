@@ -85,7 +85,7 @@ export class Player extends LitElement {
             <div class="student ${this.disappear ? 'scale-out' : ''}">
                 <div class="button student-button scale-in" tabindex="0" role="button">
                     <p class="person-name">${this.name}</p>
-                    <user-char data-style="teacher-screen" data-character="${JSON.stringify(this.characterConfig)}"></user-char>
+                    <mamk-char data-style="teacher-screen" data-character="${JSON.stringify(this.characterConfig)}"></mamk-char>
                     <div class="kick-player">Kick Player</div>
                 </div>
             </div>

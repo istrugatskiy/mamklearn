@@ -1,8 +1,8 @@
 /* This file is for the global selectors that aren't specific to a class, id or anything like that */
 button {
-	appearance: button;
-	-webkit-writing-mode: horizontal-tb !important;
-	writing-mode: horizontal-tb !important;
+    appearance: button;
+    -webkit-writing-mode: horizontal-tb !important;
+    writing-mode: horizontal-tb !important;
     text-rendering: auto;
     color: -internal-light-dark(black, white);
     letter-spacing: normal;
@@ -25,12 +25,12 @@ button {
     border-image: initial;
 }
 [contentEditable] {
-	-webkit-user-modify: read-write;
+    -webkit-user-modify: read-write;
     overflow-wrap: break-word;
-	-webkit-line-break: after-white-space;
-	line-break: after-white-space;
-	-webkit-user-select: text;
-	user-select: text;
+    -webkit-line-break: after-white-space;
+    line-break: after-white-space;
+    -webkit-user-select: text;
+    user-select: text;
 }
 tbody {
     display: table-row-group;
@@ -47,111 +47,113 @@ table {
     text-indent: initial;
     border-spacing: 2px;
 }
-th {	
+th {
     display: table-cell;
     vertical-align: inherit;
     font-weight: bold;
     text-align: center;
 }
 html {
-	-webkit-font-smoothing: antialiased;
-	box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    box-sizing: border-box;
 }
 img {
-	-webkit-user-drag: none;
-  	-khtml-user-drag: none;
-  	-moz-user-drag: none;
-	-o-user-drag: none;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
 }
-*:before, *:after {
-	box-sizing: inherit;
+*:before,
+*:after {
+    box-sizing: inherit;
 }
-input[type="checkbox"] > * {
-	pointer-events: none;
+input[type='checkbox'] > * {
+    pointer-events: none;
 }
 ::selection {
-  background: hsla(212, 100%, 83%, 0.678); /* WebKit/Blink Browsers */
+    background: hsla(212, 100%, 83%, 0.678); /* WebKit/Blink Browsers */
 }
 ::-moz-selection {
-  background: hsla(212, 100%, 83%, 0.678); /* Gecko Browsers */
+    background: hsla(212, 100%, 83%, 0.678); /* Gecko Browsers */
 }
 canvas {
-	width: 100%;
-	height: 100%;
-	background-size: cover;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
 }
 body {
-	padding: 0px;
-	margin: 0px;
-	bottom: 0px;
-	overflow-x: hidden;
-	outline: none;
-	overflow-y: overlay;
-	background-color: #eee;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-	-webkit-tap-highlight-color:  rgba(255, 255, 255, 0); 
+    padding: 0px;
+    margin: 0px;
+    bottom: 0px;
+    overflow-x: hidden;
+    outline: none;
+    overflow-y: overlay;
+    background-color: #eee;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 }
 :focus {
-	outline: -webkit-focus-ring-color auto 0;
+    outline: -webkit-focus-ring-color auto 0;
 }
 @media (prefers-reduced-motion: reduce) {
-	* {
-		-webkit-animation-play-state: paused;
-		-moz-animation-play-state: paused;
-		-o-animation-play-state: paused;
-		animation-play-state: paused;
-		-webkit-transition: none !important;
-		-moz-transition: none !important;
-		-o-transition: none !important;
-		transition: none !important;
-		-webkit-animation: none !important;
-		-moz-animation: none !important;
-		-o-animation: none !important;
-		-ms-animation: none !important;
-		animation: none !important;
-	}
-	canvas {
-		display: none;
-	}
+    * {
+        -webkit-animation-play-state: paused;
+        -moz-animation-play-state: paused;
+        -o-animation-play-state: paused;
+        animation-play-state: paused;
+        -webkit-transition: none !important;
+        -moz-transition: none !important;
+        -o-transition: none !important;
+        transition: none !important;
+        -webkit-animation: none !important;
+        -moz-animation: none !important;
+        -o-animation: none !important;
+        -ms-animation: none !important;
+        animation: none !important;
+    }
+    canvas {
+        display: none;
+    }
 }
 ::-webkit-scrollbar {
-	width: 10px;
-	height: 10px;
+    width: 10px;
+    height: 10px;
 }
 ::-webkit-scrollbar-thumb {
-	background: rgba(255, 255, 255, 0.596);
-	border-radius: 10px;
+    background: rgba(255, 255, 255, 0.596);
+    border-radius: 10px;
 }
 ::-webkit-scrollbar-track {
-	background: rgba(0, 0, 0, 0);
+    background: rgba(0, 0, 0, 0);
 }
 li {
-	list-style-type: none;
-	float: left;
+    list-style-type: none;
+    float: left;
 }
-input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-	margin: 0;
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
-input[type=number] {
-	-moz-appearance: textfield;
+input[type='number'] {
+    -moz-appearance: textfield;
 }
-[contentEditable=true]:empty:not(:focus):before {
-	content: attr(placeholder);
-	color: grey;
+[contentEditable='true']:empty:not(:focus):before {
+    content: attr(placeholder);
+    color: grey;
 }
-[contentEditable=true] {
-	word-break: break-word;
-	white-space: break-spaces;
+[contentEditable='true'] {
+    word-break: break-word;
+    white-space: break-spaces;
 }
 button::-moz-focus-inner {
-	border: 0;
+    border: 0;
 }
 *:focus {
-	outline: 0;
+    outline: 0;
 }

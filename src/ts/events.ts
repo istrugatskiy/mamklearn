@@ -1,5 +1,5 @@
 import { globals } from './globals';
-import { characterCount, getCaretCharacterOffsetWithin, mathClamp, setCaretPosition, throwExcept } from './utils';
+import { characterCount, getCaretCharacterOffsetWithin, mathClamp, setCaretPosition, throwExcept } from './old-utils';
 
 /**
  * Initiliiazes the event handling Library.
