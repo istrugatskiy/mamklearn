@@ -16,8 +16,15 @@ export abstract class base_content extends LitElement {
                 margin: 5px;
             }
             p {
+                color: white;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 font-size: 16px;
                 margin: 5px;
+                padding: 10px 10px 10px 10px;
+                -webkit-user-select: text; /* Safari */
+                -ms-user-select: text; /* IE 10 and IE 11 */
+                user-select: text;
+                word-break: break-word;
             }
             .button,
             .content {
@@ -25,18 +32,23 @@ export abstract class base_content extends LitElement {
                 background-color: white;
                 border: 2px solid white;
                 text-decoration: none;
+                padding: 20px;
                 border-radius: 30px;
                 transform: scale(1);
                 border-color: rgba(255, 255, 255, 0);
                 color: black;
                 text-align: center;
                 font-family: 'Roboto Mono', monospace;
-                font-size: 64px;
+                font-size: 32px;
                 transition: background-color 0.3s, border-radius 0.3s, color 0.3s, box-shadow 0.3s, transform 0.3s, width 0.3s, height 0.3s;
                 box-shadow: 0px 0px 12px #000000;
             }
             .button {
                 cursor: pointer;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
             }
             .button > * {
                 pointer-events: none;

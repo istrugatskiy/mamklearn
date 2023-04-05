@@ -1,5 +1,6 @@
 import { signInWithRedirect, signOut } from 'firebase/auth';
 import { auth, provider } from '../firebase-config';
+import { redirect } from './router';
 
 const home: route = {
     title: 'Home',
@@ -53,7 +54,8 @@ const login: route = {
     show_user: false,
     special_path: true,
     load: async () => {
-        signInWithRedirect(auth, provider);
+        redirect('/');
+        await signInWithRedirect(auth, provider);
     },
 };
 
@@ -66,7 +68,7 @@ const logout: route = {
     special_path: true,
     load: async () => {
         await signOut(auth);
-        window.location.pathname = '/';
+        window.location.href = `/${window.location.search}`;
     },
 };
 

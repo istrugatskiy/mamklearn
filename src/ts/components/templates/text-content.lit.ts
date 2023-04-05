@@ -12,10 +12,9 @@ export class text_content extends LitElement {
             }
             :host {
                 display: block;
-                padding: 1rem;
+                padding: 16px;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 margin: 0 auto;
-                width: 100%;
                 max-width: 800px;
                 text-align: left;
                 color: white;
@@ -24,7 +23,7 @@ export class text_content extends LitElement {
                 text-align: center;
             }
             p {
-                font-size: x-large;
+                font-size: 16px;
                 text-shadow: 0px 0px 12px black;
                 -webkit-backdrop-filter: blur(20px);
                 backdrop-filter: blur(20px);
@@ -37,6 +36,7 @@ export class text_content extends LitElement {
                 -webkit-user-select: text; /* Safari */
                 -ms-user-select: text; /* IE 10 and IE 11 */
                 user-select: text;
+                word-break: break-word;
             }
             a {
                 color: white;
@@ -53,6 +53,11 @@ export class text_content extends LitElement {
             ::selection {
                 background: rgba(31, 42, 210, 0.25);
                 color: white;
+            }
+            @media screen and (max-width: 600px) {
+                :host {
+                    padding-top: 0;
+                }
             }
         `,
     ];

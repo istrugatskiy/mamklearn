@@ -20,19 +20,67 @@ export class side_bar extends base_content {
                 border-radius: 10px;
                 margin: 10px;
                 width: 100%;
-                max-width: 350px;
+                max-width: 250px;
             }
             h1 {
                 font-size: 32px;
                 color: white;
                 font-family: Chelsea Market, cursive;
                 text-align: center;
+                height: min-content;
             }
             ul {
                 padding: 20px;
             }
             li {
                 list-style-type: none;
+            }
+            @media screen and (max-width: 1000px) {
+                ::-webkit-scrollbar {
+                    width: 10px;
+                    height: 10px;
+                }
+                ::-webkit-scrollbar-thumb {
+                    background: rgba(255, 255, 255, 0.596);
+                    border-radius: 10px;
+                }
+                ::-webkit-scrollbar-track {
+                    background: rgba(0, 0, 0, 0);
+                }
+                :host {
+                    height: min-content;
+                    max-width: 100vw;
+                    flex-wrap: wrap;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-basis: auto;
+                }
+                ul {
+                    display: flex;
+                    flex-wrap: no-wrap;
+                    align-items: center;
+                    overflow-x: auto;
+                    padding: 0;
+                }
+                li {
+                    flex: 0 0 auto;
+                    width: auto;
+                    height: auto;
+                    max-width: 100%;
+                }
+                sidebar-button {
+                    width: 150px;
+                    margin: 10px;
+                }
+            }
+            @media screen and (max-width: 600px) {
+                sidebar-button {
+                    width: 125px;
+                }
+                :host {
+                    margin: 0;
+                }
             }
         `,
     ];
@@ -60,7 +108,7 @@ export class side_bar extends base_content {
     };
 
     render() {
-        return html`<h1>Mamklearn v2</h1>
+        return html`<mamk-header>Mamklearn v2</mamk-header>
             <ul>
                 ${Object.entries(routes.layout)
                     .filter(([, value]) => value.show_user)

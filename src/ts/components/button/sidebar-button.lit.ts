@@ -12,17 +12,27 @@ export class sidebar_button extends link_button {
                 margin: 0;
             }
             a {
-                display: block;
+                display: flex;
                 padding: 10px;
                 margin: 0;
                 margin-top: 10px;
+                align-items: center;
+                justify-content: center;
             }
             .button {
-                font-size: 24px;
+                font-size: 16px;
             }
             /* when disabled highlight current link */
             :host([data-disabled]) a {
                 text-decoration: underline;
+            }
+            @media screen and (max-width: 600px) {
+                .button {
+                    padding: 0px;
+                }
+                a {
+                    min-height: 66px;
+                }
             }
         `,
     ];
