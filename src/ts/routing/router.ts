@@ -1,3 +1,4 @@
+import './outlet-transitions.css';
 import { onAuthStateChanged } from 'firebase/auth';
 import { routes } from './routes';
 import { auth } from '../firebase-config';
@@ -51,16 +52,17 @@ const resume_UI = () => {
 const update_route = (event?: Event) => {
     if (!state.ready) return;
     if (routes.$outlet) {
+        const path = window.location.pathname || '/';
+        if (state.UI_halted) {
+            event?.preventDefault();
+            state.last_queued_route = path;
+            return;
+        }
         window.dispatchEvent(new CustomEvent('mamk-route-change', { detail: window.location.pathname, bubbles: true, composed: true }));
         const { $outlet } = routes;
-        const path = window.location.pathname || '/';
         let route = routes.layout[path] || routes.not_found;
         if (route.require_auth && !state.signed_in) {
             route = routes.no_auth;
-        }
-        if (state.UI_halted) {
-            state.last_queued_route = path;
-            return;
         }
         if (!route.special_path) {
             halt_UI();
@@ -89,9 +91,9 @@ const update_route = (event?: Event) => {
                     is_forward
                 );
                 if (state.last_queued_route) {
-                    const last_queued_route = state.last_queued_route;
+                    // We can't check the current event but we can check the last event.
                     state.last_queued_route = undefined;
-                    redirect(last_queued_route);
+                    update_route();
                 }
             })
             .catch((err) => {

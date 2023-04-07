@@ -1,6 +1,7 @@
 import { html, LitElement, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-
+// @ts-ignore
+import * as images from './img/**';
 type options = 'Eyes' | 'Nose' | 'Mouth' | 'Shirt' | 'Arms';
 type char_styles = 'animated-char' | 'teacher-screen' | 'student-screen' | 'third-place results-player' | 'second-place results-player' | 'first-place ' | '';
 const custom_options = ['Eyes', 'Nose', 'Mouth', 'Shirt', 'Arms'];
@@ -155,15 +156,16 @@ export class mamk_char extends LitElement {
      * Get the src of the image that corresponds to the currently configured character.
      * @param string data
      */
-    private get_src(property: options): string {
+    private get_src(property: options): string | URL {
         const lookup_index = custom_options.indexOf(property);
         if (lookup_index == -1) {
-            return 'img/qIcon-0.svg';
+            return new URL('/src/img/qIcon-0.svg', import.meta.url);
         }
-        return this.character_config ? `img/${property.toLowerCase()}-${this.character_config[lookup_index].toString()}.${lookup_index == 4 ? 'svg' : 'png'}` : 'data:,';
+        return this.character_config ? images[`${property.toLowerCase()}-${this.character_config[lookup_index].toString()}.${lookup_index == 4 ? 'svg' : 'png'}`] : new URL('data:,');
     }
 
     render() {
+        const base = new URL('./img/base.svg', import.meta.url);
         return html`
             <div class="${this.char_style} main">
                 <img alt="your arms" src="${this.get_src('Arms')}" width="250" height="337" />
@@ -171,7 +173,7 @@ export class mamk_char extends LitElement {
                 <img alt="your nose" src="${this.get_src('Nose')}" width="250" height="337" />
                 <img alt="your mouth" src="${this.get_src('Mouth')}" width="250" height="337" />
                 <img alt="your shirt" src="${this.get_src('Shirt')}" width="250" height="337" />
-                <img alt="your profile picture" src="img/base.svg" class="base" width="250" height="337" />
+                <img alt="your profile picture" src="${base}" class="base" width="250" height="337" />
             </div>
         `;
     }

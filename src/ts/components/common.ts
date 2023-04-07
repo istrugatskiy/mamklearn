@@ -1,4 +1,4 @@
-import './character.lit';
+import './character/mamk-char.lit';
 import './button/mamk-button.lit';
 import './button/link-button.lit';
 import './button/sidebar-button.lit';

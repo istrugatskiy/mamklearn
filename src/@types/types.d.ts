@@ -17,3 +17,8 @@ type route_list = {
     $outlet: HTMLElement;
     layout: { [key: string]: route };
 };
+
+declare module './img/**' {
+    const value: string;
+    export default value;
+}

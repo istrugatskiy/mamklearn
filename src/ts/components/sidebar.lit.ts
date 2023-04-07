@@ -14,13 +14,23 @@ export class side_bar extends base_content {
     static styles = [
         base_content.styles,
         css`
+            @keyframes slide-in-from-left {
+                0% {
+                    transform: translateX(-100%);
+                }
+                100% {
+                    transform: translateX(0);
+                }
+            }
             :host {
                 display: block;
                 /* background-color: white; */
                 border-radius: 10px;
                 margin: 10px;
                 width: 100%;
-                max-width: 250px;
+                max-width: 300px;
+                animation: slide-in-from-left 0.3s cubic-bezier(0.29, 0.09, 0.07, 1.2);
+                animation-fill-mode: forwards;
             }
             h1 {
                 font-size: 32px;

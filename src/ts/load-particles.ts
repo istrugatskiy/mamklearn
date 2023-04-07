@@ -122,5 +122,6 @@ const particle_data_base64 = 'data:text/plain;base64,' + window.btoa(JSON.string
 export const init_particles = () => {
     if (!window.location.href.includes('#performance-mode')) {
         particlesJS.load('particles-js', particle_data_base64);
+        document.getElementById('particles-js')!.classList.add('ready');
     }
 };

@@ -5,6 +5,7 @@ html {
 body {
     height: 100%;
     margin: 0;
+    background-color: #232742;
 }
 #particles-js {
     top: 0;
@@ -22,6 +23,19 @@ body {
     padding: 0px;
     min-height: 100%;
     z-index: 0;
+    opacity: 0;
+}
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+.ready {
+    animation: fade-in 1s;
+    animation-fill-mode: forwards;
 }
 .main {
     height: 100%;

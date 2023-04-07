@@ -3,13 +3,13 @@ import { auth, provider } from '../firebase-config';
 import { redirect } from './router';
 
 const home: route = {
-    title: 'Home',
+    title: 'My Style',
     path: '/',
-    component: 'home-page',
+    component: 'my-style',
     require_auth: true,
     show_user: true,
     load: async () => {
-        await import('../pages/home.page');
+        await import('../pages/my-style.page');
     },
 };
 

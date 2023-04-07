@@ -3,7 +3,7 @@ import '../css/button.css';
 import '../css/loader.css';
 import '../css/style.css';
 import './trolls';
-import './components/character.lit';
+import './components/character/mamk-char.lit';
 import { $, createTemplate, setTitle, logOut, timeHandler, throwExcept, call } from './old-utils';
 import { eventHandle } from './events';
 import { init_particles } from './load-particles';
