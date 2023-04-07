@@ -71,6 +71,16 @@ const logout: route = {
         window.location.href = `/${window.location.search}`;
     },
 };
+const terms_of_service: route = {
+    title: 'Terms of Service',
+    path: '/terms-of-service',
+    component: 'terms-of-service-page',
+    require_auth: false,
+    show_user: true,
+    load: async () => {
+        await import('../pages/terms.page');
+    },
+};
 
 export const routes: route_list = {
     default: home,
@@ -81,6 +91,7 @@ export const routes: route_list = {
         '/404': not_found,
         '/no-auth': no_auth,
         '/privacy-policy': privacy_policy,
+        '/terms-of-service': terms_of_service,
         '/login': login,
         '/logout': logout,
     },
