@@ -22,11 +22,10 @@ export class text_content extends LitElement {
             h1 {
                 text-align: center;
             }
-            p {
+            p,
+            ul {
                 font-size: 16px;
                 text-shadow: 0px 0px 12px black;
-                -webkit-backdrop-filter: blur(20px);
-                backdrop-filter: blur(20px);
                 background-color: rgba(255, 255, 255, 0.116);
                 text-align: center;
                 border-radius: 3px;
@@ -37,6 +36,13 @@ export class text_content extends LitElement {
                 -ms-user-select: text; /* IE 10 and IE 11 */
                 user-select: text;
                 word-break: break-word;
+            }
+            ul {
+                list-style-position: inside;
+                list-style-type: none;
+            }
+            li {
+                margin-bottom: 10px;
             }
             a {
                 color: white;
