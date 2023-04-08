@@ -1,7 +1,7 @@
 import { html, LitElement, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 // @ts-ignore
-import * as images from './img/**';
+import * as images from './images/**';
 type options = 'Eyes' | 'Nose' | 'Mouth' | 'Shirt' | 'Arms';
 type char_styles = 'animated-char' | 'teacher-screen' | 'student-screen' | 'third-place results-player' | 'second-place results-player' | 'first-place ' | '';
 const custom_options: options[] = ['Eyes', 'Nose', 'Mouth', 'Shirt', 'Arms'];
@@ -159,13 +159,13 @@ export class mamk_char extends LitElement {
     private get_src(property: options): string | URL {
         const lookup_index = custom_options.indexOf(property);
         if (lookup_index == -1) {
-            return new URL('/src/img/qIcon-0.svg', import.meta.url);
+            return new URL('/src/images/quiz-icon-0.svg', import.meta.url);
         }
         return this.character_config ? images[`${property.toLowerCase()}-${this.character_config[lookup_index].toString()}.${lookup_index == 4 ? 'svg' : 'png'}`] : new URL('data:,');
     }
 
     render() {
-        const base = new URL('./img/base.svg', import.meta.url);
+        const base = new URL('./images/base.svg', import.meta.url);
         return html`
             <div class="${this.char_style} main">
                 ${custom_options.map((option) => html`<img alt="your ${option}" src="${this.get_src(option)}" width="250" height="337" />`)}

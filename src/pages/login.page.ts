@@ -35,7 +35,7 @@ export class login_page extends base_content {
     };
 
     render() {
-        const google_logo = new URL('/src/img/google-logo.svg', import.meta.url);
+        const google_logo = new URL('/src/images/google-logo.svg', import.meta.url);
         const url_search_params = new URLSearchParams(window.location.search);
         // This property appears only when the user's email isn't valid.
         const invalid_email_exists = !!url_search_params.get('invalid_email');
