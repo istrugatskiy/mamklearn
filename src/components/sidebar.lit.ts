@@ -1,6 +1,6 @@
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { base_content } from './templates/base-content.lit';
+import { base_content } from '../templates/base-content.lit';
 import { routes } from '../routing/routes';
 
 // Fixes customElementRegistry being written to twice.

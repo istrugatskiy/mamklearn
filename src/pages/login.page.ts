@@ -1,6 +1,6 @@
 import { html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { base_content } from '../components/templates/base-content.lit';
+import { base_content } from '../templates/base-content.lit';
 
 @customElement('login-page')
 export class login_page extends base_content {
@@ -35,7 +35,7 @@ export class login_page extends base_content {
     };
 
     render() {
-        const google_logo = new URL('../../img/Google__G__Logo.svg', import.meta.url);
+        const google_logo = new URL('/src/img/google-logo.svg', import.meta.url);
         const url_search_params = new URLSearchParams(window.location.search);
         // This property appears only when the user's email isn't valid.
         const invalid_email_exists = !!url_search_params.get('invalid_email');

@@ -1,8 +1,8 @@
 import { customElement, state } from 'lit/decorators.js';
-import { base_content } from '../components/templates/base-content.lit';
+import { base_content } from '../templates/base-content.lit';
 import { css, html } from 'lit';
 import { onValue, ref } from 'firebase/database';
-import { auth, db } from '../firebase-config';
+import { auth, db } from '../ts/firebase-config';
 
 @customElement('my-style')
 export class my_style extends base_content {

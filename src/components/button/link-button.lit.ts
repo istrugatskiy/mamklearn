@@ -1,5 +1,5 @@
 import { html } from 'lit';
-import { base_content } from '../templates/base-content.lit';
+import { base_content } from '../../templates/base-content.lit';
 import { customElement, property } from 'lit/decorators';
 import { redirect } from '../../routing/router';
 

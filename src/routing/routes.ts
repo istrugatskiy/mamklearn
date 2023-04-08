@@ -1,5 +1,5 @@
 import { signInWithRedirect, signOut } from 'firebase/auth';
-import { auth, provider } from '../firebase-config';
+import { auth, provider } from '../ts/firebase-config';
 import { redirect } from './router';
 
 const home: route = {

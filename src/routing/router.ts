@@ -1,9 +1,9 @@
 import './outlet-transitions.css';
 import { onAuthStateChanged } from 'firebase/auth';
 import { routes } from './routes';
-import { auth } from '../firebase-config';
+import { auth } from '../ts/firebase-config';
 import { default_transition } from './default-transition';
-import config from '../config.json';
+import config from '../../mamk-config.json';
 
 type state = {
     ready: boolean;

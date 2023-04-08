@@ -4,7 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 import * as images from './img/**';
 type options = 'Eyes' | 'Nose' | 'Mouth' | 'Shirt' | 'Arms';
 type char_styles = 'animated-char' | 'teacher-screen' | 'student-screen' | 'third-place results-player' | 'second-place results-player' | 'first-place ' | '';
-const custom_options = ['Eyes', 'Nose', 'Mouth', 'Shirt', 'Arms'];
+const custom_options: options[] = ['Eyes', 'Nose', 'Mouth', 'Shirt', 'Arms'];
 
 @customElement('mamk-char')
 export class mamk_char extends LitElement {
@@ -168,11 +168,7 @@ export class mamk_char extends LitElement {
         const base = new URL('./img/base.svg', import.meta.url);
         return html`
             <div class="${this.char_style} main">
-                <img alt="your arms" src="${this.get_src('Arms')}" width="250" height="337" />
-                <img alt="your eyes" src="${this.get_src('Eyes')}" width="250" height="337" />
-                <img alt="your nose" src="${this.get_src('Nose')}" width="250" height="337" />
-                <img alt="your mouth" src="${this.get_src('Mouth')}" width="250" height="337" />
-                <img alt="your shirt" src="${this.get_src('Shirt')}" width="250" height="337" />
+                ${custom_options.map((option) => html`<img alt="your ${option}" src="${this.get_src(option)}" width="250" height="337" />`)}
                 <img alt="your profile picture" src="${base}" class="base" width="250" height="337" />
             </div>
         `;

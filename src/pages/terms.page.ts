@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { text_content } from '../components/templates/text-content.lit';
+import { text_content } from '../templates/text-content.lit';
 import { redirect } from '../routing/router';
 
 @customElement('terms-of-service-page')

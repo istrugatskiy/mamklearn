@@ -6,7 +6,7 @@ import './trolls';
 import './components/character/mamk-char.lit';
 import { $, createTemplate, setTitle, logOut, timeHandler, throwExcept, call } from './old-utils';
 import { eventHandle } from './events';
-import { init_particles } from './load-particles';
+import { init_particles } from '../../src/ts/load-particles';
 import { child, DatabaseReference, getDatabase, onValue, push, ref, set } from 'firebase/database';
 import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from 'firebase/auth';
 import { globals } from './globals';

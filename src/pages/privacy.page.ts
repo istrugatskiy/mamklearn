@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { text_content } from '../components/templates/text-content.lit';
+import { text_content } from '../templates/text-content.lit';
 
 @customElement('privacy-policy-page')
 export class privacy_policy extends text_content {

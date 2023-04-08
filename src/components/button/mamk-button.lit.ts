@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { base_content } from '../templates/base-content.lit';
+import { base_content } from '../../templates/base-content.lit';
 
 /**
  * A button component.
