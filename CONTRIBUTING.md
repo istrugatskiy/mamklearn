@@ -34,6 +34,6 @@ Mamklearn uses the following tools (non exhaustive list):
 ## Build Issues
 Periodically Parcel (Mamklearn's build tool) gets confused.
 It may fail to build or build out-of-sync code.
-The commands below will purge Parce's cache:
+The commands below will purge Parcel's cache:
 * Windows: `yarn run win-clean`
 * Linux: `yarn run clean`
