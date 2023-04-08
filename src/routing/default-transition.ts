@@ -1,4 +1,4 @@
-import { sleep } from '../ts/utils';
+import { sleep } from '../scripts/utils';
 
 export const default_transition = async (outlet: HTMLElement, replace_route: () => void, resume_UI: () => void, is_forward: boolean) => {
     const first_transition = `slide-${is_forward ? 'right' : 'left'}-out`;

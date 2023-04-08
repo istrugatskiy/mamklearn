@@ -1,7 +1,7 @@
 import './outlet-transitions.css';
 import { onAuthStateChanged } from 'firebase/auth';
 import { routes } from './routes';
-import { auth } from '../ts/firebase-config';
+import { auth } from '../scripts/firebase-config';
 import { default_transition } from './default-transition';
 import config from '../../mamk-config.json';
 

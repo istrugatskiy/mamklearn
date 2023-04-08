@@ -4,8 +4,8 @@ import './styles/globals.css';
 import './styles/styles.css';
 import './routing/router';
 import './components/common';
-import { init_particles } from './ts/load-particles';
-import './ts/trolls';
+import { init_particles } from './scripts/load-particles';
+import './scripts/trolls';
 import { app_version } from '../mamk-config.json';
 
 // Mamklearn version (used for analytics)
