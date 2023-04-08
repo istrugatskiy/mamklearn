@@ -1,3 +1,19 @@
+declare global {
+    interface Window {
+        WIZ_global_data: string;
+        jQuery: {
+            fn: {
+                jquery: string;
+            };
+        };
+        React: {
+            version: string;
+            Component: string;
+        };
+        __mamkVersion: string;
+    }
+}
+
 type route = {
     title: string;
     path: string;
@@ -17,8 +33,3 @@ type route_list = {
     $outlet: HTMLElement;
     layout: { [key: string]: route };
 };
-
-declare module './img/**' {
-    const value: string;
-    export default value;
-}
