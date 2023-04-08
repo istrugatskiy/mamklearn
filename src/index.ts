@@ -1,7 +1,7 @@
 // This is the new app entry point.
 
-import './css/globals.css';
-import './css/styles.css';
+import './styles/globals.css';
+import './styles/styles.css';
 import './routing/router';
 import './components/common';
 import { init_particles } from './ts/load-particles';
