@@ -82,6 +82,17 @@ const terms_of_service: route = {
     },
 };
 
+const about: route = {
+    title: 'About',
+    path: '/about',
+    component: 'about-page',
+    require_auth: false,
+    show_user: true,
+    load: async () => {
+        await import('../pages/about.page');
+    },
+};
+
 export const routes: route_list = {
     default: home,
     not_found: not_found,
@@ -90,6 +101,7 @@ export const routes: route_list = {
         '/': home,
         '/404': not_found,
         '/no-auth': no_auth,
+        '/about': about,
         '/privacy-policy': privacy_policy,
         '/terms-of-service': terms_of_service,
         '/login': login,

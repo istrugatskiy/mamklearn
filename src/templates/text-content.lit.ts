@@ -65,6 +65,9 @@ export class text_content extends LitElement {
                     padding-top: 0;
                 }
             }
+            .center {
+                text-align: center;
+            }
         `,
     ];
 }
