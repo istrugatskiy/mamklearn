@@ -96,7 +96,7 @@ const listener = onAuthStateChanged(
             return;
         }
         if (user) {
-            if (/.*@mamkschools.org$/.test(user.email!) || /.*@student.mamkschools.org$/.test(user.email!) || /.*@mamklearn.com$/.test(user.email!) || user.email == 'ilyastrug@gmail.com') {
+            if (/.*@mamkschools.org$/.test(user.email!) || /.*@student.mamkschools.org$/.test(user.email!) || /.*@mamklearn.com$/.test(user.email!) || /.*@umich.edu$/.test(user.email!) || user.email == 'ilyastrug@gmail.com') {
                 currentUser = ref(database, `userProfiles/${getAuth().currentUser!.uid}`);
                 charConfig = child(currentUser, 'charConfig');
                 quizList = child(currentUser, 'quizList');
