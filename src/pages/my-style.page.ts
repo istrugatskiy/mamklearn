@@ -14,7 +14,18 @@ export class my_style extends base_content {
         this.disabled = false;
     };
 
-    static styles = [base_content.styles, css``];
+    static styles = [
+        base_content.styles,
+        css`
+            p {
+                color: unset;
+                font-family: unset;
+            }
+            .button {
+                flex-direction: column;
+            }
+        `,
+    ];
 
     char_listener?: () => void;
 
@@ -31,8 +42,8 @@ export class my_style extends base_content {
 
     render() {
         return html` <mamk-header>Home</mamk-header>
-            <div class="button titleTransitionBack" id="charCustomize" tabindex="0">
-                <p class="notifyTextChar" id="tapToCustom">Tap to customize...</p>
+            <div class="button" tabindex="0">
+                <p>Tap to customize...</p>
                 <mamk-char data-style="animated-char" data-character="${JSON.stringify(this.user_char)}"></mamk-char>
                 <p class="notifyTextChar" id="customType">
                     <a class="arrow left" href="javascript:void(0)" id="leftCustomizeArrow"> </a>
