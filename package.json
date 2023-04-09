@@ -1,43 +1,43 @@
 {
-  "name": "mamklearn",
-  "version": "1.0.0",
-  "description": "Mamklearn Project",
-  "private": true,
-  "scripts": {
-    "build": "webpack",
-    "buildProd": "webpack --config prod.config.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/istrugatskiy/mamklearn.git"
-  },
-  "author": "Ilya Strugatskiy",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/istrugatskiy/mamklearn/issues"
-  },
-  "homepage": "https://github.com/istrugatskiy/mamklearn#readme",
-  "devDependencies": {
-    "clean-webpack-plugin": "^3.0.0",
-    "copy-webpack-plugin": "^7.0.0",
-    "css-loader": "^5.0.2",
-    "css-minimizer-webpack-plugin": "^3.0.0",
-    "html-webpack-plugin": "^5.2.0",
-    "mini-css-extract-plugin": "^1.3.7",
-    "style-loader": "^2.0.0",
-    "terser-webpack-plugin": "^5.1.1",
-    "ts-loader": "^8.0.18",
-    "typescript": "^4.2.3",
-    "watch": "^0.13.0",
-    "webpack": "^5.38.1",
-    "webpack-bundle-analyzer": "^4.4.1",
-    "webpack-cli": "^4.5.0",
-    "webpack-dev-server": "^3.11.2"
-  },
-  "dependencies": {
-    "@types/firebase": "^3.2.1",
-    "firebase": "^9.0.1",
-    "particles.js": "^2.0.0",
-    "semver": "^7.3.5"
-  }
+    "name": "mamklearn",
+    "version": "1.0.0",
+    "description": "Mamklearn Project",
+    "private": true,
+    "scripts": {
+        "develop": "webpack",
+        "build": "webpack --config prod.config.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/istrugatskiy/mamklearn.git"
+    },
+    "author": "Ilya Strugatskiy",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/istrugatskiy/mamklearn/issues"
+    },
+    "homepage": "https://github.com/istrugatskiy/mamklearn#readme",
+    "devDependencies": {
+        "clean-webpack-plugin": "^3.0.0",
+        "copy-webpack-plugin": "^7.0.0",
+        "css-loader": "^5.0.2",
+        "css-minimizer-webpack-plugin": "^3.0.0",
+        "html-webpack-plugin": "^5.2.0",
+        "mini-css-extract-plugin": "^1.3.7",
+        "style-loader": "^2.0.0",
+        "terser-webpack-plugin": "^5.1.1",
+        "ts-loader": "^8.0.18",
+        "typescript": "^4.2.3",
+        "watch": "^0.13.0",
+        "webpack": "^5.38.1",
+        "webpack-bundle-analyzer": "^4.4.1",
+        "webpack-cli": "^4.5.0",
+        "webpack-dev-server": "^3.11.2"
+    },
+    "dependencies": {
+        "@types/firebase": "^3.2.1",
+        "firebase": "^9.0.1",
+        "particles.js": "^2.0.0",
+        "semver": "^7.3.5"
+    }
 }
