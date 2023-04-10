@@ -3,5 +3,15 @@
     "resolvers": [
         "@parcel/resolver-glob",
         "..."
-    ]
+    ],
+    "transformers": {
+        "*.{js,jsx,ts,tsx}": [
+            "@parcel/transformer-babel",
+            "@parcel/transformer-js",
+            "parcel-transformer-minify-html-literals"
+        ],
+        "url:*": [
+            "@parcel/transformer-raw"
+        ]
+    }
 }

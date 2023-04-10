@@ -1,4 +1,4 @@
-import { html } from 'lit';
+import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { base_content } from '../../templates/base-content.lit';
 
@@ -9,6 +9,15 @@ import { base_content } from '../../templates/base-content.lit';
  */
 @customElement('mamk-button')
 export class mamk_button extends base_content {
+    static styles = [
+        base_content.styles,
+        css`
+            .button {
+                padding: 10px;
+            }
+        `,
+    ];
+
     halt_UI = () => {
         this.disabled = true;
     };

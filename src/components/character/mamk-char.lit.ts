@@ -2,13 +2,30 @@ import { html, LitElement, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 // @ts-ignore
 import * as images from './images/**';
-type options = 'Eyes' | 'Nose' | 'Mouth' | 'Shirt' | 'Arms';
+export type char_options = 'Eyes' | 'Nose' | 'Mouth' | 'Shirt' | 'Arms';
 type char_styles = 'animated-char' | 'teacher-screen' | 'student-screen' | 'third-place results-player' | 'second-place results-player' | 'first-place ' | '';
-const custom_options: options[] = ['Eyes', 'Nose', 'Mouth', 'Shirt', 'Arms'];
+export const custom_options: char_options[] = ['Eyes', 'Nose', 'Mouth', 'Shirt', 'Arms'];
+
+/**
+ * Get the src of the image that corresponds to the currently configured character.
+ * @param {string} property The property to get the image for.
+ * @param {number[]} character_config The character configuration to get the image for.
+ * @returns {string | URL} The src of the image.
+ */
+export const get_src = (property: char_options, character_config?: number[]): string | URL => {
+    const lookup_index = custom_options.indexOf(property);
+    if (lookup_index == -1) {
+        return new URL('/src/images/quiz-icon-0.svg', import.meta.url);
+    }
+    return character_config ? images[`${property.toLowerCase()}-${character_config[lookup_index].toString()}.${lookup_index == 4 ? 'svg' : 'png'}`] : new URL('data:,');
+};
 
 @customElement('mamk-char')
 export class mamk_char extends LitElement {
     static styles = css`
+        :host {
+            display: block;
+        }
         img {
             position: absolute;
         }
@@ -20,6 +37,7 @@ export class mamk_char extends LitElement {
             margin-top: 94px;
             margin-bottom: 0px;
             height: 280px;
+            width: 250px;
         }
         @keyframes char-anim {
             0% {
@@ -152,23 +170,11 @@ export class mamk_char extends LitElement {
     })
     char_style: char_styles = '';
 
-    /**
-     * Get the src of the image that corresponds to the currently configured character.
-     * @param string data
-     */
-    private get_src(property: options): string | URL {
-        const lookup_index = custom_options.indexOf(property);
-        if (lookup_index == -1) {
-            return new URL('/src/images/quiz-icon-0.svg', import.meta.url);
-        }
-        return this.character_config ? images[`${property.toLowerCase()}-${this.character_config[lookup_index].toString()}.${lookup_index == 4 ? 'svg' : 'png'}`] : new URL('data:,');
-    }
-
     render() {
-        const base = new URL('./images/base.svg', import.meta.url);
+        const base = new URL('./images/base.svg', import.meta.url).href;
         return html`
             <div class="${this.char_style} main">
-                ${custom_options.map((option) => html`<img alt="your ${option}" src="${this.get_src(option)}" width="250" height="337" />`)}
+                ${custom_options.map((option) => html`<img alt="your ${option}" src="${get_src(option, this.character_config)}" width="250" height="337" />`)}
                 <img alt="your profile picture" src="${base}" class="base" width="250" height="337" />
             </div>
         `;
