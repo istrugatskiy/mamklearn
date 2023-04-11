@@ -81,7 +81,16 @@ const terms_of_service: route = {
         await import('../pages/terms.page');
     },
 };
-
+const join_game: route = {
+    title: 'Join',
+    path: '/play-page',
+    component: 'play-page',
+    require_auth: false,
+    show_user: true,
+    load: async () => {
+        await import('../pages/play.page');
+    },
+};
 export const routes: route_list = {
     default: home,
     not_found: not_found,
@@ -92,6 +101,7 @@ export const routes: route_list = {
         '/no-auth': no_auth,
         '/privacy-policy': privacy_policy,
         '/terms-of-service': terms_of_service,
+        '/join-game': join_game,
         '/login': login,
         '/logout': logout,
     },
