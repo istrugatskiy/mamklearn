@@ -12,6 +12,8 @@ if (module.hot) {
 }
 @customElement('side-bar')
 export class side_bar extends base_content {
+    // Probably will make fixed to right side of screen.
+    // And remove the top bar when in mobile view.
     static styles = [
         base_content.styles,
         css`
@@ -32,7 +34,8 @@ export class side_bar extends base_content {
                 max-width: 300px;
                 animation: slide-in-from-left 0.3s cubic-bezier(0.29, 0.09, 0.07, 1.2);
                 animation-fill-mode: forwards;
-                background-color: rgba(0, 0, 0, 0.15);
+                background-color: rgba(0, 0, 0, 0.2);
+                height: 100vh;
             }
             h1 {
                 font-size: 32px;
