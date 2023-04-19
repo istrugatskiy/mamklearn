@@ -2,6 +2,7 @@ import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { base_content } from '../templates/base-content.lit';
 import { routes } from '../routing/routes';
+import './button/sidebar-button.lit';
 
 // Fixes customElementRegistry being written to twice.
 if (module.hot) {
@@ -31,6 +32,7 @@ export class side_bar extends base_content {
                 max-width: 300px;
                 animation: slide-in-from-left 0.3s cubic-bezier(0.29, 0.09, 0.07, 1.2);
                 animation-fill-mode: forwards;
+                background-color: rgba(0, 0, 0, 0.15);
             }
             h1 {
                 font-size: 32px;
