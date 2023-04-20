@@ -93,6 +93,17 @@ const about: route = {
     },
 };
 
+const play: route = {
+    title: 'Play',
+    path: '/play',
+    component: 'play-page',
+    require_auth: true,
+    show_user: true,
+    load: async () => {
+        await import('../pages/play.page');
+    },
+};
+
 export const routes: route_list = {
     default: home,
     not_found: not_found,
@@ -101,6 +112,7 @@ export const routes: route_list = {
         '/': home,
         '/404': not_found,
         '/no-auth': no_auth,
+        '/play': play,
         '/about': about,
         '/privacy-policy': privacy_policy,
         '/terms-of-service': terms_of_service,
