@@ -5,6 +5,8 @@ import { redirect } from '../routing/router';
 
 @customElement('terms-of-service-page')
 export class terms_of_service extends text_content {
+    // This was copilot generated.
+    // I don't know what this TOS means.
     render() {
         return html`
             <h1>Terms of Service</h1>
