@@ -20,7 +20,7 @@
             // Use cookies to show warning once per browser session.
             if (document.cookie.indexOf('devWarningShown') === -1) {
                 alert('This is a development version of mamklearn deployed to dev.mamklearn.com. Please use the production version at mamklearn.com');
-                document.cookie += 'devWarningShown=true';
+                document.cookie = `devWarningShown=true;`;
             }
         </script>
         <noscript>
