@@ -7,7 +7,8 @@ The mamklearn project repo containing the firebase and client config.
 ## IMPORTANT!
 
 Mamklearn already has a firebase project setup, don't accidentally overwrite it
-or accidentally deploy code.
+or accidentally deploy code. Whenever you commit to main, Mamklearn will build a
+project to https://dev.mamklearn.com
 
 ## How To Build:
 

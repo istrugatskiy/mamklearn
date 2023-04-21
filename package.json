@@ -6,6 +6,7 @@
     "scripts": {
         "develop": "yarn run parcel ./src/index.html",
         "build": "yarn run parcel build ./src/index.html",
+        "build-dev": "yarn run parcel build ./src/dev.index.html",
         "clean": "rm -rf dist && rm -rf .parcel-cache",
         "win-clean": "rmdir /s /q dist 2>nul && rmdir /s /q .parcel-cache 2>nul"
     },
