@@ -5,10 +5,9 @@
         "..."
     ],
     "transformers": {
-        "*.{js,jsx,ts,tsx}": [
-            "@parcel/transformer-babel",
-            "@parcel/transformer-js",
-            "parcel-transformer-minify-html-literals"
+        "*.{js,mjs,jsm,jsx,es6,cjs,ts,tsx}": [
+            "parcel-transformer-minify-html-literals",
+            "..."
         ],
         "url:*": [
             "@parcel/transformer-raw"
