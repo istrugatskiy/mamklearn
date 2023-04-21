@@ -1,8 +1,20 @@
 {
-  "projects": {
-    "default": "mamklearn-preview",
-    "dev": "mamklearn-preview"
-  },
-  "targets": {},
-  "etags": {}
+    "projects": {
+        "default": "mamklearn-preview",
+        "dev": "mamklearn-preview"
+    },
+    "targets": {
+        "mamklearn-preview": {
+            "hosting": {
+                "public": "mamklearn-preview",
+                "rewrites": [
+                    {
+                        "source": "**",
+                        "destination": "/dev.index.html"
+                    }
+                ]
+            }
+        }
+    },
+    "etags": {}
 }
