@@ -5,8 +5,8 @@
     "private": true,
     "scripts": {
         "develop": "yarn run parcel ./src/index.html",
-        "build": "yarn run parcel build ./src/index.html",
-        "build-dev": "yarn run parcel build ./src/dev.index.html",
+        "build": "yarn run parcel build ./src/index.html --no-source-maps",
+        "build-dev": "cp dev.firebase.json firebase.json && yarn run parcel build ./src/dev.index.html --no-source-maps",
         "clean": "rm -rf dist && rm -rf .parcel-cache",
         "win-clean": "rmdir /s /q dist 2>nul && rmdir /s /q .parcel-cache 2>nul"
     },
