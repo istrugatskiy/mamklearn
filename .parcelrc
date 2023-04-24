@@ -6,7 +6,7 @@
     ],
     "transformers": {
         "*.{js,mjs,jsm,jsx,es6,cjs,ts,tsx}": [
-            "parcel-transformer-minify-html-literals",
+            "@anteris/parcel-transformer-html-literals",
             "..."
         ],
         "url:*": [
