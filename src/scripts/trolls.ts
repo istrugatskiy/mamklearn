@@ -1,7 +1,24 @@
+interface Window {
+    WIZ_global_data: string;
+    jQuery: {
+        fn: {
+            jquery: string;
+        };
+    };
+    React: {
+        version: string;
+        Component: string;
+    };
+    __mamkVersion: string;
+}
+
+interface Document {
+    __wizdispatcher: string;
+}
+
 // Creates a console message that rickrolls you
 console.log('%cUse link to get quiz answers:https://bit.ly/31Apj2U', 'font-size: 32px;');
 // For messing with developers trying to see what libraries mamklearn uses.
-// @ts-ignore
 document.__wizdispatcher = 'funny troll';
 window.WIZ_global_data = 'Hi There, it seems you have found a little easter egg.';
 window.jQuery = {

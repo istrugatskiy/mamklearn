@@ -13,6 +13,7 @@ import { mamk_math } from '../scripts/utils';
 // The character options for an empty part.
 // This allows us to replace it with a special "none" option.
 // For legacy reasons the "none" option is a different index for each person.
+// @ts-ignore This is temporary until the var is used.
 const none_map = [1, 2, 2, 2, -1];
 
 @customElement('my-style')

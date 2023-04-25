@@ -1,8 +1,9 @@
-// Definese the configuration data for particles js and initializes it.
-import 'particles.js';
-
+// Definese the configuration data for ts particles and initializes it.
 // The config for particles.js
-const particle_data = {
+import { IOptions, RecursivePartial, SingleOrMultiple, tsParticles } from 'tsparticles-engine';
+import { loadSlim } from 'tsparticles-slim';
+// TODO: optimize which components are loaded.
+const particle_data: SingleOrMultiple<RecursivePartial<IOptions>> = {
     particles: {
         number: {
             value: 25,
@@ -113,15 +114,13 @@ const particle_data = {
     retina_detect: false,
 };
 
-// The library requires the config to be a network request, but you can trick it with this scuffedness.
-const particle_data_base64 = 'data:text/plain;base64,' + window.btoa(JSON.stringify(particle_data));
-
 /**
  * Initializes the particle library with the mamklearn snow preset.
  */
-export const init_particles = () => {
+export const init_particles = async () => {
+    await loadSlim(tsParticles);
     if (!window.location.href.includes('#performance-mode')) {
-        particlesJS.load('particles-js', particle_data_base64);
+        await tsParticles.load('particles-js', particle_data);
         document.getElementById('particles-js')!.classList.add('ready');
     }
 };
