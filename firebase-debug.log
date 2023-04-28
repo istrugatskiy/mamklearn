@@ -1,0 +1,51 @@
+[debug] [2023-04-28T21:00:18.056Z] ----------------------------------------------------------------------
+[debug] [2023-04-28T21:00:18.058Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Ilya\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only functions
+[debug] [2023-04-28T21:00:18.058Z] CLI Version:   11.29.1
+[debug] [2023-04-28T21:00:18.059Z] Platform:      win32
+[debug] [2023-04-28T21:00:18.059Z] Node Version:  v18.12.0
+[debug] [2023-04-28T21:00:18.060Z] Time:          Fri Apr 28 2023 17:00:18 GMT-0400 (Eastern Daylight Time)
+[debug] [2023-04-28T21:00:18.060Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-28T21:00:18.136Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-28T21:00:18.136Z] > authorizing via signed-in user (ilyastrug@gmail.com)
+[debug] [2023-04-28T21:00:18.137Z] [iam] checking project mamaroneck-learn for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2023-04-28T21:00:18.138Z] > refreshing access token with scopes: []
+[debug] [2023-04-28T21:00:18.140Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2023-04-28T21:00:18.140Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-04-28T21:00:18.186Z] [iam] error while checking permissions, command may fail: FirebaseError: Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2023-04-28T21:00:18.187Z] > refreshing access token with scopes: []
+[debug] [2023-04-28T21:00:18.187Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2023-04-28T21:00:18.187Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-04-28T21:00:18.192Z] [functions] service account IAM check errored, deploy may fail:Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci {"name":"FirebaseError","children":[],"exit":1,"message":"Authentication Error: Your credentials are no longer valid. Please run \u001b[1mfirebase login --reauth\u001b[22m\n\nFor CI servers and headless environments, generate a new token with \u001b[1mfirebase login:ci\u001b[22m","status":500}
+[info] 
+[info] === Deploying to 'mamaroneck-learn'...
+[info] 
+[info] i  deploying functions 
+[info] Running command: npm --prefix "$RESOURCE_DIR" run build
+[info] +  functions: Finished running predeploy script. 
+[debug] [2023-04-28T21:00:21.998Z] > refreshing access token with scopes: []
+[debug] [2023-04-28T21:00:21.998Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2023-04-28T21:00:21.998Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-04-28T21:00:22.000Z] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2023-04-28T21:00:22.007Z] FirebaseError: Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+    at invalidCredentialError (C:\Users\Ilya\AppData\Roaming\npm\node_modules\firebase-tools\lib\auth.js:144:12)
+    at refreshTokens (C:\Users\Ilya\AppData\Roaming\npm\node_modules\firebase-tools\lib\auth.js:508:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Client.getAccessToken (C:\Users\Ilya\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:149:23)
+    at async Client.addAuthHeader (C:\Users\Ilya\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:140:21)
+    at async Client.request (C:\Users\Ilya\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:96:34)
+    at async getFirebaseProject (C:\Users\Ilya\AppData\Roaming\npm\node_modules\firebase-tools\lib\management\projects.js:295:21)
+    at async needProjectNumber (C:\Users\Ilya\AppData\Roaming\npm\node_modules\firebase-tools\lib\projectUtils.js:46:22)
+    at async prepare (C:\Users\Ilya\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\prepare.js:36:27)
+    at async chain (C:\Users\Ilya\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\index.js:35:9)
+    at async deploy (C:\Users\Ilya\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\index.js:79:5)
+[error] 
+[error] Error: Failed to get Firebase project mamaroneck-learn. Please make sure the project exists and your account has permission to access it.
