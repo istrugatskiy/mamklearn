@@ -14,6 +14,6 @@ jobs:
               working-directory: functions
               run: npm install
             - name: Deploy
-              run: npx firebase-tools deploy
+              run: npx --yes firebase-tools deploy
               env:
                   FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
