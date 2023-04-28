@@ -1,0 +1,19 @@
+name: Deploy to Firebase Functions via github action
+'on':
+    push:
+        branches:
+            - deployed
+env:
+    CI: false
+jobs:
+    build_and_deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Resolve dependencies and deploy
+              working-directory: functions
+              run: npm install && npm install -g firebase-tools
+            - name: Deploy
+              run: firebase deploy --only functions
+              env:
+                  FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
