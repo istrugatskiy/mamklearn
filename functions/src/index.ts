@@ -1,5 +1,6 @@
 import * as functions from 'firebase-functions';
-import { database, initializeApp } from 'firebase-admin';
+import { initializeApp } from 'firebase-admin/app';
+import { getDatabase } from 'firebase-admin/database';
 import { google } from '@google-cloud/tasks/build/protos/protos';
 
 initializeApp();
@@ -37,7 +38,7 @@ export const initGame = functions.runWith({ maxInstances: 10 }).https.onCall(asy
             context.auth.token.email &&
             (/.*@mamkschools.org$/.test(context.auth.token.email) || /.*@student.mamkschools.org$/.test(context.auth.token.email) || /.*@mamklearn.com$/.test(context.auth.token.email) || context.auth.token.email == 'ilyastrug@gmail.com')
         ) {
-            const db = database();
+            const db = getDatabase();
             const user = db.ref(`userProfiles/${context.auth.uid}/`);
             const gameState = user.child('currentGameState/isInGame/');
             const isTeacher = user.child('currentGameState/isTeacher/');
@@ -131,7 +132,7 @@ export const leaveGame = functions.runWith({ maxInstances: 10 }).https.onCall(as
         context.auth.token.email &&
         (/.*@mamkschools.org$/.test(context.auth.token.email) || /.*@student.mamkschools.org$/.test(context.auth.token.email) || /.*@mamklearn.com$/.test(context.auth.token.email) || context.auth.token.email == 'ilyastrug@gmail.com')
     ) {
-        const db = database();
+        const db = getDatabase();
         const user = db.ref(`userProfiles/${context.auth.uid}/`);
         const gameState = user.child('currentGameState/');
         const snap = await gameState.once('value');
@@ -188,7 +189,7 @@ export const joinGameStudent = functions.runWith({ maxInstances: 10 }).https.onC
         context.auth.token.email &&
         (/.*@mamkschools.org$/.test(context.auth.token.email) || /.*@student.mamkschools.org$/.test(context.auth.token.email) || /.*@mamklearn.com$/.test(context.auth.token.email) || context.auth.token.email == 'ilyastrug@gmail.com')
     ) {
-        const db = database();
+        const db = getDatabase();
         const user = db.ref(`userProfiles/${context.auth.uid}`);
         const gameState = user.child('currentGameState/isInGame');
         const gameCode = user.child('currentGameState/code');
@@ -247,7 +248,7 @@ export const kickPlayer = functions.runWith({ maxInstances: 10 }).https.onCall(a
         context.auth.token.email &&
         (/.*@mamkschools.org$/.test(context.auth.token.email) || /.*@student.mamkschools.org$/.test(context.auth.token.email) || /.*@mamklearn.com$/.test(context.auth.token.email) || context.auth.token.email == 'ilyastrug@gmail.com')
     ) {
-        const db = database();
+        const db = getDatabase();
         if ((await db.ref(`actualGames/${context.auth.uid}/globalState/isRunning`).once('value')).val()) {
             return {
                 message: 'Cannot kick players after a game started.',
@@ -283,7 +284,7 @@ export const startGame = functions.runWith({ maxInstances: 10 }).https.onCall(as
         context.auth.token.email &&
         (/.*@mamkschools.org$/.test(context.auth.token.email) || /.*@student.mamkschools.org$/.test(context.auth.token.email) || /.*@mamklearn.com$/.test(context.auth.token.email) || context.auth.token.email == 'ilyastrug@gmail.com')
     ) {
-        const db = database();
+        const db = getDatabase();
         const playerList = (await db.ref(`actualGames/${context.auth.uid}/players`).once('value')).val();
         if (playerList !== null) {
             const allQuestions = (await db.ref(`actualGames/${context.auth.uid}/quiz/questionObjects/`).once('value')).val() as questionObject[];
@@ -375,7 +376,7 @@ export const submitQuestion = functions.runWith({ maxInstances: 10 }).https.onCa
         (/.*@mamkschools.org$/.test(context.auth.token.email) || /.*@student.mamkschools.org$/.test(context.auth.token.email) || /.*@mamklearn.com$/.test(context.auth.token.email) || context.auth.token.email == 'ilyastrug@gmail.com')
     ) {
         if (typeof data === 'string' || typeof data === 'number') {
-            const db = database();
+            const db = getDatabase();
             let hasGameEnded = false;
             const userState = await db.ref(`userProfiles/${context.auth.uid}/currentGameState`).once('value');
             if (!userState.val()?.isInGame || userState.val()?.isTeacher) {
@@ -540,7 +541,7 @@ export const handleGameEnd = functions.runWith({ maxInstances: 10 }).https.onReq
     };
     try {
         await gameEnd(body.location, body.totalPlayers, body.gameCode);
-        await database().ref(`${body.location}__internal__/name`).set(null);
+        await getDatabase().ref(`${body.location}__internal__/name`).set(null);
         res.send(200);
     } catch (e) {
         functions.logger.log(e);
@@ -549,7 +550,7 @@ export const handleGameEnd = functions.runWith({ maxInstances: 10 }).https.onReq
 });
 
 async function gameEnd(location: string, totalPlayers: number, gameCode: string) {
-    const db = database();
+    const db = getDatabase();
     if ((await db.ref(`${location}players/`).once('value')).val()) {
         const sortArray = (input: { [key: string]: { currentQuestion: number; playerName: string } }) => {
             let tempArray: { key: string; currentQuestion: number; playerName: string }[] = [];
