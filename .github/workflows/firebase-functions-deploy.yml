@@ -14,6 +14,6 @@ jobs:
               working-directory: functions
               run: yarn set version latest && yarn && npm install -g firebase-tools
             - name: Deploy
-              run: firebase deploy --only functions,hosting -P dev
+              run: firebase deploy --only functions,database -P dev
               env:
                   FIREBASE_TOKEN: ${{ secrets.FIREBASE_DEV_SECRET }}
