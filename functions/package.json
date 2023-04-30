@@ -6,7 +6,7 @@
         "shell": "yarn run build && yarn run firebase functions:shell",
         "start": "yarn run shell",
         "deploy": "yarn run firebase deploy --only functions",
-        "logs": "firebase functions:log"
+        "logs": "yarn run firebase functions:log"
     },
     "engines": {
         "node": "18"
