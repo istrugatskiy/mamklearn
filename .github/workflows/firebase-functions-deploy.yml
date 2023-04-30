@@ -3,6 +3,9 @@ name: Deploy to Firebase Functions via github action
     push:
         branches:
             - main
+        paths:
+            - 'functions/**'
+            - 'mamk-config.json'
 env:
     CI: false
 jobs:
