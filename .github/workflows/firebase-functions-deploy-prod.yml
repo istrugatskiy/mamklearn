@@ -1,4 +1,4 @@
-name: Deploy to Firebase Functions via github action
+name: Deploy to Firebase Functions and Database via github action
 'on':
     push:
         branches:
@@ -13,8 +13,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
-            - name: Resolve dependencies and deploy
-              working-directory: functions
+            - name: Resolve dependencies
               run: yarn set version latest && yarn
             - name: Deploy
               run: yarn run firebase deploy --only functions,database
