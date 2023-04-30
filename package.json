@@ -43,5 +43,9 @@
     "alias": {
         "process": false
     },
+    "workspaces": [
+        "mamklearn",
+        "functions"
+    ],
     "packageManager": "yarn@3.5.0"
 }
