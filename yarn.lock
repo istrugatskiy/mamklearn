@@ -143,7 +143,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firebase/app@npm:*, @firebase/app@npm:0.9.9":
+"@firebase/app@npm:*, @firebase/app@npm:0.9.9, @firebase/app@npm:^0.9.9":
   version: 0.9.9
   resolution: "@firebase/app@npm:0.9.9"
   dependencies:
@@ -2248,7 +2248,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firebase@npm:^9.21.0":
+"firebase@npm:9.21.0":
   version: 9.21.0
   resolution: "firebase@npm:9.21.0"
   dependencies:
@@ -2913,11 +2913,12 @@ __metadata:
   resolution: "mamklearn@workspace:."
   dependencies:
     "@anteris/parcel-transformer-html-literals": ^0.1.0
+    "@firebase/app": ^0.9.9
     "@parcel/config-default": ^2.8.3
     "@parcel/core": ^2.8.3
     "@parcel/resolver-glob": ^2.8.3
     "@types/parcel-env": ^0.0.1
-    firebase: ^9.21.0
+    firebase: 9.21.0
     lit: ^2.7.3
     parcel: ^2.8.3
     prettier: ^2.8.8
