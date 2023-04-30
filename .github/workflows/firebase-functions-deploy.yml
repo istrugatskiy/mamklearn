@@ -15,7 +15,7 @@ jobs:
             - uses: actions/checkout@v3
             - name: Resolve dependencies and deploy
               working-directory: functions
-              run: yarn set version latest && yarn && yarn add firebase-tools
+              run: yarn set version latest && yarn
             - name: Deploy
               run: yarn run firebase deploy --only functions,database -P dev
               env:
