@@ -16,7 +16,8 @@
         "@firebase/functions-types": "^0.6.0",
         "@google-cloud/tasks": "^3.1.2",
         "firebase-admin": "^11.7.0",
-        "firebase-functions": "^4.3.1"
+        "firebase-functions": "^4.3.1",
+        "jest": "^29.5.0"
     },
     "devDependencies": {
         "firebase-functions-test": "^3.1.0",
