@@ -59,7 +59,7 @@ const particle_data: SingleOrMultiple<RecursivePartial<IOptions>> = {
         },
         move: {
             enable: true,
-            speed: 10,
+            speed: 20,
             direction: 'bottom',
             random: false,
             straight: false,
