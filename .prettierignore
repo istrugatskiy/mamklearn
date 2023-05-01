@@ -1,0 +1,8 @@
+dist
+node_modules
+legacy
+functions/node_modules
+functions/lib
+.yarn
+.pnp.cjs
+.pnp.loader.mjs
