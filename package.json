@@ -10,7 +10,7 @@
         "build-dev": "yarn run check && cp dev.firebase.json firebase.json && yarn run parcel build ./src/dev.index.html --no-source-maps",
         "clean": "rm -rf dist && rm -rf .parcel-cache",
         "win-clean": "rmdir /s /q dist  && rmdir /s /q .parcel-cache",
-        "check": "yarn run tsc --noEmit && yarn run prettier --check . && yarn run eslint . && yarn run jest",
+        "check": "yarn run tsc --noEmit && yarn run prettier --check . && yarn run eslint . && yarn run jest --coverage --coverage-reporters=text",
         "test": "jest"
     },
     "repository": {
@@ -50,6 +50,7 @@
         "@firebase/app": "^0.9.9",
         "eslint-plugin-wc": "^1.5.0",
         "firebase": "9.21.0",
+        "jest-environment-jsdom": "^29.5.0",
         "lit": "^2.7.3",
         "tsparticles-engine": "^2.9.3",
         "tsparticles-slim": "^2.9.3"
