@@ -13,16 +13,17 @@ import { mamk_math } from '../scripts/utils';
 // The character options for an empty part.
 // This allows us to replace it with a special "none" option.
 // For legacy reasons the "none" option is a different index for each person.
-// @ts-ignore This is temporary until the var is used.
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore This is temporary until the var is used (so build doesn't fail).
 const none_map = [1, 2, 2, 2, -1];
 
 @customElement('my-style')
 export class my_style extends base_content {
-    halt_UI = () => {
+    halt_ui = () => {
         this.disabled = true;
     };
 
-    resume_UI = () => {
+    resume_ui = () => {
         this.disabled = false;
     };
 

@@ -19,17 +19,18 @@ export const mamk_math = {
     /**
      * Clamps a number between two values.
      *
-     * @param {number} num The number to clamp.
      * @param {number} min The minimum value that the number can be.
+     * @param {number} num The number to clamp.
      * @param {number} max The maximum value the number can be.
      * @return {number} The number clamped between the two specified values.
      */
-    clamp: (num: number, min: number, max: number): number => {
+    clamp: (min: number, num: number, max: number): number => {
         return num <= min ? min : num >= max ? max : num;
     },
 
     /**
      * Creates an iterable range array.
+     *
      * @param {number} start_at The number to start at.
      * @param {number} end_at The number to end at.
      * @param {number} step The step size.
@@ -38,7 +39,8 @@ export const mamk_math = {
     range: (start_at: number, end_at: number, step = 1): number[] => {
         const arr = [];
         for (let i = start_at; i <= end_at; i += step) {
-            arr.push(i);
+            const true_i = parseFloat(i.toFixed(10));
+            arr.push(true_i);
         }
         return arr;
     },

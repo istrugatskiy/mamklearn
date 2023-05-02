@@ -39,12 +39,12 @@ onAuthStateChanged(auth, (user) => {
     update_route();
 });
 
-const halt_UI = () => {
+const halt_ui = () => {
     window.dispatchEvent(new CustomEvent('mamk-halt-ui', { bubbles: true, composed: true }));
     state.UI_halted = true;
 };
 
-const resume_UI = () => {
+const resume_ui = () => {
     window.dispatchEvent(new CustomEvent('mamk-resume-ui', { bubbles: true, composed: true }));
     state.UI_halted = false;
 };
@@ -65,7 +65,7 @@ const update_route = (event?: Event) => {
             route = routes.no_auth;
         }
         if (!route.special_path) {
-            halt_UI();
+            halt_ui();
         }
         let is_forward = true;
         if (event?.type == 'popstate') {
@@ -87,7 +87,7 @@ const update_route = (event?: Event) => {
                         $outlet.replaceChildren(template);
                         window.document.title = route.title;
                     },
-                    resume_UI,
+                    resume_ui,
                     is_forward
                 );
                 if (state.last_queued_route) {
@@ -101,7 +101,7 @@ const update_route = (event?: Event) => {
                 console.error(err);
             });
     } else {
-        console.error('No outlet found');
+        throw new Error('No outlet found.');
     }
 };
 

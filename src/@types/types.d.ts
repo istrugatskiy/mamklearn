@@ -14,6 +14,6 @@ type route_list = {
     no_auth: route;
     default: route;
     not_found: route;
-    $outlet: HTMLElement;
+    $outlet: HTMLElement | null;
     layout: { [key: string]: route };
 };

@@ -85,21 +85,21 @@ export abstract class base_content extends LitElement {
 
     connectedCallback() {
         super.connectedCallback();
-        if (!this.halt_UI || !this.resume_UI) return;
-        window.addEventListener('mamk-halt-ui', this.halt_UI);
-        window.addEventListener('mamk-resume-ui', this.resume_UI);
+        if (!this.halt_ui || !this.resume_ui) return;
+        window.addEventListener('mamk-halt-ui', this.halt_ui);
+        window.addEventListener('mamk-resume-ui', this.resume_ui);
     }
 
     disconnectedCallback() {
         super.disconnectedCallback();
-        if (!this.halt_UI || !this.resume_UI) return;
-        window.removeEventListener('mamk-halt-ui', this.halt_UI);
-        window.removeEventListener('mamk-resume-ui', this.resume_UI);
+        if (!this.halt_ui || !this.resume_ui) return;
+        window.removeEventListener('mamk-halt-ui', this.halt_ui);
+        window.removeEventListener('mamk-resume-ui', this.resume_ui);
     }
 
-    abstract halt_UI?: () => void;
+    abstract halt_ui?: () => void;
 
-    abstract resume_UI?: () => void;
+    abstract resume_ui?: () => void;
 
     @property({ type: Boolean, reflect: true, attribute: 'data-disabled' })
     disabled = false;

@@ -18,10 +18,10 @@ export class mamk_button extends base_content {
         `,
     ];
 
-    halt_UI = () => {
+    halt_ui = () => {
         this.disabled = true;
     };
-    resume_UI = () => {
+    resume_ui = () => {
         this.disabled = false;
     };
 

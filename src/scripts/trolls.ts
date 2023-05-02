@@ -1,19 +1,24 @@
-interface Window {
-    WIZ_global_data: string;
-    jQuery: {
-        fn: {
-            jquery: string;
-        };
-    };
-    React: {
-        version: string;
-        Component: string;
-    };
-    __mamkVersion: string;
-}
+// Scuffed hack to convince typescript that this is a module.
+export {};
 
-interface Document {
-    __wizdispatcher: string;
+declare global {
+    interface Window {
+        WIZ_global_data: string;
+        jQuery: {
+            fn: {
+                jquery: string;
+            };
+        };
+        React: {
+            version: string;
+            Component: string;
+        };
+        __mamkVersion: string;
+    }
+
+    interface Document {
+        __wizdispatcher: string;
+    }
 }
 
 // Creates a console message that rickrolls you

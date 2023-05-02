@@ -11,11 +11,11 @@ import { redirect } from '../../routing/router';
  */
 @customElement('link-button')
 export class link_button extends base_content {
-    resume_UI?: (() => void) | undefined;
-    halt_UI?: (() => void) | undefined;
+    resume_ui?: (() => void) | undefined;
+    halt_ui?: (() => void) | undefined;
 
     @property({ type: String, reflect: true, attribute: 'data-href' })
-    href: string = '';
+    href = '';
 
     render() {
         return html`

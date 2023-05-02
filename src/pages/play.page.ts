@@ -6,11 +6,11 @@ import '../components/button/link-button.lit';
 
 @customElement('play-page')
 export class play extends base_content {
-    halt_UI = () => {
+    halt_ui = () => {
         this.disabled = true;
     };
 
-    resume_UI = () => {
+    resume_ui = () => {
         this.disabled = false;
     };
 

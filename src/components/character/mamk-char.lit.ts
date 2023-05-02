@@ -1,5 +1,7 @@
 import { html, LitElement, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+// Typescript gets really confused by glob imports.
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import * as images from './images/**';
 export type char_options = 'Eyes' | 'Nose' | 'Mouth' | 'Shirt' | 'Arms';

@@ -121,6 +121,10 @@ export const init_particles = async () => {
     await loadSlim(tsParticles);
     if (!window.location.href.includes('#performance-mode')) {
         await tsParticles.load('particles-js', particle_data);
-        document.getElementById('particles-js')!.classList.add('ready');
+        const particles_el = document.getElementById('particles-js');
+        if (!particles_el) {
+            throw new Error('particles-js element not found');
+        }
+        particles_el.classList.add('ready');
     }
 };

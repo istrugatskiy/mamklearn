@@ -119,5 +119,5 @@ export const routes: route_list = {
         '/login': login,
         '/logout': logout,
     },
-    $outlet: document.getElementById('outlet')!,
+    $outlet: document.getElementById('outlet'),
 };
