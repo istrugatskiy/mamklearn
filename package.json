@@ -47,6 +47,7 @@
     },
     "dependencies": {
         "@firebase/app": "^0.9.9",
+        "eslint-plugin-wc": "^1.5.0",
         "firebase": "9.21.0",
         "lit": "^2.7.3",
         "tsparticles-engine": "^2.9.3",

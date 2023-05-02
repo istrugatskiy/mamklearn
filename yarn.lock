@@ -5156,6 +5156,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-wc@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "eslint-plugin-wc@npm:1.5.0"
+  dependencies:
+    is-valid-element-name: ^1.0.0
+    js-levenshtein-esm: ^1.2.0
+  peerDependencies:
+    eslint: ">=5"
+  checksum: 62845181cce97a4fc240d8d0ce0bb0dc5c5cdc21ac99c4cf182127ee950df4c5a7219c092656652c77167a9e5e00c3b384920eb6945b5efab0610fe0bf3a6adb
+  languageName: node
+  linkType: hard
+
 "eslint-scope@npm:^5.1.1":
   version: 5.1.1
   resolution: "eslint-scope@npm:5.1.1"
@@ -6894,6 +6906,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"is-potential-custom-element-name@npm:^1.0.0":
+  version: 1.0.1
+  resolution: "is-potential-custom-element-name@npm:1.0.1"
+  checksum: ced7bbbb6433a5b684af581872afe0e1767e2d1146b2207ca0068a648fb5cab9d898495d1ac0583524faaf24ca98176a7d9876363097c2d14fee6dd324f3a1ab
+  languageName: node
+  linkType: hard
+
 "is-stream-ended@npm:^0.1.4":
   version: 0.1.4
   resolution: "is-stream-ended@npm:0.1.4"
@@ -6926,6 +6945,15 @@ __metadata:
   version: 1.2.4
   resolution: "is-url@npm:1.2.4"
   checksum: 100e74b3b1feab87a43ef7653736e88d997eb7bd32e71fd3ebc413e58c1cbe56269699c776aaea84244b0567f2a7d68dfaa512a062293ed2f9fdecb394148432
+  languageName: node
+  linkType: hard
+
+"is-valid-element-name@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "is-valid-element-name@npm:1.0.0"
+  dependencies:
+    is-potential-custom-element-name: ^1.0.0
+  checksum: 915099b633770948b5967e6896f4475252634a2cc455ae1c158f48f6c11f03680e0bdaf0a547912ce6d3dea2cfa28a0e8013a98bb5e41445fc6ef0616824bea7
   languageName: node
   linkType: hard
 
@@ -7508,6 +7536,13 @@ __metadata:
   version: 4.14.4
   resolution: "jose@npm:4.14.4"
   checksum: 2d820a91a8fd97c05d8bc8eedc373b944a0cd7f5fe41063086da233d0473c73fb523912a9f026ea870782bd221f4a515f441a2d3af4de48c6f2c76dac5082377
+  languageName: node
+  linkType: hard
+
+"js-levenshtein-esm@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "js-levenshtein-esm@npm:1.2.0"
+  checksum: 577c3e609d3f3b6ab46071638fee14f96a0a8a9148548d4da12d40cb1a12fd197a93d2ff1047a01562c892bad243e35431e015ab020535c9dead96da64a2c3dd
   languageName: node
   linkType: hard
 
@@ -8314,6 +8349,7 @@ __metadata:
     eslint-config-prettier: ^8.8.0
     eslint-plugin-lit: ^1.8.3
     eslint-plugin-prettier: ^4.2.1
+    eslint-plugin-wc: ^1.5.0
     firebase: 9.21.0
     firebase-tools: ^11.29.1
     jest: ^29.5.0

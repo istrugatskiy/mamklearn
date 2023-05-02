@@ -7,6 +7,7 @@ import '../components/mamk-header.lit';
 import '../components/character/mamk-char.lit';
 import '../components/button/mamk-button.lit';
 import '../components/material-icon.lit';
+import '../components/material-icon.lit';
 import { custom_options, get_src } from '../components/character/mamk-char.lit';
 import { mamk_math } from '../scripts/utils';
 

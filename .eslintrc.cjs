@@ -1,6 +1,6 @@
 /* eslint-env node */
 module.exports = {
-    extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'plugin:lit/recommended', 'prettier'],
+    extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'plugin:wc/recommended', 'plugin:lit/recommended', 'prettier'],
     parser: '@typescript-eslint/parser',
     plugins: ['@typescript-eslint', 'prettier', 'lit'],
     rules: {
@@ -26,7 +26,13 @@ module.exports = {
                 format: ['PascalCase', 'snake_case'],
             },
         ],
+        'lit/no-legacy-template-syntax': 'error',
+        'lit/no-template-arrow': 'warn',
     },
-
+    settings: {
+        wc: {
+            elementBaseClasses: ['LitElement', 'HTMLElement'],
+        },
+    },
     root: true,
 };
