@@ -29,6 +29,7 @@
         "@parcel/core": "^2.8.3",
         "@parcel/resolver-glob": "^2.8.3",
         "@types/jest": "^29.5.1",
+        "@types/node": "^18.16.3",
         "@types/parcel-env": "^0.0.1",
         "@typescript-eslint/eslint-plugin": "^5.59.1",
         "@typescript-eslint/parser": "^5.59.1",

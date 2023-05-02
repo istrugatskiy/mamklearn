@@ -1,5 +1,5 @@
 import './outlet-transitions.css';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, User } from 'firebase/auth';
 import { routes } from './routes';
 import { auth } from '../scripts/firebase-config';
 import { default_transition } from './default-transition';
@@ -26,7 +26,7 @@ const state: state = {
     current_route_id: 0,
 };
 
-onAuthStateChanged(auth, (user) => {
+const on_auth_changed = (user: User | null) => {
     state.signed_in = !!user;
     const { valid_email_domains, admins } = config;
     state.ready = true;
@@ -37,7 +37,9 @@ onAuthStateChanged(auth, (user) => {
         return;
     }
     update_route();
-});
+};
+
+onAuthStateChanged(auth, on_auth_changed);
 
 const halt_ui = () => {
     window.dispatchEvent(new CustomEvent('mamk-halt-ui', { bubbles: true, composed: true }));
@@ -118,3 +120,11 @@ export const redirect = (path: string, event?: Event) => {
 
 window.addEventListener('load', update_route);
 window.addEventListener('popstate', update_route, false);
+
+export const INTERNAL_FOR_TESTING = {
+    state,
+    update_route,
+    resume_ui,
+    halt_ui,
+    on_auth_changed,
+};
