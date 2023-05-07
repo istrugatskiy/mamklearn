@@ -4,8 +4,8 @@ This guide describes the layout of the Mamklearn project.
 
 ## Style Guide
 
-Mamklearn uses prettier to style its code.
-Use camel_case for all typescript names.
+Mamklearn uses prettier to style its code and eslint to force better code style.
+Use snake_case for all typescript names.
 Prefer types over interfaces whenever possible.
 CSS classess should use dashes. Ex: '.hello-world'
 Legacy server code may not comply with this standard.
@@ -35,12 +35,12 @@ Mamklearn uses the following tools (non exhaustive list):
 
 -   [Parcel](https://github.com/parcel-bundler/parcel) - To build the project without the pain of Webpack.
 -   [Lit](https://github.com/lit/lit) - To generate dynamic and performant web components.
--   [Particles.js](https://github.com/VincentGarreau/particles.js/) - For particle backgrounds
+-   [tsParticles](https://github.com/matteobruni/tsparticles) - For particle backgrounds
 
 ## Build Issues
 
 Periodically Parcel (Mamklearn's build tool) gets confused.
-It may fail to build or build out-of-sync code.
+It may fail to build or build out-of-sync code (Currently a bit broken because of yarn pnp).
 The commands below will purge Parcel's cache:
 
 -   Windows: `yarn run win-clean`
