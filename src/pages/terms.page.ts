@@ -5,6 +5,10 @@ import { redirect } from '../routing/router';
 
 @customElement('terms-of-service-page')
 export class terms_of_service extends text_content {
+    redirect_privacy_policy = (e: Event) => {
+        redirect('/privacy-policy', e);
+    };
+
     // This was copilot generated.
     // I don't know what this TOS means.
     render() {
@@ -12,7 +16,7 @@ export class terms_of_service extends text_content {
             <h1>Terms of Service</h1>
             <h2>Introduction</h2>
             <p>
-                These terms are effective April 7, 2023 and govern the relationship between you and Mamklearn. You may not use our services without first reading through and agreeing to these terms. When we refer to "Mamklearn", "us", "we", and "our"
+                These terms are effective May 12, 2023 and govern the relationship between you and Mamklearn. You may not use our services without first reading through and agreeing to these terms. When we refer to "Mamklearn", "us", "we", and "our"
                 we mean the current operators and developers of our site located at mamklearn.com.
             </p>
             <h2>Changes to Our Terms</h2>
@@ -32,7 +36,7 @@ export class terms_of_service extends text_content {
                 exclusive jurisdiction of the courts located within the State of New York.
             </p>
             <h2>Privacy Policy</h2>
-            <p>By using our service you agree to our privacy policy. Please review our privacy policy (available <a @click="${(e: Event) => redirect('/privacy-policy', e)}" href="/privacy-policy">here</a>) to understand our practices.</p>
+            <p>By using our service you agree to our privacy policy. Please review our privacy policy (available <a @click="${this.redirect_privacy_policy}" href="/privacy-policy">here</a>) to understand our practices.</p>
             <h2>Users Under 13</h2>
             <p>
                 You must be at least 13 years old to use our services. If you are under 13, you may use our services only with the involvement of a parent or legal guardian who agrees to be bound by these terms. If you are a parent or legal guardian
@@ -70,8 +74,7 @@ export class terms_of_service extends text_content {
                 <li>a description of the copyrighted work that you claim has been infringed;</li>
                 <li>a description of where the material that you claim is infringing is located on our site;</li>
                 <li>your address, telephone number, and email address;</li>
-                <li>a statement by you that you have a good faith belief that the disputed use is not authorized by the copyright owner, its agent, or the law; and</li>
-                <li>a statement by you, made under penalty of perjury, that the above information in your notice is accurate and that you are the copyright owner or authorized to act on the copyright owner's behalf.</li>
+                <li>a statement by you that you have a good faith belief that the disputed use is not authorized by the copyright owner, its agent, or the law.</li>
             </ul>
             <p>
                 We reserve the right to remove content alleged to be infringing without prior notice and at our sole discretion. In appropriate circumstances, we will also terminate a user's account if the user is determined to be a repeat infringer.

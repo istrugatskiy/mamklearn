@@ -146,6 +146,20 @@ export class my_style extends base_content {
         }
     };
 
+    private change_item_left = () => {
+        this.change_current_item(true);
+    };
+
+    private change_item_right = () => {
+        this.change_current_item(false);
+    };
+
+    private select_item = (index: number) => {
+        this.user_char[this.current_item] = index;
+        this.user_char = [...this.user_char];
+        update(ref(db, `userProfiles/${auth.currentUser?.uid}/charConfig`), Object.assign({}, this.user_char));
+    };
+
     render() {
         return html` <mamk-header>My Style</mamk-header>
             <div class="grid">
@@ -154,9 +168,9 @@ export class my_style extends base_content {
                         <mamk-char data-style="animated-char" .character_config="${this.user_char}"></mamk-char>
                     </div>
                     <div class="inline-flex content">
-                        <button @click=${() => this.change_current_item(true)} class="arrow-button"><mat-icon>arrow_back</mat-icon></button>
+                        <button @click=${this.change_item_left} class="arrow-button"><mat-icon>arrow_back</mat-icon></button>
                         <p>${custom_options[this.current_item]}</p>
-                        <button @click=${() => this.change_current_item(false)} class="arrow-button"><mat-icon>arrow_forward</mat-icon></button>
+                        <button @click=${this.change_item_right} class="arrow-button"><mat-icon>arrow_forward</mat-icon></button>
                     </div>
                 </div>
                 <div class="content right-bar">
@@ -167,14 +181,7 @@ export class my_style extends base_content {
                             mamk_math.range(0, 9).map((i) => {
                                 const five_items = mamk_math.range(0, 4);
                                 five_items[this.current_item] = i;
-                                return html`<button
-                                    @click=${() => {
-                                        this.user_char[this.current_item] = i;
-                                        this.user_char = [...this.user_char];
-                                        update(ref(db, `userProfiles/${auth.currentUser?.uid}/charConfig`), Object.assign({}, this.user_char));
-                                    }}
-                                    class="arrow-button preview-button"
-                                >
+                                return html`<button data-index="${i}" @click=${this.select_item} class="arrow-button preview-button">
                                     <img src="${get_src(custom_options[this.current_item], five_items)}" height="200" width="148" />
                                 </button>`;
                             })

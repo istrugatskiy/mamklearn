@@ -17,9 +17,11 @@ export class link_button extends base_content {
     @property({ type: String, reflect: true, attribute: 'data-href' })
     href = '';
 
+    redirect = (e: Event) => redirect(this.href, e);
+
     render() {
         return html`
-            <a href="${this.href}" class="button" @click=${(e: Event) => redirect(this.href, e)}>
+            <a href="${this.href}" class="button" @click=${redirect}>
                 <slot></slot>
             </a>
         `;
