@@ -154,7 +154,8 @@ export class my_style extends base_content {
         this.change_current_item(false);
     };
 
-    private select_item = (index: number) => {
+    private select_item = (e: Event) => {
+        const index = parseInt((e.target as HTMLButtonElement).dataset.index ?? '-1');
         this.user_char[this.current_item] = index;
         this.user_char = [...this.user_char];
         update(ref(db, `userProfiles/${auth.currentUser?.uid}/charConfig`), Object.assign({}, this.user_char));
