@@ -1,7 +1,7 @@
 import './outlet-transitions.css';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { routes } from './routes';
-import { auth } from '../scripts/firebase-config';
+import { auth, is_test } from '../scripts/firebase-config';
 import { default_transition } from './default-transition';
 import config from '../../mamk-config.json';
 
@@ -39,7 +39,9 @@ const on_auth_changed = (user: User | null) => {
     update_route();
 };
 
-onAuthStateChanged(auth, on_auth_changed);
+if (!is_test) {
+    onAuthStateChanged(auth, on_auth_changed);
+}
 
 const halt_ui = () => {
     window.dispatchEvent(new CustomEvent('mamk-halt-ui', { bubbles: true, composed: true }));
@@ -53,6 +55,7 @@ const resume_ui = () => {
 
 const update_route = (event?: Event) => {
     if (!state.ready) return;
+    routes.$outlet = routes.$outlet ?? document.getElementById('outlet');
     if (routes.$outlet) {
         const path = window.location.pathname || '/';
         if (state.UI_halted) {

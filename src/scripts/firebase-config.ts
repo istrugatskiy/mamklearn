@@ -26,11 +26,14 @@ const dev_config = {
     measurementId: 'G-04FX04JNQ6',
 };
 
-const dev_build = window.location.hostname === 'localhost' || window.location.hostname === 'dev.mamklearn.com';
+export const dev_build = window.location.hostname === 'localhost' || window.location.hostname === 'dev.mamklearn.com';
+export const is_test = process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID !== undefined;
 
 const app = initializeApp(dev_build ? dev_config : prod_config);
-getAnalytics(app);
-getPerformance(app);
+if (!is_test) {
+    getAnalytics(app);
+    getPerformance(app);
+}
 
 // For public use.
 export const auth = getAuth();
