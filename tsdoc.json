@@ -1,0 +1,57 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
+    "tagDefinitions": [
+        {
+            "tagName": "@author",
+            "syntaxKind": "block"
+        },
+        {
+            "tagName": "@description",
+            "syntaxKind": "block"
+        },
+        {
+            "tagName": "@implements",
+            "syntaxKind": "modifier"
+        },
+        {
+            "tagName": "@element",
+            "syntaxKind": "block"
+        },
+        {
+            "tagName": "@slot",
+            "syntaxKind": "block"
+        }
+    ],
+    "supportForTags": {
+        "@author": true,
+        "@description": true,
+        "@implements": true,
+        "@alpha": true,
+        "@beta": true,
+        "@defaultValue": true,
+        "@decorator": true,
+        "@deprecated": true,
+        "@eventProperty": true,
+        "@example": true,
+        "@experimental": true,
+        "@inheritDoc": true,
+        "@internal": true,
+        "@label": true,
+        "@link": true,
+        "@override": true,
+        "@packageDocumentation": true,
+        "@param": true,
+        "@privateRemarks": true,
+        "@public": true,
+        "@readonly": true,
+        "@remarks": true,
+        "@returns": true,
+        "@sealed": true,
+        "@see": true,
+        "@throws": true,
+        "@typeParam": true,
+        "@virtual": true,
+        "@element": true,
+        "@slot": true
+    }
+}

@@ -2,6 +2,10 @@ import { html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { base_content } from '../templates/base-content.lit';
 
+/**
+ * The login page where the user logs in.
+ * @element login-page
+ */
 @customElement('login-page')
 export class login_page extends base_content {
     static styles = [
@@ -34,7 +38,7 @@ export class login_page extends base_content {
         this.disabled = false;
     };
 
-    render() {
+    protected render() {
         const google_logo = new URL('/src/images/google-logo.svg', import.meta.url).href;
         const url_search_params = new URLSearchParams(window.location.search);
         // This property appears only when the user's email isn't valid.

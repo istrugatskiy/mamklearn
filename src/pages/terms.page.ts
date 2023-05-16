@@ -3,15 +3,19 @@ import { customElement } from 'lit/decorators.js';
 import { text_content } from '../templates/text-content.lit';
 import { redirect } from '../routing/router';
 
+/**
+ * Terms of service page.
+ * @element terms-of-service-page
+ */
 @customElement('terms-of-service-page')
 export class terms_of_service extends text_content {
-    redirect_privacy_policy = (e: Event) => {
+    private redirect_privacy_policy = (e: Event) => {
         redirect('/privacy-policy', e);
     };
 
     // This was copilot generated.
     // I don't know what this TOS means.
-    render() {
+    protected render() {
         return html`
             <h1>Terms of Service</h1>
             <h2>Introduction</h2>

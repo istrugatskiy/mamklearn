@@ -1,6 +1,11 @@
 import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
+/**
+ * A header element that is styled for use on the mamklearn website.
+ * @element mamk-header
+ * @slot The content of the header.
+ */
 @customElement('mamk-header')
 export class mamk_header extends LitElement {
     static styles = [
@@ -15,7 +20,7 @@ export class mamk_header extends LitElement {
         `,
     ];
 
-    render() {
+    protected render() {
         return html`<h1><slot></slot></h1>`;
     }
 }

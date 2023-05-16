@@ -18,7 +18,11 @@ import { mamk_math } from '../scripts/utils';
 // @ts-ignore This is temporary until the var is used (so build doesn't fail).
 const none_map = [1, 2, 2, 2, -1];
 
-@customElement('my-style')
+/**
+ * The page that allows the user to customize their character.
+ * @element my-style
+ */
+@customElement('my-style-page')
 export class my_style extends base_content {
     halt_ui = () => {
         this.disabled = true;
@@ -161,7 +165,7 @@ export class my_style extends base_content {
         update(ref(db, `userProfiles/${auth.currentUser?.uid}/charConfig`), Object.assign({}, this.user_char));
     };
 
-    render() {
+    protected render() {
         return html` <mamk-header>My Style</mamk-header>
             <div class="grid">
                 <div>

@@ -25,7 +25,7 @@ export class mamk_button extends base_content {
         this.disabled = false;
     };
 
-    render() {
+    protected render() {
         return html`<button class="button"><slot></slot></button>`;
     }
 }

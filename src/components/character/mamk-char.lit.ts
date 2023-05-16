@@ -1,18 +1,19 @@
 import { html, LitElement, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+
 // Typescript gets really confused by glob imports.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import * as images from './images/**';
-export type char_options = 'Eyes' | 'Nose' | 'Mouth' | 'Shirt' | 'Arms';
+
 type char_styles = 'animated-char' | 'teacher-screen' | 'student-screen' | 'third-place results-player' | 'second-place results-player' | 'first-place ' | '';
 export const custom_options: char_options[] = ['Eyes', 'Nose', 'Mouth', 'Shirt', 'Arms'];
 
 /**
  * Get the src of the image that corresponds to the currently configured character.
- * @param {string} property The property to get the image for.
- * @param {number[]} character_config The character configuration to get the image for.
- * @returns {string | URL} The src of the image.
+ * @param property - The property to get the image for.
+ * @param character_config -  The character configuration to get the image for.
+ * @returns - The src of the image.
  */
 export const get_src = (property: char_options, character_config?: number[]): string | URL => {
     const lookup_index = custom_options.indexOf(property);
@@ -22,6 +23,10 @@ export const get_src = (property: char_options, character_config?: number[]): st
     return character_config ? images[`${property.toLowerCase()}-${character_config[lookup_index].toString()}.${lookup_index == 4 ? 'svg' : 'png'}`] : new URL('data:,');
 };
 
+/**
+ * The character component.
+ * @element mamk-char
+ */
 @customElement('mamk-char')
 export class mamk_char extends LitElement {
     static styles = css`
@@ -160,19 +165,28 @@ export class mamk_char extends LitElement {
         }
     `;
 
+    /**
+     * The character configuration.
+     * @example [0, 0, 0, 0, 0]
+     */
     @property({
         attribute: 'data-character',
         type: Array,
     })
     character_config: number[] | undefined;
 
+    /**
+     * The character style.
+     * @remarks Used for describing the exact style of the character depending on the place where it is used.
+     * @example 'animated-char'
+     */
     @property({
         attribute: 'data-style',
         type: String,
     })
     char_style: char_styles = '';
 
-    render() {
+    protected render() {
         const base = new URL('./images/base.svg', import.meta.url).href;
         return html`
             <div class="${this.char_style} main">

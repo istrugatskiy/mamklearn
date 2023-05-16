@@ -1,6 +1,11 @@
 import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
+/**
+ * A paragraph element that is styled for use on the mamklearn website.
+ * @element mamk-para
+ * @slot The content of the paragraph.
+ */
 @customElement('mamk-para')
 export class mamk_para extends LitElement {
     static styles = [
@@ -15,7 +20,7 @@ export class mamk_para extends LitElement {
         `,
     ];
 
-    render() {
+    protected render() {
         return html`<p><slot></slot></p>`;
     }
 }

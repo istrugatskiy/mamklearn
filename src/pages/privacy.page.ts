@@ -2,9 +2,13 @@ import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { text_content } from '../templates/text-content.lit';
 
+/**
+ * The privacy policy page.
+ * @element privacy-policy-page
+ */
 @customElement('privacy-policy-page')
 export class privacy_policy extends text_content {
-    render() {
+    protected render() {
         return html`
             <h1>Privacy Policy</h1>
             <h2>Introduction</h2>

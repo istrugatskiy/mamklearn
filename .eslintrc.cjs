@@ -2,7 +2,7 @@
 module.exports = {
     extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'plugin:wc/recommended', 'plugin:lit/recommended', 'prettier'],
     parser: '@typescript-eslint/parser',
-    plugins: ['@typescript-eslint', 'prettier', 'lit'],
+    plugins: ['@typescript-eslint', 'prettier', 'lit', 'eslint-plugin-tsdoc', 'tsdoc-require'],
     rules: {
         'prettier/prettier': [
             'error',
@@ -28,6 +28,8 @@ module.exports = {
         ],
         'lit/no-legacy-template-syntax': 'error',
         'lit/no-template-arrow': 'warn',
+        'tsdoc/syntax': 'warn',
+        'tsdoc-require/require': 'warn',
     },
     settings: {
         wc: {

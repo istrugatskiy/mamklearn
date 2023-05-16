@@ -4,6 +4,9 @@ import { base_content } from '../templates/base-content.lit';
 import '../components/mamk-header.lit';
 import '../components/button/link-button.lit';
 
+/**
+ * The play page where the user inputs the game code.
+ */
 @customElement('play-page')
 export class play extends base_content {
     halt_ui = () => {
@@ -27,7 +30,7 @@ export class play extends base_content {
         `,
     ];
 
-    render() {
+    protected render() {
         return html`<mamk-header>Game Code:</mamk-header>
             <form>
                 <input autocomplete="off" class="button input-button" minlength="8" maxlength="9" pattern="^[0-9-]*$" placeholder="Game Code" required title="valid game ID" />

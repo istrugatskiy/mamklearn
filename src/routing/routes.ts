@@ -5,9 +5,10 @@ import { redirect } from './router';
 const home: route = {
     title: 'My Style',
     path: '/',
-    component: 'my-style',
+    component: 'my-style-page',
     require_auth: true,
     show_user: true,
+    icon: 'styler',
     load: async () => {
         await import('../pages/my-style.page');
     },
@@ -25,7 +26,7 @@ const not_found: route = {
 };
 
 const no_auth: route = {
-    title: 'Mamklearn',
+    title: 'Not Authenticated',
     path: '/no-auth',
     component: 'login-page',
     show_user: false,
@@ -71,6 +72,7 @@ const logout: route = {
         window.location.href = `/${window.location.search}`;
     },
 };
+
 const terms_of_service: route = {
     title: 'Terms of Service',
     path: '/terms-of-service',
@@ -96,6 +98,7 @@ const about: route = {
 const play: route = {
     title: 'Play',
     path: '/play',
+    icon: 'play_arrow',
     component: 'play-page',
     require_auth: true,
     show_user: true,
@@ -105,7 +108,6 @@ const play: route = {
 };
 
 export const routes: route_list = {
-    default: home,
     not_found: not_found,
     no_auth: no_auth,
     layout: {

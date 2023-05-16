@@ -2,9 +2,13 @@ import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { text_content } from '../templates/text-content.lit';
 
+/**
+ * A page that displays information about the mamklearn app including software licenses and author information.
+ * @element about-page
+ */
 @customElement('about-page')
 export class about extends text_content {
-    render() {
+    protected render() {
         return html`
             <h1>About Mamklearn</h1>
             <p>

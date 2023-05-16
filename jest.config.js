@@ -1,4 +1,6 @@
-/** @type {import('ts-jest').JestConfigWithTsJest} */
+/**
+ * The jest.config.js file is used to configure the Jest testing framework.
+ */
 export default {
     preset: 'ts-jest',
     testEnvironment: 'jsdom',
