@@ -166,7 +166,8 @@ export class my_style extends base_content {
     };
 
     protected render() {
-        return html` <mamk-header>My Style</mamk-header>
+        return html`<div class="page">
+            <mamk-header>My Style</mamk-header>
             <div class="grid">
                 <div>
                     <div class="content">
@@ -193,6 +194,7 @@ export class my_style extends base_content {
                         }
                     </div>
                 </div>
-            </div>`;
+            </div>
+        </div>`;
     }
 }

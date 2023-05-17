@@ -36,13 +36,14 @@ export class side_bar extends base_content {
                 flex-direction: column;
                 justify-content: space-between;
                 border-radius: 10px;
-                margin: 10px;
+                margin: 20px;
                 width: 100%;
                 max-width: 300px;
                 animation: slide-in-from-left 0.3s cubic-bezier(0.29, 0.09, 0.07, 1.2);
                 animation-fill-mode: forwards;
                 background-color: rgba(0, 0, 0, 0.2);
                 height: calc(100vh - 40px);
+                overflow-y: auto;
             }
             h1 {
                 font-size: 32px;
@@ -67,6 +68,13 @@ export class side_bar extends base_content {
                 text-align: center;
                 margin: 0;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+            .bottom-bar {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                flex-wrap: wrap;
+                padding: 10px;
             }
         `,
     ];
@@ -121,7 +129,7 @@ export class side_bar extends base_content {
             </div>
             <div>
                 <hr />
-                <div>
+                <div class="bottom-bar">
                     <inline-link data-href="/terms-of-service">Terms of Service</inline-link>
                     <inline-link data-href="/privacy-policy">Privacy Policy</inline-link>
                     <inline-link data-href="/about">About</inline-link>

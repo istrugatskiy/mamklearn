@@ -11,8 +11,16 @@ export class text_content extends LitElement {
                 outline: none;
             }
             :host {
+                /* Scuffed hack to make certain components fill the screen. */
+                height: 100vh;
+                overflow-y: auto;
+                width: 100%;
+            }
+            .page {
                 display: block;
                 padding: 16px;
+                padding-bottom: 0;
+                padding-top: 0;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 margin: 0 auto;
                 max-width: 800px;

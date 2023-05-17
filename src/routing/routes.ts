@@ -110,6 +110,18 @@ const play: route = {
     },
 };
 
+const my_quizzes: route = {
+    title: 'My Quizzes',
+    path: '/my-quizzes',
+    icon: 'quiz',
+    component: 'my-quizzes-page',
+    require_auth: true,
+    show_user: true,
+    load: async () => {
+        await import('../pages/my-quizzes.page');
+    },
+};
+
 export const routes: route_list = {
     not_found: not_found,
     no_auth: no_auth,
@@ -118,6 +130,7 @@ export const routes: route_list = {
         '/404': not_found,
         '/no-auth': no_auth,
         '/play': play,
+        '/my-quizzes': my_quizzes,
         '/about': about,
         '/privacy-policy': privacy_policy,
         '/terms-of-service': terms_of_service,

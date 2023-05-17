@@ -1,7 +1,7 @@
 import { html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { base_content } from '../templates/base-content.lit';
-
+import '../components/button/inline-link.lit';
 /**
  * The login page where the user logs in.
  * @element login-page
@@ -27,6 +27,8 @@ export class login_page extends base_content {
             .content {
                 margin-bottom: 20px;
             }
+            inline-link {
+                margin: 0;
         `,
     ];
 
@@ -56,7 +58,7 @@ export class login_page extends base_content {
                 <img src="${google_logo}" alt="Google Logo" width="30" height="30" />
                 Sign in with Google
             </link-button>
-            <mamk-para>By signing in you agree to Mamklearn's terms of service and privacy policy.</mamk-para>
+            <mamk-para>By signing in you agree to Mamklearn's <inline-link data-href="/terms-of-service">terms of service</inline-link> and <inline-link data-href="/privacy-policy">privacy policy</inline-link>.</mamk-para>
         `;
     }
 }

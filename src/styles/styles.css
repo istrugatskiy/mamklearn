@@ -6,6 +6,7 @@ body {
     height: 100%;
     margin: 0;
     background-color: #232742;
+    overflow: hidden;
 }
 #particles-js {
     top: 0;
@@ -43,8 +44,7 @@ body {
     display: grid;
     grid-template-columns: fit-content(30%) 1fr;
     justify-content: space-around;
-    margin: 10px;
-    margin-right: 10px;
+    margin: 0px;
     z-index: 1;
 }
 @media screen and (max-width: 1000px) {
@@ -63,4 +63,6 @@ side-bar {
     justify-content: center;
     align-items: center;
     height: 100%;
+    margin: 0;
+    padding: 0;
 }

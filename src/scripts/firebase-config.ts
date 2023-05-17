@@ -17,7 +17,7 @@ const prod_config = {
 
 const dev_config = {
     apiKey: 'AIzaSyAgHiNEDaV56gWiVGZHQ4PJzGP4_pHIfi8',
-    authDomain: 'dev.mamklearn.com',
+    authDomain: window.location.hostname === 'localhost' ? 'mamklearn-preview.firebaseapp.com' : 'dev.mamklearn.com',
     databaseURL: 'https://mamklearn-preview-default-rtdb.firebaseio.com',
     projectId: 'mamklearn-preview',
     storageBucket: 'mamklearn-preview.appspot.com',

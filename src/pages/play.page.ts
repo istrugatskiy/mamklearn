@@ -31,10 +31,12 @@ export class play extends base_content {
     ];
 
     protected render() {
-        return html`<mamk-header>Game Code:</mamk-header>
+        return html`<div class="page">
+            <mamk-header>Game Code:</mamk-header>
             <form>
                 <input autocomplete="off" class="button input-button" minlength="8" maxlength="9" pattern="^[0-9-]*$" placeholder="Game Code" required title="valid game ID" />
                 <link-button>Join</link-button>
-            </form>`;
+            </form>
+        </div>`;
     }
 }

@@ -11,6 +11,25 @@ export abstract class base_content extends LitElement {
             *:focus {
                 outline: none;
             }
+            .page {
+                display: block;
+                padding: 16px;
+                padding-bottom: 0;
+                padding-top: 0;
+                height: 100vh;
+                overflow-y: auto;
+            }
+            ::-webkit-scrollbar {
+                width: 10px;
+                height: 10px;
+            }
+            ::-webkit-scrollbar-thumb {
+                background: rgba(255, 255, 255, 0.596);
+                border-radius: 10px;
+            }
+            ::-webkit-scrollbar-track {
+                background: rgba(0, 0, 0, 0);
+            }
             h1 {
                 font-size: 32px;
                 margin: 5px;
