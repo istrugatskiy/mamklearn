@@ -1,6 +1,7 @@
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { text_content } from '../templates/text-content.lit';
+import '../components/button/inline-link.lit';
 
 /**
  * The privacy policy page.
@@ -31,8 +32,8 @@ export class privacy_policy extends text_content {
             <p>
                 Your data may be shared with the following parties listed later in the paragraph and may be used internally for moderation purposes. Your data is shared with google for the purposes of providing our service, you can view the partner
                 site policy
-                <a target="_blank" rel="noopener noreferrer" href="https://policies.google.com/technologies/partner-sites">here</a>. Your data may also be shared with your educational institution if requested. Finally, any data provided may be shared
-                to comply with local laws, regulations, or to comply with warrants.
+                <a target="_blank" rel="noopener noreferrer" data-href="https://policies.google.com/technologies/partner-sites">here</a>. Your data may also be shared with your educational institution if requested. Finally, any data provided may be
+                shared to comply with local laws, regulations, or to comply with warrants.
             </p>
             <h2>How To Manage Your Data</h2>
             <p>If you need to view your data, or want your data deleted please contact is@mamklearn.com.</p>

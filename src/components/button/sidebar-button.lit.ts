@@ -24,13 +24,6 @@ export class sidebar_button extends link_button {
                 font-size: 16px;
                 justify-content: flex-start;
             }
-            /* when disabled highlight current link */
-            :host([data-disabled]) a {
-                text-decoration: underline;
-            }
-            :host([data-disabled]) mat-icon {
-                text-decoration: none;
-            }
             @media screen and (max-width: 600px) {
                 .button {
                     padding: 0px;

@@ -46,7 +46,6 @@ export class text_content extends LitElement {
             }
             a {
                 color: white;
-                display: block;
                 transition: all 0.2s ease-in-out;
                 cursor: pointer;
                 display: inline-block;

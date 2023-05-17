@@ -41,7 +41,8 @@ const privacy_policy: route = {
     path: '/privacy-policy',
     component: 'privacy-policy-page',
     require_auth: false,
-    show_user: true,
+    show_user: false,
+    icon: 'privacy_tip',
     load: async () => {
         await import('../pages/privacy.page');
     },
@@ -67,6 +68,7 @@ const logout: route = {
     require_auth: false,
     show_user: true,
     special_path: true,
+    icon: 'logout',
     load: async () => {
         await signOut(auth);
         window.location.href = `/${window.location.search}`;
@@ -78,7 +80,7 @@ const terms_of_service: route = {
     path: '/terms-of-service',
     component: 'terms-of-service-page',
     require_auth: false,
-    show_user: true,
+    show_user: false,
     load: async () => {
         await import('../pages/terms.page');
     },
@@ -89,7 +91,8 @@ const about: route = {
     path: '/about',
     component: 'about-page',
     require_auth: false,
-    show_user: true,
+    show_user: false,
+    icon: 'info',
     load: async () => {
         await import('../pages/about.page');
     },

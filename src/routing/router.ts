@@ -112,6 +112,10 @@ const update_route = (event?: Event) => {
 
 export const redirect = (path: string, event?: Event) => {
     event?.preventDefault();
+    if (path.startsWith('http') || path.startsWith('mailto:') || path.startsWith('tel:')) {
+        window.open(path, '_blank', 'noopener noreferrer');
+        return;
+    }
     if (path == window.location.pathname) {
         window.history.replaceState({ index: state.current_route_id }, '', path);
         return;

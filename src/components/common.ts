@@ -5,3 +5,4 @@ import './button/sidebar-button.lit';
 import './sidebar.lit';
 import './mamk-header.lit';
 import './mamk-para.lit';
+import './material-icon.lit';
