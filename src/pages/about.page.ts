@@ -19,9 +19,13 @@ export class about extends text_content {
                 </p>
                 <p class="center">Created by Ilya Strugatskiy</p>
                 <h1>Software Licenses</h1>
-                <h2>Particles.js</h2>
+                <h2>tsParticles</h2>
                 <p class="center">
-                    <a href="https://github.com/VincentGarreau/particles.js/blob/master/LICENSE.md" target="_blank" rel="noopener noreferrer">View License</a>
+                    <a href="https://github.com/matteobruni/tsparticles/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">View License</a>
+                </p>
+                <h2>Firebase SDK</h2>
+                <p class="center">
+                    <a href="https://github.com/firebase/firebase-js-sdk/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">View License</a>
                 </p>
                 <h2>Material Icons</h2>
                 <p class="center">
@@ -34,6 +38,10 @@ export class about extends text_content {
                 <h2>Roboto Mono Font</h2>
                 <p class="center">
                     <a href="https://github.com/googlefonts/roboto/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">View License</a>
+                </p>
+                <h2>Chelsea Market Font</h2>
+                <p class="center">
+                    <a href="https://fonts.google.com/specimen/Chelsea+Market/about" target="_blank" rel="noopener noreferrer">View License</a>
                 </p>
             </div>
         `;
