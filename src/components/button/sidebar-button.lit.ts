@@ -24,12 +24,11 @@ export class sidebar_button extends link_button {
                 font-size: 16px;
                 justify-content: flex-start;
             }
-            @media screen and (max-width: 600px) {
+            @media screen and (max-width: 700px) {
                 .button {
-                    padding: 0px;
-                }
-                a {
-                    min-height: 66px;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
                 }
             }
         `,

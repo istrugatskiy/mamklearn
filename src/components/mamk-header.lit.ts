@@ -17,6 +17,11 @@ export class mamk_header extends LitElement {
                 text-align: center;
                 height: min-content;
             }
+            @media screen and (max-width: 900px) {
+                h1 {
+                    font-size: 32px;
+                }
+            }
         `,
     ];
 

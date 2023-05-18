@@ -1,5 +1,5 @@
 import { css, html } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, state } from 'lit/decorators.js';
 import { base_content } from '../templates/base-content.lit';
 import { routes } from '../routing/routes';
 import './button/sidebar-button.lit';
@@ -11,6 +11,8 @@ if (module.hot) {
         window.location.reload();
     });
 }
+
+// TODO: Add a button to the bottom of the sidebar that opens the sidebar for mobile users.
 
 /**
  * A sidebar element displayed on the left side of the screen. It generates content from the routes.
@@ -37,20 +39,14 @@ export class side_bar extends base_content {
                 justify-content: space-between;
                 border-radius: 10px;
                 margin: 20px;
-                width: 100%;
-                max-width: 300px;
+                width: fit-content;
+                max-width: min(30vw, 300px);
                 animation: slide-in-from-left 0.3s cubic-bezier(0.29, 0.09, 0.07, 1.2);
                 animation-fill-mode: forwards;
                 background-color: rgba(0, 0, 0, 0.2);
                 height: calc(100vh - 40px);
                 overflow-y: auto;
-            }
-            h1 {
-                font-size: 32px;
-                color: white;
-                font-family: Chelsea Market, cursive;
-                text-align: center;
-                height: min-content;
+                box-sizing: border-box;
             }
             ul {
                 padding: 20px;
@@ -76,34 +72,33 @@ export class side_bar extends base_content {
                 flex-wrap: wrap;
                 padding: 10px;
             }
+            .short {
+                display: none;
+            }
+            @media screen and (max-width: 700px) {
+                mamk-header {
+                    display: none;
+                }
+                .short {
+                    display: block;
+                }
+            }
         `,
     ];
 
     connectedCallback() {
         super.connectedCallback();
         window.addEventListener('mamk-route-change', this.on_route_change);
-        this.mql.addEventListener('change', this.on_media_change);
     }
 
     disconnectedCallback() {
         super.disconnectedCallback();
         window.removeEventListener('mamk-route-change', this.on_route_change);
-        this.mql.removeEventListener('change', this.on_media_change);
     }
 
     private on_route_change = () => {
         this.requestUpdate();
     };
-
-    private on_media_change = (event: MediaQueryListEvent) => {
-        if (event.matches) {
-            this.halt_ui();
-        } else {
-            this.resume_ui();
-        }
-    };
-
-    private mql = window.matchMedia('(max-width: 1150px)');
 
     halt_ui = () => {
         this.disabled = true;
@@ -116,6 +111,7 @@ export class side_bar extends base_content {
     protected render() {
         return html`<div>
                 <mamk-header>Mamklearn v2</mamk-header>
+                <mamk-header class="short">Mamk-v2</mamk-header>
                 <ul>
                     ${Object.entries(routes.layout)
                         .filter(([, value]) => value.show_user)

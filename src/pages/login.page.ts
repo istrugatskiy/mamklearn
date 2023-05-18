@@ -29,6 +29,9 @@ export class login_page extends base_content {
             }
             inline-link {
                 margin: 0;
+                margin-left: 5px;
+                margin-right: 5px;
+            }
         `,
     ];
 
@@ -58,7 +61,7 @@ export class login_page extends base_content {
                 <img src="${google_logo}" alt="Google Logo" width="30" height="30" />
                 Sign in with Google
             </link-button>
-            <mamk-para>By signing in you agree to Mamklearn's <inline-link data-href="/terms-of-service">terms of service</inline-link> and <inline-link data-href="/privacy-policy">privacy policy</inline-link>.</mamk-para>
+            <mamk-para>By signing in you agree to Mamklearn's<inline-link data-href="/terms-of-service">terms of service</inline-link>and<inline-link data-href="/privacy-policy">privacy policy</inline-link>.</mamk-para>
         `;
     }
 }

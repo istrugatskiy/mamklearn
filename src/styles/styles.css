@@ -42,17 +42,10 @@ body {
     height: 100%;
     min-height: 90vh;
     display: grid;
-    grid-template-columns: fit-content(30%) 1fr;
+    grid-template-columns: auto minmax(0, 1fr);
     justify-content: space-around;
     margin: 0px;
     z-index: 1;
-}
-@media screen and (max-width: 1000px) {
-    .main {
-        grid-template-columns: 1fr;
-        grid-template-rows: 0.2fr 0.8fr;
-        justify-items: center;
-    }
 }
 side-bar {
     z-index: 1;

@@ -30,10 +30,6 @@ export abstract class base_content extends LitElement {
             ::-webkit-scrollbar-track {
                 background: rgba(0, 0, 0, 0);
             }
-            h1 {
-                font-size: 32px;
-                margin: 5px;
-            }
             p {
                 color: white;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -97,6 +93,15 @@ export abstract class base_content extends LitElement {
                     background-color: rgba(31, 42, 210, 0.25);
                     border-radius: 12px;
                     color: white;
+                }
+            }
+            @media screen and (max-width: 900px) {
+                .button,
+                .content {
+                    font-size: 24px;
+                }
+                p {
+                    font-size: 14px;
                 }
             }
         `,
