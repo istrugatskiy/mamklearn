@@ -56,8 +56,8 @@ export class my_style extends base_content {
                 grid-template-rows: 1fr;
                 grid-template-areas: 'content content';
                 grid-gap: 20px;
-                margin: 0 auto;
-                max-width: 1200px;
+                margin: 10px auto;
+                max-width: 900px;
             }
             .inline-flex {
                 display: flex;
@@ -116,6 +116,9 @@ export class my_style extends base_content {
                 background-color: white;
                 transition: transform 0.1s;
             }
+            h1 {
+                font-size: 30px;
+            }
         `,
     ];
 
@@ -166,7 +169,7 @@ export class my_style extends base_content {
     };
 
     protected render() {
-        return html`<div class="page">
+        return html`
             <mamk-header>My Style</mamk-header>
             <div class="grid">
                 <div>
@@ -195,6 +198,6 @@ export class my_style extends base_content {
                     </div>
                 </div>
             </div>
-        </div>`;
+        `;
     }
 }

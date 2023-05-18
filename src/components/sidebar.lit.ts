@@ -4,6 +4,7 @@ import { base_content } from '../templates/base-content.lit';
 import { routes } from '../routing/routes';
 import './button/sidebar-button.lit';
 import './button/inline-link.lit';
+import './material-icon.lit';
 
 // Fixes customElementRegistry being written to twice.
 if (module.hot) {
@@ -38,9 +39,9 @@ export class side_bar extends base_content {
                 flex-direction: column;
                 justify-content: space-between;
                 border-radius: 10px;
-                margin: 20px;
+                margin: 15px;
                 width: fit-content;
-                max-width: min(30vw, 300px);
+                max-width: min(30vw, 250px);
                 animation: slide-in-from-left 0.3s cubic-bezier(0.29, 0.09, 0.07, 1.2);
                 animation-fill-mode: forwards;
                 background-color: rgba(0, 0, 0, 0.2);
@@ -49,7 +50,7 @@ export class side_bar extends base_content {
                 box-sizing: border-box;
             }
             ul {
-                padding: 20px;
+                padding: 10px;
             }
             li {
                 list-style-type: none;
@@ -72,15 +73,26 @@ export class side_bar extends base_content {
                 flex-wrap: wrap;
                 padding: 10px;
             }
-            .short {
+            .open-menu {
                 display: none;
             }
-            @media screen and (max-width: 700px) {
-                mamk-header {
+            @media screen and (max-width: 900px) {
+                .open-menu {
+                    display: flex;
+                    width: fit-content;
+                    font-size: 32px;
+                    padding: 5px;
+                    margin: 10px;
+                    border-radius: 100px;
+                }
+                :host {
+                    background-color: transparent;
+                }
+                .sidebar-container {
                     display: none;
                 }
-                .short {
-                    display: block;
+                :host {
+                    height: fit-content;
                 }
             }
         `,
@@ -109,27 +121,29 @@ export class side_bar extends base_content {
     };
 
     protected render() {
-        return html`<div>
-                <mamk-header>Mamklearn v2</mamk-header>
-                <mamk-header class="short">Mamk-v2</mamk-header>
-                <ul>
-                    ${Object.entries(routes.layout)
-                        .filter(([, value]) => value.show_user)
-                        .map(
-                            ([key, value]) =>
-                                html`<li>
-                                    <sidebar-button ?data-disabled=${window.location.pathname == key || this.disabled} data-href="${key}"><mat-icon class="large-icon">${value.icon}</mat-icon>${value.title}</sidebar-button>
-                                </li>`
-                        )}
-                </ul>
-            </div>
-            <div>
-                <hr />
-                <div class="bottom-bar">
-                    <inline-link data-href="/terms-of-service">Terms of Service</inline-link>
-                    <inline-link data-href="/privacy-policy">Privacy Policy</inline-link>
-                    <inline-link data-href="/about">About</inline-link>
-                    <p>&copy; Copyright 2023 <inline-link data-href="https://github.com/istrugatskiy">Ilya Strugatskiy</inline-link></p>
+        return html`<button class="button open-menu"><mat-icon>menu_open</mat-icon></button>
+            <div class="sidebar-container">
+                <div>
+                    <mamk-header>Mamklearn v2</mamk-header>
+                    <ul>
+                        ${Object.entries(routes.layout)
+                            .filter(([, value]) => value.show_user)
+                            .map(
+                                ([key, value]) =>
+                                    html`<li>
+                                        <sidebar-button ?data-disabled=${window.location.pathname == key || this.disabled} data-href="${key}"><mat-icon class="large-icon">${value.icon}</mat-icon>${value.title}</sidebar-button>
+                                    </li>`
+                            )}
+                    </ul>
+                </div>
+                <div>
+                    <hr />
+                    <div class="bottom-bar">
+                        <inline-link data-href="/terms-of-service">Terms of Service</inline-link>
+                        <inline-link data-href="/privacy-policy">Privacy Policy</inline-link>
+                        <inline-link data-href="/about">About</inline-link>
+                        <p>&copy; Copyright 2023 <inline-link data-href="https://github.com/istrugatskiy">Ilya Strugatskiy</inline-link></p>
+                    </div>
                 </div>
             </div>`;
     }

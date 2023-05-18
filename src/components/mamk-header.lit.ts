@@ -11,16 +11,11 @@ export class mamk_header extends LitElement {
     static styles = [
         css`
             h1 {
-                font-size: 42px;
+                font-size: 32px;
                 color: white;
                 font-family: 'Chelsea Market', cursive;
                 text-align: center;
                 height: min-content;
-            }
-            @media screen and (max-width: 900px) {
-                h1 {
-                    font-size: 32px;
-                }
             }
         `,
     ];

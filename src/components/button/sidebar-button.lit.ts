@@ -22,14 +22,8 @@ export class sidebar_button extends link_button {
             .button {
                 display: flex;
                 font-size: 16px;
+                padding: 10px;
                 justify-content: flex-start;
-            }
-            @media screen and (max-width: 700px) {
-                .button {
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                }
             }
         `,
     ];

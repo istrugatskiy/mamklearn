@@ -8,16 +8,11 @@ import { property } from 'lit/decorators';
 export abstract class base_content extends LitElement {
     static styles: CSSResultGroup = [
         css`
+            :host {
+                height: fit-content;
+            }
             *:focus {
                 outline: none;
-            }
-            .page {
-                display: block;
-                padding: 16px;
-                padding-bottom: 0;
-                padding-top: 0;
-                height: 100vh;
-                overflow-y: auto;
             }
             ::-webkit-scrollbar {
                 width: 10px;
