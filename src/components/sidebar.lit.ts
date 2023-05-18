@@ -1,5 +1,5 @@
 import { css, html } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators.js';
 import { base_content } from '../templates/base-content.lit';
 import { routes } from '../routing/routes';
 import './button/sidebar-button.lit';
