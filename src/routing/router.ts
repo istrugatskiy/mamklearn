@@ -63,7 +63,13 @@ const update_route = (event?: Event) => {
             state.last_queued_route = path;
             return;
         }
-        window.dispatchEvent(new CustomEvent('mamk-route-change', { detail: window.location.pathname, bubbles: true, composed: true }));
+        window.dispatchEvent(
+            new CustomEvent('mamk-route-change', {
+                detail: window.location.pathname,
+                bubbles: true,
+                composed: true,
+            })
+        );
         const { $outlet } = routes;
         let route = routes.layout[path] || routes.not_found;
         if (route.require_auth && !state.signed_in) {

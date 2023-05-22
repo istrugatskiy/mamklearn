@@ -7,7 +7,6 @@ import '../components/mamk-header.lit';
 import '../components/character/mamk-char.lit';
 import '../components/button/mamk-button.lit';
 import '../components/material-icon.lit';
-import '../components/material-icon.lit';
 import { custom_options, get_src } from '../components/character/mamk-char.lit';
 import { mamk_math } from '../scripts/utils';
 
@@ -16,7 +15,7 @@ import { mamk_math } from '../scripts/utils';
 // For legacy reasons the "none" option is a different index for each person.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore This is temporary until the var is used (so build doesn't fail).
-const none_map = [1, 2, 2, 2, -1];
+// const none_map = [1, 2, 2, 2, -1];
 
 /**
  * The page that allows the user to customize their character.
@@ -116,6 +115,14 @@ export class my_style extends base_content {
                 background-color: white;
                 transition: transform 0.1s;
             }
+            .eyes,
+            .nose,
+            .mouth {
+                width: 75px;
+                height: 75px;
+                overflow: hidden;
+                align-items: start;
+            }
             h1 {
                 font-size: 30px;
             }
@@ -169,6 +176,7 @@ export class my_style extends base_content {
     };
 
     protected render() {
+        const current_option = custom_options[this.current_item];
         return html`
             <mamk-header>My Style</mamk-header>
             <div class="grid">
@@ -177,20 +185,24 @@ export class my_style extends base_content {
                         <mamk-char data-style="animated-char" .character_config="${this.user_char}"></mamk-char>
                     </div>
                     <div class="inline-flex content">
-                        <button @click=${this.change_item_left} class="arrow-button"><mat-icon>arrow_back</mat-icon></button>
+                        <button @click=${this.change_item_left} class="arrow-button">
+                            <mat-icon>arrow_back</mat-icon>
+                        </button>
                         <p>${custom_options[this.current_item]}</p>
-                        <button @click=${this.change_item_right} class="arrow-button"><mat-icon>arrow_forward</mat-icon></button>
+                        <button @click=${this.change_item_right} class="arrow-button">
+                            <mat-icon>arrow_forward</mat-icon>
+                        </button>
                     </div>
                 </div>
                 <div class="content right-bar">
-                    <h1>Choose your ${custom_options[this.current_item]}</h1>
+                    <h1>Choose Your ${current_option}</h1>
                     <div class="customize-options">
                         ${
                             // Map the numbers 0-9 to buttons containing the ten possible character options.
                             mamk_math.range(0, 9).map((i) => {
                                 const five_items = mamk_math.range(0, 4);
                                 five_items[this.current_item] = i;
-                                return html`<button data-index="${i}" @click=${this.select_item} class="arrow-button preview-button">
+                                return html`<button data-index="${i}" @click=${this.select_item} class="arrow-button preview-button ${current_option.toLowerCase()}">
                                     <img src="${get_src(custom_options[this.current_item], five_items)}" height="200" width="148" />
                                 </button>`;
                             })

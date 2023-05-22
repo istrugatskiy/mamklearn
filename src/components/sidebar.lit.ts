@@ -35,9 +35,6 @@ export class side_bar extends base_content {
                 }
             }
             :host {
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
                 border-radius: 10px;
                 margin: 15px;
                 width: fit-content;
@@ -75,6 +72,12 @@ export class side_bar extends base_content {
             }
             .open-menu {
                 display: none;
+            }
+            .sidebar-container {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                height: 100%;
             }
             @media screen and (max-width: 900px) {
                 .open-menu {
@@ -121,7 +124,9 @@ export class side_bar extends base_content {
     };
 
     protected render() {
-        return html`<button class="button open-menu"><mat-icon>menu_open</mat-icon></button>
+        return html`<button class="button open-menu">
+                <mat-icon>menu_open</mat-icon>
+            </button>
             <div class="sidebar-container">
                 <div>
                     <mamk-header>Mamklearn v2</mamk-header>
@@ -131,7 +136,10 @@ export class side_bar extends base_content {
                             .map(
                                 ([key, value]) =>
                                     html`<li>
-                                        <sidebar-button ?data-disabled=${window.location.pathname == key || this.disabled} data-href="${key}"><mat-icon class="large-icon">${value.icon}</mat-icon>${value.title}</sidebar-button>
+                                        <sidebar-button ?data-disabled=${window.location.pathname == key || this.disabled} data-href="${key}">
+                                            <mat-icon class="large-icon">${value.icon} </mat-icon>
+                                            ${value.title}</sidebar-button
+                                        >
                                     </li>`
                             )}
                     </ul>
@@ -142,7 +150,10 @@ export class side_bar extends base_content {
                         <inline-link data-href="/terms-of-service">Terms of Service</inline-link>
                         <inline-link data-href="/privacy-policy">Privacy Policy</inline-link>
                         <inline-link data-href="/about">About</inline-link>
-                        <p>&copy; Copyright 2023 <inline-link data-href="https://github.com/istrugatskiy">Ilya Strugatskiy</inline-link></p>
+                        <p>
+                            &copy; Copyright 2023
+                            <inline-link data-href="https://github.com/istrugatskiy">Ilya Strugatskiy</inline-link>
+                        </p>
                     </div>
                 </div>
             </div>`;

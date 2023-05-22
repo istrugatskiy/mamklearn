@@ -40,7 +40,10 @@ export class terms_of_service extends text_content {
                 exclusive jurisdiction of the courts located within the State of New York.
             </p>
             <h2>Privacy Policy</h2>
-            <p>By using our service you agree to our privacy policy. Please review our privacy policy (available <a @click="${this.redirect_privacy_policy}" href="/privacy-policy">here</a>) to understand our practices.</p>
+            <p>
+                By using our service you agree to our privacy policy. Please review our privacy policy (available
+                <a @click="${this.redirect_privacy_policy}" href="/privacy-policy">here</a>) to understand our practices.
+            </p>
             <h2>Users Under 13</h2>
             <p>
                 You must be at least 13 years old to use our services. If you are under 13, you may use our services only with the involvement of a parent or legal guardian who agrees to be bound by these terms. If you are a parent or legal guardian

@@ -2,6 +2,7 @@ import { html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { base_content } from '../templates/base-content.lit';
 import '../components/button/inline-link.lit';
+import '../components/mamk-para.lit';
 /**
  * The login page where the user logs in.
  * @element login-page
