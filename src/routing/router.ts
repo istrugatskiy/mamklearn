@@ -131,7 +131,6 @@ export const redirect = (path: string, event?: Event) => {
     update_route();
 };
 
-window.addEventListener('load', update_route);
 window.addEventListener('popstate', update_route, false);
 
 export const INTERNAL_FOR_TESTING = {
