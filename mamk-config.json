@@ -1,5 +1,0 @@
-{
-    "app_version": "2.0.0",
-    "valid_email_domains": ["mamklearn.com", "student.mamkschools.org", "mamkschools.org", "umich.edu"],
-    "admins": ["ilyastrug@gmail.com", "istrugatskiy@student.mamkschools.org"]
-}

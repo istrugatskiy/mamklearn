@@ -74,3 +74,7 @@ type route_list = {
  * The options for the character.
  */
 type char_options = 'Eyes' | 'Nose' | 'Mouth' | 'Shirt' | 'Arms';
+
+/**
+ * Scuffed hack to get TypeScript to shut up about yaml imports.
+ */

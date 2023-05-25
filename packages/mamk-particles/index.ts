@@ -1,5 +1,7 @@
-// Definese the configuration data for ts particles and initializes it.
-// The config for particles.js
+/**
+ * @packageDocumentation \@mamk-particles
+ * The particles library config used in the mamklearn app.
+ */
 import { IOptions, RecursivePartial, SingleOrMultiple, tsParticles } from 'tsparticles-engine';
 import { loadSlim } from 'tsparticles-slim';
 // TODO: optimize which components are loaded.

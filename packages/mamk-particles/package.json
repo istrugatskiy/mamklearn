@@ -1,0 +1,25 @@
+{
+    "name": "@istrugatskiy/mamk-particles",
+    "version": "1.0.0",
+    "description": "A pretty cool particles configuration for mamk projects",
+    "private": true,
+    "main": "index.ts",
+    "module": "index.ts",
+    "type": "module",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/istrugatskiy/mamklearn.git",
+        "directory": "packages/mamk-particles"
+    },
+    "author": "Ilya Strugatskiy",
+    "license": "UNLICENSED",
+    "bugs": {
+        "url": "https://github.com/istrugatskiy/mamklearn/issues"
+    },
+    "homepage": "https://github.com/istrugatskiy/mamklearn#readme",
+    "packageManager": "yarn@3.5.1",
+    "dependencies": {
+        "tsparticles-engine": "^2.9.3",
+        "tsparticles-slim": "^2.9.3"
+    }
+}

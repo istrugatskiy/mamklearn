@@ -3,7 +3,7 @@ import { onAuthStateChanged, User } from 'firebase/auth';
 import { routes } from './routes';
 import { auth, is_test } from '../scripts/firebase-config';
 import { default_transition } from './default-transition';
-import config from '../../mamk-config.json';
+import config from '../../mamk-config.yaml';
 
 type state = {
     ready: boolean;
