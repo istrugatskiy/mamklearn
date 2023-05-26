@@ -1266,7 +1266,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@istrugatskiy/mamk-router@workspace:packages/mamk-router":
+"@istrugatskiy/mamk-router@workspace:^, @istrugatskiy/mamk-router@workspace:packages/mamk-router":
   version: 0.0.0-use.local
   resolution: "@istrugatskiy/mamk-router@workspace:packages/mamk-router"
   languageName: unknown
@@ -9183,6 +9183,7 @@ __metadata:
     "@anteris/parcel-transformer-html-literals": ^0.1.0
     "@firebase/app": ^0.9.9
     "@istrugatskiy/mamk-particles": "workspace:^"
+    "@istrugatskiy/mamk-router": "workspace:^"
     "@parcel/config-default": ^2.8.3
     "@parcel/core": ^2.8.3
     "@parcel/resolver-glob": ^2.8.3

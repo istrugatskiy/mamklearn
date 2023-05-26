@@ -1,7 +1,7 @@
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { base_content } from '../templates/base-content.lit';
-import { routes } from '../routing/routes';
+import { routes } from '../routing/router-config';
 import './button/sidebar-button.lit';
 import './button/inline-link.lit';
 import './material-icon.lit';

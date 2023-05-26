@@ -46,6 +46,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@anteris/parcel-transformer-html-literals", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:0.1.0"],\
             ["@firebase/app", "npm:0.9.9"],\
             ["@istrugatskiy/mamk-particles", "workspace:packages/mamk-particles"],\
+            ["@istrugatskiy/mamk-router", "workspace:packages/mamk-router"],\
             ["@parcel/config-default", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:2.8.3"],\
             ["@parcel/core", "npm:2.8.3"],\
             ["@parcel/resolver-glob", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:2.8.3"],\
@@ -11839,6 +11840,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@anteris/parcel-transformer-html-literals", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:0.1.0"],\
             ["@firebase/app", "npm:0.9.9"],\
             ["@istrugatskiy/mamk-particles", "workspace:packages/mamk-particles"],\
+            ["@istrugatskiy/mamk-router", "workspace:packages/mamk-router"],\
             ["@parcel/config-default", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:2.8.3"],\
             ["@parcel/core", "npm:2.8.3"],\
             ["@parcel/resolver-glob", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:2.8.3"],\

@@ -1,4 +1,4 @@
-import { redirect } from '../router';
+import { redirect } from '..';
 
 describe('redirect', () => {
     it('should redirect to the given path', () => {
