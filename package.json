@@ -56,7 +56,6 @@
     "dependencies": {
         "@firebase/app": "^0.9.9",
         "@istrugatskiy/mamk-particles": "workspace:^",
-        "@types/js-yaml": "^4.0.5",
         "firebase": "9.21.0",
         "lit": "^2.7.3"
     },

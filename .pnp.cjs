@@ -24,16 +24,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:packages/mamk-particles"\
       },\
       {\
-        "name": "mamk-routing",\
-        "reference": "workspace:packages/mamk-routing"\
+        "name": "@istrugatskiy/mamk-router",\
+        "reference": "workspace:packages/mamk-router"\
       }\
     ],\
     "enableTopLevelFallback": true,\
     "ignorePatternData": "(^(?:\\\\.yarn\\\\/sdks(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)",\
     "fallbackExclusionList": [\
       ["@istrugatskiy/mamk-particles", ["workspace:packages/mamk-particles"]],\
+      ["@istrugatskiy/mamk-router", ["workspace:packages/mamk-router"]],\
       ["functions", ["workspace:functions"]],\
-      ["mamk-routing", ["workspace:packages/mamk-routing"]],\
       ["mamklearn", ["workspace:."]]\
     ],\
     "fallbackPool": [\
@@ -51,7 +51,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@parcel/resolver-glob", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:2.8.3"],\
             ["@parcel/transformer-yaml", "npm:2.8.3"],\
             ["@types/jest", "npm:29.5.1"],\
-            ["@types/js-yaml", "npm:4.0.5"],\
             ["@types/node", "npm:18.16.3"],\
             ["@types/parcel-env", "npm:0.0.1"],\
             ["@typescript-eslint/eslint-plugin", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:5.59.1"],\
@@ -2098,6 +2097,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@istrugatskiy/mamk-particles", "workspace:packages/mamk-particles"],\
             ["tsparticles-engine", "npm:2.9.3"],\
             ["tsparticles-slim", "npm:2.9.3"]\
+          ],\
+          "linkType": "SOFT"\
+        }]\
+      ]],\
+      ["@istrugatskiy/mamk-router", [\
+        ["workspace:packages/mamk-router", {\
+          "packageLocation": "./packages/mamk-router/",\
+          "packageDependencies": [\
+            ["@istrugatskiy/mamk-router", "workspace:packages/mamk-router"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -4528,15 +4536,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/jest", "npm:29.5.1"],\
             ["expect", "npm:29.5.0"],\
             ["pretty-format", "npm:29.5.0"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["@types/js-yaml", [\
-        ["npm:4.0.5", {\
-          "packageLocation": "./.yarn/cache/@types-js-yaml-npm-4.0.5-bb64d71397-7dcac8c50f.zip/node_modules/@types/js-yaml/",\
-          "packageDependencies": [\
-            ["@types/js-yaml", "npm:4.0.5"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -11832,15 +11831,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["mamk-routing", [\
-        ["workspace:packages/mamk-routing", {\
-          "packageLocation": "./packages/mamk-routing/",\
-          "packageDependencies": [\
-            ["mamk-routing", "workspace:packages/mamk-routing"]\
-          ],\
-          "linkType": "SOFT"\
-        }]\
-      ]],\
       ["mamklearn", [\
         ["workspace:.", {\
           "packageLocation": "./",\
@@ -11854,7 +11844,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@parcel/resolver-glob", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:2.8.3"],\
             ["@parcel/transformer-yaml", "npm:2.8.3"],\
             ["@types/jest", "npm:29.5.1"],\
-            ["@types/js-yaml", "npm:4.0.5"],\
             ["@types/node", "npm:18.16.3"],\
             ["@types/parcel-env", "npm:0.0.1"],\
             ["@typescript-eslint/eslint-plugin", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:5.59.1"],\

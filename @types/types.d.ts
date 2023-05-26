@@ -78,3 +78,28 @@ type char_options = 'Eyes' | 'Nose' | 'Mouth' | 'Shirt' | 'Arms';
 /**
  * Scuffed hack to get TypeScript to shut up about yaml imports.
  */
+declare module '*.yaml' {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const content: any;
+    export default content;
+}
+
+/**
+ * Specific definition for mamk-config.yaml.
+ */
+type mamk_config = {
+    /**
+     * The app version.
+     * @example '1.0.0'
+     */
+    version: string;
+    /**
+     * The valid email domains to use for app login.
+     */
+    valid_email_domains: string[];
+    /**
+     * The list of admins for the app.
+     * @example ilyastrug\@gmail.com
+     */
+    admins: string[];
+};

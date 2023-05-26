@@ -1,0 +1,21 @@
+{
+    "name": "@istrugatskiy/mamk-router",
+    "version": "1.0.0",
+    "description": "A routing library used by mamk projects",
+    "private": true,
+    "main": "index.ts",
+    "module": "index.ts",
+    "type": "module",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/istrugatskiy/mamklearn.git",
+        "directory": "packages/mamk-router"
+    },
+    "author": "Ilya Strugatskiy",
+    "license": "UNLICENSED",
+    "bugs": {
+        "url": "https://github.com/istrugatskiy/mamklearn/issues"
+    },
+    "homepage": "https://github.com/istrugatskiy/mamklearn/tree/main/packages/mamk-router#readme",
+    "packageManager": "yarn@3.5.1"
+}
