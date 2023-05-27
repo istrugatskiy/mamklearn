@@ -1269,6 +1269,14 @@ __metadata:
 "@istrugatskiy/mamk-router@workspace:^, @istrugatskiy/mamk-router@workspace:packages/mamk-router":
   version: 0.0.0-use.local
   resolution: "@istrugatskiy/mamk-router@workspace:packages/mamk-router"
+  dependencies:
+    "@istrugatskiy/mamk-utils": "workspace:^"
+  languageName: unknown
+  linkType: soft
+
+"@istrugatskiy/mamk-utils@workspace:^, @istrugatskiy/mamk-utils@workspace:packages/mamk-utils":
+  version: 0.0.0-use.local
+  resolution: "@istrugatskiy/mamk-utils@workspace:packages/mamk-utils"
   languageName: unknown
   linkType: soft
 
@@ -9184,6 +9192,7 @@ __metadata:
     "@firebase/app": ^0.9.9
     "@istrugatskiy/mamk-particles": "workspace:^"
     "@istrugatskiy/mamk-router": "workspace:^"
+    "@istrugatskiy/mamk-utils": "workspace:^"
     "@parcel/config-default": ^2.8.3
     "@parcel/core": ^2.8.3
     "@parcel/resolver-glob": ^2.8.3
@@ -9213,6 +9222,7 @@ __metadata:
     ts-node: ^10.9.1
     typescript: 4.6.3
     web-component-analyzer: ^1.1.7
+    yaml-jest: ^1.2.0
   languageName: unknown
   linkType: soft
 
@@ -13511,6 +13521,15 @@ __metadata:
   version: 4.0.0
   resolution: "yallist@npm:4.0.0"
   checksum: 343617202af32df2a15a3be36a5a8c0c8545208f3d3dfbc6bb7c3e3b7e8c6f8e7485432e4f3b88da3031a6e20afa7c711eded32ddfb122896ac5d914e75848d5
+  languageName: node
+  linkType: hard
+
+"yaml-jest@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "yaml-jest@npm:1.2.0"
+  dependencies:
+    js-yaml: ^4.1.0
+  checksum: f772fc1d2a6aeb1c3c96429366727e446350fa471453214e032e6192e8740d04d98440f08d5b468c2f261d69b8afdc479783b253b63a111b7f89f115505d56dd
   languageName: node
   linkType: hard
 

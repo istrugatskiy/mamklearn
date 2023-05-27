@@ -26,6 +26,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       {\
         "name": "@istrugatskiy/mamk-router",\
         "reference": "workspace:packages/mamk-router"\
+      },\
+      {\
+        "name": "@istrugatskiy/mamk-utils",\
+        "reference": "workspace:packages/mamk-utils"\
       }\
     ],\
     "enableTopLevelFallback": true,\
@@ -33,6 +37,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
     "fallbackExclusionList": [\
       ["@istrugatskiy/mamk-particles", ["workspace:packages/mamk-particles"]],\
       ["@istrugatskiy/mamk-router", ["workspace:packages/mamk-router"]],\
+      ["@istrugatskiy/mamk-utils", ["workspace:packages/mamk-utils"]],\
       ["functions", ["workspace:functions"]],\
       ["mamklearn", ["workspace:."]]\
     ],\
@@ -47,6 +52,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@firebase/app", "npm:0.9.9"],\
             ["@istrugatskiy/mamk-particles", "workspace:packages/mamk-particles"],\
             ["@istrugatskiy/mamk-router", "workspace:packages/mamk-router"],\
+            ["@istrugatskiy/mamk-utils", "workspace:packages/mamk-utils"],\
             ["@parcel/config-default", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:2.8.3"],\
             ["@parcel/core", "npm:2.8.3"],\
             ["@parcel/resolver-glob", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:2.8.3"],\
@@ -75,7 +81,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ts-lit-plugin", "npm:1.2.1"],\
             ["ts-node", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:10.9.1"],\
             ["typescript", "patch:typescript@npm%3A4.6.3#~builtin<compat/typescript>::version=4.6.3&hash=5d3a66"],\
-            ["web-component-analyzer", "npm:1.1.7"]\
+            ["web-component-analyzer", "npm:1.1.7"],\
+            ["yaml-jest", "npm:1.2.0"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -2106,7 +2113,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         ["workspace:packages/mamk-router", {\
           "packageLocation": "./packages/mamk-router/",\
           "packageDependencies": [\
-            ["@istrugatskiy/mamk-router", "workspace:packages/mamk-router"]\
+            ["@istrugatskiy/mamk-router", "workspace:packages/mamk-router"],\
+            ["@istrugatskiy/mamk-utils", "workspace:packages/mamk-utils"]\
+          ],\
+          "linkType": "SOFT"\
+        }]\
+      ]],\
+      ["@istrugatskiy/mamk-utils", [\
+        ["workspace:packages/mamk-utils", {\
+          "packageLocation": "./packages/mamk-utils/",\
+          "packageDependencies": [\
+            ["@istrugatskiy/mamk-utils", "workspace:packages/mamk-utils"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -11841,6 +11858,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@firebase/app", "npm:0.9.9"],\
             ["@istrugatskiy/mamk-particles", "workspace:packages/mamk-particles"],\
             ["@istrugatskiy/mamk-router", "workspace:packages/mamk-router"],\
+            ["@istrugatskiy/mamk-utils", "workspace:packages/mamk-utils"],\
             ["@parcel/config-default", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:2.8.3"],\
             ["@parcel/core", "npm:2.8.3"],\
             ["@parcel/resolver-glob", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:2.8.3"],\
@@ -11869,7 +11887,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ts-lit-plugin", "npm:1.2.1"],\
             ["ts-node", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:10.9.1"],\
             ["typescript", "patch:typescript@npm%3A4.6.3#~builtin<compat/typescript>::version=4.6.3&hash=5d3a66"],\
-            ["web-component-analyzer", "npm:1.1.7"]\
+            ["web-component-analyzer", "npm:1.1.7"],\
+            ["yaml-jest", "npm:1.2.0"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -16668,6 +16687,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/yaml-npm-2.2.2-6e3cddb343-d90c235e09.zip/node_modules/yaml/",\
           "packageDependencies": [\
             ["yaml", "npm:2.2.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["yaml-jest", [\
+        ["npm:1.2.0", {\
+          "packageLocation": "./.yarn/cache/yaml-jest-npm-1.2.0-6866a50608-f772fc1d2a.zip/node_modules/yaml-jest/",\
+          "packageDependencies": [\
+            ["yaml-jest", "npm:1.2.0"],\
+            ["js-yaml", "npm:4.1.0"]\
           ],\
           "linkType": "HARD"\
         }]\

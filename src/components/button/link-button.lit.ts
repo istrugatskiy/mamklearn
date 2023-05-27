@@ -1,7 +1,7 @@
 import { html } from 'lit';
 import { base_content } from '../../templates/base-content.lit';
 import { customElement, property } from 'lit/decorators';
-import { redirect } from '../../routing/router';
+import { redirect } from '@istrugatskiy/mamk-router';
 
 /**
  * A button that redirects to a new page.

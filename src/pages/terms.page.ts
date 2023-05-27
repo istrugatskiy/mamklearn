@@ -1,7 +1,7 @@
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { text_content } from '../templates/text-content.lit';
-import { redirect } from '../routing/router';
+import { redirect } from '@istrugatskiy/mamk-router';
 
 /**
  * Terms of service page.

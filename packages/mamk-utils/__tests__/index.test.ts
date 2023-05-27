@@ -1,4 +1,4 @@
-import { mamk_math, sleep } from '../utils';
+import { mamk_math, sleep } from '..';
 
 describe('mamk_math', () => {
     const { clamp, lerp, range } = mamk_math;

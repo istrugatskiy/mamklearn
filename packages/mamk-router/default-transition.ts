@@ -1,4 +1,4 @@
-import { sleep } from '../scripts/utils';
+import { sleep } from '@istrugatskiy/mamk-utils';
 
 export const default_transition = async (outlet: HTMLElement, replace_route: () => void, resume_ui: () => void, is_forward: boolean) => {
     const first_transition = `slide-${is_forward ? 'right' : 'left'}-out`;

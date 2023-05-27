@@ -14,6 +14,8 @@ All lit pages should end in '.page.ts'.
 
 ## Project Structure
 
+Out of date: needs to be fixed.
+
 -   `/legacy` - Legacy mamklearn code from Mamklearn v1, kept only to help with porting to mamklearn v2.
 -   `/functions` - Cloud functions used by Mamklearn.
 -   `/src` - New codebase root.
