@@ -34,7 +34,6 @@ export const router = class {
     /**
      * Whether the user is signed in.
      * @remarks This is set by the `on_auth_changed` function.
-     * @returns Whether the user is signed in.
      */
     get is_signed_in() {
         return this.signed_in;
@@ -45,6 +44,14 @@ export const router = class {
      * @remarks Set to true after the first call to `on_auth_changed`.
      */
     private ready = false;
+
+    /**
+     * Whether the app is ready to be used, goes to true when authentication is ready.
+     * @remarks Set to true after the first call to `on_auth_changed`.
+     */
+    get is_ready() {
+        return this.ready;
+    }
 
     /**
      * Whether the UI is halted.
@@ -99,13 +106,14 @@ export const router = class {
      * A function that must be called, with a user's email, when the user's authentication state changes.
      * @param email - The user's email, or null if the user is not signed in.
      * @remarks If an app is not using authentication, this function should be called with `null`.
+     * @remarks If an email is not part of the `email_domains` list, the user will be redirected to `/logout?invalid_email=true&email_ending={{encoded_uri_email_ending}}`.
      */
     readonly on_auth_changed = (email?: string | null) => {
         this.signed_in = !!email;
         this.ready = true;
         const is_valid_email = this.email_domains.some((domain) => email?.endsWith(`@${domain}`)) || this.admins.some((admin) => email === admin);
         if (this.signed_in && !is_valid_email) {
-            this.redirect(`/logout?invalid_email=true&email_ending=${email?.split('@')[1]}`);
+            this.redirect(`/logout?invalid_email=true&email_ending=${encodeURIComponent(email?.split('@')[1] ?? '')}`);
             this.signed_in = false;
             return;
         }
@@ -115,14 +123,14 @@ export const router = class {
     /**
      * Updates the UI to reflect the current route.
      * @param event - The event that triggered the route change (if any).
-     * @remarks This function should only be called by the router.
      */
-    private readonly update_route = (event?: Event) => {
+    readonly update_route = (event?: Event) => {
         if (!this.ready) return;
         const routes = this.routes;
         routes.$outlet ??= document.getElementById('outlet');
         if (!routes.$outlet) throw new Error('No outlet found.');
         const path = window.location.pathname || '/';
+        console.log(`Routing to ${path}`);
         // If the UI is halted, queue the route change.
         if (this.ui_halted) {
             event?.preventDefault();
@@ -147,6 +155,7 @@ export const router = class {
             this.halt_ui();
         }
         let is_forward = true;
+        console.log(`Using route ${event?.type}`);
         if (event?.type == 'popstate') {
             const index = history.state?.index ?? 0;
             if (index < this.current_route_id) {
@@ -195,4 +204,10 @@ export const router = class {
         window.dispatchEvent(new CustomEvent('mamk-resume-ui', { bubbles: true, composed: true }));
         this.ui_halted = false;
     };
+
+    /**
+     * Internal testing function.
+     * @internal
+     */
+    __INTERNAL__UPDATE_ROUTE = this.update_route;
 };
