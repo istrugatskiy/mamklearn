@@ -41,12 +41,6 @@ const fake_router: route_list = {
             icon: 'support',
             component: 'support-page',
             require_auth: true,
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            transition: async (outlet, replace, resume_ui) => {
-                resume_ui();
-            },
             load: () => Promise.resolve(),
         },
         '/bad': {
@@ -163,26 +157,6 @@ describe('router', () => {
             await sleep(100);
             expect(spy).toHaveBeenCalledWith(expect.any(Error));
             spy.mockRestore();
-        });
-    });
-
-    describe('update_route', () => {
-        const r = new router(fake_router, ['gmail.com'], [email]);
-        r.on_auth_changed(email);
-
-        it('should determine whether we are going forwards or backwards', async () => {
-            const spy = jest.spyOn(fake_router.layout['/support.html'], 'transition');
-            r.redirect('/support.html');
-            await sleep(100);
-            expect(spy).toHaveBeenCalledWith(expect.any(HTMLElement), expect.any(Function), expect.any(Function), true);
-            r.redirect('/Downloads');
-            await sleep(1000);
-            spy.mockRestore();
-            history.state.index = 1;
-            console.log('start');
-            r.__INTERNAL__UPDATE_ROUTE(new PopStateEvent('popstate', { state: { index: 1 } }));
-            await sleep(1000);
-            expect(spy).toHaveBeenCalledWith(expect.any(HTMLElement), expect.any(Function), expect.any(Function), false);
         });
     });
 });

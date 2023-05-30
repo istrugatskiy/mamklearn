@@ -130,7 +130,6 @@ export const router = class {
         routes.$outlet ??= document.getElementById('outlet');
         if (!routes.$outlet) throw new Error('No outlet found.');
         const path = window.location.pathname || '/';
-        console.log(`Routing to ${path}`);
         // If the UI is halted, queue the route change.
         if (this.ui_halted) {
             event?.preventDefault();
@@ -155,7 +154,6 @@ export const router = class {
             this.halt_ui();
         }
         let is_forward = true;
-        console.log(`Using route ${event?.type}`);
         if (event?.type == 'popstate') {
             const index = history.state?.index ?? 0;
             if (index < this.current_route_id) {
@@ -204,10 +202,4 @@ export const router = class {
         window.dispatchEvent(new CustomEvent('mamk-resume-ui', { bubbles: true, composed: true }));
         this.ui_halted = false;
     };
-
-    /**
-     * Internal testing function.
-     * @internal
-     */
-    __INTERNAL__UPDATE_ROUTE = this.update_route;
 };
