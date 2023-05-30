@@ -83,7 +83,7 @@ export const router = class {
      * @param path - The path to redirect to.
      * @param event - The event that triggered the redirect (if any).
      */
-    readonly redirect = (path: string, event?: Event) => {
+    readonly redirect = async (path: string, event?: Event) => {
         event?.preventDefault();
         if (path.startsWith('http') || path.startsWith('mailto:') || path.startsWith('tel:')) {
             window.open(path, '_blank', 'noopener noreferrer');
@@ -99,7 +99,7 @@ export const router = class {
         }
         this.current_route_id++;
         window.history.pushState({ index: this.current_route_id }, '', path);
-        this.update_route();
+        await this.update_route();
     };
 
     /**
@@ -108,7 +108,7 @@ export const router = class {
      * @remarks If an app is not using authentication, this function should be called with `null`.
      * @remarks If an email is not part of the `email_domains` list, the user will be redirected to `/logout?invalid_email=true&email_ending={{encoded_uri_email_ending}}`.
      */
-    readonly on_auth_changed = (email?: string | null) => {
+    readonly on_auth_changed = async (email?: string | null) => {
         this.signed_in = !!email;
         this.ready = true;
         const is_valid_email = this.email_domains.some((domain) => email?.endsWith(`@${domain}`)) || this.admins.some((admin) => email === admin);
@@ -117,14 +117,14 @@ export const router = class {
             this.signed_in = false;
             return;
         }
-        this.update_route();
+        await this.update_route();
     };
 
     /**
      * Updates the UI to reflect the current route.
      * @param event - The event that triggered the route change (if any).
      */
-    readonly update_route = (event?: Event) => {
+    readonly update_route = async (event?: Event) => {
         if (!this.ready) return;
         const routes = this.routes;
         routes.$outlet ??= document.getElementById('outlet');
@@ -161,30 +161,28 @@ export const router = class {
             }
             this.current_route_id = index;
         }
-        route
-            .load(this.redirect, this.on_auth_changed)
-            .then(async () => {
-                if (route.special_path) return;
-                route.transition ??= default_transition;
-                await route.transition(
-                    $outlet,
-                    () => {
-                        const template = document.createElement(route.component);
-                        $outlet.replaceChildren(template);
-                        window.document.title = route.title;
-                    },
-                    this.resume_ui,
-                    is_forward
-                );
-                if (this.last_queued_route) {
-                    this.last_queued_route = undefined;
-                    this.update_route();
-                }
-            })
-            .catch((err) => {
-                // TODO: Show error page.
-                console.error(err);
-            });
+        try {
+            await route.load(this.redirect, this.on_auth_changed);
+            if (route.special_path) return;
+            route.transition ??= default_transition;
+            await route.transition(
+                $outlet,
+                () => {
+                    const template = document.createElement(route.component);
+                    $outlet.replaceChildren(template);
+                    window.document.title = route.title;
+                },
+                this.resume_ui,
+                is_forward
+            );
+            if (this.last_queued_route) {
+                this.last_queued_route = undefined;
+                this.update_route();
+            }
+        } catch (err) {
+            // TODO: Show error page.
+            console.error(err);
+        }
     };
 
     /**
