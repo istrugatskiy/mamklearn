@@ -1,8 +1,7 @@
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { text_content } from '../templates/text-content.lit';
-import { redirect } from '@istrugatskiy/mamk-router';
-
+import router from '../scripts/router-config';
 /**
  * Terms of service page.
  * @element terms-of-service-page
@@ -10,7 +9,7 @@ import { redirect } from '@istrugatskiy/mamk-router';
 @customElement('terms-of-service-page')
 export class terms_of_service extends text_content {
     private redirect_privacy_policy = (e: Event) => {
-        redirect('/privacy-policy', e);
+        router.redirect('/privacy-policy', e);
     };
 
     // This was copilot generated.

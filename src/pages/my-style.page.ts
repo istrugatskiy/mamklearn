@@ -8,7 +8,7 @@ import '../components/character/mamk-char.lit';
 import '../components/button/mamk-button.lit';
 import '../components/material-icon.lit';
 import { custom_options, get_src } from '../components/character/mamk-char.lit';
-import { mamk_math } from '../scripts/utils';
+import { mamk_math } from '@istrugatskiy/mamk-utils';
 
 // The character options for an empty part.
 // This allows us to replace it with a special "none" option.

@@ -1,7 +1,7 @@
 import { html } from 'lit';
 import { base_content } from '../../templates/base-content.lit';
 import { customElement, property } from 'lit/decorators';
-import { redirect } from '@istrugatskiy/mamk-router';
+import router from '../../scripts/router-config';
 
 /**
  * A button that redirects to a new page.
@@ -10,8 +10,8 @@ import { redirect } from '@istrugatskiy/mamk-router';
  */
 @customElement('link-button')
 export class link_button extends base_content {
-    resume_ui?: (() => void) | undefined;
-    halt_ui?: (() => void) | undefined;
+    resume_ui?: () => void;
+    halt_ui?: () => void;
 
     /**
      * The internal path to redirect to.
@@ -26,7 +26,7 @@ export class link_button extends base_content {
      * @param e - The event that triggered the redirect.
      * @returns Nothing.
      */
-    private redirect = (e: Event) => redirect(this.href, e);
+    private redirect = (e: Event) => router.redirect(this.href, e);
 
     protected render() {
         return html`

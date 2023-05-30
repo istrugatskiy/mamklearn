@@ -1,7 +1,7 @@
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { base_content } from '../templates/base-content.lit';
-import { routes } from '../routing/router-config';
+import router from '../scripts/router-config';
 import './button/sidebar-button.lit';
 import './button/inline-link.lit';
 import './material-icon.lit';
@@ -124,6 +124,8 @@ export class side_bar extends base_content {
     };
 
     protected render() {
+        const legal_items = ['/terms-of-service', '/privacy-policy', '/about'];
+        const items_to_show = router.is_signed_in ? ['/', '/play', '/my-quizzes', '/logout'] : legal_items;
         return html`<button class="button open-menu">
                 <mat-icon>menu_open</mat-icon>
             </button>
@@ -131,8 +133,8 @@ export class side_bar extends base_content {
                 <div>
                     <mamk-header>Mamklearn v2</mamk-header>
                     <ul>
-                        ${Object.entries(routes.layout)
-                            .filter(([, value]) => value.show_user)
+                        ${Object.entries(router.routes.layout)
+                            .filter(([key]) => items_to_show.includes(key))
                             .map(
                                 ([key, value]) =>
                                     html`<li>
@@ -147,9 +149,7 @@ export class side_bar extends base_content {
                 <div>
                     <hr />
                     <div class="bottom-bar">
-                        <inline-link data-href="/terms-of-service">Terms of Service</inline-link>
-                        <inline-link data-href="/privacy-policy">Privacy Policy</inline-link>
-                        <inline-link data-href="/about">About</inline-link>
+                        ${router.is_signed_in ? legal_items.map((key) => html`<inline-link data-href="${key}">${router.routes.layout[key].title}</inline-link>`) : ''}
                         <p>
                             &copy; Copyright 2023
                             <inline-link data-href="https://github.com/istrugatskiy">Ilya Strugatskiy</inline-link>

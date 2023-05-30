@@ -8,8 +8,8 @@ import { base_content } from '../templates/base-content.lit';
  */
 @customElement('not-found-page')
 export class not_found extends base_content {
-    resume_ui?: (() => void) | undefined;
-    halt_ui?: (() => void) | undefined;
+    resume_ui?: () => void;
+    halt_ui?: () => void;
 
     static styles = [
         base_content.styles,

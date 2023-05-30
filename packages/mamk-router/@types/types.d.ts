@@ -4,24 +4,19 @@ type route = {
      */
     title: string;
     /**
-     * Path of the page.
-     */
-    path: string;
-    /**
      * Component name of the page.
      * @example 'my-style-page'
      */
     component: string;
     /**
      * Whether the page requires authentication.
+     * By default, this is `false`.
      */
-    require_auth: boolean;
-    /**
-     * Whether the page should be shown in the sidebar.
-     */
-    show_user: boolean;
+    require_auth?: boolean;
     /**
      * Whether the page is a special path.
+     * @remarks A special path is a path that is not a page but rather an action.
+     * @remarks The router will skip animation and UI updates for special paths.
      * @example '/login'
      * @example '/logout'
      */
@@ -36,15 +31,12 @@ type route = {
     transition?: (outlet: HTMLElement, replace_route: () => void, resume_ui: () => void, is_forward: boolean) => Promise<void>;
     /**
      * The function that loads the page (or more typically any components it depends on).
-     * @returns A promise that resolves when the page is loaded.
+     * @param redirect - A function that can be used to redirect the user to a different page.
+     * @param on_auth_changed - A function that should be called when the authentication state changes.
+     * @remarks While the loader function is allowed to call `redirect` and `on_auth_changed`, it is recommended that it does not (for most cases).
+     * @returns A promise that resolves when the page is loaded. Note: the promise's value is ignored.
      */
-    load: () => Promise<void>;
-    /**
-     * A function which can be used to restrict access to the page.
-     * @remarks This function is currently not implemented or used.
-     * @returns True if the page can be accessed, false otherwise.
-     */
-    restrictor?: () => boolean;
+    load: (redirect: (url: string) => void, on_auth_changed: (email?: string | null) => void) => Promise<unknown>;
 };
 
 type route_list = {
@@ -59,8 +51,9 @@ type route_list = {
     /**
      * The outlet element to which pages are rendered.
      * @remarks This is typically a div.
+     * @remarks If this is null, the router will attempt to use the element with the id `outlet`.
      */
-    $outlet: HTMLElement | null;
+    $outlet?: HTMLElement | null;
     /**
      * The routes that are part of the application.
      * @remarks This is a map of paths to routes.

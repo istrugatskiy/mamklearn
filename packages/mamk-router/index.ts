@@ -1,66 +1,135 @@
 import './outlet-transitions.css';
 export { default_transition } from './default-transition';
 import { default_transition } from './default-transition';
-import { valid_email_domains, admins } from '../../mamk-config.yaml';
 
-type state = {
-    ready: boolean;
-    signed_in: boolean;
-    ui_halted: boolean;
-    last_queued_route: string | undefined;
-    current_route_id: number;
-    routes: route_list | undefined;
-};
+export const router = class {
+    /**
+     * The routes to use.
+     * @remarks This is set by the constructor.
+     */
+    readonly routes: route_list;
 
-const state: state = {
-    // Whether the app is ready to be used, goes to true when authentication is ready.
-    ready: false,
-    // Whether the user is signed in.
-    signed_in: false,
-    // Whether the UI is halted, goes to true when a transition is in progress.
-    ui_halted: false,
-    // In the event that the user requests another transition while the UI is halted, this will store the path of the next route.
-    last_queued_route: undefined,
-    // The current route's ID, used for determining whether the app is going forwards or backwards.
-    current_route_id: 0,
-    // The routes for the app.
-    routes: undefined,
-};
+    /**
+     * The valid email domains to use for app login.
+     */
+    readonly email_domains: string[];
 
-export const on_auth_changed = (email: string | null | undefined) => {
-    state.signed_in = !!email;
-    state.ready = true;
-    const is_valid_email = valid_email_domains.some((domain) => email?.endsWith(`@${domain}`)) || admins.some((admin) => email === admin);
-    if (state.signed_in && !is_valid_email) {
-        redirect(`/logout?invalid_email=true&email_ending=${email?.split('@')[1]}`);
-        state.signed_in = false;
-        return;
+    /**
+     * The list of admins for the app.
+     * @example ilyastrug\@gmail.com
+     */
+    readonly admins: string[];
+
+    /**
+     * The current route's sequential ID.
+     * @remarks This is used for determining whether the app is going forwards or backwards.
+     */
+    private current_route_id = 0;
+
+    /**
+     * Whether the user is signed in.
+     */
+    private signed_in = false;
+
+    /**
+     * Whether the user is signed in.
+     * @remarks This is set by the `on_auth_changed` function.
+     * @returns Whether the user is signed in.
+     */
+    get is_signed_in() {
+        return this.signed_in;
     }
-    update_route();
-};
 
-const halt_ui = () => {
-    window.dispatchEvent(new CustomEvent('mamk-halt-ui', { bubbles: true, composed: true }));
-    state.ui_halted = true;
-};
+    /**
+     * Whether the app is ready to be used, goes to true when authentication is ready.
+     * @remarks Set to true after the first call to `on_auth_changed`.
+     */
+    private ready = false;
 
-const resume_ui = () => {
-    window.dispatchEvent(new CustomEvent('mamk-resume-ui', { bubbles: true, composed: true }));
-    state.ui_halted = false;
-};
+    /**
+     * Whether the UI is halted.
+     * @remarks The UI is halted when a transition is in progress
+     * to prevent going out-of-sync with the URL.
+     */
+    private ui_halted = false;
 
-const update_route = (event?: Event) => {
-    if (!state.ready) return;
-    const routes = state.routes;
-    if (!routes) return;
-    routes.$outlet = routes.$outlet ?? document.getElementById('outlet');
-    if (routes.$outlet) {
-        const path = window.location.pathname || '/';
-        if (state.ui_halted) {
-            event?.preventDefault();
-            state.last_queued_route = path;
+    /**
+     * The path of the next route to transition to, if any.
+     * @remarks This is used when the user requests another transition while the UI is halted.
+     */
+    private last_queued_route?: string;
+
+    /**
+     * Starts the router.
+     * @param routes - The routes to use.
+     * @remarks This registers the `popstate` event listener by default.
+     */
+    constructor(routes: route_list, email_domains: string[], admins: string[]) {
+        this.routes = routes;
+        this.email_domains = email_domains;
+        this.admins = admins;
+        window.addEventListener('popstate', this.update_route, false);
+    }
+
+    /**
+     * Redirects to the given path.
+     * @param path - The path to redirect to.
+     * @param event - The event that triggered the redirect (if any).
+     */
+    readonly redirect = (path: string, event?: Event) => {
+        event?.preventDefault();
+        if (path.startsWith('http') || path.startsWith('mailto:') || path.startsWith('tel:')) {
+            window.open(path, '_blank', 'noopener noreferrer');
             return;
         }
+        // This should never happen (and if it did would most likely be blocked), but just in case.
+        if (path.toLowerCase().trim().startsWith('javascript:')) {
+            throw new Error('Redirecting to JavaScript URLs is not allowed.');
+        }
+        if (path == window.location.pathname) {
+            window.history.replaceState({ index: this.current_route_id }, '', path);
+            return;
+        }
+        this.current_route_id++;
+        window.history.pushState({ index: this.current_route_id }, '', path);
+        this.update_route();
+    };
+
+    /**
+     * A function that must be called, with a user's email, when the user's authentication state changes.
+     * @param email - The user's email, or null if the user is not signed in.
+     * @remarks If an app is not using authentication, this function should be called with `null`.
+     */
+    readonly on_auth_changed = (email?: string | null) => {
+        this.signed_in = !!email;
+        this.ready = true;
+        const is_valid_email = this.email_domains.some((domain) => email?.endsWith(`@${domain}`)) || this.admins.some((admin) => email === admin);
+        if (this.signed_in && !is_valid_email) {
+            this.redirect(`/logout?invalid_email=true&email_ending=${email?.split('@')[1]}`);
+            this.signed_in = false;
+            return;
+        }
+        this.update_route();
+    };
+
+    /**
+     * Updates the UI to reflect the current route.
+     * @param event - The event that triggered the route change (if any).
+     * @remarks This function should only be called by the router.
+     */
+    private readonly update_route = (event?: Event) => {
+        if (!this.ready) return;
+        const routes = this.routes;
+        routes.$outlet ??= document.getElementById('outlet');
+        if (!routes.$outlet) throw new Error('No outlet found.');
+        const path = window.location.pathname || '/';
+        // If the UI is halted, queue the route change.
+        if (this.ui_halted) {
+            event?.preventDefault();
+            this.last_queued_route = path;
+            return;
+        }
+        // Dispatch a route change event.
         window.dispatchEvent(
             new CustomEvent('mamk-route-change', {
                 detail: window.location.pathname,
@@ -69,26 +138,27 @@ const update_route = (event?: Event) => {
             })
         );
         const { $outlet } = routes;
+        // Determine the route to use.
         let route = routes.layout[path] || routes.not_found;
-        if (route.require_auth && !state.signed_in) {
+        if (route.require_auth && !this.signed_in) {
             route = routes.no_auth;
         }
         if (!route.special_path) {
-            halt_ui();
+            this.halt_ui();
         }
         let is_forward = true;
         if (event?.type == 'popstate') {
             const index = history.state?.index ?? 0;
-            if (index < state.current_route_id) {
+            if (index < this.current_route_id) {
                 is_forward = false;
             }
-            state.current_route_id = index;
+            this.current_route_id = index;
         }
         route
-            .load()
+            .load(this.redirect, this.on_auth_changed)
             .then(async () => {
                 if (route.special_path) return;
-                route.transition = route.transition ?? default_transition;
+                route.transition ??= default_transition;
                 await route.transition(
                     $outlet,
                     () => {
@@ -96,47 +166,33 @@ const update_route = (event?: Event) => {
                         $outlet.replaceChildren(template);
                         window.document.title = route.title;
                     },
-                    resume_ui,
+                    this.resume_ui,
                     is_forward
                 );
-                if (state.last_queued_route) {
-                    // We can't check the current event but we can check the last event.
-                    state.last_queued_route = undefined;
-                    update_route();
+                if (this.last_queued_route) {
+                    this.last_queued_route = undefined;
+                    this.update_route();
                 }
             })
             .catch((err) => {
                 // TODO: Show error page.
                 console.error(err);
             });
-    } else {
-        throw new Error('No outlet found.');
-    }
-};
+    };
 
-export const redirect = (path: string, event?: Event) => {
-    event?.preventDefault();
-    if (path.startsWith('http') || path.startsWith('mailto:') || path.startsWith('tel:')) {
-        window.open(path, '_blank', 'noopener noreferrer');
-        return;
-    }
-    if (path == window.location.pathname) {
-        window.history.replaceState({ index: state.current_route_id }, '', path);
-        return;
-    }
-    state.current_route_id++;
-    window.history.pushState({ index: state.current_route_id }, '', path);
-    update_route();
-};
+    /**
+     * Halts the UI.
+     */
+    private readonly halt_ui = () => {
+        window.dispatchEvent(new CustomEvent('mamk-halt-ui', { bubbles: true, composed: true }));
+        this.ui_halted = true;
+    };
 
-export const start_router = (routes: route_list) => {
-    state.routes = routes;
-    window.addEventListener('popstate', update_route, false);
-};
-
-export const INTERNAL_FOR_TESTING = {
-    state,
-    update_route,
-    resume_ui,
-    halt_ui,
+    /**
+     * Resumes the UI.
+     */
+    private readonly resume_ui = () => {
+        window.dispatchEvent(new CustomEvent('mamk-resume-ui', { bubbles: true, composed: true }));
+        this.ui_halted = false;
+    };
 };

@@ -33,7 +33,7 @@ export const mamk_math = {
      * @returns The array.
      */
     range: (start_at: number, end_at: number, step = 1): number[] => {
-        // Todo: This needs to be generated once needed (through an iterator, like in Python).
+        // TODO: This needs to be generated once needed (through an iterator, like in Python).
         const arr = [];
         for (let i = start_at; i <= end_at; i += step) {
             const true_i = parseFloat(i.toFixed(10));

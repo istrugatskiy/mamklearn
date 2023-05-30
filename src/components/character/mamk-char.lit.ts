@@ -173,7 +173,7 @@ export class mamk_char extends LitElement {
         attribute: 'data-character',
         type: Array,
     })
-    character_config: number[] | undefined;
+    character_config?: number[];
 
     /**
      * The character style.
