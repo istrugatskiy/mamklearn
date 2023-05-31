@@ -1,0 +1,24 @@
+{
+    "name": "@istrugatskiy/mamk-firewrap",
+    "version": "1.0.0",
+    "description": "Some common firebase configuration used by mamk projects.",
+    "private": true,
+    "main": "index.ts",
+    "module": "index.ts",
+    "type": "module",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/istrugatskiy/mamklearn.git",
+        "directory": "packages/mamk-firewrap"
+    },
+    "author": "Ilya Strugatskiy",
+    "license": "UNLICENSED",
+    "bugs": {
+        "url": "https://github.com/istrugatskiy/mamklearn/issues"
+    },
+    "homepage": "https://github.com/istrugatskiy/mamklearn/tree/main/packages/mamk-firewrap#readme",
+    "packageManager": "yarn@3.5.1",
+    "dependencies": {
+        "@istrugatskiy/mamk-utils": "workspace:^"
+    }
+}
