@@ -1,14 +1,6 @@
 # mamklearn
 
-The mamklearn project repo containing the firebase and client config.
-
-#
-
-## IMPORTANT!
-
-Mamklearn already has a firebase project setup, don't accidentally overwrite it
-or accidentally deploy code. Whenever you commit to main, Mamklearn will build a
-project to https://dev.mamklearn.com
+The mamklearn monorepo containing the firebase and client config.
 
 ## How To Build:
 
@@ -25,25 +17,12 @@ yarn run build
 ```
 
 ## How To Setup Dev Environment:
+Clone the repo, install a new yarn version using corepack.
 
-Make sure to have the following installed:
-
-1. Visual Studio Code
-2. Node
-3. Git
-
-Then, run the terminal in the folder you want to setup, DONT PUT IT INTO 3D OBJECTS.
-Then run
+In the repo run:
 
 ```
-git clone https://github.com/istrugatskiy/mamklearn.git
-```
-
-Then in the installed directory run:
-
-```
-yarn
-yarn global add firebase-tools
+yarn install
 ```
 
 You're done!
