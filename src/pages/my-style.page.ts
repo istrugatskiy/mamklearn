@@ -2,7 +2,7 @@ import { customElement, state } from 'lit/decorators.js';
 import { base_content } from '../templates/base-content.lit';
 import { css, html } from 'lit';
 import { onValue, ref, update } from 'firebase/database';
-import { auth, db } from '../scripts/firebase-config';
+import { auth, db } from '@istrugatskiy/mamk-firewrap';
 import '../components/mamk-header.lit';
 import '../components/character/mamk-char.lit';
 import '../components/button/mamk-button.lit';
@@ -141,7 +141,7 @@ export class my_style extends base_content {
         super.connectedCallback();
         const user_char = ref(db, `userProfiles/${auth.currentUser?.uid}/charConfig`);
         this.char_listener = onValue(user_char, (snapshot) => {
-            this.user_char = snapshot.val();
+            this.user_char = snapshot.val() ?? [0, 0, 0, 0, 0];
         });
     }
 

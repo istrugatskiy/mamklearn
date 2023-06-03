@@ -57,6 +57,7 @@
     },
     "dependencies": {
         "@firebase/app": "^0.9.9",
+        "@istrugatskiy/mamk-firewrap": "workspace:^",
         "@istrugatskiy/mamk-particles": "workspace:^",
         "@istrugatskiy/mamk-router": "workspace:^",
         "@istrugatskiy/mamk-utils": "workspace:^",

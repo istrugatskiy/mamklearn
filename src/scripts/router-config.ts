@@ -1,6 +1,6 @@
 import { signInWithRedirect, signOut } from 'firebase/auth';
 import { router } from '@istrugatskiy/mamk-router';
-import { auth, provider } from './firebase-config';
+import { auth, provider } from '@istrugatskiy/mamk-firewrap';
 import { valid_email_domains, admins } from '/mamk-config.yaml';
 
 const not_found: route = {

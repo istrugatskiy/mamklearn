@@ -19,6 +19,7 @@
     "homepage": "https://github.com/istrugatskiy/mamklearn/tree/main/packages/mamk-firewrap#readme",
     "packageManager": "yarn@3.5.1",
     "dependencies": {
-        "@istrugatskiy/mamk-utils": "workspace:^"
+        "@firebase/app": "0.9.9",
+        "firebase": "9.21.0"
     }
 }

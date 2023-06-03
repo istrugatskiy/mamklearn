@@ -1257,6 +1257,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@istrugatskiy/mamk-firewrap@workspace:^, @istrugatskiy/mamk-firewrap@workspace:packages/mamk-firewrap":
+  version: 0.0.0-use.local
+  resolution: "@istrugatskiy/mamk-firewrap@workspace:packages/mamk-firewrap"
+  dependencies:
+    "@firebase/app": 0.9.9
+    firebase: 9.21.0
+  languageName: unknown
+  linkType: soft
+
 "@istrugatskiy/mamk-particles@workspace:^, @istrugatskiy/mamk-particles@workspace:packages/mamk-particles":
   version: 0.0.0-use.local
   resolution: "@istrugatskiy/mamk-particles@workspace:packages/mamk-particles"
@@ -9190,6 +9199,7 @@ __metadata:
   dependencies:
     "@anteris/parcel-transformer-html-literals": ^0.1.0
     "@firebase/app": ^0.9.9
+    "@istrugatskiy/mamk-firewrap": "workspace:^"
     "@istrugatskiy/mamk-particles": "workspace:^"
     "@istrugatskiy/mamk-router": "workspace:^"
     "@istrugatskiy/mamk-utils": "workspace:^"

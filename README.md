@@ -17,6 +17,7 @@ yarn run build
 ```
 
 ## How To Setup Dev Environment:
+
 Clone the repo, install a new yarn version using corepack.
 
 In the repo run:

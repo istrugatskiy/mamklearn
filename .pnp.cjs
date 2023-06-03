@@ -20,6 +20,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:functions"\
       },\
       {\
+        "name": "@istrugatskiy/mamk-firewrap",\
+        "reference": "workspace:packages/mamk-firewrap"\
+      },\
+      {\
         "name": "@istrugatskiy/mamk-particles",\
         "reference": "workspace:packages/mamk-particles"\
       },\
@@ -35,6 +39,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
     "enableTopLevelFallback": true,\
     "ignorePatternData": "(^(?:\\\\.yarn\\\\/sdks(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)",\
     "fallbackExclusionList": [\
+      ["@istrugatskiy/mamk-firewrap", ["workspace:packages/mamk-firewrap"]],\
       ["@istrugatskiy/mamk-particles", ["workspace:packages/mamk-particles"]],\
       ["@istrugatskiy/mamk-router", ["workspace:packages/mamk-router"]],\
       ["@istrugatskiy/mamk-utils", ["workspace:packages/mamk-utils"]],\
@@ -50,6 +55,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@anteris/parcel-transformer-html-literals", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:0.1.0"],\
             ["@firebase/app", "npm:0.9.9"],\
+            ["@istrugatskiy/mamk-firewrap", "workspace:packages/mamk-firewrap"],\
             ["@istrugatskiy/mamk-particles", "workspace:packages/mamk-particles"],\
             ["@istrugatskiy/mamk-router", "workspace:packages/mamk-router"],\
             ["@istrugatskiy/mamk-utils", "workspace:packages/mamk-utils"],\
@@ -2096,6 +2102,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@istanbuljs/schema", "npm:0.1.3"]\
           ],\
           "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@istrugatskiy/mamk-firewrap", [\
+        ["workspace:packages/mamk-firewrap", {\
+          "packageLocation": "./packages/mamk-firewrap/",\
+          "packageDependencies": [\
+            ["@istrugatskiy/mamk-firewrap", "workspace:packages/mamk-firewrap"],\
+            ["@firebase/app", "npm:0.9.9"],\
+            ["firebase", "npm:9.21.0"]\
+          ],\
+          "linkType": "SOFT"\
         }]\
       ]],\
       ["@istrugatskiy/mamk-particles", [\
@@ -11856,6 +11873,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mamklearn", "workspace:."],\
             ["@anteris/parcel-transformer-html-literals", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:0.1.0"],\
             ["@firebase/app", "npm:0.9.9"],\
+            ["@istrugatskiy/mamk-firewrap", "workspace:packages/mamk-firewrap"],\
             ["@istrugatskiy/mamk-particles", "workspace:packages/mamk-particles"],\
             ["@istrugatskiy/mamk-router", "workspace:packages/mamk-router"],\
             ["@istrugatskiy/mamk-utils", "workspace:packages/mamk-utils"],\

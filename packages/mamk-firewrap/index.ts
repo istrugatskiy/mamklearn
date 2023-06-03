@@ -29,7 +29,7 @@ const dev_config = {
 export const dev_build = window.location.hostname === 'localhost' || window.location.hostname === 'dev.mamklearn.com';
 export const is_test = process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID !== undefined;
 
-const app = initializeApp(dev_build ? dev_config : prod_config);
+export const app = initializeApp(dev_build ? dev_config : prod_config);
 if (!is_test) {
     getAnalytics(app);
     getPerformance(app);

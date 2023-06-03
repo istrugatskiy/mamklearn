@@ -20,6 +20,7 @@ export const get_src = (property: char_options, character_config?: number[]): st
     if (lookup_index == -1) {
         return new URL('/src/images/quiz-icon-0.svg', import.meta.url);
     }
+    console.trace(character_config);
     return character_config ? images[`${property.toLowerCase()}-${character_config[lookup_index].toString()}.${lookup_index == 4 ? 'svg' : 'png'}`] : new URL('data:,');
 };
 
