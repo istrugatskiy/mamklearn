@@ -10,13 +10,6 @@ import '../components/material-icon.lit';
 import { custom_options, get_src } from '../components/character/mamk-char.lit';
 import { mamk_math } from '@istrugatskiy/mamk-utils';
 
-// The character options for an empty part.
-// This allows us to replace it with a special "none" option.
-// For legacy reasons the "none" option is a different index for each person.
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore This is temporary until the var is used (so build doesn't fail).
-// const none_map = [1, 2, 2, 2, -1];
-
 /**
  * The page that allows the user to customize their character.
  * @element my-style
@@ -51,12 +44,12 @@ export class my_style extends base_content {
             }
             .grid {
                 display: grid;
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 0.5fr 1fr;
                 grid-template-rows: 1fr;
                 grid-template-areas: 'content content';
                 grid-gap: 20px;
                 margin: 10px auto;
-                max-width: 900px;
+                max-width: 650px;
             }
             .inline-flex {
                 display: flex;
@@ -112,19 +105,25 @@ export class my_style extends base_content {
                 border-radius: 10px;
                 border-color: black;
                 border-width: 4px;
-                background-color: white;
+                background-color: rgba(0, 0, 0, 0.1);
                 transition: transform 0.1s;
+                width: 75px;
+                height: 75px;
+                overflow: hidden;
             }
             .eyes,
             .nose,
             .mouth {
-                width: 75px;
-                height: 75px;
-                overflow: hidden;
                 align-items: start;
+            }
+            .shirt {
+                align-items: center;
             }
             h1 {
                 font-size: 30px;
+            }
+            .none-option {
+                align-items: center;
             }
         `,
     ];
@@ -202,8 +201,8 @@ export class my_style extends base_content {
                             mamk_math.range(0, 9).map((i) => {
                                 const five_items = mamk_math.range(0, 4);
                                 five_items[this.current_item] = i;
-                                return html`<button data-index="${i}" @click=${this.select_item} class="arrow-button preview-button ${current_option.toLowerCase()}">
-                                    <img src="${get_src(custom_options[this.current_item], five_items)}" height="200" width="148" />
+                                return html`<button data-index="${i}" @click=${this.select_item} class="arrow-button preview-button ${i !== 9 ? current_option.toLowerCase() : 'none-option'}">
+                                    ${i !== 9 ? html`<img src="${get_src(custom_options[this.current_item], five_items)}" height="200" width="148" />` : html`<mat-icon>block</mat-icon> `}
                                 </button>`;
                             })
                         }
