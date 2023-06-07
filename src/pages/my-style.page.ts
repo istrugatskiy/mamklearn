@@ -56,7 +56,6 @@ export class my_style extends base_content {
                 justify-content: space-between;
                 align-items: center;
                 margin: 10px auto;
-                max-width: 1200px;
                 flex-direction: row;
             }
             .arrow-button {
@@ -69,14 +68,10 @@ export class my_style extends base_content {
                 height: 50px;
                 background-color: white;
                 border: none;
-                transition: transform 0.1s;
+                transition: box-shadow 0.1s;
                 margin: 5px;
-            }
-            .arrow-button:hover {
-                transform: scale(1.1);
-            }
-            .arrow-button:active {
-                transform: scale(0.9);
+                box-shadow: 0px 0px 12px #000000;
+                border-radius: 10px;
             }
             .arrow-button[disabled] {
                 cursor: not-allowed;
@@ -85,8 +80,10 @@ export class my_style extends base_content {
             .arrow-button > * {
                 pointer-events: none;
             }
+            .arrow-button:active,
             .arrow-button:focus {
-                outline: 2px solid black;
+                outline: none;
+                box-shadow: none;
             }
             .right-bar {
                 flex-direction: column;
@@ -102,14 +99,17 @@ export class my_style extends base_content {
                 width: 200px;
                 height: 200px;
                 margin: 10px;
-                border-radius: 10px;
                 border-color: black;
-                border-width: 4px;
+                border-width: 0;
+                border-style: solid;
                 background-color: rgba(0, 0, 0, 0.1);
-                transition: transform 0.1s;
                 width: 75px;
                 height: 75px;
                 overflow: hidden;
+            }
+            .current-preview {
+                border-width: 4px;
+                box-shadow: none;
             }
             .eyes,
             .nose,
@@ -119,11 +119,21 @@ export class my_style extends base_content {
             .shirt {
                 align-items: center;
             }
+            .shirt > img {
+                transform: translateX(7px);
+            }
             h1 {
-                font-size: 30px;
+                font-size: 28px;
             }
             .none-option {
                 align-items: center;
+            }
+            .shirt-8 > img {
+                transform: scale(0.7);
+            }
+            .arms > img {
+                align-items: center;
+                transform: scale(0.5) translateX(10px);
             }
         `,
     ];
@@ -201,8 +211,13 @@ export class my_style extends base_content {
                             mamk_math.range(0, 9).map((i) => {
                                 const five_items = mamk_math.range(0, 4);
                                 five_items[this.current_item] = i;
-                                return html`<button data-index="${i}" @click=${this.select_item} class="arrow-button preview-button ${i !== 9 ? current_option.toLowerCase() : 'none-option'}">
-                                    ${i !== 9 ? html`<img src="${get_src(custom_options[this.current_item], five_items)}" height="200" width="148" />` : html`<mat-icon>block</mat-icon> `}
+                                const none_option = i !== 9 || current_option === 'Arms';
+                                return html`<button
+                                    data-index="${i}"
+                                    @click=${this.select_item}
+                                    class="arrow-button preview-button ${none_option ? current_option.toLowerCase() : 'none-option'} ${current_option.toLowerCase()}-${i} ${this.user_char[this.current_item] === i ? 'current-preview' : ''}"
+                                >
+                                    ${none_option ? html`<img src="${get_src(custom_options[this.current_item], five_items)}" height="200" width="148" />` : html`<mat-icon>block</mat-icon> `}
                                 </button>`;
                             })
                         }

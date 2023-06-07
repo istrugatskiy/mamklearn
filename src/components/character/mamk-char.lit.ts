@@ -190,7 +190,7 @@ export class mamk_char extends LitElement {
         const base = new URL('./images/base.svg', import.meta.url).href;
         return html`
             <div class="${this.char_style} main">
-                ${custom_options.map((option) => html`<img alt="your ${option}" src="${get_src(option, this.character_config)}" width="250" height="337" />`)}
+                ${custom_options.map((option) => html`<img alt="your ${option}" src="${get_src(option, this.character_config)}" style="z-index: ${option === 'Shirt' ? 1 : 0}" width="250" height="337" />`)}
                 <img alt="your profile picture" src="${base}" class="base" width="250" height="337" />
             </div>
         `;
