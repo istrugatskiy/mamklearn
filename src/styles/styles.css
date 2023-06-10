@@ -48,7 +48,7 @@ body {
     z-index: 1;
 }
 side-bar {
-    z-index: 1;
+    z-index: 100;
 }
 #outlet {
     z-index: 1;

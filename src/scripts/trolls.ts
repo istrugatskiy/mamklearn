@@ -31,12 +31,13 @@ window.jQuery = {
         jquery: '69.420',
     },
 };
+// Became too much of a hypocrite to keep this in it's original form.
 window.React = {
-    version: `React and all the other major libraries are garbage. There are some excpetions like lit or Preact which mitigate some of my concerns but no library is perfect.
+    version: `React sucks (and I am a hypocrite).
     React's flaws:
-    1. It gives your web app type 2 diabetes in the form of 90kb.
-    2. It literally puts HTML in JS and libraries like styledComponents make it even worse. The entire idea is to separate stuff into multiple files, something that Angular does sometimes.
-    3. It renders everything at once and doesn't allow for lazy loading parts of the site, you need the entirety of react to start rendering.
-    4. It isn't as fast as native dom operations.`,
+    1. It gives your web app type 2 diabetes in the form of ~30kb.
+    2. It is slow.
+    3. Hooks help you shoot yourself in the foot.
+    4. className (and not class) is stupid. I know why it exists, but it is still stupid.`,
     Component: 'Very fun to fake the javascript library detector tests.',
 };

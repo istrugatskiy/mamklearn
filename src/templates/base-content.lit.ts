@@ -49,7 +49,7 @@ export abstract class base_content extends LitElement {
                 color: black;
                 text-align: center;
                 font-family: 'Roboto Mono', monospace;
-                font-size: 32px;
+                font-size: 24px;
                 transition: background-color 0.3s, border-radius 0.3s, color 0.3s, box-shadow 0.3s, transform 0.3s, width 0.3s, height 0.3s;
                 box-shadow: 0px 0px 12px #000000;
             }

@@ -68,10 +68,11 @@ export class my_style extends base_content {
                 height: 50px;
                 background-color: white;
                 border: none;
-                transition: box-shadow 0.1s;
+                transition: box-shadow 0.1s, border-color 0.3s;
                 margin: 5px;
                 box-shadow: 0px 0px 12px #000000;
                 border-radius: 10px;
+                background-color: rgba(0, 0, 0, 0.1);
             }
             .arrow-button[disabled] {
                 cursor: not-allowed;
@@ -82,7 +83,6 @@ export class my_style extends base_content {
             }
             .arrow-button:active,
             .arrow-button:focus {
-                outline: none;
                 box-shadow: none;
             }
             .right-bar {
@@ -99,17 +99,16 @@ export class my_style extends base_content {
                 width: 200px;
                 height: 200px;
                 margin: 10px;
-                border-color: black;
-                border-width: 0;
+                border-color: transparent;
+                border-width: 4px;
                 border-style: solid;
-                background-color: rgba(0, 0, 0, 0.1);
                 width: 75px;
                 height: 75px;
                 overflow: hidden;
             }
             .current-preview {
-                border-width: 4px;
                 box-shadow: none;
+                border-color: black;
             }
             .eyes,
             .nose,
