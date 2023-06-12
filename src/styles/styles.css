@@ -20,8 +20,8 @@ body {
     background-position: 50% 50%;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
     min-height: 100%;
     z-index: 0;
     opacity: 0;
@@ -44,7 +44,7 @@ body {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     justify-content: space-around;
-    margin: 0px;
+    margin: 0;
     z-index: 1;
 }
 side-bar {
@@ -57,12 +57,18 @@ side-bar {
     overflow-y: auto;
     margin: 0;
     padding: 0;
+    transition: opacity 0.2s;
+    transform: scale(1);
+    opacity: 1;
 }
 #outlet > * {
     margin: auto;
 }
-@media screen and (max-width: 900px) {
+@media screen and (width <= 900px) {
     .main {
         grid-template-columns: 1fr;
     }
+}
+.blur {
+    opacity: 0.3 !important;
 }

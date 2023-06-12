@@ -42,7 +42,7 @@ export class mamk_char extends LitElement {
             z-index: -1;
             position: relative;
             margin-top: 94px;
-            margin-bottom: 0px;
+            margin-bottom: 0;
             height: 280px;
             width: 250px;
         }
@@ -153,7 +153,7 @@ export class mamk_char extends LitElement {
             position: absolute;
             height: 150px;
             bottom: 50px;
-            transform: translateX(calc(114px * var(--questionOffset)));
+            transform: translateX(calc(114px * var(--question-index)));
             transition: transform 0.3s;
         }
         .student-screen > * {

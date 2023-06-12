@@ -11,6 +11,9 @@ export abstract class base_content extends LitElement {
             :host {
                 height: fit-content;
             }
+            *[hidden] {
+                display: none !important;
+            }
             *:focus {
                 outline: none;
             }
@@ -19,39 +22,37 @@ export abstract class base_content extends LitElement {
                 height: 10px;
             }
             ::-webkit-scrollbar-thumb {
-                background: rgba(255, 255, 255, 0.596);
+                background: rgb(255 255 255 / 59.6%);
                 border-radius: 10px;
             }
             ::-webkit-scrollbar-track {
-                background: rgba(0, 0, 0, 0);
+                background: rgb(0 0 0 / 0%);
             }
             p {
                 color: white;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 font-size: 16px;
                 margin: 5px;
-                padding: 10px 10px 10px 10px;
-                -webkit-user-select: text; /* Safari */
-                -ms-user-select: text; /* IE 10 and IE 11 */
+                padding: 10px; /* Safari */ /* IE 10 and IE 11 */
                 user-select: text;
                 word-break: break-word;
             }
             .button,
             .content {
-                -webkit-appearance: none;
+                appearance: none;
                 background-color: white;
                 border: 2px solid white;
                 text-decoration: none;
                 padding: 20px;
                 border-radius: 30px;
                 transform: scale(1);
-                border-color: rgba(255, 255, 255, 0);
+                border-color: rgb(255 255 255 / 0%);
                 color: black;
                 text-align: center;
                 font-family: 'Roboto Mono', monospace;
                 font-size: 24px;
                 transition: background-color 0.3s, border-radius 0.3s, color 0.3s, box-shadow 0.3s, transform 0.3s, width 0.3s, height 0.3s;
-                box-shadow: 0px 0px 12px #000000;
+                box-shadow: 0 0 12px #000;
             }
             .button {
                 cursor: pointer;
@@ -64,20 +65,20 @@ export abstract class base_content extends LitElement {
                 pointer-events: none;
             }
             .button:active {
-                background-color: rgba(31, 42, 210, 0.25);
+                background-color: rgb(31 42 210 / 25%);
                 border-radius: 12px;
                 color: white;
                 box-shadow: none;
             }
             .button:focus {
-                background-color: rgba(31, 42, 210, 0.25);
+                background-color: rgb(31 42 210 / 25%);
                 border-radius: 12px;
                 color: white;
                 box-shadow: none;
             }
             .button:disabled,
             :host([data-disabled]) .button {
-                background-color: rgba(31, 42, 210, 0.25);
+                background-color: rgb(31 42 210 / 25%);
                 border-radius: 12px;
                 color: white;
                 box-shadow: none;
@@ -85,12 +86,12 @@ export abstract class base_content extends LitElement {
             }
             @media (hover: hover) and (pointer: fine) {
                 .button:hover {
-                    background-color: rgba(31, 42, 210, 0.25);
+                    background-color: rgb(31 42 210 / 25%);
                     border-radius: 12px;
                     color: white;
                 }
             }
-            @media screen and (max-width: 900px) {
+            @media screen and (width <= 900px) {
                 .button,
                 .content {
                     font-size: 24px;

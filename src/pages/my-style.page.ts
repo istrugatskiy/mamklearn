@@ -44,9 +44,7 @@ export class my_style extends base_content {
             }
             .grid {
                 display: grid;
-                grid-template-columns: 0.5fr 1fr;
-                grid-template-rows: 1fr;
-                grid-template-areas: 'content content';
+                grid-template: 'content content' 1fr / 1fr;
                 grid-gap: 20px;
                 margin: 10px auto;
                 max-width: 650px;
@@ -66,13 +64,12 @@ export class my_style extends base_content {
                 align-items: center;
                 width: 50px;
                 height: 50px;
-                background-color: white;
                 border: none;
                 transition: box-shadow 0.1s, border-color 0.3s;
                 margin: 5px;
-                box-shadow: 0px 0px 12px #000000;
+                box-shadow: 0 0 12px #000;
                 border-radius: 10px;
-                background-color: rgba(0, 0, 0, 0.1);
+                background-color: rgb(0 0 0 / 10%);
             }
             .arrow-button[disabled] {
                 cursor: not-allowed;
@@ -86,8 +83,8 @@ export class my_style extends base_content {
                 box-shadow: none;
             }
             .right-bar {
-                flex-direction: column;
-                flex-wrap: wrap;
+                flex-flow: column wrap;
+                margin-bottom: 10px;
             }
             .customize-options {
                 display: flex;
@@ -96,8 +93,6 @@ export class my_style extends base_content {
                 align-items: center;
             }
             .preview-button {
-                width: 200px;
-                height: 200px;
                 margin: 10px;
                 border-color: transparent;
                 border-width: 4px;

@@ -16,7 +16,7 @@ export class text_content extends LitElement {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 font-size: 16px;
                 margin: 5px;
-                padding: 10px 10px 10px 10px;
+                padding: 10px;
                 max-width: 800px;
             }
             h1 {
@@ -25,15 +25,12 @@ export class text_content extends LitElement {
             p,
             ul {
                 font-size: 16px;
-                text-shadow: 0px 0px 12px black;
-                background-color: rgba(255, 255, 255, 0.116);
-                text-align: center;
+                text-shadow: 0 0 12px black;
+                background-color: rgb(255 255 255 / 11.6%);
                 border-radius: 3px;
-                box-shadow: 0px 0px 12px #000000;
+                box-shadow: 0 0 12px #000;
                 text-align: left;
-                padding: 10px 10px 10px 10px;
-                -webkit-user-select: text; /* Safari */
-                -ms-user-select: text; /* IE 10 and IE 11 */
+                padding: 10px; /* Safari */ /* IE 10 and IE 11 */
                 user-select: text;
                 word-break: break-word;
             }
@@ -56,10 +53,10 @@ export class text_content extends LitElement {
                 border-radius: 10px;
             }
             ::selection {
-                background: rgba(31, 42, 210, 0.25);
+                background: rgb(31 42 210 / 25%);
                 color: white;
             }
-            @media screen and (max-width: 600px) {
+            @media screen and (width <= 600px) {
                 :host {
                     padding-top: 0;
                 }

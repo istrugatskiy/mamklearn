@@ -14,9 +14,9 @@ export class mat_icon extends LitElement {
                 display: inline-flex;
             }
             .material-symbols-outlined {
+                /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
                 font-family: 'Material Symbols Outlined';
                 font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
-                -webkit-user-select: none;
                 user-select: none;
             }
         `,

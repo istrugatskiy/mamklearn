@@ -1,0 +1,15 @@
+{
+    "extends": ["stylelint-config-standard"],
+    "overrides": [
+        {
+            "files": ["*{.js,.ts}"],
+            "customSyntax": "postcss-lit"
+        }
+    ],
+    "rules": {
+        "rule-empty-line-before": "never-multi-line",
+        "at-rule-empty-line-before": "never"
+    },
+
+    "ignoreFiles": [".git/**/*", ".yarn/**/*", ".parcel-cache/**/*", "node_modules/**/*", "dist/**/*", "functions/**/*"]
+}

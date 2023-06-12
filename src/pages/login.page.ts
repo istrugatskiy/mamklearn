@@ -13,7 +13,6 @@ export class login_page extends base_content {
         base_content.styles,
         css`
             :host {
-                height: 100%;
                 display: flex;
                 flex-direction: column;
                 align-items: center;

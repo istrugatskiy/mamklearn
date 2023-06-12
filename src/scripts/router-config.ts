@@ -26,6 +26,16 @@ const routes: route_list = {
             icon: 'styler',
             load: () => import('../pages/my-style.page'),
         },
+        '/login': {
+            title: 'Login',
+            component: '[none]',
+            icon: 'login',
+            special_path: true,
+            load: async (redirect) => {
+                redirect('/');
+                await signInWithRedirect(auth, provider);
+            },
+        },
         '/404': not_found,
         '/no-auth': no_auth,
         '/play': {
@@ -42,11 +52,11 @@ const routes: route_list = {
             require_auth: true,
             load: () => import('../pages/my-quizzes.page'),
         },
-        '/about': {
-            title: 'About',
-            component: 'about-page',
-            icon: 'info',
-            load: () => import('../pages/about.page'),
+        '/terms-of-service': {
+            title: 'Terms of Service',
+            component: 'terms-of-service-page',
+            icon: 'gavel',
+            load: () => import('../pages/terms.page'),
         },
         '/privacy-policy': {
             title: 'Privacy Policy',
@@ -54,20 +64,11 @@ const routes: route_list = {
             icon: 'privacy_tip',
             load: () => import('../pages/privacy.page'),
         },
-        '/terms-of-service': {
-            title: 'Terms of Service',
-            component: 'terms-of-service-page',
-            icon: 'gavel',
-            load: () => import('../pages/terms.page'),
-        },
-        '/login': {
-            title: 'Login',
-            component: '[none]',
-            special_path: true,
-            load: async (redirect) => {
-                redirect('/');
-                await signInWithRedirect(auth, provider);
-            },
+        '/about': {
+            title: 'About',
+            component: 'about-page',
+            icon: 'info',
+            load: () => import('../pages/about.page'),
         },
         '/logout': {
             title: 'Logout',
