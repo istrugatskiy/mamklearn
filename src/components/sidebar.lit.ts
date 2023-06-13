@@ -121,7 +121,9 @@ export class side_bar extends base_content {
                     height: 100vh;
                     background-color: rgb(0 0 0 / 50%);
                     z-index: -1;
-                    backdrop-filter: blur(5px);
+                    /* stylelint-disable-next-line property-no-vendor-prefix */
+                    -webkit-backdrop-filter: blur(5px) brightness(0.6);
+                    backdrop-filter: blur(5px) brightness(0.6);
                     transition: opacity 0.3s cubic-bezier(0.29, 0.09, 0.07, 1.2);
                     opacity: 1;
                 }

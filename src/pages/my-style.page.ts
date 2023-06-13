@@ -8,7 +8,7 @@ import '../components/character/mamk-char.lit';
 import '../components/button/mamk-button.lit';
 import '../components/material-icon.lit';
 import { custom_options, get_src } from '../components/character/mamk-char.lit';
-import { mamk_math } from '@istrugatskiy/mamk-utils';
+import { mamk_math, sleep } from '@istrugatskiy/mamk-utils';
 
 /**
  * The page that allows the user to customize their character.
@@ -79,7 +79,8 @@ export class my_style extends base_content {
                 pointer-events: none;
             }
             .arrow-button:active,
-            .arrow-button:focus {
+            .arrow-button:focus,
+            .arrow-button[disabled] {
                 box-shadow: none;
             }
             .right-bar {
@@ -153,8 +154,9 @@ export class my_style extends base_content {
         this.char_listener?.();
     }
 
-    private change_current_item = (go_left: boolean) => {
+    private change_current_item = async (go_left: boolean) => {
         this.current_item = go_left ? this.current_item - 1 : this.current_item + 1;
+        await sleep(300);
         if (this.current_item < 0) {
             this.current_item = custom_options.length - 1;
         }
@@ -188,11 +190,11 @@ export class my_style extends base_content {
                         <mamk-char data-style="animated-char" .character_config="${this.user_char}"></mamk-char>
                     </div>
                     <div class="inline-flex content">
-                        <button @click=${this.change_item_left} class="arrow-button">
+                        <button @click=${this.change_item_left} class="arrow-button" ?disabled=${this.disabled}>
                             <mat-icon>arrow_back</mat-icon>
                         </button>
                         <p>${custom_options[this.current_item]}</p>
-                        <button @click=${this.change_item_right} class="arrow-button">
+                        <button @click=${this.change_item_right} class="arrow-button" ?disabled=${this.disabled}>
                             <mat-icon>arrow_forward</mat-icon>
                         </button>
                     </div>
@@ -210,8 +212,9 @@ export class my_style extends base_content {
                                     data-index="${i}"
                                     @click=${this.select_item}
                                     class="arrow-button preview-button ${none_option ? current_option.toLowerCase() : 'none-option'} ${current_option.toLowerCase()}-${i} ${this.user_char[this.current_item] === i ? 'current-preview' : ''}"
+                                    ?disabled=${this.disabled}
                                 >
-                                    ${none_option ? html`<img src="${get_src(custom_options[this.current_item], five_items)}" height="200" width="148" />` : html`<mat-icon>block</mat-icon> `}
+                                    ${none_option ? html`<img src="${get_src(custom_options[this.current_item], five_items)}" height="200" width="148" decoding="async" />` : html`<mat-icon>block</mat-icon> `}
                                 </button>`;
                             })
                         }
