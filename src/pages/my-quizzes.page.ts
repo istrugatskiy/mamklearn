@@ -3,11 +3,11 @@ import { customElement } from 'lit/decorators.js';
 import { base_content } from '../templates/base-content.lit';
 
 /**
- * A page that is displayed when a resource is not found.
- * @element not-found-page
+ * The page from which users can view and manage their quizzes.
+ * @element my-quizzes-page
  */
-@customElement('not-found-page')
-export class not_found extends base_content {
+@customElement('my-quizzes-page')
+export class my_quizzes extends base_content {
     resume_ui?: () => void;
     halt_ui?: () => void;
 
@@ -20,10 +20,17 @@ export class not_found extends base_content {
         `,
     ];
 
+    connectedCallback() {
+        super.connectedCallback();
+    }
+
     protected render() {
-        return html` <div class="content">
-            <h1>Resource not found!</h1>
-            <p>The page '${window.location.pathname}' could not be found!</p>
-        </div>`;
+        return html``;
+    }
+}
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'my-quizzes-page': my_quizzes;
     }
 }

@@ -17,17 +17,6 @@ export abstract class base_content extends LitElement {
             *:focus {
                 outline: none;
             }
-            ::-webkit-scrollbar {
-                width: 10px;
-                height: 10px;
-            }
-            ::-webkit-scrollbar-thumb {
-                background: rgb(255 255 255 / 59.6%);
-                border-radius: 10px;
-            }
-            ::-webkit-scrollbar-track {
-                background: rgb(0 0 0 / 0%);
-            }
             p {
                 color: white;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

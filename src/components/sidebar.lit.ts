@@ -170,7 +170,13 @@ export class side_bar extends base_content {
 
     private readonly media_query = window.matchMedia('(max-width: 900px)');
 
-    private readonly mq_change = () => (this.media_query.matches ? this.hide_sidebar() : this.show_sidebar());
+    private readonly mq_change = () => {
+        if (this.media_query.matches) this.hide_sidebar();
+        else {
+            this.show_sidebar();
+            window.dispatchEvent(new Event('mamk-resume-ui'));
+        }
+    };
 
     connectedCallback() {
         super.connectedCallback();

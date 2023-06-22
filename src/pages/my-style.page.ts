@@ -49,6 +49,25 @@ export class my_style extends base_content {
                 margin: 10px auto;
                 max-width: 650px;
             }
+            @media screen and (width <= 650px) {
+                .grid {
+                    grid-template: 'content' 1fr / 1fr;
+                    max-width: 300px;
+                    justify-items: center;
+                    grid-gap: 0;
+                }
+                h1 {
+                    display: none;
+                }
+                .char-container {
+                    padding-left: 0;
+                    padding-right: 0;
+                }
+                .right-bar {
+                    padding-left: 0;
+                    padding-right: 0;
+                }
+            }
             .inline-flex {
                 display: flex;
                 justify-content: space-between;
@@ -155,14 +174,15 @@ export class my_style extends base_content {
     }
 
     private change_current_item = async (go_left: boolean) => {
-        this.current_item = go_left ? this.current_item - 1 : this.current_item + 1;
+        let current_item = go_left ? this.current_item - 1 : this.current_item + 1;
         await sleep(300);
-        if (this.current_item < 0) {
-            this.current_item = custom_options.length - 1;
+        if (current_item < 0) {
+            current_item = custom_options.length - 1;
         }
-        if (this.current_item >= custom_options.length) {
-            this.current_item = 0;
+        if (current_item >= custom_options.length) {
+            current_item = 0;
         }
+        this.current_item = current_item;
     };
 
     private change_item_left = () => {
@@ -186,7 +206,7 @@ export class my_style extends base_content {
             <mamk-header>My Style</mamk-header>
             <div class="grid">
                 <div>
-                    <div class="content">
+                    <div class="content char-container">
                         <mamk-char data-style="animated-char" .character_config="${this.user_char}"></mamk-char>
                     </div>
                     <div class="inline-flex content">
@@ -212,9 +232,10 @@ export class my_style extends base_content {
                                     data-index="${i}"
                                     @click=${this.select_item}
                                     class="arrow-button preview-button ${none_option ? current_option.toLowerCase() : 'none-option'} ${current_option.toLowerCase()}-${i} ${this.user_char[this.current_item] === i ? 'current-preview' : ''}"
+                                    aria-label="${none_option ? `${current_option} option ${i + 1}` : `No ${current_option}`}"
                                     ?disabled=${this.disabled}
                                 >
-                                    ${none_option ? html`<img src="${get_src(custom_options[this.current_item], five_items)}" height="200" width="148" decoding="async" />` : html`<mat-icon>block</mat-icon> `}
+                                    ${none_option ? html`<img src="${get_src(custom_options[this.current_item], five_items)}" alt=${`${current_option} option ${i}`} height="200" width="148" decoding="async" />` : html`<mat-icon>block</mat-icon> `}
                                 </button>`;
                             })
                         }
