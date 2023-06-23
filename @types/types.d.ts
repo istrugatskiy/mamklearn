@@ -22,3 +22,5 @@ declare module '*/mamk-config.yaml' {
      */
     export const admins: string[];
 }
+
+declare module '*.css';

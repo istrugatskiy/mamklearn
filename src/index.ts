@@ -1,7 +1,7 @@
 // This is the new app entry point.
 
-import './styles/globals.css';
 import './styles/styles.css';
+import 'normalize.css';
 import './components/common';
 import { init_particles } from '@istrugatskiy/mamk-particles';
 import router from './scripts/router-config';

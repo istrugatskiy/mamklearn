@@ -72,3 +72,12 @@ side-bar {
 .blur {
     opacity: 0.3 !important;
 }
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+    canvas {
+        display: none;
+    }
+}

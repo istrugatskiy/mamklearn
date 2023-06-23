@@ -1,5 +1,6 @@
 import { CSSResultGroup, LitElement, css } from 'lit';
 import { property } from 'lit/decorators';
+import * as normalize from 'normalize.css';
 
 /**
  * A base button class that can be extended to create different types of buttons
@@ -7,6 +8,7 @@ import { property } from 'lit/decorators';
  */
 export abstract class base_content extends LitElement {
     static styles: CSSResultGroup = [
+        normalize,
         css`
             :host {
                 height: fit-content;

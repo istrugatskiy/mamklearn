@@ -68,7 +68,8 @@
         "@istrugatskiy/mamk-router": "workspace:^",
         "@istrugatskiy/mamk-utils": "workspace:^",
         "firebase": "9.21.0",
-        "lit": "^2.7.3"
+        "lit": "^2.7.3",
+        "normalize.css": "^8.0.1"
     },
     "alias": {
         "process": false
