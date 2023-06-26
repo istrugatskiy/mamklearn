@@ -1,0 +1,20 @@
+diff --git a/lib/parse.js b/lib/parse.js
+index 39fadef7cb06d8a1c67ca35b0fa9a5d39ea53ec2..adb91f2552f44e0984e9c076fe5db0d37aa0c20d 100755
+--- a/lib/parse.js
++++ b/lib/parse.js
+@@ -18,9 +18,14 @@ const parse = (source, opts) => {
+     const doc = new postcss_1.Document();
+     const sourceAsString = source.toString();
+     const userConfig = (0, userConfig_js_1.getUserConfig)(configKey);
+-    const ast = (0, parser_1.parse)(sourceAsString, {
++    let ast;
++    try {
++        ast = (0, parser_1.parse)(sourceAsString, {
+         ...userConfig.babelOptions
+     });
++} catch (e) {
++        console.warn('[postcss-lit]', 'Failed to parse document as JavaScript. ');
++    }
+     const extractedStyles = new Set();
+     (0, traverse_1.default)(ast, {
+         TaggedTemplateExpression: (path) => {

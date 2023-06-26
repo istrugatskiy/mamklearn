@@ -8,7 +8,8 @@
     ],
     "rules": {
         "rule-empty-line-before": "never-multi-line",
-        "at-rule-empty-line-before": "never"
+        "at-rule-empty-line-before": "never",
+        "comment-empty-line-before": "never"
     },
 
     "ignoreFiles": [".git/**/*", ".yarn/**/*", ".parcel-cache/**/*", "node_modules/**/*", "dist/**/*", "functions/**/*"]

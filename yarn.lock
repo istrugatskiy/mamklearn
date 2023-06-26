@@ -1806,6 +1806,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lit-labs/motion@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@lit-labs/motion@npm:1.0.3"
+  dependencies:
+    lit: ^2.0.0
+  checksum: 126fd10df999e10e669d82e3961a01d750ffa7597f32427ea452ab92a24fbb7070358fb3a6a19147bb76652aa2d452ba3d73fd7fca49e381f42858ed4baf482d
+  languageName: node
+  linkType: hard
+
 "@lit-labs/ssr-dom-shim@npm:^1.0.0, @lit-labs/ssr-dom-shim@npm:^1.1.0":
   version: 1.1.0
   resolution: "@lit-labs/ssr-dom-shim@npm:1.1.0"
@@ -9285,6 +9294,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lit@npm:^2.0.0":
+  version: 2.7.5
+  resolution: "lit@npm:2.7.5"
+  dependencies:
+    "@lit/reactive-element": ^1.6.0
+    lit-element: ^3.3.0
+    lit-html: ^2.7.0
+  checksum: 61a3f87c57136618f47a30b36cdfb592fcba42dcfbdb104d2b5ca291148c2d9a32fcb713bb91090bd08d6897a00e73f8425da6e3626aa080eaf410a32397ae69
+  languageName: node
+  linkType: hard
+
 "lit@npm:^2.7.3":
   version: 2.7.3
   resolution: "lit@npm:2.7.3"
@@ -9612,6 +9632,7 @@ __metadata:
     "@istrugatskiy/mamk-particles": "workspace:^"
     "@istrugatskiy/mamk-router": "workspace:^"
     "@istrugatskiy/mamk-utils": "workspace:^"
+    "@lit-labs/motion": ^1.0.3
     "@parcel/config-default": ^2.8.3
     "@parcel/core": ^2.8.3
     "@parcel/optimizer-data-url": 2.8.3
@@ -10957,7 +10978,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-lit@npm:^1.1.0":
+"postcss-lit@npm:1.1.0":
   version: 1.1.0
   resolution: "postcss-lit@npm:1.1.0"
   dependencies:
@@ -10968,6 +10989,20 @@ __metadata:
   peerDependencies:
     postcss: ^8.3.11
   checksum: a25bb6a0ce3b43e553167a3c2c748325e7fa805531af45a6806eb8594b41934ca1a1491da1c3bd5cae5de3d3089cffc6340a53fdab12089fbcf4af4acb446d9e
+  languageName: node
+  linkType: hard
+
+"postcss-lit@patch:postcss-lit@npm%3A1.1.0#./.yarn/patches/postcss-lit-npm-1.1.0-336aba2a76.patch::locator=mamklearn%40workspace%3A.":
+  version: 1.1.0
+  resolution: "postcss-lit@patch:postcss-lit@npm%3A1.1.0#./.yarn/patches/postcss-lit-npm-1.1.0-336aba2a76.patch::version=1.1.0&hash=6ba870&locator=mamklearn%40workspace%3A."
+  dependencies:
+    "@babel/generator": ^7.16.5
+    "@babel/parser": ^7.16.2
+    "@babel/traverse": ^7.16.0
+    lilconfig: ^2.0.6
+  peerDependencies:
+    postcss: ^8.3.11
+  checksum: a15661a89541164ec290360fc37c094f499d3275255d98fce1ce0f385d4ecfd64371230d110e462420bfe667b137b8c1c07e132fa73facd3bbad5a1ddb9f293e
   languageName: node
   linkType: hard
 

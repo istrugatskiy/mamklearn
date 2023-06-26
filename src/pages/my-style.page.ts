@@ -9,6 +9,7 @@ import '../components/button/mamk-button.lit';
 import '../components/material-icon.lit';
 import { custom_options, get_src } from '../components/character/mamk-char.lit';
 import { mamk_math, sleep } from '@istrugatskiy/mamk-utils';
+import { animate, fadeIn as fade_in, fadeOut as fade_out } from '@lit-labs/motion';
 
 /**
  * The page that allows the user to customize their character.
@@ -234,6 +235,13 @@ export class my_style extends base_content {
                                     class="arrow-button preview-button ${none_option ? current_option.toLowerCase() : 'none-option'} ${current_option.toLowerCase()}-${i} ${this.user_char[this.current_item] === i ? 'current-preview' : ''}"
                                     aria-label="${none_option ? `${current_option} option ${i + 1}` : `No ${current_option}`}"
                                     ?disabled=${this.disabled}
+                                    ${animate({
+                                        keyframeOptions: {
+                                            duration: 300,
+                                        },
+                                        in: fade_in,
+                                        out: fade_out,
+                                    })}
                                 >
                                     ${none_option ? html`<img src="${get_src(custom_options[this.current_item], five_items)}" alt=${`${current_option} option ${i}`} height="200" width="148" decoding="async" />` : html`<mat-icon>block</mat-icon> `}
                                 </button>`;

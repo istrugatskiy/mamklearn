@@ -1,6 +1,6 @@
 import { CSSResultGroup, LitElement, css } from 'lit';
 import { property } from 'lit/decorators';
-import * as normalize from 'normalize.css';
+import { normalize } from '../styles/normalize';
 
 /**
  * A base button class that can be extended to create different types of buttons

@@ -59,6 +59,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@istrugatskiy/mamk-particles", "workspace:packages/mamk-particles"],\
             ["@istrugatskiy/mamk-router", "workspace:packages/mamk-router"],\
             ["@istrugatskiy/mamk-utils", "workspace:packages/mamk-utils"],\
+            ["@lit-labs/motion", "npm:1.0.3"],\
             ["@parcel/config-default", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:2.8.3"],\
             ["@parcel/core", "npm:2.8.3"],\
             ["@parcel/optimizer-data-url", "npm:2.8.3"],\
@@ -85,7 +86,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["normalize.css", "npm:8.0.1"],\
             ["parcel", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:2.8.3"],\
             ["postcss", "npm:8.4.24"],\
-            ["postcss-lit", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:1.1.0"],\
+            ["postcss-lit", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#patch:postcss-lit@npm%3A1.1.0#./.yarn/patches/postcss-lit-npm-1.1.0-336aba2a76.patch::version=1.1.0&hash=6ba870&locator=mamklearn%40workspace%3A."],\
             ["prettier", "npm:2.8.8"],\
             ["process", "npm:0.11.10"],\
             ["stylelint", "npm:15.7.0"],\
@@ -2741,6 +2742,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@lezer/lr", "npm:0.15.8"],\
             ["@lezer/common", "npm:0.15.12"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@lit-labs/motion", [\
+        ["npm:1.0.3", {\
+          "packageLocation": "./.yarn/cache/@lit-labs-motion-npm-1.0.3-14039fff1c-126fd10df9.zip/node_modules/@lit-labs/motion/",\
+          "packageDependencies": [\
+            ["@lit-labs/motion", "npm:1.0.3"],\
+            ["lit", "npm:2.7.5"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -11985,6 +11996,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["lit-html", "npm:2.7.0"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:2.7.5", {\
+          "packageLocation": "./.yarn/cache/lit-npm-2.7.5-bef28da03f-61a3f87c57.zip/node_modules/lit/",\
+          "packageDependencies": [\
+            ["lit", "npm:2.7.5"],\
+            ["@lit/reactive-element", "npm:1.6.1"],\
+            ["lit-element", "npm:3.3.0"],\
+            ["lit-html", "npm:2.7.0"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["lit-analyzer", [\
@@ -12372,6 +12393,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@istrugatskiy/mamk-particles", "workspace:packages/mamk-particles"],\
             ["@istrugatskiy/mamk-router", "workspace:packages/mamk-router"],\
             ["@istrugatskiy/mamk-utils", "workspace:packages/mamk-utils"],\
+            ["@lit-labs/motion", "npm:1.0.3"],\
             ["@parcel/config-default", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:2.8.3"],\
             ["@parcel/core", "npm:2.8.3"],\
             ["@parcel/optimizer-data-url", "npm:2.8.3"],\
@@ -12398,7 +12420,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["normalize.css", "npm:8.0.1"],\
             ["parcel", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:2.8.3"],\
             ["postcss", "npm:8.4.24"],\
-            ["postcss-lit", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:1.1.0"],\
+            ["postcss-lit", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#patch:postcss-lit@npm%3A1.1.0#./.yarn/patches/postcss-lit-npm-1.1.0-336aba2a76.patch::version=1.1.0&hash=6ba870&locator=mamklearn%40workspace%3A."],\
             ["prettier", "npm:2.8.8"],\
             ["process", "npm:0.11.10"],\
             ["stylelint", "npm:15.7.0"],\
@@ -13886,17 +13908,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["postcss-lit", [\
-        ["npm:1.1.0", {\
-          "packageLocation": "./.yarn/cache/postcss-lit-npm-1.1.0-336aba2a76-a25bb6a0ce.zip/node_modules/postcss-lit/",\
+        ["patch:postcss-lit@npm%3A1.1.0#./.yarn/patches/postcss-lit-npm-1.1.0-336aba2a76.patch::version=1.1.0&hash=6ba870&locator=mamklearn%40workspace%3A.", {\
+          "packageLocation": "./.yarn/cache/postcss-lit-patch-7ef0ea0bba-a15661a895.zip/node_modules/postcss-lit/",\
           "packageDependencies": [\
-            ["postcss-lit", "npm:1.1.0"]\
+            ["postcss-lit", "patch:postcss-lit@npm%3A1.1.0#./.yarn/patches/postcss-lit-npm-1.1.0-336aba2a76.patch::version=1.1.0&hash=6ba870&locator=mamklearn%40workspace%3A."]\
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:1.1.0", {\
-          "packageLocation": "./.yarn/__virtual__/postcss-lit-virtual-71a9e756be/0/cache/postcss-lit-npm-1.1.0-336aba2a76-a25bb6a0ce.zip/node_modules/postcss-lit/",\
+        ["virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#patch:postcss-lit@npm%3A1.1.0#./.yarn/patches/postcss-lit-npm-1.1.0-336aba2a76.patch::version=1.1.0&hash=6ba870&locator=mamklearn%40workspace%3A.", {\
+          "packageLocation": "./.yarn/__virtual__/postcss-lit-virtual-fbf65c722b/0/cache/postcss-lit-patch-7ef0ea0bba-a15661a895.zip/node_modules/postcss-lit/",\
           "packageDependencies": [\
-            ["postcss-lit", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#npm:1.1.0"],\
+            ["postcss-lit", "virtual:bfb14f05e7269cc2364f7e75bee5178518bfb476c06c6df3126ff48f689be50c0f1d0ec96d5ede381e869183673236aae1d32adacc12c424cea1ae1831cb4dc2#patch:postcss-lit@npm%3A1.1.0#./.yarn/patches/postcss-lit-npm-1.1.0-336aba2a76.patch::version=1.1.0&hash=6ba870&locator=mamklearn%40workspace%3A."],\
             ["@babel/generator", "npm:7.22.5"],\
             ["@babel/parser", "npm:7.22.5"],\
             ["@babel/traverse", "npm:7.22.5"],\

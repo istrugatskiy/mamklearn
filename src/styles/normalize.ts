@@ -1,6 +1,4 @@
-import * as normalize from 'bundle-text:normalize.css';
-import { css } from 'lit';
+import * as normalize_raw from 'bundle-text:normalize.css';
+import { unsafeCSS } from 'lit';
 
-// export const normalize_css = css`
-//     ${unsafeCSS(normalize)}
-// `;
+export const normalize = unsafeCSS(normalize_raw);

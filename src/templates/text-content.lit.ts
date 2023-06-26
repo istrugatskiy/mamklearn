@@ -1,4 +1,5 @@
 import { LitElement, css } from 'lit';
+import { normalize } from '../styles/normalize';
 
 /**
  * A base class for text content. Useful for documentation and policy pages.
@@ -6,7 +7,7 @@ import { LitElement, css } from 'lit';
  */
 export class text_content extends LitElement {
     static styles = [
-        // normalize,
+        normalize,
         css`
             *:focus {
                 outline: none;

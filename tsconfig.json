@@ -71,7 +71,31 @@
         "plugins": [
             {
                 "name": "ts-lit-plugin",
-                "strict": true
+                "rules": {
+                    "no-unknown-tag-name": "error",
+                    "no-missing-import": "error",
+                    "no-unclosed-tag": "error",
+                    "no-unknown-attribute": "error",
+                    "no-unknown-property": "error",
+                    "no-unknown-event": "error",
+                    "no-unknown-slot": "error",
+                    "no-invalid-boolean-binding": "error",
+                    "no-expressionless-property-binding": "error",
+                    "no-noncallable-event-binding": "error",
+                    "no-boolean-in-attribute-binding": "error",
+                    "no-complex-attribute-binding": "error",
+                    "no-nullable-attribute-binding": "off",
+                    "no-invalid-directive-binding": "error",
+                    "no-unintended-mixed-binding": "error",
+                    "no-incompatible-property-type": "error",
+                    "no-unknown-property-converter": "error",
+                    "no-invalid-attribute-name": "error",
+                    "no-invalid-tag-name": "error",
+                    "no-invalid-css": "error"
+                },
+                "globalAttributes": [
+                    "________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________"
+                ]
             }
         ]
     },
