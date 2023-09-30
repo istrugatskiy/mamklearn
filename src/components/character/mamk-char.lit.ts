@@ -36,7 +36,7 @@ export class mamk_char extends LitElement {
         img {
             position: absolute;
             /* Compensate for original images being off */
-            bottom: -065px;
+            bottom: -65px;
             left: 10px;
         }
         .animated-char {
