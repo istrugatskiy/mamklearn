@@ -1,5 +1,5 @@
 # mamklearn
-
+Note: This is the development branch of mamklearn v2 and is not yet complete.
 The mamklearn monorepo containing the firebase and client config.
 
 ## How To Build:
