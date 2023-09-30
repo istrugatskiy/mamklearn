@@ -80,7 +80,7 @@
         "functions",
         "packages/*"
     ],
-    "packageManager": "yarn@3.6.0",
+    "packageManager": "yarn@3.6.3",
     "resolutions": {
         "postcss-lit@^1.1.0": "patch:postcss-lit@npm%3A1.1.0#./.yarn/patches/postcss-lit-npm-1.1.0-336aba2a76.patch"
     }
