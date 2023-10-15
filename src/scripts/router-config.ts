@@ -80,6 +80,12 @@ const routes: route_list = {
                 window.location.href = `/${window.location.search}`;
             },
         },
+        '/form': {
+            title: 'Form',
+            component: 'form-page',
+            icon: 'form',
+            load: () => import('../pages/form.page'),
+        },
     },
 };
 
