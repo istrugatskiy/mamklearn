@@ -45,3 +45,9 @@ export class about extends text_content {
         `;
     }
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'about-page': about;
+    }
+}

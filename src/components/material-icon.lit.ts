@@ -26,3 +26,9 @@ export class mat_icon extends LitElement {
         return html`<span class="material-symbols-outlined"><slot></slot></span>`;
     }
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'mat-icon': mat_icon;
+    }
+}

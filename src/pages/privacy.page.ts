@@ -1,7 +1,6 @@
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { text_content } from '../templates/text-content.lit';
-import '../components/button/inline-link.lit';
 
 /**
  * The privacy policy page.
@@ -43,5 +42,11 @@ export class privacy_policy extends text_content {
                 contact us at is@mamklearn.com with any concerns or questions.
             </p>
         `;
+    }
+}
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'privacy-policy-page': privacy_policy;
     }
 }

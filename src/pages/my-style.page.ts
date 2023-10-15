@@ -253,3 +253,9 @@ export class my_style extends base_content {
         `;
     }
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'my-style-page': my_style;
+    }
+}

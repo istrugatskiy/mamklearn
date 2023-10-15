@@ -11,7 +11,7 @@
         "build-dev": "yarn run check && cp dev.firebase.json firebase.json && yarn run parcel build ./src/dev.index.html --no-source-maps && yarn node ./license-header-create.mjs",
         "clean": "rm -rf dist && rm -rf .parcel-cache",
         "fix": "yarn run prettier --write . && yarn run stylelint \"**/*{.ts,.css}\" --fix && yarn run eslint . --fix",
-        "check": "yarn run tsc --noEmit && yarn run prettier --check . && yarn run stylelint \"**/*{.ts,.css}\" && yarn run eslint . && yarn run test",
+        "check": "yarn run tsc --noEmit && yarn run lit-analyzer src && yarn run prettier --check . && yarn run stylelint \"**/*{.ts,.css}\" && yarn run eslint . && yarn run test",
         "test": "yarn run jest --coverage --coverage-reporters=text"
     },
     "repository": {
@@ -47,6 +47,7 @@
         "firebase-tools": "^11.29.1",
         "jest": "^29.5.0",
         "jest-environment-jsdom": "^29.5.0",
+        "lit-analyzer": "^1.2.1",
         "parcel": "^2.8.3",
         "postcss": "^8.4.24",
         "postcss-lit": "^1.1.0",

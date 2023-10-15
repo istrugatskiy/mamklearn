@@ -131,3 +131,9 @@ export class terms_of_service extends text_content {
         `;
     }
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'terms-of-service-page': terms_of_service;
+    }
+}

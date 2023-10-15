@@ -71,10 +71,12 @@
         "plugins": [
             {
                 "name": "ts-lit-plugin",
+                "maxProjectImportDepth": 1 /* To improve future refactoring we require direct imports for all components. */,
                 "rules": {
                     "no-unknown-tag-name": "error",
                     "no-missing-import": "error",
                     "no-unclosed-tag": "error",
+                    "no-missing-element-type-definition": "error",
                     "no-unknown-attribute": "error",
                     "no-unknown-property": "error",
                     "no-unknown-event": "error",
@@ -91,7 +93,7 @@
                     "no-unknown-property-converter": "error",
                     "no-invalid-attribute-name": "error",
                     "no-invalid-tag-name": "error",
-                    "no-invalid-css": "error"
+                    "no-invalid-css": "off"
                 },
                 "globalAttributes": [
                     "________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________"

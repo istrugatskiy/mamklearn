@@ -6,6 +6,7 @@ import router from '../scripts/router-config';
 import './button/sidebar-button.lit';
 import './button/inline-link.lit';
 import './material-icon.lit';
+import './mamk-header.lit';
 
 // Fixes customElementRegistry being written to twice.
 if (module.hot) {

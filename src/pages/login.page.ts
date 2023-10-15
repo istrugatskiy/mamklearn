@@ -3,6 +3,9 @@ import { customElement } from 'lit/decorators.js';
 import { base_content } from '../templates/base-content.lit';
 import '../components/button/inline-link.lit';
 import '../components/mamk-para.lit';
+import '../components/mamk-header.lit';
+import '../components/button/link-button.lit';
+
 /**
  * The login page where the user logs in.
  * @element login-page
@@ -63,5 +66,11 @@ export class login_page extends base_content {
             </link-button>
             <mamk-para>By signing in you agree to Mamklearn's&nbsp;<inline-link data-href="/terms-of-service">terms of service</inline-link>&nbsp;and&nbsp;<inline-link data-href="/privacy-policy">privacy policy</inline-link>.</mamk-para>
         `;
+    }
+}
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'login-page': login_page;
     }
 }

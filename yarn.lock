@@ -9256,7 +9256,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lit-analyzer@npm:1.2.1":
+"lit-analyzer@npm:1.2.1, lit-analyzer@npm:^1.2.1":
   version: 1.2.1
   resolution: "lit-analyzer@npm:1.2.1"
   dependencies:
@@ -9656,6 +9656,7 @@ __metadata:
     jest: ^29.5.0
     jest-environment-jsdom: ^29.5.0
     lit: ^2.7.3
+    lit-analyzer: ^1.2.1
     normalize.css: ^8.0.1
     parcel: ^2.8.3
     postcss: ^8.4.24

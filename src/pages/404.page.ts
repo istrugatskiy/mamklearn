@@ -27,3 +27,9 @@ export class not_found extends base_content {
         </div>`;
     }
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'not-found-page': not_found;
+    }
+}

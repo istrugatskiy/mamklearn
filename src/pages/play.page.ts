@@ -43,3 +43,9 @@ export class play extends base_content {
         `;
     }
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'play-page': play;
+    }
+}
