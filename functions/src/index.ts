@@ -549,6 +549,11 @@ export const handleGameEnd = functions.runWith({ maxInstances: 10 }).https.onReq
     }
 });
 
+export const ple = functions.runWith({ maxInstances: 10 }).https.onRequest(async (req, res) => {
+    functions.logger.log(req.body);
+    res.send(200);
+});
+
 async function gameEnd(location: string, totalPlayers: number, gameCode: string) {
     const db = getDatabase();
     if ((await db.ref(`${location}players/`).once('value')).val()) {
