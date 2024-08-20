@@ -4,8 +4,10 @@ function isValiduser(uid) {
     && (auth.token.email.matches(/.*@mamkschools.org$/) 
     || auth.token.email.matches(/.*@student.mamkschools.org$/) 
     || auth.token.email.matches(/.*@mamklearn.com$/) 
-    || auth.token.email.matches(/.*@umich.edu$/)
-    || auth.token.email == 'ilyastrug@gmail.com')
+    || auth.token.email.matches(/.*@cornell.edu$/)
+    || auth.token.email == 'ilyastrug@gmail.com'
+    || auth.token.email == 'leaguegamer233@gmail.com')
+
 }
 
 // This is where the actual path for the /actualGame/{uid} is stored.
